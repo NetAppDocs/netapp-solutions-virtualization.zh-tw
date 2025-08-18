@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-getting-started-snapcenter.html 
+keywords: netapp, vmware, getting, started 
+summary:  
+---
+= 了解如何使用適用於 VMware vSphere 的SnapCenter插件備份和還原虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter Plug-in for VMware vSphere可對虛擬機器、資料儲存區和 VMDK 檔案實現快速、虛擬機器一致的備份和還原作業。此 VMware 外掛程式與SnapCenter Server 集成，以支援基於應用程式的備份和SnapCenter特定應用程式插件的復原。
+
+
+
+== 文件資源
+
+有關詳細信息，請參閱以下文檔資源。
+
+* link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/["SnapCenter Plug-in for VMware vSphere文檔"]
+
+
+
+
+== 解決方案資源
+
+請參閱以下 3-2-1 備份解決方案，其中包括適用SnapCenter Plug-in for VMware vSphere和適用於虛擬機器的BlueXP backup and recovery。
+
+技術報告：link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-321-dp-scv.html["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"^]
+
+Tech ONTAP部落格：link:https://community.netapp.com/t5/Tech-ONTAP-Blogs/3-2-1-Data-Protection-for-VMware-with-SnapCenter-Plug-in-and-BlueXP-backup-and/ba-p/446180["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"]
+
+
+
+== 視訊資源
+
+.SnapCenter Plug-in for VMware vSphere- 解決方案先決條件
+video::38881de9-9ab5-4a8e-a17d-b01200fade6a[panopto]
+.SnapCenter Plug-in for VMware vSphere- 部署
+video::10cbcf2c-9964-41aa-ad7f-b01200faca01[panopto]
+.SnapCenter Plug-in for VMware vSphere- 備份工作流程
+video::b7272f18-c424-4cc3-bc0d-b01200faaf25[panopto]
+.SnapCenter Plug-in for VMware vSphere- 還原工作流程
+video::ed41002e-585c-445d-a60c-b01200fb1188[panopto]
+.SnapCenter - SQL 還原工作流程
+video::8df4ad1f-83ad-448b-9405-b01200fb2567[panopto]

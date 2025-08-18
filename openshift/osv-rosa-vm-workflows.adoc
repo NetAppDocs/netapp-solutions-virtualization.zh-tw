@@ -1,0 +1,55 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-rosa-vm-workflows.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, ROSA, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: ROSA 上的 Red Hat OpenShift 虛擬化 
+---
+= 在 ROSA 叢集上使用 FSx for ONTAP在 Red Hat OpenShift Virtualization 中重新啟動或遷移虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用Amazon FSx for ONTAP在 OpenShift Virtualization 中的兩個節點之間重新啟動 VM 或執行 VM 的即時遷移。
+
+單擊重啟按鈕。image:redhat-openshift-ocpv-rosa-020.png["OCP-v VM重啟"]
+
+VM 恢復運作狀態，檔案系統、PVC 和檔案系統中的檔案完全相同image:redhat-openshift-ocpv-rosa-021.png["OCP-v VM 重新啟動檔案系統"]
+
+image:redhat-openshift-ocpv-rosa-022.png["OCP-v VM 重啟磁碟"]
+
+image:redhat-openshift-ocpv-rosa-023.png["OCP-v VM重啟文件"]
+
+
+
+== 虛擬機器即時遷移
+
+在本節中，我們將執行 VM 即時遷移，然後檢查磁碟的內容。即時遷移是指將正在運作的虛擬機器 (VM) 從一台實體主機移至另一台主機的過程，而不會中斷正常操作或導致任何停機，或對最終使用者造成其他不利影響。即時遷移被認為是虛擬化的重要步驟。它允許將整個虛擬機器連同正在運行的作業系統 (OS)、記憶體、儲存和網路連接從當前節點移動到目標節點。下面我們將看到如何執行虛擬機器從目前節點到新節點的即時遷移。
+
+注意虛擬機器正在運行的節點image:redhat-openshift-ocpv-rosa-024.png["OCP-v VM目前節點"]
+
+點選 3 個點並選擇遷移image:redhat-openshift-ocpv-rosa-025.png["OCP-v 虛擬機器即時遷移"]
+
+在概覽頁面，您可以看到遷移已成功，狀態變成成功。image:redhat-openshift-ocpv-rosa-026.png["OCP-v 虛擬機器遷移成功"]
+
+即時遷移完成後，虛擬機器現在位於不同的節點上。image:redhat-openshift-ocpv-rosa-027.png["不同節點上的 OCP-v VM"]
+
+開啟 Web 控制台並查看磁碟的內容。它仍然具有我們在即時遷移之前創建的相同的 2 個檔案。image:redhat-openshift-ocpv-rosa-028.png["實時遷移後 OCP-v VM 相同檔案1"] image:redhat-openshift-ocpv-rosa-029.png["即時遷移後 OCP-v VM 相同檔案2"]
+
+新節點上的虛擬機器儲存仍顯示相同的磁碟image:redhat-openshift-ocpv-rosa-030.png["即時遷移後，OCP-v VM 相同的磁碟"]
+
+此外，PVC 也相同。image:redhat-openshift-ocpv-rosa-031.png["即時遷移後，OCP-v VM 具有相同的 PVC"]
+
+與 VM pod 關聯的磁碟區也與先前相同（2 個 PVC）。image:redhat-openshift-ocpv-rosa-032.png["即時遷移後，OCP-v VM 具有相同的 PVC"]
+
+
+
+== 示範影片
+
+.使用Amazon FSx for NetApp ONTAP在 ROSA 上的 OpenShift 虛擬化中即時遷移虛擬機
+video::4b3ef03d-7d65-4637-9dab-b21301371d7d[panopto,width=360]
+可以找到更多關於 Red Hat OpenShift 和 OpenShift 虛擬化解決方案的視頻link:../videos/openshift-videos.html["這裡"]。

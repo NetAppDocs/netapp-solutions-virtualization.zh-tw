@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-vm-dp-using-velero-overview.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, OADP operator, Openshift Data Protection Application operator, velero 
+summary: Red Hat OpenShift 虛擬化資料保護與NetApp ONTAP 
+---
+= 了解如何使用 OpenShift API for Data Protection (OADP) 對 Red Hat OpenShift Virtualization 中的虛擬機器進行資料保護
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+帶有 Velero 的 OpenShift API for Data Protection (OADP) 為 OpenShift Virtualization 中的虛擬機器提供備份、復原和災難復原功能。使用Trident CSI 快照將持久磁碟區和 VM 元資料備份到NetApp ONTAP S3 或StorageGRID S3。  OADP 與 Velero API 和 CSI 儲存驅動程式集成，以管理容器化虛擬機器的資料保護操作。
+
+OpenShift 虛擬化環境中的虛擬機器是在 OpenShift 容器平台的工作節點中執行的容器化應用程式。保護虛擬機器元資料以及虛擬機器的持久性磁碟非常重要，以便在它們遺失或損壞時可以還原它們。
+
+OpenShift 虛擬化虛擬機器的持久性磁碟可以透過使用整合到 OpenShift 叢集的ONTAP儲存進行支援link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"]。在本節中我們使用link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/installing/installing-oadp-ocs.html["OpenShift 資料保護 API (OADP)"]執行虛擬機器（包括其資料卷）的備份
+
+* ONTAP物件存儲
+* 儲存網格
+
+
+然後我們在需要時從備份中恢復。
+
+OADP 支援 OpenShift 叢集上應用程式的備份、還原和災難復原。可以使用 OADP 保護的資料包括 Kubernetes 資源物件、持久磁碟區和內部映像。
+
+image:redhat-openshift-oadp-001.png["OpenShift 資料保護 API"]
+
+Red Hat OpenShift 利用開源社群開發的解決方案來保護資料。link:https://velero.io/["維萊羅"]是一個開源工具，用於安全地備份和復原、執行災難復原以及遷移 Kubernetes 叢集資源和持久磁碟區。為了輕鬆使用 Velero，OpenShift 開發了 OADP 操作符和 Velero 插件以與 CSI 儲存驅動程式整合。所公開的 OADP API 的核心是基於 Velero API。安裝 OADP 操作器並配置後，可以執行的備份/復原作業是基於 Velero API 公開的操作。
+
+image:redhat-openshift-oadp-002.png["OpenShift 資料保護 API"]
+
+OADP 1.3 可從 OpenShift 叢集 4.12 及更高版本的操作員中心取得。它有一個內建的資料移動器，可以將 CSI 磁碟區快照移至遠端物件儲存。透過在備份期間將快照移至物件儲存位置，這提供了可移植性和耐用性。災難發生後，快照可用於復原。
+
+**以下是本節範例所使用的各個元件的版本**
+
+* OpenShift 叢集 4.14
+* 透過 Operator 安裝的 OpenShift VirtualizationRed Hat 提供的 OpenShift Virtualization Operator
+* Red Hat 提供的 OADP Operator 1.13
+* 適用於 Linux 的 Velero CLI 1.13
+* Trident24.02
+* ONTAP 9.12
+
+
+link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"] link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/installing/installing-oadp-ocs.html["OpenShift 資料保護 API (OADP)"] link:https://velero.io/["維萊羅"]

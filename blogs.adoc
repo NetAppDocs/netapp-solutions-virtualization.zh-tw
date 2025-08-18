@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: blogs.html 
+summary: 閱讀博客，了解有關將ONTAP儲存與NetApp虛擬化解決方案整合的實用指導和最佳實踐。 
+keywords: netapp, solutions, blogs 
+---
+= 閱讀NetApp專家的虛擬化解決方案博客
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+閱讀博客，了解有關將ONTAP儲存與NetApp虛擬化解決方案整合的實用指導和最佳實踐。
+
+* NetApp和 VMware 雲端基金會 (VCF)
++
+** link:https://www.netapp.com/blog/netapp-vmware-cloud-foundation-getting-started["第 1 部分：入門"]
+** link:https://www.netapp.com/blog/netapp-vmware-cloud-foundation-ontap-principal-storage["第 2 部分：VCF 和ONTAP主存儲"]
+** link:https://www.netapp.com/blog/netapp-vmware-cloud-foundation-element-principal-storage["第 3 部分：VCF 和 Element 主體存儲"]
+** link:https://www.netapp.com/blog/netapp-vmware-cloud-foundation-supplemental-storage["第 4 部分：適用於 VMware 和補充儲存的ONTAP工具"]
+
+
+* link:https://cloud.netapp.com/blog/azure-blg-optimize-storage-for-cloud-based-vmware-deployments["優化基於雲端的 VMware 部署的存儲"]
+* link:https://cloud.netapp.com/blog/azure-blg-netapp-cloud-offerings-with-azure-vmware-solution["使用基於NetApp的雲端產品開始使用 Azure VMware 解決方案"]
+* link:https://community.netapp.com/t5/Tech-ONTAP-Blogs/NetApp-and-VMware-Better-than-ever/ba-p/445780["NetApp和 VMware – 比以往更好"]
+* link:https://community.netapp.com/t5/Tech-ONTAP-Blogs/3-2-1-Data-Protection-for-VMware-with-SnapCenter-Plug-in-and-BlueXP-Backup-and/ba-p/446180["透過SnapCenter插件和BlueXP虛擬機器備份與恢復，為 VMware 提供 3-2-1 資料保護"]
+

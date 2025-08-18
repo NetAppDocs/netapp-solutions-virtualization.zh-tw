@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: hyperv/hyperv-deploy.html 
+keywords: hyperv, hyper-v, deploy, netapp, virtualization, overview 
+summary: 該解決方案提供了在NetApp儲存上部署 Hyper-V 所需的步驟 
+---
+= 了解如何使用ONTAP儲存系統部署 Microsoft Hyper-V
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+透過 Windows Server 的 Hyper-V 角色實現 Microsoft 的電腦虛擬化。了解如何使用ONTAP儲存系統和 Windows Server 功能建立和管理虛擬化運算環境。
+
+Windows Server平台使用Hyper-V角色提供虛擬化技術。  Hyper-V 是 Windows Server 提供的眾多選用角色之一。
+
+
+
+== 概況
+
+Hyper-V 角色使我們能夠使用 Windows Server 內建的虛擬化技術來建立和管理虛擬化運算環境。  Hyper-V 技術將硬體虛擬化，從而提供一個可以在一台實體電腦上同時運行多個作業系統的環境。 Hyper-V 可讓您建立和管理虛擬機器及其資源。每個虛擬機器都是獨立的、虛擬化的電腦系統，可以運作自己的作業系統。  Hyper-V 提供虛擬化應用程式和工作負載的基礎架構，支援旨在提高效率和降低成本的各種業務目標，是 VMware vSphere 的完美替代方案，尤其是在當前市場條件下組織尋求多個虛擬機器管理程式共存的情況下。
+
+
+
+== 對象
+
+本文檔介紹了使用NetApp ONTAP系統的 Hyper-V 叢集配置的架構和部署流程。本文檔的目標讀者包括銷售工程師、現場顧問、專業服務、IT 經理、合作夥伴工程師以及希望將 Hyper-V 部署為主要或備用虛擬機器管理程式的客戶。
+
+
+
+== 架構
+
+本文檔中所述的架構具體包括 Microsoft Windows Server 2022 和 Hyper-V 虛擬化。 NetApp強烈建議在每次部署中都採用虛擬化軟體和基礎架構管理軟體。此配置使用每個元件的最佳實踐來實現可靠的企業級基礎架構。
+
+
+
+== 用例摘要
+
+本文檔介紹了使用NetApp全快閃FAS和ASA陣列模型設定 Hyper-V 叢集以便在 Microsoft Windows Server 2022 上作為工作負載實現最佳效能的部署流程和最佳實務。伺服器作業系統/虛擬機器管理程式是 Microsoft Windows Server 2022。本指南涵蓋透過儲存區域網路 (SAN) 和網路附加儲存 (NAS) 協定提供資料的NetApp儲存系統。

@@ -1,0 +1,124 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-vm-restore-using-velero.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, OADP operator, Openshift Data Protection Application operator, velero 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用 Velero 從 Red Hat OpenShift Virtualization 中的備份還原虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 Velero 和 OpenShift API for Data Protection (OADP) 在 OpenShift Virtualization 中還原虛擬機器。此流程包括建立復原自訂資源 (CR) 以從備份中還原虛擬機器及其持久性磁碟區，並可選擇還原至原始命名空間、不同的命名空間或使用備用儲存類別。
+
+
+
+== 先決條件
+
+為了從備份中恢復，我們假設虛擬機器所在的命名空間被意外刪除了。
+
+.還原到同一命名空間
+[%collapsible%open]
+====
+要從我們剛剛建立的備份中恢復，我們需要建立一個恢復自訂資源 (CR)。我們需要為其提供一個名稱，提供我們想要從中還原的備份的名稱，並將 restorePVs 設為 true。可以設定其他參數，如下所示link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/backing_up_and_restoring/restoring-applications.html["文件"]。點選建立按鈕。
+
+image:redhat-openshift-oadp-restore-001.png["建立恢復 CR"]
+
+....
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore1
+  namespace: openshift-adp
+spec:
+  backupName: backup1
+  restorePVs: true
+....
+當階段顯示完成時，您可以看到虛擬機器已恢復到拍攝快照時的狀態。  （如果備份是在虛擬機器運行時建立的，則從備份還原虛擬機器將啟動還原的虛擬機器並使其處於運作狀態）。  VM 恢復到相同的命名空間。
+
+image:redhat-openshift-oadp-restore-002.png["恢復完成"]
+
+====
+.還原到不同的命名空間
+[%collapsible%open]
+====
+若要將 VM 還原到不同的命名空間，您可以在 Restore CR 的 yaml 定義中提供 namespaceMapping。
+
+以下範例 yaml 檔案建立一個復原 CR，以在將備份帶到虛擬機器命名空間時還原虛擬機器及其磁碟在虛擬機器-demo 命名空間中。
+
+....
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-to-different-ns
+  namespace: openshift-adp
+spec:
+  backupName: backup
+  restorePVs: true
+  includedNamespaces:
+  - virtual-machines-demo
+  namespaceMapping:
+    virtual-machines-demo: virtual-machines
+....
+當階段顯示完成時，您可以看到虛擬機器已恢復到拍攝快照時的狀態。  （如果備份是在虛擬機器運行時建立的，則從備份還原虛擬機器將啟動還原的虛擬機器並使其處於運作狀態）。  VM 已還原至 yaml 中指定的不同命名空間。
+
+image:redhat-openshift-oadp-restore-003.png["還原到新命名空間已完成"]
+
+====
+.還原到不同的儲存類別
+[%collapsible%open]
+====
+Velero 提供了透過指定 json 補丁來修改復原期間資源的通用功能。在恢復資源之前，json 補丁會套用到資源上。json 補丁在 configmap 中指定，並在 restore 命令中引用該 configmap。此功能使您能夠使用不同的儲存類別進行復原。
+
+在下面的範例中，虛擬機器在建立期間使用 ontap-nas 作為其磁碟的儲存類別。建立了名為backup1的虛擬機器備份。
+
+image:redhat-openshift-oadp-restore-004.png["使用 ontap-nas 的虛擬機"]
+
+image:redhat-openshift-oadp-restore-005.png["虛擬機器備份 ontap-nas"]
+
+透過刪除虛擬機器來模擬虛擬機器的遺失。
+
+要使用不同的儲存類別（例如 ontap-nas-eco 儲存類別）還原虛擬機，您需要執行以下兩個步驟：
+
+**步驟 1**
+
+在 openshift-adp 命名空間中建立一個設定映射（控制台），如下所示： 填寫螢幕截圖中顯示的詳細資訊： 選擇命名空間：openshift-adp 名稱：change-storage-class-config（可以是任意名稱） 鍵：change-storage-class-config.yaml： 值：
+
+....
+version: v1
+    resourceModifierRules:
+    - conditions:
+         groupResource: persistentvolumeclaims
+         resourceNameRegex: "^rhel*"
+         namespaces:
+         - virtual-machines-demo
+      patches:
+      - operation: replace
+        path: "/spec/storageClassName"
+        value: "ontap-nas-eco"
+....
+image:redhat-openshift-oadp-restore-006.png["配置地圖使用者介面"]
+
+產生的配置映射物件應如下所示（CLI）：
+
+image:redhat-openshift-oadp-restore-007.png["配置地圖 CLI"]
+
+此配置圖將在建立復原時套用資源修改規則。將應用程式補丁將以 rhel 開頭的所有持久化卷聲明的儲存類別名稱替換為 ontap-nas-eco。
+
+**步驟 2**
+
+若要復原虛擬機，請使用 Velero CLI 中的下列命令：
+
+....
+#velero restore create restore1 --from-backup backup1 --resource-modifier-configmap change-storage-class-config -n openshift-adp
+....
+虛擬機器與使用儲存類別 ontap-nas-eco 建立的磁碟在相同命名空間中復原。
+
+image:redhat-openshift-oadp-restore-008.png["VM 還原 ontap-nas-eco"]
+
+====

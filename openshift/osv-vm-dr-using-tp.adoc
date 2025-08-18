@@ -1,0 +1,239 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-vm-dr-using-tp.html 
+keywords: OpenShift, OCP, Trident, Trident protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, ROSA, Red Hat OpenShift Virtualization 
+summary: ROSA 上的 Red Hat OpenShift 虛擬化 
+---
+= 使用Trident Protect 在 Red Hat OpenShift Virtualization 中為虛擬機器設定故障轉移和故障復原
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用Trident Protect 為 OpenShift Virtualization 中的虛擬機器設定災難復原。此過程包括使用ONTAP S3 建立 AppVault、在來源和災難復原命名空間之間建立 AppMirror 關係、排程複製以及執行故障轉移和故障復原作業以在網站中斷期間維持虛擬機器可用性。
+
+
+
+== 先決條件
+
+* 必須安裝Trident 。在使用 OpenShift Virtualization 操作員在叢集上安裝 OpenShift Virtualization 之前，必須建立後端和儲存類別。
+* 必須安裝Trident Protect 才能為 OpenShift VM 實作故障轉移和故障復原作業。請參閱此處的說明link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-installation.html["安裝三叉戟保護"]
+
+
+image:redhat-openshift-ocpv-tp-001.png["OCP-v trident protected 安裝在 trident-protect 命名空間中"]
+
+OpenShift Virtualization 中必須有一個可用的 VM。有關部署新 VM 或將現有 VM 遷移到 OpenShift Virtualization 的詳細信息，請參閱文件中的相應部分。
+
+image:redhat-openshift-ocpv-tp-003.png["安裝在 source-ns 命名空間中的 OCP-v VM"]
+
+
+
+== 使用ONTAP S3 建立 App Vault
+
+本節介紹如何使用 ontap S3 物件儲存在 trident protected 中設定應用程式保管庫。
+
+使用 oc 命令和下面顯示的 yaml 檔案為 ontap s3 建立機密和 appvault 自訂資源。確保在 trident protected 命名空間中建立它們。
+
+[source, cli]
+----
+oc create -f app-vault-secret.yaml -n trident-protect
+oc create -f app-vault.yaml -n trident-protect
+----
+[source, yaml]
+----
+apiVersion: v1
+# You can provide the keys either as stringData or base 64 encoded data
+stringData:
+  accessKeyID: "<access key id as obtained from ONTAP>"
+  secretAccessKey: "<secret access key as obtained from ONTAP>"
+#data:
+  #accessKeyID: <base 64 encoded value of access key>
+  #secretAccessKey: <base 64 encoded value of secret access key>
+kind: Secret
+metadata:
+  name: appvault-secret
+  namespace: trident-protect
+type: Opaque
+----
+[source, yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: ontap-s3-appvault
+  namespace: trident-protect
+spec:
+  providerConfig:
+    azure:
+      accountName: ""
+      bucketName: ""
+      endpoint: ""
+    gcp:
+      bucketName: ""
+      projectID: ""
+    s3:
+      bucketName: trident-protect
+      endpoint: <data lif to use to access S3>
+      secure: "false"
+      skipCertValidation: "true"
+  providerCredentials:
+    accessKeyID:
+      valueFromSecret:
+        key: accessKeyID
+        name: appvault-secret
+    secretAccessKey:
+      valueFromSecret:
+        key: secretAccessKey
+        name: appvault-secret
+  providerType: OntapS3
+----
+確保 ONTAP S3 保管庫已建立且處於可用狀態
+
+image:redhat-openshift-ocpv-tp-002.png["trident-protect 命名空間中的 OCP-v appvault"]
+
+
+
+== 為虛擬機器建立Trident保護應用程式
+
+在虛擬機器所在的命名空間中建立應用自訂資源。
+
+image:redhat-openshift-ocpv-tp-004.png["source-ns 命名空間中的 OCP-v 應用程式"]
+
+[source, CLI]
+----
+tridentctl-protect create app source-vm -n source-ns --namespaces source-ns
+----
+image:redhat-openshift-ocpv-tp-004.png["source-ns 命名空間中的 OCP-v 應用程式"]
+
+
+
+== 在新的命名空間中為災難復原虛擬機器建立Trident保護應用程式
+
+[source, CLI]
+----
+oc create ns dr-ns
+tridentctl-protect create app dr-vm -n dr-ns --namespaces dr-ns
+----
+image:redhat-openshift-ocpv-tp-005.png["source-ns 命名空間中的 OCP-v 應用程式"]
+
+
+
+== 在來源命名空間中建立 AppMirror 計劃
+
+如下所示，使用 yaml 為 AppMirror 建立一個計劃。這將使用計劃（每 5 分鐘）建立快照並保留 2 個快照
+
+[source, CLI]
+----
+oc create -f appmirror-schedule.yaml -n source-ns
+----
+[source, yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Schedule
+metadata:
+  name: appmirror-sched1
+spec:
+  appVaultRef: ontap-s3-appvault
+  applicationRef: source-vm
+  backupRetention: "0"
+  enabled: true
+  granularity: Custom
+  recurrenceRule: |-
+    DTSTART:20240901T000200Z
+    RRULE:FREQ=MINUTELY;INTERVAL=5
+  snapshotRetention: "2"
+----
+image:redhat-openshift-ocpv-tp-006.png["應用程式鏡像調度來源 ns 命名空間"]
+
+image:redhat-openshift-ocpv-tp-007.png["快照已建立"]
+
+
+
+== 在 DR 命名空間中建立 appMirror 關係
+
+在災難復原命名空間中建立 Appmirror 關係。將 desiredState 設定為 Established。
+
+[source, yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppMirrorRelationship
+metadata:
+  name: amr1
+spec:
+  desiredState: Established
+  destinationAppVaultRef: ontap-s3-appvault
+  destinationApplicationRef: dr-vm
+  namespaceMapping:
+  - destination: dr-ns
+    source: source-ns
+  recurrenceRule: |-
+    DTSTART:20240901T000200Z
+    RRULE:FREQ=MINUTELY;INTERVAL=5
+  sourceAppVaultRef: ontap-s3-appvault
+  sourceApplicationName: source-vm
+  sourceApplicationUID: "<application UID of the source VM>"
+  storageClassName: "ontap-nas"
+----
+
+NOTE: 您可以從來源應用程式的 json 輸出中取得來源虛擬機器的應用程式 UID，如下所示
+
+image:redhat-openshift-ocpv-tp-008.png["應用程式 UID 已創建"]
+
+image:redhat-openshift-ocpv-tp-009.png["建立應用程式鏡像關係"]
+
+當 AppMirror 關係建立時，最新的快照將傳輸到目標命名空間。已在 dr 命名空間中為 VM 建立 PVC，但尚未在 dr 命名空間中建立 VM pod。
+
+image:redhat-openshift-ocpv-tp-010.png["建立應用程式鏡像關係已建立"]
+
+image:redhat-openshift-ocpv-tp-011.png["App 鏡像的狀態變化"]
+
+image:redhat-openshift-ocpv-tp-012.png["在目標命名空間中建立 PVC"]
+
+
+
+== 將關係提升到故障轉移
+
+將關係的所需狀態變更為“已提升”，以在 DR 命名空間中建立 VM。  VM 仍在來源命名空間中運作。
+
+[source, CLI]
+----
+oc patch amr amr1 -n dr-ns --type=merge -p '{"spec":{"desiredState":"Promoted"}}'
+----
+image:redhat-openshift-ocpv-tp-013.png["AppMirror 關係應用補丁"]
+
+image:redhat-openshift-ocpv-tp-014.png["AppMirror 關係處於升級狀態"]
+
+image:redhat-openshift-ocpv-tp-015.png["在 DR 命名空間中建立的虛擬機"]
+
+image:redhat-openshift-ocpv-tp-016.png["來源 ns 中的虛擬機器仍在執行"]
+
+
+
+== 再次建立關係以進行故障回复
+
+將關係的期望狀態變更為「已建立」。此虛擬機器已在 DR 命名空間中刪除。  pvc 仍然存在於 DR 命名空間中。 VM 仍在來源命名空間中運作。從來源命名空間到 DR ns 的原始關係已建立。。
+
+[source, CLI]
+----
+oc patch amr amr1 -n dr-ns --type=merge -p '{"spec":{"desiredState":"Established"}}'
+----
+image:redhat-openshift-ocpv-tp-017.png["補丁到已建立狀態"]
+
+image:redhat-openshift-ocpv-tp-018.png["應用程式鏡像處於已建立狀態"]
+
+image:redhat-openshift-ocpv-tp-019.png["DR ns 中的 PVC 仍然存在"]
+
+image:redhat-openshift-ocpv-tp-020.png["來源 ns 中的 POD 和 PVC 仍然存在"]
+
+
+
+== 影片示範
+
+以下影片示範如何使用Trident Protect 為 OpenShift VM 實作災難復原場景
+
+.使用Trident Protect 進行災難復原
+video::ae4bdcf7-b344-4f19-89ed-b2d500f94efd[panopto,width=360]

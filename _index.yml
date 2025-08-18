@@ -1,0 +1,70 @@
+---
+indexpage:
+  title: NetApp虛擬化解決方案
+  summary: NetApp提供全面的虛擬化解決方案，使組織能夠在多個虛擬機器管理程式和平台上優化其 IT 基礎架構。探索現代化 VMware 環境、遷移到替代虛擬機器管理程式以及利用
+    NetApp 進階資料管理和雲端整合功能的策略。
+  lead: NetApp提供全面的虛擬化解決方案，使組織能夠在多個虛擬機器管理程式和平台上優化其 IT 基礎架構。探索現代化 VMware 環境、遷移到替代虛擬機器管理程式以及利用
+    NetApp 進階資料管理和雲端整合功能的策略。
+  tiles:
+  - title: 開始
+    links:
+    - title: 什麼是新的
+      url: "/whats-new.html"
+    - title: 了解NetApp的虛擬化
+      url: "/virtualization/virt-overview.html"
+    - title: 使用NetApp提供任何虛擬化解決方案
+      url: "/virtualization/virt-options-on-netapp.html"
+    - title: 部落格
+      url: "/blogs.html"
+    - title: 影片和演示
+      url: "/videos/index.html"
+  - title: NetApp虛擬化解決方案
+    links:
+    - title: VMware 本地端和雲端
+      url: "/vmware/index.html"
+    - title: 微軟 Hyper-V
+      url: hyperv/index.html
+    - title: Red Hat OpenShift 虛擬化
+      url: "/openshift/index.html"
+    - title: Proxmox 虛擬環境
+      url: "/proxmox/index.html"
+    - title: KVM 和 libvirt
+      url: "/kvm/index.html"
+  - title: 虛擬機器遷移與轉換
+    links:
+    - title: 使用 Shift Toolkit 遷移虛擬機
+      url: "/migration/shift-toolkit-migration.html"
+    - title: 使用 Shift Toolkit 轉換虛擬機
+      url: "/migration/shift-toolkit-conversion.html"
+    - title: 將虛擬機器遷移到ONTAP資料儲存庫
+      url: "/migration/migrate-vms-to-ontap-datastore.html"
+    - title: 將虛擬機器移轉到 Amazon EC2
+      url: "/migration/migrate-vms-to-ec2-fsxn-overview.html"
+  - title: 管理工具和集成
+    links:
+    - title: ONTAP tools for VMware vSphere
+      url: "/vmware/vmw-getting-started-otv.html"
+    - title: 用於管理的ONTAP和 VMware API
+      url: "/vmware/vmw-getting-started-automation.html"
+    - title: 用於監控的Data Infrastructure Insights
+      url: "/vmware/vmw-getting-started-dii.html"
+    - title: 虛擬機器工作負載遷移以提高效率
+      url: "/vmware/vmw-getting-started-migration.html"
+  - title: 資料保護和災難復原
+    links:
+    - title: 使用MetroCluster和SnapMirror Active Sync 進行保護
+      url: "/vmware/vmw-getting-started-vmsc.html"
+    - title: 保護並恢復資料以抵禦勒索軟體
+      url: "/vmware/vmw-getting-started-security.html"
+    - title: SnapCenter Plug-in for VMware vSphere
+      url: "/vmware/vmw-getting-started-snapcenter.html"
+    - title: BlueXP disaster recovery
+      url: "/vmware/vmw-dr-gs.html"
+  - title: 解決方案請求和回饋
+    links:
+    - title: 請求自動化
+      url: https://github.com/NetAppDocs/netapp-solutions/issues/new?body=[Request%20Automation]%0d%0a%0d%0aSolution%20Name:%20%0d%0aRequest%20Title:%20%0d%0aDescription:%0d%0aSuggestions:&title=Request%20Automation%20-%20%3Crequest_title%3E
+    - title: 提出新的解決方案
+      url: https://github.com/NetAppDocs/netapp-solutions/issues/new?body=[Request%20Solution]%0d%0a%0d%0aSolution%20Use%20Case:%20%0d%0aSolution%20Description:%20%0d%0aAdditional%20Comments:&title=Request%20Solution%20-%20%3Csolution%3E
+    - title: 提供解決方案回饋
+      url: https://github.com/NetAppDocs/netapp-solutions/issues/new?body=[Solution%20Feedback]%0d%0a%0d%0aSolution%20Name:%20%0d%0aSolution%20Feedback:%20%0d%0aAdditional%20Comments:&title=Solution%20Feedback%20-%20%3Csolution%3E

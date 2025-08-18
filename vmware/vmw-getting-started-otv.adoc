@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-getting-started-otv.html 
+keywords: vmware, getting, started, overview, netapp, otv, ontap, tools 
+summary:  
+---
+= 了解如何使用適用ONTAP tools for VMware vSphere管理虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+ONTAP tools for VMware vSphere簡化了使用NetApp儲存的虛擬機器的生命週期管理。管理員可以直接從 vCenter Server 管理存儲，從而簡化操作並增強可擴展性。虛擬儲存控制台 (VSC)、VASA 提供者和儲存複製適配器 (SRA) 等關鍵元件可最佳化設定、效能監控和災難復原。
+
+
+
+== 介紹
+
+它使管理員能夠直接管理 vCenter Server 內的存儲，並簡化 VMware 環境的儲存和資料管理。 VMware vSphere Client 外掛程式工具旨在將外掛功能整合到 vSphere Client 中，而無需在 vCenter Server 內部執行。這提供了插件隔離並支援在大型 vSphere 環境中運行的插件的橫向擴展。
+
+
+
+== ONTAP工具元件
+
+* *虛擬儲存控制台 (VSC)* VSC 包括與 vSphere 用戶端整合的介面，您可以在其中新增儲存控制器、設定資料儲存庫、監控資料儲存庫的效能以及檢視和更新 ESXi 主機設定。
+* *VASA 提供者* 適用於ONTAP 的VMware vSphere APIs for Storage Awareness (VASA) 提供者將有關 VMware vSphere 使用的儲存的資訊傳送至 vCenter Server，從而實現 VMware 虛擬磁碟區 (vVols) 資料儲存的設定、儲存功能設定檔的建立與使用、合規性
+* *儲存複製適配器 (SRA)* 啟用並與 VMware Site Recovery Manager (SRM) 一起使用時，SRA 可在發生故障時促進 vCenter Server 資料儲存和虛擬機器的恢復，從而允許配置受保護網站和復原網站以進行災難復原。
+
+
+有關適用於 VMware 的NetApp ONTAP工具的更多信息，請參閱 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere/index.html["ONTAP tools for VMware vSphere文檔"]。

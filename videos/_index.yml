@@ -1,0 +1,48 @@
+---
+indexpage:
+  title: 觀看有關使用NetApp進行虛擬化的影片和演示
+  summary: 一系列影片和示範討論了 NetApp 眾多虛擬化解決方案的功能
+  lead: 探索 NetApp 的綜合影片庫，展示跨 OpenShift、VMware 和混合多雲平台的虛擬化解決方案。每個集合都專注於特定的用例和整合場景。
+  tiles:
+  - title: Red Hat OpenShift 虛擬化
+    links:
+    - title: 虛擬機器管理和操作
+      url: openshift-videos.html#vm-management-and-operations
+    - title: 資料保護和災難復原
+      url: openshift-videos.html#data-protection-and-disaster-recovery
+    - title: 儲存整合與管理
+      url: openshift-videos.html#storage-integration-and-management
+    - title: 自動化和監控
+      url: openshift-videos.html#automation-and-monitoring
+  - title: VMware虛擬化
+    links:
+    - title: 使用ONTAP配置 VMware 資料儲存庫
+      url: vmware-videos.html#vmware-datastore-provisioning-with-ontap
+    - title: SnapCenter Plug-in for VMware vSphere
+      url: vmware-videos.html#snapcenter-plug-in-for-vmware-vsphere
+    - title: 3-2-1 資料保護解決方案
+      url: vmware-videos.html#3-2-1-data-protection-solutions
+    - title: 帶有 AWS FSx ONTAP 的VMware Cloud on AWS
+      url: vmware-videos.html#vmware-cloud-on-aws-with-aws-fsx-ontap
+    - title: Azure VMware 解決方案
+      url: vmware-videos.html#azure-vmware-solutions
+    - title: 採用NetApp ONTAP 的VMware Cloud Foundation
+      url: vmware-videos.html#vmware-cloud-foundation-with-netapp-ontap
+    - title: NetApp與 VMware Tanzu
+      url: vmware-videos.html#netapp-with-vmware-tanzu
+    - title: NetAppCloud Insights
+      url: vmware-videos.html#netapp-cloud-insights
+  - title: 混合多雲虛擬化
+    links:
+    - title: 帶有 FSx ONTAP 的AWS 上的 Red Hat OpenShift 服務（ROSA）
+      url: hybrid-cloud-videos.html#red-hat-openshift-service-on-aws-rosa-with-fsx-ontap
+    - title: NetApp HCI 解決方案
+      url: hybrid-cloud-videos.html#netapp-hci-solutions
+  - title: 精選影片
+    links:
+    - title: 適用於 VMware 的ONTAP工具 - 概述
+      url: https://netapp.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=e8071955-f6f1-45a0-a868-b12a010bba44
+    - title: 使用 iSCSI 儲存在 OpenShift Virtualization 中建立 VM
+      url: https://netapp.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=497b868d-2917-4824-bbaa-b2d500f92dda
+    - title: Amazon FSx for NetApp ONTAP與 AWS 上的 Red Hat OpenShift 服務
+      url: https://netapp.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=213061d2-53e6-4762-a68f-b21401519023

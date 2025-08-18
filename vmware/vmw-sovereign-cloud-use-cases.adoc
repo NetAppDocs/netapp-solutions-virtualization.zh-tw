@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-sovereign-cloud-use-cases.html 
+keywords: NetApp solutions, vmware, sovereign cloud, netapp, use case 
+summary:  
+---
+= NetApp技術與 VMware Sovereign Cloud 的集成
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp技術與 VMware Sovereign Cloud 框架集成，為政府和嚴格監管的組織提供資料主權、安全性和合規性解決方案。這些整合使服務提供者能夠對敏感資料保持完全的管轄控制，同時利用NetApp StorageGRID進行物件存儲，利用ONTAP進行主要資料儲存和保護服務。
+
+NetApp透過整合多種NetApp技術為 VMware Sovereign Cloud 概念提供支援。使用以下連結了解更多有關NetApp技術與 VMware Sovereign Cloud 整合的資訊：
+
+* link:#storageGRID["NetApp StorageGRID作為物件儲存擴充"]
+
+
+
+
+== NetApp StorageGRID作為物件儲存擴充
+
+NetApp與 VMware 合作，將NetApp StorageGRID整合到 VMware Cloud Director 中，以支援 VMware Sovereign Cloud。  VMware Cloud Director 的這個外掛程式使服務提供者能夠使用StorageGRID作為其物件儲存產品（無論使用情況如何），並允許透過服務提供者用來管理其產品目錄其他部分的相同 VMware 多租用戶解決方案（VMware Cloud Director）來管理StorageGRID 。
+
+提供 VMware Sovereign Clouds 的合作夥伴可以選擇NetApp StorageGRID來協助他們管理和維護具有非結構化資料的雲端環境。它對行業標準 API（如 Amazon S3 API）的原生支援具有通用相容性，有助於確保跨不同雲端環境的順暢互通性，而自動生命週期管理等獨特創新有助於確保更具成本效益地保護、儲存和長期保存客戶的非結構化資料。
+
+NetApp 的 Sovereign Cloud 與 Cloud Director 的集成為客戶提供了：
+
+* 確保包括元資料在內的敏感資料仍處於主權控制之下，同時阻止可能違反資料隱私法的外國當局存取。
+* 增強安全性和合規性，保護應用程式和資料免受快速發展的攻擊媒介的侵害，同時保持對值得信賴的本地基礎設施、內建框架和本地專家的持續合規性。
+* 面向未來的基礎設施，能夠快速應對不斷變化的資料隱私法規、安全威脅和地緣政治。
+* 透過安全的資料共享和分析釋放資料的價值，從而推動創新，同時又不違反隱私法。資料完整性受到保護以確保準確的見解。
+
+
+有關StorageGRID整合的更多信息，請查看以下內容：
+
+* link:https://www.netapp.com/newsroom/press-releases/news-rel-20231107-561294/["NetApp公告"]
+

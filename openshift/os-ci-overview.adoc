@@ -1,0 +1,37 @@
+---
+sidebar: sidebar 
+permalink: openshift/os-ci-overview.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, cloud Insights 
+summary: 使用 Red Hat OpenShift 虛擬化中的Cloud Insights對虛擬機器進行監控 
+---
+= 了解如何使用 Red Hat OpenShift 虛擬化中的Data Infrastructure Insights監控虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp Data Infrastructure Insights （以前稱為Cloud Insights）與 OpenShift Virtualization 整合以監控虛擬機，從而提供跨公有雲和私有資料中心的可見性。它使用戶能夠使用儀表板、強大的查詢和資料閾值警報來排除故障、最佳化資源並獲得洞察力。
+
+NetApp Cloud Insights是一款雲端基礎架構監控工具，可讓您了解整個基礎架構。透過Cloud Insights，您可以監控、排除故障並優化所有資源，包括公有雲和私有資料中心。有關NetApp Cloud Insights的更多信息，請參閱 https://docs.netapp.com/us-en/cloudinsights["Cloud Insights文檔"]。
+
+要開始使用Cloud Insights，您必須在NetApp BlueXP入口網站上註冊。有關詳細信息，請參閱link:https://docs.netapp.com/us-en/cloudinsights/task_cloud_insights_onboarding_1.html["Cloud Insights入門"]
+
+Cloud Insights具有多種功能，可讓您快速輕鬆地找到資料、解決問題並深入了解您的環境。您可以使用強大的查詢輕鬆找到數據，可以在儀表板中視覺化數據，並針對您設定的數據閾值發送電子郵件警報。請參閱link:https://docs.netapp.com/us-en/cloudinsights/concept_feature_tutorials.html#introduction["影片教學"]幫助您了解這些功能。
+
+要讓Cloud Insights開始收集數據，您需要以下內容
+
+**資料收集器** 資料收集器有 3 種類型：* 基礎架構（儲存設備、網路交換器、運算基礎架構）* 作業系統（如 VMware 或 Windows）* 服務（如 Kafka）
+
+資料收集器從資料來源（例如ONTAP儲存設備（基礎設施資料收集器））發現資訊。收集的資訊用於分析、驗證、監控和故障排除。
+
+**採集單元** 如果您正在使用基礎設施資料收集器，那麼您還需要一個採集單元將資料注入Cloud Insights。採集單元是專用於託管資料收集器的計算機，通常是虛擬機。此計算機通常與被監控項目位於同一資料中心/VPC。
+
+**Telegraf 代理程式** Cloud Insights也支援 Telegraf 作為其代理程式來收集整合資料。  Telegraf 是一個插件驅動的伺服器代理，可用於收集和報告指標、事件和日誌。
+
+Cloud Insights架構
+
+image:redhat-openshift-ci-overview-001.png["Cloud Insights架構"]

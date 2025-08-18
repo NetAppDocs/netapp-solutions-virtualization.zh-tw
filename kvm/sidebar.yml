@@ -1,0 +1,11 @@
+---
+section: kvm
+title: KVM虛擬化
+url: "/kvm/index.html"
+entries:
+- title: 關於 KVM 虛擬化
+  pdf-filename: NetApp上的 KVM 虛擬化概述
+  url: "/kvm/kvm-overview.html"
+- title: 帶有 KVM 和 Libvirt 的ONTAP存儲
+  pdf-filename: 適用於 KVM 虛擬化的NetApp ONTAP存儲
+  url: "/kvm/kvm-ontap.html"

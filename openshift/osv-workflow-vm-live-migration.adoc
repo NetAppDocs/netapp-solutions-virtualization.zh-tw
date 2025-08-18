@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-workflow-vm-live-migration.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 在 Red Hat OpenShift 叢集中的兩個節點之間遷移虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在叢集中的兩個節點之間遷移 OpenShift Virtualization 中的 VM，無需停機。此過程包括確認磁碟使用與 RWX 相容的儲存類別、啟動遷移以及監控進度。
+
+
+
+== 虛擬機器即時遷移
+
+即時遷移是將虛擬機器執行個體從 OpenShift 叢集中的一個節點遷移到另一個節點的過程，無需停機。為了在 OpenShift 叢集中進行即時遷移，虛擬機器必須綁定到具有共用 ReadWriteMany 存取模式的 PVC。使用 ontap-nas 驅動程式配置的Trident後端支援檔案系統協定 nfs 和 smb 的 RWX 存取模式。請參閱文檔link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas.html["這裡"]。使用 ontap-san 驅動程式配置的Trident後端支援 iSCSI 和 NVMe/TCP 協定的區塊磁碟區模式的 RWX 存取模式。請參閱文檔link:https://docs.netapp.com/us-en/trident/trident-use/ontap-san.html["這裡"]。
+
+因此，為了成功實現即時遷移，必須使用 ontap-nas 或 ontap-san（volumeMode：Block）儲存類別為虛擬機器配置具有 PVC 的磁碟（啟動磁碟和附加熱插拔磁碟）。建立 PVC 時， Trident會在啟用 NFS 或 iSCSI 的 SVM 中建立ONTAP區。
+
+image:redhat-openshift-055.png["VM 即時遷移架構"]
+
+若要對先前已建立且處於運作狀態的 VM 執行即時遷移，請執行下列步驟：
+
+. 選擇您想要即時遷移的虛擬機器。
+. 按一下“*配置*”標籤。
+. 確保虛擬機器的所有磁碟都是使用可以支援 RWX 存取模式的儲存類別建立的。
+. 點選右上角的*操作*，然後選擇*遷移*。
+. 若要查看遷移的進度，請前往左側選單上的“虛擬化”>“概述”，然後按一下“*遷移*”標籤。  VM 的遷移將從 *待定* 過渡到 *計劃* 再到 *成功*
+
+
+
+NOTE: 如果將 evictionStrategy 設定為 LiveMigrate，則當原始節點處於維護模式時，OpenShift 叢集中的 VM 實例會自動遷移到另一個節點。
+
+image:rh-os-n-use-case-vm-live-migrate-001.png["VM即時遷移開始"]
+
+image:rh-os-n-use-case-vm-live-migrate-002.png["虛擬機器即時遷移成功"]

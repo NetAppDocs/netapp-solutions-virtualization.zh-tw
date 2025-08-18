@@ -1,0 +1,291 @@
+---
+sidebar: sidebar 
+permalink: hyperv/hyperv-smas.html 
+keywords: hyperv, hyper-v, snapmirror, active, sync, stretch, cluster, netapp, virtualization 
+summary: 本文介紹了SnapMirror主動同步技術在 Microsoft 延伸叢集之間的同步雙向複製，允許在兩個站點之間主動存取和同步多站點應用程式資料（例如 MSSQL 和 Oracle）。 
+---
+= 使用NetApp SnapMirror Active Sync 和 Microsoft 延伸叢集設定同步複製
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用SnapMirror Active Sync 在 Microsoft 延伸故障轉移叢集之間設定同步、雙向複製。此流程包括安裝延伸故障轉移叢集、建立叢集間對等連線、使用ONTAP配置中介、啟用對稱主動/主動保護以及執行叢集故障轉移驗證測試。
+
+
+
+== 介紹
+
+從ONTAP 9.15.1 開始， SnapMirror主動同步支援對稱主動/主動部署，允許透過雙向同步複製從受保護 LUN 的兩個副本執行讀寫 I/O 操作。 Windows Stretch Cluster 是 Windows 故障轉移叢集功能的擴展，它跨越多個地理位置以提供高可用性和災難復原。借助SnapMirror主動同步對稱主動/主動和 Windows 故障轉移群集等群集應用程序，我們可以實現 Microsoft Hyper-V 關鍵業務應用程式的持續可用性，從而在意外事件期間實現零 RTO 和 RPO。該解決方案具有以下優勢：
+
+* 零資料遺失：確保資料同步複製，實現零復原點目標 (RPO)。
+* 高可用性和負載平衡：兩個站點都可以主動處理請求，提供負載平衡和高可用性。
+* 業務連續性：實施對稱主動/主動配置，以確保兩個資料中心都在積極地為應用程式提供服務，並且在發生故障時可以無縫接管。
+* 提高效能：使用對稱主動/主動配置在多個儲存系統之間分配負載，從而提高回應時間和整體系統效能。
+
+
+本文介紹了SnapMirror主動同步技術在 Microsoft 延伸故障轉移群集之間的同步雙向複製，允許在兩個站點之間主動存取和同步多站點應用程式資料（例如 MSSQL 和 Oracle）。如果發生故障，應用程式將立即重定向到剩餘的活動站點，不會丟失數據，也不會丟失訪問，從而提供高可用性、災難恢復和地理冗餘。
+
+
+
+== 用例
+
+一旦發生網路攻擊、停電或自然災害等中斷事件，全球互聯的商業環境就需要快速恢復業務關鍵應用程式數據，並且確保零數據遺失。在金融等領域以及遵守《一般資料保護規範》（GDPR）等監管要求的領域，這些要求更加突出。部署對稱主動/主動配置，以在地理位置分散的位置之間複製數據，提供對數據的本地存取並確保在發生區域中斷時的連續性。
+
+SnapMirror主動同步提供以下用例：
+
+.零復原時間物件 (RTO) 的應用程式部署
+在SnapMirror主動同步部署中，您有一個主叢集和鏡像叢集。主集群 (L1P) 中的 LUN 在輔助集群上有一個鏡像 (L1S)；根據熱鄰近度設置，讀取和寫入由主機本地的站點提供。
+
+.實現零 RTO 或 TAF 的應用程式部署
+透明應用程式故障轉移 (TAF) 基於主機 MPIO 軟體的路徑故障轉移，實現對儲存的無中斷存取。兩個 LUN 副本（例如主副本 (L1P) 和鏡像副本 (L1S)）具有相同的標識（序號）並向主機報告為可讀寫。
+
+.叢集應用程式
+叢集應用程式（包括 VMware vSphere Metro Storage Cluster (vMSC)、Oracle RAC 和帶有 SQL 的 Windows 故障轉移叢集）需要同時訪問，以便虛擬機器可以故障轉移到另一個站點而不會產生任何效能開銷。  SnapMirror主動同步對稱主動/主動透過雙向複製在本地提供 IO 服務，以滿足叢集應用程式的要求。
+
+.災難場景
+在分散地理位置的網站之間同步複製應用程式的多個磁碟區。當主副本發生中斷時，您可以自動故障轉移到輔助副本，從而實現一級應用程式的業務連續性。
+
+.Windows 故障轉移
+SnapMirror主動同步透過易於使用的應用程式級粒度和自動故障轉移提供了靈活性，從而可以在虛擬和實體環境中為業務關鍵型應用程式（如 Oracle、Microsoft SQL Server 等）實現高資料可用性和快速資料複製。
+
+
+
+== 解決方案架構
+
+Microsoft 延伸叢集在每個網站上都有兩個 Hyper-V 節點。這兩個節點共享NetApp儲存並使用SnapMirror主動同步對稱主動-主動在兩個站點之間複製磁碟區。一致性組確保資料集的所有磁碟區都處於靜止狀態，然後在同一時間點進行快照。這為支援資料集的磁碟區提供了資料一致的還原點。  ONTAP調解器接收有關對等ONTAP叢集和節點的健康訊息，在兩者之間進行協調並確定每個節點/叢集是否健康且正在運行。
+
+解決方案組件：
+
+* 兩個NetApp儲存系統ONTAP 9.15.1：第一和第二個故障域
+* 用於ONTAP調解器的 Redhat 8.7 VM
+* Windows 2022 上的三個 Hyper-V 故障轉移叢集：
++
+** 站點 1、站點 2 用於應用程式
+** 調解員站台 3
+
+
+* Hyper-V 上的虛擬機器：Microsoft 網域控制器、MSSQL Always On 故障轉移叢集執行個體、 ONTAP調解器
+
+
+image:hyperv-smas-001.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+=== 安裝 Microsoft Stretch 故障轉移叢集
+
+您可以使用 Windows Admin Center、PowerShell 或伺服器管理員控制台來安裝故障轉移群集功能及其相關的 PowerShell cmdlet。有關先決條件和步驟的詳細信息，請查看建立故障轉移群集。
+
+以下是設定 Windows Stretch Cluster 的逐步指南：
+
+. 在所有四台伺服器 hyperv1、hyperv2、hyperv3 和 hyperv4 上安裝 Windows 2022
+. 將所有四台伺服器加入同一個 Active Directory 網域：hyperv.local。
+. 在每台伺服器上安裝 Windows 功能故障轉移叢集、Hyper-V、Hyper-V_Powershell 和 MPIO。
++
+[source, shell]
+----
+Install-WindowsFeature –Name "Failover-Clustering", "Hyper-V", "Hyper-V-Powershell", "MPIO" –IncludeManagementTools
+----
+. 配置MPIO，新增對iSCSI設備的支援。
++
+image:hyperv-smas-002.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 在網站 1 和網站 2 ONTAP儲存上，建立兩個 iSCSI LUN（SQLdata 和 SQLlog）並對應到 Windows 伺服器 iqn 群組。使用 Microsoft iSCSI 軟體啟動器連接 LUN。欲了解更多詳情，請查看link:https://docs.netapp.com/us-en/ontap-sm-classic/iscsi-config-windows/index.html["Windows 的 iSCSI 配置"]。
+. 執行叢集驗證報告以檢查任何錯誤或警告。
++
+[source, shell]
+----
+Test-Cluster –Node hyperv1, hyperv2, hyperv3, hyperv4
+----
+. 建立故障轉移群集，分配靜態 IP 位址，
++
+[source, shell]
+----
+New-Cluster –Name <clustername> –Node hyperv1, hyperv2, hyperv3, hyperv4, StaticAddress <IPaddress>
+----
++
+image:hyperv-smas-003.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 將映射的 iSCSI 儲存體新增至故障轉移群集。
+. 配置仲裁見證，右鍵點擊集群->更多操作->配置集群仲裁設置，選擇磁碟見證。
++
+下圖顯示了四個叢集共用 LUN - 兩個網站 sqldata 和 sqllog 以及一個仲裁中的磁碟見證。
+
++
+image:hyperv-smas-004.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+.Always On 故障轉移叢集實例
+Always On 故障轉移叢集實例 (FCI) 是一個 SQL Server 實例，它安裝在 WSFC 中具有 SAN 共用磁碟儲存的節點上。在故障轉移期間，WSFC 服務將執行個體資源的所有權轉移到指定的故障轉移節點。然後，SQL Server 執行個體在故障轉移節點上重新啟動，資料庫照常復原。有關設定的更多詳細信息，請查看使用 SQL 的 Windows 故障轉移群集。在每個網站上建立兩個 Hyper-V SQL FCI VM 並設定優先權。使用 hyperv1 和 hyperv2 作為網站 1 VM 的首選擁有者，使用 hyperv3 和 hyperv4 作為網站 2 VM 的首選擁有者。
+
+image:hyperv-smas-005.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+=== 建立集群間對等連接
+
+您必須先在來源叢集和目標叢集之間建立對等關係，然後才能使用SnapMirror複製 Snapshot 副本。
+
+. 在兩個集群上新增集群間網路接口
++
+image:hyperv-smas-006.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 您可以使用 cluster peer create 指令在本機和遠端叢集之間建立對等關係。建立對等關係後，您可以在遠端叢集上執行 cluster peer create 來向本機叢集進行驗證。
++
+image:hyperv-smas-007.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+
+=== 使用ONTAP配置調解器
+
+ONTAP調解器接收有關對等ONTAP叢集和節點的健康訊息，在兩者之間進行協調並確定每個節點/叢集是否健康且正在運行。 SM-as 允許資料在寫入來源磁碟區後立即複製到目標。調解器必須部署在第三個故障域。先決條件
+
+* 硬體規格：8GB RAM、2x2GHz CPU、1Gb 網路（<125ms RTT）
+* 安裝了 Red Hat 8.7 作業系統，檢查link:https://docs.netapp.com/us-en/ontap/mediator/index.html["ONTAP調解器版本和支援的 Linux 版本"]。
+* 設定 Mediator Linux 主機：網路設定和防火牆連接埠 31784 和 3260
+* 安裝 yum-utils 套件
+* link:https://docs.netapp.com/us-en/ontap/mediator/index.html#register-a-security-key-when-uefi-secure-boot-is-enabled["啟用 UEFI 安全啟動時註冊安全金鑰"]
+
+
+.步驟
+. 從下載 Mediator 安裝包link:https://mysupport.netapp.com/site/products/all/details/ontap-mediator/downloads-tab["ONTAP調解器下載頁面"]。
+. 驗證ONTAP調解器代碼簽章。
+. 運行安裝程式並根據需要回應提示：
++
+[source, shell]
+----
+./ontap-mediator-1.8.0/ontap-mediator-1.8.0 -y
+----
+. 啟用安全啟動後，您必須在安裝後採取額外步驟來註冊安全金鑰：
++
+.. 依照 README 檔案中的說明對 SCST 核心模組進行簽署：
++
+[source, shell]
+----
+/opt/netapp/lib/ontap_mediator/ontap_mediator/SCST_mod_keys/README.module-signing
+----
+.. 找到所需的鍵：
++
+[source, shell]
+----
+/opt/netapp/lib/ontap_mediator/ontap_mediator/SCST_mod_keys
+----
+
+
+. 驗證安裝
++
+.. 確認流程：
++
+[source, shell]
+----
+systemctl status ontap_mediator mediator-scst
+----
++
+image:hyperv-smas-008.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+.. 確認ONTAP調解器服務所使用的連接埠：
++
+image:hyperv-smas-009.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+. 使用自簽名憑證初始化ONTAP調解器以進行SnapMirror主動同步
++
+.. 從ONTAP Mediator Linux VM/主機軟體安裝位置 cd /opt/netapp/lib/ontap_mediator/ontap_mediator/server_config 中找到ONTAP Mediator CA 憑證。
+.. 將ONTAP調解器 CA 憑證新增至ONTAP叢集。
++
+[source, shell]
+----
+security certificate install -type server-ca -vserver <vserver_name>
+----
+
+
+. 新增中介，進入系統管理器，保護>概覽>中介，輸入中介的IP位址、使用者名稱（API使用者預設為mediatoradmin）、密碼和連接埠31784。
++
+下圖顯示了集群間網路介面、集群對等體、調解器和 SVM 對等體均已設定。
+
++
+image:hyperv-smas-010.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+
+=== 配置對稱主動/主動保護
+
+一致性群組有助於應用程式工作負載管理，提供易於配置的本機和遠端保護策略以及某一時間點的磁碟區集合的同時崩潰一致性或應用程式一致性 Snapshot 副本。更多詳細資訊請參閱link:https://docs.netapp.com/us-en/ontap/consistency-groups/index.html["一致性組概述"]。我們對此設定使用統一的配置。
+
+.統一配置的步驟
+. 建立一致性群組時，指定主機啟動器來建立igroup。
+. 選取核取方塊以啟用SnapMirror ，然後選擇 AutomatedFailoverDuplex 政策。
+. 在出現的對話方塊中，選取複製啟動器群組複選框以複製 igroup。在編輯近端設定中，為您的主機設定近端 SVM。
++
+image:hyperv-smas-011.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 選擇“儲存”
++
+源和目的之間建立保護關係。
+
++
+image:hyperv-smas-012.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+
+=== 執行群集故障轉移驗證測試
+
+我們建議您執行計劃的故障轉移測試來進行叢集驗證檢查，兩個網站上的 SQL 資料庫或任何叢集軟體 - 主網站或鏡像網站在測試期間應該繼續可存取。
+
+Hyper-V 故障轉移叢集需求包括：
+
+* SnapMirror活動同步關係必須同步。
+* 當非中斷操作正在進行時，您無法啟動計劃的故障轉移。非中斷操作包括磁碟區移動、聚合重新定位和儲存故障轉移。
+* ONTAP調解器必須已配置、已連線且處於法定人數。
+* 每個站點上至少有兩個 Hyper-V 群集節點，其 CPU 處理器屬於相同 CPU 系列，以最佳化 VM 遷移過程。  CPU 應該是支援硬體輔助虛擬化和基於硬體的資料執行保護 (DEP) 的 CPU。
+* Hyper-V 叢集節點應該是相同的 Active Directory 網域成員，以確保彈性。
+* Hyper-V 叢集節點和NetApp儲存節點應透過冗餘網路連接，以避免單點故障。
+* 共享存儲，所有叢集節點都可以透過 iSCSI、光纖通道或 SMB 3.0 協定存取。
+
+
+
+
+==== 測試場景
+
+有很多方法可以觸發主機、儲存或網路的故障轉移。
+
+image:hyperv-smas-013.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+.Hyper-V 發生故障的節點或站點
+* 節點故障 故障轉移群集節點可以接管故障節點的工作負載，此過程稱為故障轉移。操作：關閉 Hyper-V 節點 預期結果：叢集中的另一個節點將接管工作負載。虛擬機器將被遷移到另一個節點。
+* 一個站點故障 我們還可以使整個站點發生故障，並觸發主站點故障轉移到鏡像站點： 操作：關閉一個站點上的兩個 Hyper-V 節點。預期結果：主站點上的虛擬機器將遷移到鏡像站點 Hyper-V 集群，因為SnapMirror主動同步對稱主動/主動透過雙向複製在本地提供 IO，並且對工作負載沒有影響，RPO 和 RTO 為零。
+
+
+.一個站點發生儲存故障
+* 停止主站點上的 SVM 操作：停止 iSCSI SVM 預期結果：Hyper-V 主群集已連接到鏡像站點，且SnapMirror主動同步對稱主動/主動無工作負載影響，RPO 和 RTO 為零。
+
+
+.成功標準
+測試期間，請注意以下事項：
+
+* 觀察叢集的行為並確保服務轉移到其餘節點。
+* 檢查是否有任何錯誤或服務中斷。
+* 確保叢集可以處理儲存故障並繼續運作。
+* 驗證資料庫資料是否仍然可存取且服務是否繼續運作。
+* 驗證資料庫資料完整性是否已維護。
+* 驗證特定應用程式是否可以故障轉移到另一個節點而不會對使用者產生影響。
+* 驗證叢集是否可以在故障轉移期間和之後平衡負載並保持效能。
+
+
+
+
+== 總結
+
+SnapMirror主動同步可以幫助多站點應用程式資料（例如 MSSQL 和 Oracle）在兩個站點之間主動存取和同步。如果發生故障，應用程式會立即重新導向到剩餘的活動站點，不會遺失數據，也不會遺失存取。

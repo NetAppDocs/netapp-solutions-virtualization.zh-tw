@@ -1,0 +1,63 @@
+---
+sidebar: sidebar 
+permalink: openshift/os-ci-samples.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, cloud Insights 
+summary: 使用 Red Hat OpenShift 虛擬化中的Cloud Insights對虛擬機器進行監控 
+---
+= 使用Data Infrastructure Insights監控 Red Hat OpenShift 虛擬化中的虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp Data Infrastructure Insights （以前稱為Cloud Insights）為 OpenShift Virtualization 中的虛擬機器提供了強大的監控功能，包括基於事件的監控、警報建立和後端儲存對應。它還提供變化分析來追蹤集群變化並協助進行故障排除。
+
+
+
+== **基於事件的監控並建立警報**
+
+以下是一個範例，其中包含 OpenShift Virtualization 中的 VM 的命名空間會根據事件進行監控。在本範例中，基於**logs.kubernetes**.event為叢集中的指定命名空間建立一個監視器。
+
+image:redhat-openshift-ci-samples-001.png["Cloud Insights範例"]
+
+此查詢提供命名空間中虛擬機器的所有事件。 （命名空間中只有一台虛擬機器）。也可以建立進階查詢，根據原因為「失敗」或「FailedMount」的事件進行過濾。這些事件通常是在建立 PV 或將 PV 安裝到 pod 時出現問題時建立的，這表示動態設定程式在為 VM 建立持久性磁碟區時存在問題。在建立如上所示的警報監視器時，您也可以設定對收件者的通知。您也可以提供有助於解決錯誤的糾正措施或其他資訊。在上面的範例中，可以透過查看Trident後端設定和儲存類別定義來取得更多資訊以解決問題。
+
+
+
+== **變更分析**
+
+透過變更分析，您可以了解集群狀態的變化，包括誰進行了變更，這有助於解決問題。
+
+image:redhat-openshift-ci-samples-002.png["Cloud Insights範例"]
+
+在上面的範例中，在 OpenShift 叢集上為包含 OpenShift 虛擬化 VM 的命名空間配置了變更分析。儀表板顯示時間線上的變化。您可以深入了解發生了什麼變化，然後按一下「所有變化差異」以查看清單的差異。從清單中，您可以看到已建立持久磁碟的新備份。
+
+image:redhat-openshift-ci-samples-003.png["Cloud Insights範例"]
+
+image:redhat-openshift-ci-samples-004.png["Cloud Insights範例"]
+
+
+
+== 後端儲存映射
+
+透過Cloud Insights，您可以輕鬆查看 VM 磁碟的後端儲存以及有關 PVC 的幾個統計資料。
+
+image:redhat-openshift-ci-samples-005.png["Cloud Insights範例"]
+
+您可以點擊後端列下的鏈接，它將直接從後端ONTAP儲存中提取資料。
+
+image:redhat-openshift-ci-samples-006.png["Cloud Insights範例"]
+
+查看所有 pod 到儲存映射的另一種方法是從「探索」下的「可觀察性」選單建立「所有指標」查詢。
+
+image:redhat-openshift-ci-samples-007.png["Cloud Insights範例"]
+
+點擊任意連結都會為您提供來自 ONTP 儲存的相應詳細資訊。例如，按一下 storageVirtualMachine 欄位中的 SVM 名稱將從ONTAP中提取有關該 SVM 的詳細資訊。按一下內部磁碟區名稱將會擷取有關ONTAP中該磁碟區的詳細資訊。
+
+image:redhat-openshift-ci-samples-008.png["Cloud Insights範例"]
+
+image:redhat-openshift-ci-samples-009.png["Cloud Insights範例"]

@@ -1,0 +1,112 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-nfs-arp.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, ransomware 
+summary:  
+---
+= 自主防禦 NFS 儲存勒索軟體
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+儘早偵測勒索軟體對於防止其傳播和避免代價高昂的停機至關重要。有效的勒索軟體偵測策略必須在 ESXi 主機和客戶 VM 層級納入多層保護。雖然實施了多種安全措施來全面防禦勒索軟體攻擊，但ONTAP能夠在整體防禦方法中添加更多層保護。舉幾個功能的例子，它包括快照、自主勒索軟體保護、防篡改快照等等。
+
+讓我們看看上述功能如何與 VMware 搭配使用來保護資料並恢復資料以抵禦勒索軟體的攻擊。為了保護 vSphere 和客戶虛擬機器免受攻擊，必須採取多項措施，包括分段、利用端點的 EDR/XDR/SIEM、安裝安全性更新並遵守適當的強化指南。駐留在資料儲存上的每個虛擬機器也託管一個標準作業系統。確保企業伺服器安裝反惡意軟體產品套件並定期更新，這是多層勒索軟體保護策略的重要組成部分。除此之外，在為資料儲存提供支援的 NFS 磁碟區上啟用自主勒索軟體保護 (ARP)。  ARP 利用內建的 onbox ML 查看卷宗工作負載活動和資料熵來自動偵測勒索軟體。  ARP 可透過ONTAP內建管理介面或系統管理員進行配置，並依磁碟區啟用。
+
+image:nfs-arp-001.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+NOTE: 使用目前處於技術預覽階段的全新NetApp ARP/AI，無需學習模式。相反，它可以利用其人工智慧勒索軟體檢測功能直接進入主動模式。
+
+
+NOTE: 使用ONTAP One，所有這些功能集都是完全免費的。存取 NetApp 強大的資料保護、安全套件以及ONTAP提供的所有功能，無需擔心許可障礙。
+
+一旦進入活動模式，它就會開始尋找可能是勒索軟體的異常卷活動。如果偵測到異常活動，則會立即進行自動快照複製，從而提供盡可能接近檔案感染的復原點。當加密磁碟區中新增副檔名或修改檔案副檔名時，ARP 可以偵測到位於 VM 外部的 NFS 磁碟區上 VM 特定檔案副檔名的變化。
+
+image:nfs-arp-002.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+如果勒索軟體攻擊針對虛擬機器 (VM) 並更改 VM 內的檔案而不對 VM 外部進行更改，則如果 VM 的預設熵較低（例如，對於 .txt、.docx 或 .mp4 檔案等檔案類型），進階勒索軟體防護 (ARP) 仍將偵測到威脅。即使 ARP 在這種情況下創建了保護快照，它也不會產生威脅警報，因為 VM 以外的檔案副檔名尚未被篡改。在這種情況下，初始防禦層會識別異常，但 ARP 有助於根據熵建立快照。
+
+有關詳細信息，請參閱link:https://docs.netapp.com/us-en/ontap/anti-ransomware/use-cases-restrictions-concept.html#supported-configurations["ARP 用例和注意事項"]。
+
+從檔案轉向備份數據，勒索軟體攻擊現在越來越多地瞄準備份和快照恢復點，試圖在開始加密檔案之前刪除它們。但是，使用ONTAP，可以透過在主系統或輔助系統上建立防篡改快照來防止這種情況link:https://docs.netapp.com/us-en/ontap/snaplock/snapshot-lock-concept.html["NetApp Snapshot 副本鎖定"]。
+
+image:nfs-arp-003.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+這些 Snapshot 副本無法被勒索軟體攻擊者或惡意管理員刪除或更改，因此即使在受到攻擊後它們仍然可用。如果資料儲存或特定虛擬機器受到影響， SnapCenter可以在幾秒鐘內恢復虛擬機器數據，最大限度地減少組織的停機時間。
+
+image:nfs-arp-004.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+以上內容展示了ONTAP儲存如何在現有技術上添加額外的層，從而增強環境的未來性。
+
+如需更多信息，請查看link:https://www.netapp.com/media/7334-tr4572.pdf["NetApp勒索軟體解決方案"]。
+
+現在，如果所有這些都需要與 SIEM 工具進行協調和集成，那麼可以使用像BlueXP ransomware protection這樣的 offtap 服務。這是一項旨在保護資料免受勒索軟體侵害的服務。該服務為基於應用程式的工作負載（例如 Oracle、MySQL、VM 資料儲存和本機 NFS 儲存上的檔案共用）提供保護。
+
+在此範例中，NFS 資料儲存「Src_NFS_DS04」使用BlueXP ransomware protection進行保護。
+
+image:nfs-arp-005.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:nfs-arp-006.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+有關配置BlueXP ransomware protection的詳細信息，請參閱link:https://docs.netapp.com/us-en/bluexp-ransomware-protection/rp-start-setup.html["設定BlueXP ransomware protection"]和link:https://docs.netapp.com/us-en/bluexp-ransomware-protection/rp-use-settings.html#add-amazon-web-services-as-a-backup-destination["配置BlueXP ransomware protection設置"]。
+
+現在是時候透過一個例子來解釋這一點了。在本演練中，資料儲存「Src_NFS_DS04」受到影響。
+
+image:nfs-arp-007.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+ARP 在偵測到後立即觸發了磁碟區上的快照。
+
+image:nfs-arp-008.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:nfs-arp-009.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+一旦法醫分析完成，就可以使用SnapCenter或BlueXP ransomware protection快速且無縫地完成恢復。使用SnapCenter，前往受影響的虛擬機器並選擇要還原的適當快照。
+
+image:nfs-arp-010.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+本節介紹BlueXP ransomware protection如何協調從加密 VM 檔案的勒索軟體事件中復原。
+
+
+NOTE: 如果 VM 由SnapCenter管理， BlueXP ransomware protection會使用 VM 一致性流程將 VM 恢復到先前的狀態。
+
+. 存取BlueXP ransomware protection， BlueXP ransomware protection儀表板上會出現警報。
+. 按一下警報以查看產生警報的特定磁碟區上的事件
++
+image:nfs-arp-011.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 選擇「標記需要恢復」將勒索軟體事件標記為可恢復（事件消除後）
++
+image:nfs-arp-012.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
++
+
+NOTE: 如果事件被證明是誤報，則可以解除警報。
+
+. 轉到“恢復”選項卡並查看“恢復”頁面中的工作負載信息，選擇處於“需要恢復”狀態的資料存儲卷，然後選擇“恢復”。
++
+image:nfs-arp-013.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 在這種情況下，還原範圍是「按 VM」（對於 VM 的SnapCenter ，還原範圍是「按 VM」）
++
+image:nfs-arp-014.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 選擇用於復原資料的還原點，然後選擇目標並按一下復原。
++
+image:nfs-arp-015.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 從頂部選單中，選擇「恢復」以查看「恢復」頁面上的工作負載，其中操作的狀態會在各個狀態之間移動。恢復完成後，虛擬機器檔案將恢復如下。
++
+image:nfs-arp-016.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+NOTE: 根據應用程序，可以從SnapCenter for VMware 或SnapCenter插件執行復原。
+
+NetApp解決方案提供了各種有效的可見性、偵測和補救工具，可協助您及早發現勒索軟體，防止其傳播，並在必要時快速恢復，以避免代價高昂的停機。傳統的分層防禦解決方案仍然盛行，第三方和合作夥伴的可視性和檢測解決方案也是如此。有效的補救措施仍然是應對任何威脅的關鍵部分。

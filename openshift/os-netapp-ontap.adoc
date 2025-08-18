@@ -1,0 +1,93 @@
+---
+sidebar: sidebar 
+permalink: openshift/os-netapp-ontap.html 
+keywords: NetApp, ONTAP, AFF, FAS, iSCSI, NFS 
+summary: NetApp ONTAP是一款功能強大的儲存軟體工具，具有直覺的 GUI、具有自動化整合的 REST API、基於 AI 的預測分析和糾正措施、無中斷硬體升級以及跨儲存導入等功能。 
+---
+= NetApp ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp ONTAP是一款功能強大的儲存軟體工具，具有直覺的 GUI、具有自動化整合的 REST API、基於 AI 的預測分析和糾正措施、無中斷硬體升級以及跨儲存導入等功能。
+
+有關NetApp ONTAP儲存系統的更多信息，請訪問 https://www.netapp.com/data-management/ontap-data-management-software/["NetApp ONTAP網站"^]。
+
+ONTAP 提供以下功能：
+
+* 一個統一的儲存系統，可同時存取和管理 NFS、CIFS、iSCSI、FC、FCoE 和 FC-NVMe 協定的資料。
+* 不同的部署模型包括全快閃、混合和全 HDD 硬體配置上的本地部署；受支援的虛擬機器管理程式（如ONTAP Select）上的基於 VM 的儲存平台；以及在雲端中的Cloud Volumes ONTAP。
+* 透過支援自動資料分層、內聯資料壓縮、重複資料刪除和壓縮，提高了ONTAP系統上的資料儲存效率。
+* 基於工作負載、QoS 控制的儲存。
+* 與公有雲無縫集成，實現資料分層與保護。ONTAP還提供強大的資料保護功能，使其在任何環境中都脫穎而出：
++
+** * NetApp Snapshot 副本。 *使用最少的磁碟空間快速進行時間點資料備份，且不產生額外的效能開銷。
+** * NetApp SnapMirror。 *將資料的 Snapshot 副本從一個儲存系統鏡像到另一個儲存系統。ONTAP也支援將資料鏡像到其他實體平台和雲端原生服務。
+** * NetApp SnapLock。 *透過將不可重寫資料寫入在指定時間內無法覆寫或擦除的特殊捲，可以有效地管理這些資料。
+** * NetApp SnapVault。 *將來自多個儲存系統的資料備份到中央 Snapshot 副本，作為所有指定係統的備份。
+** * NetAppSyncMirror。 *為實體連接到同一控制器的兩個不同磁碟叢提供即時 RAID 等級資料鏡像。
+** * NetApp SnapRestore。 *提供從 Snapshot 副本按需快速恢復備份資料的功能。
+** * NetApp FlexClone。 *根據 Snapshot 副本提供NetApp磁碟區的完全可讀、可寫入副本的即時配置。
+
+
+
+
+有關ONTAP的更多信息，請參閱 https://docs.netapp.com/ontap-9/index.jsp["ONTAP 9 文檔中心"^]。
+
+
+NOTE: NetApp ONTAP可在本機、虛擬化或雲端使用。
+
+image:redhat-openshift-035.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== NetApp平台
+
+
+
+=== NetApp AFF/ FAS
+
+NetApp提供強大的全快閃 (AFF) 和橫向擴展混合 (FAS) 儲存平台，這些平台具有低延遲效能、整合資料保護和多協定支援等特點。
+
+這兩種系統均由NetApp ONTAP資料管理軟體提供支持，這是業界最先進的資料管理軟體，具有高可用性、雲端整合、簡化的儲存管理功能，可提供您的資料結構所需的企業級速度、效率和安全性。
+
+有關 NETAPP AFF/ FAS平台的更多信息，請按一下 https://docs.netapp.com/platstor/index.jsp["這裡"]。
+
+
+
+=== ONTAP Select
+
+ONTAP Select是NetApp ONTAP的軟體定義部署，可部署到您環境中的虛擬機器管理程式。它可以安裝在 VMware vSphere 或 KVM 上，並提供基於硬體的ONTAP系統的全部功能和體驗。
+
+有關ONTAP Select的更多信息，請單擊 https://docs.netapp.com/us-en/ontap-select/["這裡"]。
+
+
+
+=== Cloud Volumes ONTAP
+
+NetApp Cloud Volumes ONTAP是NetApp ONTAP的雲端部署版本，可部署在許多公有雲中，包括：Amazon AWS、Microsoft Azure 和 Google Cloud。
+
+有關Cloud Volumes ONTAP 的更多信息，請單擊 https://docs.netapp.com/us-en/occm/#discover-whats-new["這裡"]。
+
+
+
+=== Amazon FSx ONTAP
+
+Amazon FSx ONTAP透過ONTAP流行的資料存取和管理功能在 AWS 雲端中提供完全託管的共用儲存。有關Amazon FSx ONTAP 的更多信息，請單擊 https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/what-is-fsx-ontap.html["這裡"]。
+
+
+
+=== Azure NetApp Files
+
+Azure NetApp Files是 Azure 原生的、第一方的、企業級的高效能檔案儲存服務。它提供卷宗服務，您可以為其建立NetApp帳戶、容量池和磁碟區。您還可以選擇服務和效能等級並管理資料保護。您可以使用熟悉且依賴的相同協定和工具來建立和管理高效能、高可用性和可擴展的檔案共用。有關Azure NetApp Files 的更多信息，請單擊 https://learn.microsoft.com/en-us/azure/azure-netapp-files/["這裡"]。
+
+
+
+=== Google Cloud NetApp Volumes
+
+Google Cloud NetApp Volumes是一種完全託管的基於雲端的資料儲存服務，可提供進階資料管理功能和高度可擴展的效能。它允許您將基於檔案的應用程式移至 Google Cloud。它內建支援網路檔案系統（NFSv3 和 NFSv4.1）和伺服器訊息區塊（SMB）協議，因此您無需重新建置應用程序，並可以繼續為您的應用程式取得持久儲存。有關 Google Cloud NetApp VolumesP 的更多信息，請點擊 https://cloud.google.com/netapp/volumes/docs/discover/overview["這裡"]。

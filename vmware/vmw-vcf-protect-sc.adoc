@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-protect-sc.html 
+keywords: vmware, vcf, protect, snapcenter 
+summary:  
+---
+= 了解如何使用適用於 VMware vSphere 的SnapCenter外掛程式保護 VCF 工作負載域
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解您可以使用哪些NetApp解決方案透過適用於SnapCenter Plug-in for VMware vSphere保護 VMware Cloud Foundation (VCF) 工作負載。該插件簡化了備份和恢復，確保了應用程式一致的備份，並使用 NetApp 的效率技術優化儲存。
+
+它支援自動化工作流程和可擴展操作，同時提供與 vSphere 用戶端的無縫整合。  SnapMirror複製可在本地或雲端提供二級備份，從而在虛擬化環境中提供強大的資料保護和營運效率。
+
+請參閱以下解決方案以了解更多詳細資訊。
+
+* link:vmw-vcf-scv-viwld.html["保護 VCF 工作負載域"]
+* link:vmw-vcf-scv-multiwkld-protection.html["保護 VCF 多工負載域"]
+* link:vmw-vcf-scv-nvme.html["使用 NVMe 保護 VCF 工作負載域"]
+* link:vmw-vcf-321-data-protection.html["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"]
+

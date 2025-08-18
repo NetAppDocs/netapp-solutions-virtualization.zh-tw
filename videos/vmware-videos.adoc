@@ -1,0 +1,104 @@
+---
+sidebar: sidebar 
+permalink: videos/vmware-videos.html 
+summary: 展示 VMware 解決方案與NetApp儲存技術整合的影片和演示 
+keywords: vmware, vsphere, vcf, tanzu, snapcenter, ontap tools, videos, demos 
+---
+= 觀看有關使用NetApp進行 VMware 虛擬化的視頻
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+觀看有關 VMware 與NetApp儲存解決方案整合的影片和示範。了解如何使用適用於 VMware vSphere 的NetApp ONTAP工具、SnapCenter Plug-in for VMware vSphere、3-2-1 資料保護，以及NetApp如何與 VMware Cloud Foundation 和 Tanzu 協同工作。
+
+
+
+== 使用ONTAP配置 VMware 資料儲存庫
+
+.適用於 VMware 的ONTAP工具 - 概述
+video::e8071955-f6f1-45a0-a868-b12a010bba44[panopto]
+.使用ONTAP配置 VMware iSCSI 資料存儲
+video::5c047271-aecc-437c-a444-b01200f9671a[panopto]
+.使用ONTAP配置 VMware NFS 資料儲存庫
+video::a34bcd1c-3aaa-4917-9a5d-b01200f97f08[panopto]
+
+
+== SnapCenter Plug-in for VMware vSphere
+
+.SnapCenter Plug-in for VMware vSphere- 解決方案先決條件
+video::38881de9-9ab5-4a8e-a17d-b01200fade6a[panopto,width=360]
+.SnapCenter Plug-in for VMware vSphere- 部署
+video::10cbcf2c-9964-41aa-ad7f-b01200faca01[panopto,width=360]
+.SnapCenter Plug-in for VMware vSphere- 備份工作流程
+video::b7272f18-c424-4cc3-bc0d-b01200faaf25[panopto,width=360]
+.SnapCenter Plug-in for VMware vSphere- 還原工作流程
+video::ed41002e-585c-445d-a60c-b01200fb1188[panopto,width=360]
+.SnapCenter - SQL 還原工作流程
+video::8df4ad1f-83ad-448b-9405-b01200fb2567[panopto,width=360]
+
+
+== 3-2-1 資料保護解決方案
+
+.使用SnapCenter Plug-in for VMware vSphere以及適用於虛擬機器的BlueXP backup and recovery為 VMFS 資料儲存提供 3-2-1 資料保護
+video::7c21f3fc-4025-4d8f-b54c-b0e001504c76[panopto,width=360]
+
+
+== 帶有 AWS FSx ONTAP 的VMware Cloud on AWS
+
+.使用 iSCSI 的 Windows 用戶端連線儲存與 FSx ONTAP
+video::0d03e040-634f-4086-8cb5-b01200fb8515[panopto,width=360]
+.使用 NFS 連接 Linux 用戶端和 FSx ONTAP 的存儲
+video::c3befe1b-4f32-4839-a031-b01200fb6d60[panopto,width=360]
+.VMware Cloud on AWS 使用Amazon FSx ONTAP節省 TCO
+video::f0fedec5-dc17-47af-8821-b01200f00e08[panopto,width=360]
+.VMware Cloud on AWS 補充資料儲存（附Amazon FSx ONTAP）
+video::2065dcc1-f31a-4e71-a7d5-b01200f01171[panopto,width=360]
+.VMC 的 VMware HCX 部署與設定
+video::6132c921-a44c-4c81-aab7-b01200fb5d29[panopto,width=360]
+.使用 VMware HCX for VMC 和 FSx ONTAP進行 vMotion 遷移演示
+video::52661f10-3f90-4f3d-865a-b01200f06d31[panopto,width=360]
+.使用 VMware HCX for VMC 和 FSx ONTAP進行冷遷移演示
+video::685c0dc2-9d8a-42ff-b46d-b01200f056b0[panopto,width=360]
+
+
+== Azure VMware 解決方案
+
+.Azure VMware 解決方案補充資料儲存概述（包含Azure NetApp Files）
+video::8c5ddb30-6c31-4cde-86e2-b01200effbd6[panopto,width=360]
+.帶有Cloud Volumes ONTAP、 SnapCenter和 JetStream 的 Azure VMware 解決方案 DR
+video::5cd19888-8314-4cfc-ba30-b01200efff4f[panopto,width=360]
+.使用 VMware HCX 進行 AVS 和 ANF 的冷遷移演示
+video::b7ffa5ad-5559-4e56-a166-b01200f025bc[panopto,width=360]
+.使用 VMware HCX 進行 AVS 和 ANF 的 vMotion 演示
+video::986bb505-6f3d-4a5a-b016-b01200f03f18[panopto,width=360]
+.使用 VMware HCX 進行 AVS 和 ANF 的批量遷移演示
+video::255640f5-4dff-438c-8d50-b01200f017d1[panopto,width=360]
+
+
+== 採用NetApp ONTAP 的VMware Cloud Foundation
+
+.NFS 資料存儲作為 VCF 工作負載域的主要存儲
+video::9b66ac8d-d2b1-4ac4-a33c-b16900f67df6[panopto]
+.iSCSI 資料儲存作為 VCF 管理域的補充存儲
+video::1d0e1af1-40ae-483a-be6f-b156015507cc[panopto]
+
+
+== NetApp與 VMware Tanzu
+
+.如何將vVols與NetApp和 VMware Tanzu Basic 結合使用，第 1 部分
+video::ZtbXeOJKhrc[youtube,width=360]
+.如何將vVols與NetApp和 VMware Tanzu Basic 結合使用，第 2 部分
+video::FVRKjWH7AoE[youtube,width=360]
+.如何將vVols與NetApp和 VMware Tanzu Basic 結合使用，第 3 部分
+video::Y-34SUtTTtU[youtube,width=360]
+
+
+== NetAppCloud Insights
+
+.NetApp Cloud Insights - 現代資料中心的可觀察性
+video::1e4da521-3104-4d51-8cde-b0e001502d3d[panopto,width=360]

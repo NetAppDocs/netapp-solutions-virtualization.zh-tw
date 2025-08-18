@@ -1,0 +1,69 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-workflow-vm-from-snapshot.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用 Red Hat OpenShift Virtualization 從快照副本建立 VM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 OpenShift Virtualization 從快照建立 VM。此過程包括建立 VolumeSnapshotClass、對 VM 的持久性磁碟區宣告 (PVC) 進行快照、將快照還原到新的 PVC 以及部署使用還原的 PVC 作為根磁碟的新 VM。
+
+
+
+== 從快照建立虛擬機
+
+透過Trident和 Red Hat OpenShift，使用者可以對其所配置的儲存類別上的持久磁碟區進行快照。利用此功能，使用者可以取得磁碟區的某個時間點的副本並使用它來建立新磁碟區或將同一磁碟區還原到先前的狀態。這啟用或支援各種用例，從回滾到克隆到資料恢復。
+
+對於 OpenShift 中的 Snapshot 操作，必須定義資源 VolumeSnapshotClass、VolumeSnapshot 和 VolumeSnapshotContent。
+
+* VolumeSnapshotContent 是從叢集中的磁碟區取得的實際快照。它是類似於用於儲存的 PersistentVolume 的叢集範圍的資源。
+* VolumeSnapshot 是建立磁碟區快照的請求。它類似於 PersistentVolumeClaim。
+* VolumeSnapshotClass 允許管理員為 VolumeSnapshot 指定不同的屬性。它允許您對從同一磁碟區取得的不同快照設定不同的屬性。
+
+
+image:redhat-openshift-060.png["快照架構的虛擬機"]
+
+若要建立虛擬機器的快照，請完成下列步驟：
+
+. 建立一個 VolumeSnapshotClass，然後可以使用它來建立 VolumeSnapshot。導航至儲存>VolumeSnapshotClasses，然後點擊建立VolumeSnapshotClass。
+. 輸入快照類別的名稱，輸入驅動程式的 csi.trident.netapp.io，然後按一下建立。
++
+image:redhat-openshift-061.png["建立快照類"]
+
+. 識別連接到來源虛擬機器的 PVC，然後建立該 PVC 的快照。導航至 `Storage > VolumeSnapshots`並點擊建立磁碟區快照。
+. 選擇要為其建立 Snapshot 的 PVC，輸入 Snapshot 的名稱或接受預設值，並選擇適當的 VolumeSnapshotClass。然後點擊“創建”。
++
+image:redhat-openshift-062.png["建立快照"]
+
+. 這將建立該時間點的 PVC 快照。
+
+
+
+
+== 從快照建立新的虛擬機
+
+. 首先，將快照還原到新的 PVC 中。導覽至儲存 > VolumeSnapshots，按一下要復原的快照旁邊的省略號，然後按一下還原為新 PVC。
+. 輸入新 PVC 的詳細信息，然後按一下「恢復」。這將建立一個新的 PVC。
++
+image:redhat-openshift-063.png["將快照還原到新的 PVC"]
+
+. 接下來，從此 PVC 建立一個新的 VM。導航至“虛擬化”>“虛擬機器”，然後按一下“建立”>“使用 YAML”。
+. 在 spec > template > spec >volumes 部分中，指定從快照而不是從容器磁碟建立的新 PVC。根據您的要求提供新虛擬機器的所有其他詳細資訊。
++
+[source, cli]
+----
+- name: rootdisk
+  persistentVolumeClaim:
+    claimName: rhel8-short-frog-rootdisk-28dvb-snapshot-restore
+----
+. 按一下「建立」以建立新的虛擬機器。
+. 虛擬機器建立成功後，存取並驗證新虛擬機器與建立快照時使用 PVC 建立的虛擬機器的狀態是否相同。
+

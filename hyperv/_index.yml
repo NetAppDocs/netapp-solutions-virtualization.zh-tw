@@ -1,0 +1,34 @@
+---
+indexpage:
+  title: NetApp Hyper-V 虛擬化解決方案
+  summary: NetApp Hyper-V 虛擬化解決方案是一組策略和技術功能，展示了NetApp儲存體使用 Microsoft Hyper-V 進行虛擬化的功能。
+  lead: NetApp Hyper-V 虛擬化解決方案是一組策略和技術功能，展示了NetApp儲存體使用 Microsoft Hyper-V 進行虛擬化的功能。
+  tiles:
+  - title: 開始
+    links:
+    - title: 了解使用ONTAP進行 Hyper-V 部署
+      url: hyperv-deploy.html
+    - title: Windows Server 上的 Hyper-V 簡介
+      url: https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/about/
+    - title: 了解 Hyper-V 技術
+      url: https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview
+  - title: 部署 Microsoft Hyper-V
+    links:
+    - title: 準備部署
+      url: hyperv-deploy-prereqs.html
+    - title: 部署指南
+      url: hyperv-deploy-considerations.html
+    - title: 在NetApp儲存上部署 Microsoft Hyper-V
+      url: hyperv-deploy-data-protection.html
+    - title: 使用FlexClone和 PowerShell 遷移虛擬機
+      url: hyperv-deploy-script.html
+  - title: NetApp的 Microsoft Hyper-V 解決方案
+    links:
+    - title: 具有延伸叢集的SnapMirror Active Sync
+      url: hyperv-smas.html
+    - title: 適用於 Hyper-V 的NetApp SMI-S Provider
+      url: hyperv-smis.html
+  - title: 其他資源
+    links:
+    - title: Hyper-V 的部署指南和儲存最佳實踐
+      url: https://docs.netapp.com/us-en/ontap-apps-dbs/microsoft/win_overview.html

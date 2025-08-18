@@ -1,0 +1,196 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-oadp-installation.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, OADP operator, Openshift Data Protection Application operator, velero 
+summary: Red Hat OpenShift 虛擬化資料保護與NetApp ONTAP 
+---
+= 安裝 Red Hat OpenShift API for Data Protection (OADP) 操作員
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+安裝 OpenShift API for Data Protection (OADP) Operator 以啟用 OpenShift Virtualization 中虛擬機器的備份和復原功能。此過程包括從 OpenShift Operator Hub 部署 OADP Operator、配置 Velero 以使用NetApp ONTAP S3 或StorageGRID作為備份目標，以及設定必要的機密和備份位置。
+
+
+
+== 先決條件
+
+* 安裝在裸機基礎架構上並帶有 RHCOS 工作節點的 Red Hat OpenShift 叢集（高於 4.12 版本）
+* 使用Trident與叢集整合的NetApp ONTAP叢集
+* 在ONTAP叢集上設定了 SVM 的Trident後端
+* 在 OpenShift 叢集上設定 StorageClass，並使用Trident作為配置器
+* 在叢集上建立的Trident Snapshot 類
+* 叢集管理員存取 Red Hat OpenShift 叢集
+* NetApp ONTAP叢集的管理員存取權限
+* OpenShift 虛擬化操作員已安裝並配置
+* 在 OpenShift 虛擬化的命名空間中部署的虛擬機
+* 安裝了 tridentctl 和 oc 工具並新增至 $PATH 的管理員工作站
+
+
+
+NOTE: 如果您想在虛擬機器處於運作狀態時對其進行備份，則必須在該虛擬機器上安裝 QEMU 客戶代理程式。如果您使用現有範本安裝 VM，則會自動安裝 QEMU 代理程式。 QEMU 允許客戶代理在快照過程中使客戶作業系統中的動態資料靜止，並避免可能的資料損壞。如果您沒有安裝 QEMU，您可以在備份之前停止虛擬機器。
+
+
+
+== 安裝 OADP Operator 的步驟
+
+. 進入叢集的 Operator Hub，選擇 Red Hat OADP 操作員。在安裝頁面中，使用所有預設選擇並按一下安裝。在下一頁上，再次使用所有預設設定並點擊“安裝”。OADP 操作員將安裝在命名空間 openshift-adp 中。
+
+
+image:redhat-openshift-oadp-install-001.png["操作員中心中的 OpenShift API 用於資料保護"]
+
+image:redhat-openshift-oadp-install-002.png["OpenShift API for Data Protection Operator 安裝"]
+
+image:redhat-openshift-oadp-install-003.png["已安裝 Data Protection Operator 的 OpenShift API"]
+
+
+
+=== 使用 Ontap S3 詳細資訊進行 Velero 配置的先決條件
+
+操作員安裝成功後，配置Velero的實例。Velero 可以配置為使用 S3 相容的物件儲存。使用所示步驟設定ONTAP S3link:https://docs.netapp.com/us-en/ontap/object-storage-management/index.html["ONTAP文件的物件儲存管理部分"] 。您將需要ONTAP S3 配置中的以下資訊才能與 Velero 整合。
+
+* 可用於存取 S3 的邏輯介面 (LIF)
+* 存取 S3 的使用者憑證，包括存取金鑰和秘密存取金鑰
+* S3 中用於備份的儲存桶名稱，具有使用者存取權限
+* 為了安全存取物件存儲，應在物件儲存伺服器上安裝 TLS 憑證。
+
+
+
+
+=== 使用 StorageGrid S3 詳細資訊進行 Velero 配置的先決條件
+
+Velero 可以配置為使用 S3 相容的物件儲存。您可以使用以下所示的步驟來配置 StorageGrid S3link:https://docs.netapp.com/us-en/storagegrid-116/s3/configuring-tenant-accounts-and-connections.html["StorageGrid 文檔"] 。您將需要 StorageGrid S3 配置中的以下資訊才能與 Velero 整合。
+
+* 可用於存取 S3 的端點
+* 存取 S3 的使用者憑證，包括存取金鑰和秘密存取金鑰
+* S3 中用於備份的儲存桶名稱，具有使用者存取權限
+* 為了安全存取物件存儲，應在物件儲存伺服器上安裝 TLS 憑證。
+
+
+
+
+=== 配置 Velero 的步驟
+
+* 首先，為ONTAP S3 使用者憑證或 StorageGrid Tenant 使用者憑證建立一個金鑰。這將用於稍後配置 Velero。您可以從 CLI 或 Web 控制台建立機密。若要從 Web 控制台建立金鑰，請選擇“金鑰”，然後按一下“鍵/值金鑰”。提供憑證名稱、金鑰和值的值，如下所示。請務必使用您的 S3 使用者的存取金鑰 ID 和秘密存取金鑰。為秘密指定一個合適的名稱。在下面的範例中，建立了一個名為 ontap-s3-credentials 的具有ONTAP S3 使用者憑證的金鑰。
+
+
+image:redhat-openshift-oadp-install-004.png["S3 使用者憑證的秘密"]
+
+image:redhat-openshift-oadp-install-005.png["為 S3 使用者憑證建立 Secret"]
+
+若要從 CLI 建立名為 sg-s3-credentials 的金鑰，您可以使用下列命令。
+
+image:redhat-openshift-oadp-install-006.png["使用 CLI 為 S3 使用者憑證建立 Secret"]
+
+* 接下來，要設定 Velero，請從 Operators 下的選單項目中選擇 Installed Operators，按一下 OADP Operator，然後選擇 DataProtectionApplication 標籤。
+
+
+image:redhat-openshift-oadp-install-007.png["資料保護應用程式"]
+
+按一下建立 DataProtectionApplication。在表單檢視中，為資料保護應用程式提供一個名稱或使用預設名稱。
+
+image:redhat-openshift-oadp-install-008.png["建立 DataProtectionApplication"]
+
+現在轉到 YAML 視圖並取代規範訊息，如下面的 yaml 檔案範例所示。
+
+**使用ONTAP S3 作為備份位置配置 Velero 的範例 yaml 檔案**
+
+....
+spec:
+  backupLocations:
+    - velero:
+        config:
+          insecureSkipTLSVerify: 'false' ->use this for https communication with ONTAP S3
+          profile: default
+          region: us-east-1
+          s3ForcePathStyle: 'True' ->This allows use of IP in s3URL
+          s3Url: 'https://10.xx.xx.xx' ->LIF to access S3. Ensure TLS certificate for S3 is configured
+        credential:
+          key: cloud
+          name: ontap-s3-credentials ->previously created secret
+        default: true
+        objectStorage:
+          bucket: velero ->Your bucket name previously created in S3 for backups
+          prefix: demobackup ->The folder that will be created in the bucket
+        provider: aws
+  configuration:
+    nodeAgent:
+      enable: true
+      uploaderType: kopia
+      #default Data Mover uses Kopia to move snapshots to Object Storage
+    velero:
+      defaultPlugins:
+        - csi ->Add this plugin
+        - openshift
+        - aws
+        - kubevirt ->Add this plugin
+....
+**使用 StorageGrid S3 作為備份位置和快照位置來配置 Velero 的範例 yaml 檔案**
+
+....
+spec:
+  backupLocations:
+    - velero:
+        config:
+          insecureSkipTLSVerify: 'true'
+          profile: default
+          region: us-east-1 ->region of your StorageGrid system
+          s3ForcePathStyle: 'True'
+          s3Url: 'https://172.21.254.25:10443' ->the IP used to access S3
+        credential:
+          key: cloud
+          name: sg-s3-credentials ->secret created earlier
+        default: true
+        objectStorage:
+          bucket: velero
+          prefix: demobackup
+        provider: aws
+  configuration:
+    nodeAgent:
+      enable: true
+      uploaderType: kopia
+    velero:
+      defaultPlugins:
+        - csi
+        - openshift
+        - aws
+        - kubevirt
+....
+yaml 檔案中的 spec 部分應針對類似上述範例的下列參數進行適當配置
+
+**backupLocations** ONTAP S3 或 StorageGrid S3（其憑證和其他資訊如 yaml 所示）配置為 velero 的預設 BackupLocation。
+
+**snapshotLocations** 如果您使用容器儲存介面 (CSI) 快照，則無需指定快照位置，因為您將建立 VolumeSnapshotClass CR 來註冊 CSI 驅動程式。在我們的範例中，您使用Trident CSI，並且先前已使用Trident CSI 驅動程式建立了 VolumeSnapShotClass CR。
+
+**啟用 CSI 插件** 將 csi 新增至 Velero 的預設插件中，以使用 CSI 快照備份持久性磁碟區。Velero CSI 外掛程式用於備份 CSI 支援的 PVC，它將選擇叢集中設定了 **velero.io/csi-volumesnapshot-class** 標籤的 VolumeSnapshotClass。為了這
+
+* 您必須建立 trident VolumeSnapshotClass。
+* 編輯 trident-snapshotclass 的標籤，並將其設定為 **velero.io/csi-volumesnapshot-class=true**，如下所示。
+
+
+image:redhat-openshift-oadp-install-009.png["Trident Snapshot 類別標籤"]
+
+確保即使 VolumeSnapshot 物件被刪除，快照也能保留。這可以透過將 *deletionPolicy* 設為 Retain 來實現。如果不是，刪除命名空間將完全遺失其中備份的所有 PVC。
+
+....
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: trident-snapshotclass
+driver: csi.trident.netapp.io
+deletionPolicy: Retain
+....
+image:redhat-openshift-oadp-install-010.png["VolumeSnapshotClass 刪除策略應設定為“保留”"]
+
+確保 DataProtectionApplication 已建立並且處於「狀態：Reconciled」。
+
+image:redhat-openshift-oadp-install-011.png["已建立 DataProtectionApplication 對象"]
+
+OADP 操作員將建立對應的 BackupStorageLocation。這將在建立備份時使用。
+
+image:redhat-openshift-oadp-install-012.png["BackupStorageLocation 已建立"]

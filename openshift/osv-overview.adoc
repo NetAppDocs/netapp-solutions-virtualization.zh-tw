@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-overview.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 了解 Red Hat OpenShift 虛擬化與ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解如何使用 Red Hat OpenShift Virtualization 和ONTAP儲存來運作和管理虛擬機器。使用Trident實作即時 VM 遷移、VM 磁碟複製和 VM 快照，從而簡化基礎架構管理和資料保護。
+
+根據具體的用例，容器和虛擬機器 (VM) 都可以作為不同類型應用程式的最佳平台。因此，許多組織在容器上運行一些工作負載，在虛擬機器上運行一些工作負載。通常，這會導致組織面臨額外的挑戰，因為必須管理單獨的平台：用於虛擬機器的虛擬機器管理程式和用於應用程式的容器編排器。
+
+為了應對這項挑戰，Red Hat 從 OpenShift 4.6 版本開始引入了 OpenShift Virtualization（以前稱為 Container Native Virtualization）。 OpenShift 虛擬化功能可讓您在同一個 OpenShift 容器平台安裝上執行和管理虛擬機器以及容器，提供混合管理功能，透過操作員自動部署和管理虛擬機器。除了在 OpenShift 中建立虛擬機器之外，透過 OpenShift Virtualization，Red Hat 還支援從 VMware vSphere、Red Hat Virtualization 和 Red Hat OpenStack Platform 部署匯入虛擬機器。
+
+image:redhat-openshift-044.png["OpenShift 虛擬化"]
+
+在NetApp ONTAP的支援下，OpenShift Virtualization 在Trident的幫助下也支援某些功能，例如即時 VM 遷移、VM 磁碟複製、VM 快照等。本文檔後面將在各自的章節中討論每個工作流程的範例。
+
+要了解有關 Red Hat OpenShift 虛擬化的更多信息，請參閱文檔 https://www.openshift.com/learn/topics/virtualization/["這裡"]。

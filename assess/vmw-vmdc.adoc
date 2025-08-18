@@ -1,0 +1,205 @@
+---
+sidebar: sidebar 
+permalink: assess/vmw-vmdc.html 
+keywords: vmware, vm, data, collector, vmdc 
+summary: '虛擬機器資料收集器 (VMDC) 是一個免費、輕量級、基於簡單 GUI 的 VMware 環境工具包，可讓使用者收集有關其虛擬機器 (VM)、主機、儲存和網路的詳細庫存資訊。' 
+---
+= 虛擬機器資料收集器 (VMDC)
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+虛擬機器資料收集器 (VMDC) 是一個免費、輕量級、基於簡單 GUI 的 VMware 環境工具包，可讓使用者收集有關其虛擬機器 (VM)、主機、儲存和網路的詳細庫存資訊。
+
+
+NOTE: *這是 VMDC 的預覽版。 *
+
+
+
+== 概況
+
+VMDC 的主要功能是報告 vCenter、ESXi 伺服器以及駐留在 vSphere 環境中的虛擬機器 (VM) 的配置，包括叢集配置、網路、儲存和效能資料。一旦收集到全面的環境數據，就可以利用這些數據來產生有關基礎設施的深刻資訊。報告輸出顯示為電子表格樣式的 GUI，其各個部分有多個選項卡。它提供易於閱讀的報告並有助於優化資源使用和規劃容量。
+
+VMDC 只是收集快速即時統計資料的墊腳石，用於預測 VMWare 核心授權以及 vCPU 和 RAM 的最佳化可能性。link:https://docs.netapp.com/us-en/data-infrastructure-insights/["NetAppData Infrastructure Insights"]這需要安裝 AU 和資料收集器，這顯然是理解詳細 VM 拓撲、使用註釋對 VM 進行分組的下一步，以便正確調整工作負載的大小並確保基礎設施的未來發展。
+
+VMDC 可以下載link:https://mysupport.netapp.com/site/tools/tool-eula/vm-data-collector["這裡"]並且僅適用於 Windows 系統。
+
+
+
+== 安裝並設定 VMDC
+
+VMDC 可以在 Windows 2019、2022 版本上運作。先決條件是從 VMDC 執行個體到指定的 vCenter 伺服器有網路連線。驗證後，從下載 VMDC 套件link:https://mysupport.netapp.com/site/tools/tool-eula/vm-data-collector["NetApp工具箱"]然後解壓縮包並運行批次檔來安裝並啟動服務。
+
+安裝 VMDC 後，使用安裝期間提到的 IP 位址存取 UI。這將開啟 VMDC 登入介面，您可以在其中輸入 vCenter Server 的 IP 位址或 DNS 名稱和憑證來新增 vCenter。
+
+. 下載link:https://mysupport.netapp.com/site/tools/tool-eula/vm-data-collector["VMDC 包"]。
++
+image:vmdc-001.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 將程式包解壓縮到指定資料夾。
++
+image:vmdc-002.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 按一下 Start_VMDC 批次檔運行 VMDC 套件。這將打開命令提示字元並提示輸入 IP 位址。
++
+image:vmdc-003.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 安裝程式將開始安裝程序並啟動 VMDC 服務。
++
+image:vmdc-004.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
++
+image:vmdc-005.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+. 完成後，「按任意鍵繼續」關閉命令提示字元。
++
+image:vmdc-006.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+NOTE: 若要停止資料收集，請按一下 Stop_VMDC 批次檔。
+
+
+NOTE: 若要刪除收集的資料並重設 VMDC，請執行 reset_VMDC 批次檔。請記住，運行重置 bat 檔案將刪除所有現有資料並從頭開始。
+
+image:vmdc-007.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== 使用 GUI
+
+
+
+=== 運行 VMDC
+
+* 使用瀏覽器存取 VMDC UI
++
+image:vmdc-008.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+* 使用「新增 vCenter」選項新增指定的 vCenter
++
+** vCenter 名稱 - 為 vCenter 提供名稱
+** 端點 - 輸入 vCenter 伺服器的 IP 位址或 FQDN
+** 使用者名稱 - 存取 vCenter 的使用者名稱（UPN 格式：username@domain.com）
+** 密碼
+
+
+* 根據要求修改“附加詳細資料”
++
+** 資料間隔時間 – 指定樣本聚合時間範圍。預設值為 5 分鐘，但可以根據需要修改為 30 秒或 1 分鐘。
+** 資料保留 – 指定儲存歷史指標的保留期限。
+** 收集效能指標 - 啟用後，收集每個虛擬機器的效能指標。如果未選擇，VMDC 將僅透過提供虛擬機器、主機和資料儲存詳細資訊來提供類似 RVtools 的功能。
+
+
+* 完成後，按一下“新增 vCenter”
++
+image:vmdc-009.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+NOTE: 新增 vCenter 後，資料收集立即開始。無需安排收集時間，因為該過程將獲取 vCenter 資料庫中可用的資料並根據指定的「資料間隔時間」開始聚合它們。
+
+若要查看特定 vCenter 的數據，請前往儀表板，按一下對應 vCenter 名稱對應的「檢視清單」。該頁面將顯示虛擬機器清單以及虛擬機器屬性。預設情況下，「效能指標」在 UI 中是停用的，但可以使用切換選項將其開啟。一旦啟用效能指標，將顯示每個虛擬機器的效能資料。如需查看現場演出信息，請點擊刷新按鈕。
+
+
+
+=== 查看虛擬機器拓撲
+
+VMDC 為每個虛擬機器提供「顯示拓撲」選項，該選項提供了一個互動式介面來查看資源及其與虛擬機器磁碟、虛擬機器、ESXi 主機、資料儲存和網路的關係。它有助於利用收集到的效能數據進行管理和監控。拓撲有助於使用當前資料執行基本診斷和解決問題。如需詳細故障排除和快速 MTTR，請使用link:https://docs.netapp.com/us-en/data-infrastructure-insights/["NetAppData Infrastructure Insights"]它提供了具有端到端依賴關係映射的詳細拓撲視圖。
+
+若要存取拓撲視圖，請依照下列步驟操作：
+
+* 存取 VMDC 儀表板。
+* 選擇 vCenter 名稱並按一下「檢視清單」。
++
+image:vmdc-010.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+* 選擇虛擬機器並點選「顯示拓撲」。
++
+image:vmdc-011.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+
+=== 匯出到 Excel
+
+若要以可用格式擷取收集到的信息，請使用「下載報告」選項下載 XLSX 檔案。
+
+若要下載報告，請依照下列步驟操作：
+
+* 存取 VMDC 儀表板。
+* 選擇 vCenter 名稱並按一下「檢視清單」。
++
+image:vmdc-012.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+* 選擇“下載報告”選項
++
+image:vmdc-013.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+* 選擇時間範圍。時間範圍提供從4小時到7天的多個選項。
++
+image:vmdc-014.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+例如，如果所需數據是過去 4 小時的數據，請選擇 4 或選擇適當的值來擷取該給定時間段的數據。產生的資料會持續匯總。因此，選擇時間範圍以確保產生的報告捕獲必要的工作負載統計資料。
+
+
+
+=== VMDC資料計數器
+
+下載後，VMDC 顯示的第一個表是“VM 資訊”，該表包含有關駐留在 vSphere 環境中的 VM 的資訊。這顯示了有關虛擬機器的一般資訊：虛擬機器名稱、電源狀態、CPU、已配置記憶體（MB）、已利用記憶體（MB）、已配置容量（GB）、已利用容量（GB）、VMware 工具版本、作業系統版本、環境類型、資料中心、叢集、主機、資料夾、主資料儲存、磁碟機、NIC、虛擬機 ID 和虛擬機 UUID。
+
+「VM 效能」標籤會擷取在選定間隔層級（預設為 5 分鐘）取樣的每個 VM 的效能資料。每個虛擬機器的樣本涵蓋：平均讀取 IOPS、平均寫入 IOPS、總平均 IOPS、峰值讀取 IOPS、峰值寫入 IOPS、總峰值IOPS、平均讀取吞吐量（KB/s）、平均寫入吞吐量（KB/s）、總平均吞吐量（KB/s）、峰值讀取吞吐量（KB/s）、峰值寫入吞吐量（KB/s）、總峰值吞吐量（KB/s）、平均讀取延遲（ms）、平均讀取和峰值寫入
+
+「ESXi 主機資訊」標籤擷取每台主機的資訊：資料中心、vCenter、叢集、作業系統、製造商、型號、CPU 插槽、CPU 核心、網路時鐘速度（GHz）、CPU 時脈速度（GHz）、CPU 執行緒、記憶體（GB）、已使用記憶體（%）、CPU 使用率（GHz）、客戶虛擬機器數和網卡數量。
+
+
+
+=== 後續步驟
+
+使用下載的 XLSX 檔案進行最佳化和重構練習。
+
+
+
+== VMDC 屬性描述
+
+本文檔的此部分涵蓋了 Excel 表中使用的每個計數器的定義。
+
+*虛擬機器資訊表*
+
+image:vmdc-015.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+*虛擬機器效能表*
+
+image:vmdc-016.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+*ESXi 主機資訊*
+
+image:vmdc-017.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== 結論
+
+隨著即將發生的授權變更，各組織正在積極應對總體擁有成本 (TCO) 的潛在增加。他們透過積極的資源管理和適當的規模策略性地優化其 VMware 基礎架構，以提高資源利用率並簡化容量規劃。透過有效使用專門的工具，組織可以有效地識別和回收浪費的資源，從而減少核心數量和整體授權費用。  VMDC 提供快速收集可切片的 VM 資料的能力，以報告和最佳化現有環境。
+
+使用 VMDC 進行快速評估以找出未充分利用的資源，然後使用NetAppData Infrastructure Insights(DII) 為 VM 回收提供詳細的分析和建議。這使客戶能夠了解部署和配置NetAppData Infrastructure Insights(DII) 時的潛在成本節約和最佳化。 NetAppData Infrastructure Insights(DII) 可以幫助企業就優化其 VM 環境做出明智的決策。它可以確定哪些地方可以回收資源或哪些地方可以退役主機，對生產的影響最小，從而幫助企業以深思熟慮、策略性的方式應對博通收購 VMware 帶來的變化。換句話說，VMDC 和 DII 作為一種詳細的分析機制，可幫助企業在決策中擺脫情緒因素的影響。他們不必驚慌或沮喪地應對變化，而是可以利用這兩種工具提供的見解來做出合理的策略決策，在成本優化與營運效率和生產力之間取得平衡。
+
+透過NetApp，您可以適當調整虛擬化環境的規模，並引入經濟高效的快閃儲存效能以及簡化的資料管理和勒索軟體解決方案，以確保組織為新的訂閱模式做好準備，同時優化現有的 IT 資源。
+
+image:vmdc-018.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== 後續步驟
+
+下載 VMDC 套件並收集資料並使用link:https://mhcsolengg.com/vmwntaptco/["vSAN TCO 估算器"]方便投影然後使用link:https://docs.netapp.com/us-en/data-infrastructure-insights/task_cloud_insights_onboarding_1.html["直接投資"]不斷提供智能，影響現在和未來的 IT，以確保它能夠適應新的需求。

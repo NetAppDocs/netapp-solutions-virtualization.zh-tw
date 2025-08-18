@@ -1,0 +1,17 @@
+---
+sidebar: sidebar 
+permalink: hyperv/hyperv-deploy-conclusion.html 
+keywords: hyperv, hyper-v, deploy, netapp, virtualization 
+summary: 該解決方案提供了在NetApp儲存上部署 Hyper-V 所需的步驟 
+---
+= ONTAP儲存系統上的 Microsoft Hyper-V 部署摘要
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+ONTAP是部署各種 IT 工作負載的最佳共享儲存基礎。  ONTAP AFF或ASA平台既靈活又可擴展，適用於多種用例和應用程式。  Windows Server 2022 及其上啟用的 Hyper-V 是虛擬化解決方案的常見用例，本文檔對此進行了描述。 ONTAP儲存及其相關功能的靈活性和可擴展性使客戶能夠從適當大小的儲存層開始，該儲存層可以隨著不斷變化的業務需求而成長並適應其需求。在目前的市場條件下，Hyper-V 提供了一個完美的替代虛擬機器管理程式選項，它提供了 VMware 提供的大部分功能。

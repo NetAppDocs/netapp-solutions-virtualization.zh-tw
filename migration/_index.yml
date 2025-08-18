@@ -1,0 +1,30 @@
+---
+indexpage:
+  title: 虛擬機器遷移解決方案
+  summary: NetApp VM 遷移解決方案提供了全面的工具和實用程序，用於跨不同平台和儲存系統遷移和轉換虛擬機器。
+  lead: NetApp VM 遷移解決方案提供了全面的工具和實用程序，用於跨不同平台和儲存系統遷移和轉換虛擬機器。
+  tiles:
+  - title: 開始
+    links:
+    - title: 關於Shift Toolkit
+      url: shift-toolkit-overview.html
+    - title: 關於將虛擬機器遷移到ONTAP資料儲存庫
+      url: migrate-get-start-ontap.html
+    - title: 關於將虛擬機器移轉到 Amazon EC2
+      url: migrate-vms-to-ec2-fsxn-overview.html
+  - title: 使用 Shift Toolkit
+    links:
+    - title: 安裝 Shift Toolkit
+      url: shift-toolkit-install.html
+    - title: 配置 Shift Toolkit
+      url: shift-toolkit-ui.html
+    - title: 使用 Shift Toolkit 遷移虛擬機
+      url: shift-toolkit-migration.html
+    - title: 使用 Shift Toolkit 轉換虛擬機
+      url: shift-toolkit-conversion.html
+  - title: 在本地和雲端中遷移虛擬機
+    links:
+    - title: 將虛擬機器遷移到ONTAP資料儲存庫
+      url: migrate-vms-to-ontap-datastore.html
+    - title: 將虛擬機器移轉到 Amazon EC2
+      url: migrate-vms-to-ec2-fsxn-deploy.html

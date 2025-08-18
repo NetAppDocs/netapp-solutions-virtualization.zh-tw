@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: openshift/os-ci-integration.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, cloud Insights 
+summary: 使用 Red Hat OpenShift 虛擬化中的Cloud Insights對虛擬機器進行監控 
+---
+= 整合Data Infrastructure Insights以在 Red Hat OpenShift 虛擬化中收集虛擬機器數據
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+要開始在 OpenShift Virtualization 中收集虛擬機器的數據，您需要安裝幾個元件，包括一個 Kubernetes 監控操作員、一個 Kubernetes 資料收集器以及一個用於從支援虛擬機器磁碟的ONTAP儲存收集資料的擷取單元。
+
+. Kubernetes 監控操作員和資料收集器，用於收集 Kubernetes 資料。有關完整說明，請參閱link:https://docs.netapp.com/us-en/cloudinsights/task_config_telegraf_agent_k8s.html["文件"]。
+. 一個採集單元，用於從為虛擬機磁碟提供持久性儲存的ONTAP儲存中收集資料。有關完整說明，請參閱link:https://docs.netapp.com/us-en/cloudinsights/task_getting_started_with_cloud_insights.html["文件"]。
+. ONTAP資料收集器有關完整說明，請參閱link:https://docs.netapp.com/us-en/cloudinsights/task_getting_started_with_cloud_insights.html#configure-the-data-collector-infrastructure["文件"]
+
+
+此外，如果您使用 StorageGrid 進行 VM 備份，則您還需要StorageGRID的資料收集器。

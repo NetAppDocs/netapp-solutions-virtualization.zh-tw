@@ -1,0 +1,258 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-dii.html 
+keywords: vsphere, ontap, data infrastructure insights, asa, all-flash san array, 
+summary:  
+---
+= 使用Data Infrastructure Insights洞察監控本地存儲
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp Data Infrastructure Insights （以前稱為Cloud Insights）是一個基於雲端的平台，旨在監控和分析本地和雲端 IT 基礎架構的效能、健康狀況和成本。了解如何部署資料收集器、分析效能指標以及使用儀表板來識別問題和最佳化資源。
+
+
+
+== 利用Data Infrastructure Insights監控本地存儲
+
+Data Infrastructure Insights透過採集單元軟體運行，該軟體設定了 VMware vSphere 和NetApp ONTAP儲存系統等資產的資料收集器。這些收集器收集數據並將其傳輸到Data Infrastructure Insights。然後，該平台利用各種儀表板、小部件和指標查詢將資料組織成有見地的分析，供使用者解釋。
+
+Data Infrastructure Insights架構圖：
+
+image:vmware-dii.png["Data Infrastructure Insights"]
+
+
+
+== 解決方案部署概述
+
+此解決方案介紹如何使用Data Infrastructure Insights監控本機 VMware vSphere 和ONTAP儲存系統。
+
+此清單提供了此解決方案中涵蓋的高級步驟：
+
+. 為 vSphere 叢集配置資料收集器。
+. 為ONTAP儲存系統配置資料收集器。
+. 使用註釋規則來標記資產。
+. 探索並關聯資產。
+. 使用「Top VM Latency」儀表板隔離吵雜的鄰居。
+. 確定適當調整虛擬機器大小的機會。
+. 使用查詢來隔離和排序指標。
+
+
+
+
+== 先決條件
+
+此解決方案使用以下組件：
+
+. 具有ONTAP 9.13 的NetApp全快閃 SAN 陣列 A400。
+. VMware vSphere 8.0 叢集。
+. NetApp BlueXP帳戶。
+. NetAppData Infrastructure Insights採集單元軟體安裝在本機虛擬機器上，並透過網路連接到資產以收集資料。
+
+
+
+
+== 解決方案部署
+
+
+
+=== 配置資料收集器
+
+若要為 VMware vSphere 和ONTAP儲存系統設定資料收集器，請完成下列步驟：
+
+.為ONTAP儲存系統新增資料收集器
+[%collapsible%open]
+====
+. 登入Data Infrastructure Insights後，導覽至 *可觀察性>收集器>資料收集器*，然後按下按鈕安裝新的資料收集器。
++
+image:vmware-asa-031.png["新的數據收集器"]
+
+. 從這裡搜尋* ONTAP* 並點擊* ONTAP資料管理軟體*。
++
+image:vmware-asa-030.png["搜尋資料收集器"]
+
+. 在*設定收集器*頁面上填寫收集器的名稱，指定正確的*採集單元*並提供ONTAP儲存系統的憑證。點擊頁面底部的“*儲存並繼續*”，然後點擊“完成設定*”即可完成設定。
++
+image:vmware-asa-032.png["配置收集器"]
+
+
+
+====
+.為 VMware vSphere 群集新增資料收集器
+[%collapsible%open]
+====
+. 再次導航至*可觀察性>收集器>資料收集器*並按下按鈕安裝新的資料收集器。
++
+image:vmware-asa-031.png["新的數據收集器"]
+
+. 從這裡搜尋 *vSphere* 並點擊 *VMware vSphere*。
++
+image:vmware-asa-033.png["搜尋資料收集器"]
+
+. 在*設定收集器*頁面上填寫收集器的名稱，指定正確的*擷取單元*並提供 vCenter 伺服器的憑證。點擊頁面底部的“*儲存並繼續*”，然後點擊“完成設定*”即可完成設定。
++
+image:vmware-asa-034.png["配置收集器"]
+
+
+
+====
+
+
+=== 向資產添加註釋
+
+註解是標記資產的有用方法，以便可以在Cloud Insights中可用的各種視圖和指標查詢中對其進行過濾和識別。
+
+在本節中，將向虛擬機器資產新增註釋，以便按*資料中心*進行過濾。
+
+.使用註釋規則標記資產
+[%collapsible%open]
+====
+. 在左側選單中，導覽至 *可觀察性 > 豐富 > 註解規則*，然後按一下右上角的 *+ 規則* 按鈕新增規則。
++
+image:vmware-asa-035.png["存取註釋規則"]
+
+. 在*新增規則*對話方塊中填入規則的名稱，找到將套用該規則的查詢、受影響的註解欄位以及要填入的值。
++
+image:vmware-asa-036.png["新增規則"]
+
+. 最後，在*註釋規則*頁面的右上角點擊*運行所有規則*來運行規則並將註釋應用於資產。
++
+image:vmware-asa-037.png["運行所有規則"]
+
+
+
+====
+
+
+=== 探索並關聯資產
+
+Cloud Insights對儲存系統和 vSphere 叢集上一起運作的資產得出合理的結論。
+
+本節說明如何使用儀表板關聯資產。
+
+.從儲存效能儀表板關聯資產
+[%collapsible%open]
+====
+. 在左側選單中，導覽至*可觀察性>探索>所有儀表板*。
++
+image:vmware-asa-038.png["存取所有儀表板"]
+
+. 按一下「+ 來自圖庫」按鈕可查看可匯入的現成儀表板清單。
++
+image:vmware-asa-039.png["圖庫儀表板"]
+
+. 從清單中選擇一個FlexVol效能儀表板，然後點擊頁面底部的 *新增儀表板* 按鈕。
++
+image:vmware-asa-040.png["FlexVol性能儀表板"]
+
+. 導入後，打開儀表板。從這裡您可以看到帶有詳細性能數據的各種小部件。新增篩選器以查看單一儲存系統並選擇儲存磁碟區以深入了解其詳細資訊。
++
+image:vmware-asa-041.png["深入了解儲存量"]
+
+. 從此視圖中，您可以看到與此儲存磁碟區相關的各種指標以及在該磁碟區上執行的使用率最高且相關的虛擬機器。
++
+image:vmware-asa-042.png["最相關的虛擬機"]
+
+. 點擊使用率最高的虛擬機器可深入了解該虛擬機器的指標，以查看任何潛在問題。
++
+image:vmware-asa-043.png["虛擬機器效能指標"]
+
+
+
+====
+
+
+=== 使用Cloud Insights辨識吵鬧的鄰居
+
+Cloud Insights具有儀表板，可輕鬆隔離對在同一儲存磁碟區上執行的其他虛擬機器產生負面影響的對等虛擬機器。
+
+.使用“頂級虛擬機器延遲”儀表板隔離嘈雜的鄰居
+[%collapsible%open]
+====
+. 在此範例中，存取「圖庫」中名為「VMware Admin - 我在哪裡有 VM 延遲？」的儀表板。
++
+image:vmware-asa-044.png["虛擬機器延遲儀表板"]
+
+. 接下來，透過上一個步驟中建立的*資料中心*註釋進行過濾，以查看資產子集。
++
+image:vmware-asa-045.png["資料中心註釋"]
+
+. 此儀表板顯示按平均延遲排名的前 10 個虛擬機器的清單。從這裡點擊關注的虛擬機器即可深入了解其詳細資訊。
++
+image:vmware-asa-046.png["十大虛擬機"]
+
+. 可能導致工作負載爭用的虛擬機器已列出且可用。深入研究這些虛擬機器的效能指標來調查任何潛在的問題。
++
+image:vmware-asa-047.png["工作負載爭用"]
+
+
+
+====
+
+
+=== 在Cloud Insights中查看過度使用和未充分利用的資源
+
+透過將虛擬機器資源與實際工作負載需求相匹配，可以優化資源利用率，從而節省基礎架構和雲端服務的成本。可自訂Cloud Insights中的數據，以輕鬆顯示過度或未充分利用的虛擬機器。
+
+.確定適當大小虛擬機器的機會
+[%collapsible%open]
+====
+. 在此範例中，請存取「*圖庫*」中名為「VMware Admin - 哪裡有機會進行適當調整？」的儀表板。 *
++
+image:vmware-asa-048.png["合適尺寸的儀表板"]
+
+. 首先按叢集中的所有 ESXi 主機進行篩選。然後，您可以看到按記憶體和 CPU 使用率排名靠前和靠後的虛擬機器的排名。
++
+image:vmware-asa-049.png["合適尺寸的儀表板"]
+
+. 表格允許排序並根據所選的資料列提供更多詳細資訊。
++
+image:vmware-asa-050.png["公製表"]
+
+. 另一個名為「VMware Admin - 我可以在哪裡潛在地回收廢棄物？」的儀表板顯示已關閉的虛擬機器按其容量使用情況排序。
++
+image:vmware-asa-051.png["關閉虛擬機"]
+
+
+
+====
+
+
+=== 使用查詢來隔離和排序指標
+
+Cloud Insights擷取的資料量相當全面。指標查詢提供了一種以有用的方式對大量資料進行排序和組織的有效方法。
+
+.查看ONTAP Essentials 下的詳細 VMware 查詢
+[%collapsible%open]
+====
+. 導覽至 * ONTAP Essentials > VMware* 以存取全面的 VMware 指標查詢。
++
+image:vmware-asa-052.png["ONTAP基礎 - VMware"]
+
+. 在此檢視中，您會看到多個用於在頂部篩選和分組資料的選項。所有資料列都是可自訂的，並且可以輕鬆添加額外的列。
++
+image:vmware-asa-053.png["ONTAP基礎 - VMware"]
+
+
+
+====
+
+
+== 結論
+
+該解決方案旨在作為入門指南，幫助您了解如何開始使用NetApp Cloud Insights ，並展示該可觀察性解決方案可以提供的一些強大功能。該產品內建數百個儀表板和指標查詢，可以輕鬆立即開始使用。  Cloud Insights的完整版本可試用 30 天，基本版本可供NetApp客戶免費使用。
+
+
+
+== 附加資訊
+
+要了解有關此解決方案中提出的技術的更多信息，請參閱以下附加資訊。
+
+* https://bluexp.netapp.com/cloud-insights["NetApp BlueXP和Data Infrastructure Insights登陸頁面"]
+* https://docs.netapp.com/us-en/data-infrastructure-insights/index.html/["NetAppData Infrastructure Insights文檔"]
+

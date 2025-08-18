@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: openshift/os-netapp-overview.html 
+keywords: NetApp, ONTAP, Element, Storage 
+summary: NetApp擁有多個符合我們的Trident Storage Orchestrator 要求的儲存平台，可為部署在 Red Hat OpenShift 上的應用程式設定儲存。 
+---
+= 了解如何為 Red Hat OpenShift 上部署的應用程式配置存儲
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp使用Trident Storage Orchestrator 與 Red Hat OpenShift 集成，為容器化應用程式提供持久性儲存。支援的儲存選項包括基於ONTAP 的系統（例如AFF和FAS）以及用於虛擬化和雲端環境的ONTAP Select和Cloud Cloud Volumes ONTAP 。也支援Amazon FSx for NetApp ONTAP、 Azure NetApp Files和Google Cloud NetApp Volumes等雲端原生服務。
+
+image:redhat-openshift-043.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+* AFF和FAS系統運行NetApp ONTAP並為基於檔案 (NFS) 和基於區塊 (iSCSI) 的用例提供儲存。
+* Cloud Volumes ONTAP和ONTAP Select分別在雲端和虛擬空間中提供相同的優勢。
+* Amazon FSx for NetApp ONTAP、 Azure NetApp Files和Google Cloud NetApp Volumes在雲端提供基於檔案的儲存。
+* NetApp Element儲存系統在高度可擴充的環境中提供基於區塊（iSCSI）的用例。
+
+
+
+NOTE: NetApp產品組合中的每個儲存系統都可以簡化資料管理和內部站點與雲端之間的移動，確保您的資料位於應用程式所在的位置。
+
+以下頁麵包含有關在 Red Hat OpenShift with NetApp解決方案中驗證的NetApp儲存系統的更多資訊：
+
+* link:os-netapp-ontap.html["NetApp ONTAP"]
+* link:https://docs.netapp.com/us-en/netapp-solutions-containers/openshift/os-netapp-element.html["NetApp Element"^]
+

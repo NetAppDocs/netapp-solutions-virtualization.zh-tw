@@ -1,0 +1,389 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
+summary:  
+---
+= 使用適用ONTAP tools for VMware vSphere將 NFS 和vVols作為補充儲存新增至 VI 工作負載域
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在此用例中，我們概述了使用ONTAP Tools for VMware 將 NFS 和vVols資料儲存新增為 VMware Cloud Foundation (VCF) 虛擬基礎架構 (VI) 工作負載域的補充儲存的過程。此過程總結了為 VMware vSphere 部署ONTAP工具、使用 NFS 邏輯介面配置儲存虛擬機器 (SVM) 以及配置 NFS 和vVols資料儲存庫。
+
+*NFS* 用作vVols資料儲存的儲存協定。
+
+
+
+== NFS 的優勢
+
+*簡單易用：*NFS 設定和管理簡單，使其成為需要快速簡單的文件共享環境的絕佳選擇。
+
+*可擴展性*：ONTAP 的架構允許 NFS 有效擴展，從而無需對基礎架構進行重大更改即可支援不斷增長的資料需求。
+
+*靈活性*：NFS 支援廣泛的應用程式和工作負載，使其適用於各種用例，包括虛擬化環境。
+
+欲了解更多信息，請參閱link:vmw-vvf-overview.html["適用於 vSphere 8 的 NFS v3 參考指南"] 。
+
+
+
+== 場景概述
+
+此場景涵蓋以下進階步驟：
+
+* 建立具有邏輯介面 (LIF) 的儲存虛擬機器 (SVM) 以用於 NFS 流量。
+* 為 VI 工作負載域上的 NFS 網路建立分散式連接埠群組。
+* 在 ESXi 主機上為 VI 工作負載域建立 NFS 的 vmkernel 適配器。
+* 在 VI 工作負載域部署ONTAP工具。
+* 在 VI 工作負載域上建立一個新的 NFS 資料儲存。
+* 在 VI 工作負載域上建立一個新的vVols資料儲存。
+
+
+
+
+== 先決條件
+
+此場景需要以下組件和配置：
+
+* ONTAP AFF或FAS儲存系統，乙太網路交換器上具有專用於儲存流量的實體資料連接埠。
+* VCF管理網域部署已完成，並且可以存取vSphere客戶端。
+* 之前已部署 VI 工作負載域。
+
+
+NetApp建議為 NFS 採用冗餘網路設計，為儲存系統、交換器、網路介面卡和主機系統提供容錯功能。根據架構要求，通常使用單一子網路或多個子網路部署 NFS。
+
+參考 https://www.vmware.com/docs/vmw-best-practices-running-nfs-vmware-vsphere["使用 VMware vSphere 運行 NFS 的最佳實踐"]有關 VMware vSphere 的詳細資訊。
+
+有關使用ONTAP與 VMware vSphere 的網路指導，請參閱 https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-network.html#nfs["網路設定 - NFS"]NetApp企業應用程式文件的部分。
+
+本文檔示範了建立新 SVM 和指定 IP 位址資訊以建立用於 NFS 流量的多個 LIF 的過程。若要將新的 LIF 新增至現有 SVM，請參閱link:https://docs.netapp.com/us-en/ontap/networking/create_a_lif.html["建立 LIF（網路介面）"]。
+
+有關在 vSphere 群集中使用 NFS 的完整信息，請參閱link:vmw-vvf-overview.html["適用於 vSphere 8 的 NFS v3 參考指南"]。
+
+{nbsp}image:vmware-vcf-aff-070.png["NFS架構圖"] {nbsp}
+
+
+
+== 部署步驟
+
+若要部署ONTAP工具並使用它在 VCF 管理網域上建立vVols和 NFS 資料儲存庫，請完成下列步驟：
+
+
+
+=== 在ONTAP儲存系統上建立 SVM 和 LIF
+
+以下步驟在ONTAP系統管理員中執行。
+
+.建立儲存虛擬機器和 LIF
+[%collapsible%open]
+====
+完成以下步驟，建立一個 SVM 以及用於 NFS 流量的多個 LIF。
+
+. 從ONTAP系統管理員導覽到左側選單中的 *儲存虛擬機器*，然後按一下 *+ 新增* 開始。
++
+image:vmware-vcf-asa-001.png["點擊“+新增”開始建立 SVM"]
+
++
+{nbsp}
+
+. 在“新增儲存虛擬機器”精靈中，為 SVM 提供一個“名稱”，選擇“IP 空間”，然後在“存取協定”下按一下“SMB/CIFS、NFS、S3”標籤並勾選“啟用 NFS”複選框。
++
+image:vmware-vcf-aff-035.png["新增儲存虛擬機器精靈 - 啟用 NFS"]
+
++
+
+TIP: 這裡不需要選取「*允許 NFS 用戶端存取*」按鈕，因為將使用適用於 VMware vSphere 的 Ontap Tools 來自動化資料儲存部署流程。這包括為 ESXi 主機提供客戶端存取。  &#160;
+
+. 在 *網路介面* 部分填寫第一個 LIF 的 *IP 位址*、*子網路遮罩* 和 *廣播域和連接埠*。對於後續 LIF，可以啟用該複選框以在所有剩餘 LIF 中使用通用設定或使用單獨的設定。
++
+image:vmware-vcf-aff-036.png["填寫 LIF 的網路訊息"]
+
++
+{nbsp}
+
+. 選擇是否啟用儲存虛擬機器管理帳戶（適用於多租用戶環境），然後按一下「*儲存*」以建立 SVM。
++
+image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
+
+
+
+====
+
+
+==== 在 ESXi 主機上設定 NFS 網絡
+
+以下步驟使用 vSphere 用戶端在 VI 工作負載域叢集上執行。在這種情況下，使用 vCenter Single Sign-On，因此 vSphere 用戶端在管理和工作負載域中是通用的。
+
+.為 NFS 流量建立分散式連接埠組
+[%collapsible%open]
+====
+完成以下步驟來為網路建立一個新的分散式連接埠群組來承載 NFS 流量：
+
+. 從 vSphere 用戶端，導覽至工作負載域的 *Inventory > Networking*。導航至現有的分散式交換器並選擇建立*新分散式連接埠群組...*的操作。
++
+image:vmware-vcf-asa-022.png["選擇建立新的連接埠群組"]
+
++
+{nbsp}
+
+. 在「新分散式連接埠群組」精靈中填寫新連接埠群組的名稱，然後按一下「下一步」繼續。
+. 在*配置設定*頁面上填寫所有設定。如果正在使用 VLAN，請確保提供正確的 VLAN ID。按一下“*下一步*”繼續。
++
+image:vmware-vcf-asa-023.png["填寫VLAN ID"]
+
++
+{nbsp}
+
+. 在*準備完成*頁面上，檢查變更並按一下*完成*以建立新的分散式連接埠群組。
+. 建立連接埠組後，導覽至該連接埠組並選擇操作*編輯設定...*。
++
+image:vmware-vcf-aff-037.png["DPG－編輯設置"]
+
++
+{nbsp}
+
+. 在*分散式連接埠群組 - 編輯設定*頁面上，導覽至左側選單中的*組合和故障轉移*。確保上行鏈路位於「活動上行鏈路」區域中，以啟用上行鏈路組合來用於 NFS 流量。將任何未使用的上行鏈路移至*未使用的上行鏈路*。
++
+image:vmware-vcf-aff-038.png["DPG-- 團隊上行鏈路"]
+
++
+{nbsp}
+
+. 對叢集中的每個 ESXi 主機重複此程序。
+
+
+====
+.在每個 ESXi 主機上建立 VMkernel 適配器
+[%collapsible%open]
+====
+在工作負載域中的每個 ESXi 主機上重複此程序。
+
+. 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
++
+image:vmware-vcf-asa-030.png["啟動新增網路精靈"]
+
++
+{nbsp}
+
+. 在*選擇連線類型*視窗中選擇*VMkernel 網路適配器*，然後按一下*下一步*繼續。
++
+image:vmware-vcf-asa-008.png["選擇 VMkernel 網路適配器"]
+
++
+{nbsp}
+
+. 在「選擇目標裝置」頁面上，選擇先前建立的 NFS 分散式連接埠群組之一。
++
+image:vmware-vcf-aff-039.png["選擇目標連接埠群組"]
+
++
+{nbsp}
+
+. 在*連接埠屬性*頁面上保留預設設定（未啟用服務）並按一下*下一步*繼續。
+. 在 *IPv4 設定* 頁面上填寫 *IP 位址*、*子網路遮罩*，並提供新的網關 IP 位址（僅在需要時）。按一下“*下一步*”繼續。
++
+image:vmware-vcf-aff-040.png["VMkernel IPv4 設定"]
+
++
+{nbsp}
+
+. 在「準備完成」頁面上檢查您的選擇，然後按一下「完成」以建立 VMkernel 適配器。
++
+image:vmware-vcf-aff-041.png["檢查 VMkernel 選擇"]
+
+
+
+====
+
+
+=== 部署並使用ONTAP工具配置存儲
+
+以下步驟使用 vSphere 用戶端在 VCF 管理域叢集上執行，包括部署 OTV、建立vVols NFS 資料儲存以及將管理 VM 遷移到新的資料儲存。
+
+對於 VI 工作負載域，OTV 安裝到 VCF 管理集群，但在與 VI 工作負載域關聯的 vCenter 中註冊。
+
+有關在多 vCenter 環境中部署和使用ONTAP工具的更多信息，請參閱link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere/configure/concept_requirements_for_registering_vsc_in_multiple_vcenter_servers_environment.html["在多個 vCenter Server 環境中註冊ONTAP工具的要求"]。
+
+.ONTAP tools for VMware vSphere
+[%collapsible%open]
+====
+ONTAP tools for VMware vSphere以 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。
+
+完成下列步驟以部署ONTAP tools for VMware vSphere：
+
+. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並下載到本機資料夾。
+. 登入 VCF 管理網域的 vCenter 設備。
+. 在 vCenter 裝置介面中右鍵單擊管理叢集並選擇“部署 OVF 範本...”
++
+image:vmware-vcf-aff-021.png["部署 OVF 範本..."]
+
++
+{nbsp}
+
+. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕，然後選擇上一個步驟下載的ONTAP工具 OVA 檔案。
++
+image:vmware-vcf-aff-022.png["選擇 OVA 文件"]
+
++
+{nbsp}
+
+. 對於精靈的第 2 步到第 5 步，選擇 VM 的名稱和資料夾，選擇計算資源，查看詳細信息，然後接受許可協議。
+. 配置和磁碟檔案的儲存位置選擇VCF管理域叢集的vSAN資料儲存。
++
+image:vmware-vcf-aff-023.png["選擇 OVA 文件"]
+
++
+{nbsp}
+
+. 在選擇網路頁面上選擇用於管理流量的網路。
++
+image:vmware-vcf-aff-024.png["選擇網路"]
+
++
+{nbsp}
+
+. 在自訂範本頁面上填寫所有必需的資訊：
++
+** 用於 OTV 管理存取的密碼。
+** NTP 伺服器 IP 位址。
+** OTV維護帳戶密碼。
+** OTV Derby DB 密碼。
+** 不要選取「啟用 VMware Cloud Foundation (VCF)」複選框。部署補充儲存不需要 VCF 模式。
+** *VI 工作負載域* 的 vCenter 設備的 FQDN 或 IP 位址
+** *VI 工作負載域* 的 vCenter 設備的憑證
+** 提供所需的網路屬性欄位。
++
+按一下“*下一步*”繼續。
+
++
+image:vmware-vcf-aff-025.png["自訂OTV模板1"]
+
++
+image:vmware-vcf-asa-035.png["自訂OTV模板2"]
+
++
+{nbsp}
+
+
+
+. 查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署 OTV 設備。
+
+
+====
+.為ONTAP工具新增儲存系統。
+[%collapsible%open]
+====
+. 透過從 vSphere 用戶端的主選單中選擇NetApp ONTAP工具來存取它。
++
+image:vmware-asa-006.png["NetApp ONTAP工具"]
+
++
+{nbsp}
+
+. 從ONTAP工具介面中的 *INSTANCE* 下拉式選單中，選擇與要管理的工作負載域關聯的 OTV 實例。
++
+image:vmware-vcf-asa-036.png["選擇OTV實例"]
+
++
+{nbsp}
+
+. 在ONTAP工具中，從左側選單中選擇“*儲存系統*”，然後按“*新增*”。
++
+image:vmware-vcf-asa-037.png["新增儲存系統"]
+
++
+{nbsp}
+
+. 填寫儲存系統的 IP 位址、憑證和連接埠號碼。點擊“*新增*”開始發現過程。
++
+image:vmware-vcf-asa-038.png["提供儲存系統憑證"]
+
+
+
+====
+.在ONTAP工具中建立 NFS 資料儲存庫
+[%collapsible%open]
+====
+完成以下步驟以使用ONTAP工具部署在 NFS 上執行的ONTAP資料儲存庫。
+
+. 在ONTAP工具中選擇 *概覽*，然後從 *入門* 標籤中按一下 *配置* 以啟動精靈。
++
+image:vmware-vcf-asa-041.png["配置資料儲存區"]
+
++
+{nbsp}
+
+. 在新資料儲存精靈的「常規」頁面上，選擇 vSphere 資料中心或叢集目標。選擇 *NFS* 作為資料儲存類型，填寫資料儲存的名稱，然後選擇協定。選擇是否使用FlexGroup磁碟區以及是否使用儲存功能檔案進行設定。按一下“*下一步*”繼續。
++
+注意：選擇*在叢集中分發資料儲存資料*將把底層磁碟區建立為FlexGroup卷，從而阻止使用儲存功能設定檔。參考 https://docs.netapp.com/us-en/ontap/flexgroup/supported-unsupported-config-concept.html["FlexGroup卷支援和不支援的配置"]有關使用FlexGroup磁碟區的詳細資訊。
+
++
+image:vmware-vcf-aff-042.png["常規頁面"]
+
++
+{nbsp}
+
+. 在*儲存系統*頁面上選擇儲存功能設定檔、儲存系統和 SVM。按一下“*下一步*”繼續。
++
+image:vmware-vcf-aff-043.png["儲存系統"]
+
++
+{nbsp}
+
+. 在*儲存屬性*頁面上選擇要使用的聚合，然後按一下*下一步*繼續。
++
+image:vmware-vcf-aff-044.png["儲存屬性"]
+
++
+{nbsp}
+
+. 最後，查看*摘要*並按一下「完成」開始建立 NFS 資料儲存。
++
+image:vmware-vcf-aff-045.png["審核總結並完成"]
+
+
+
+====
+.在ONTAP工具中建立vVols資料存儲
+[%collapsible%open]
+====
+若要在ONTAP工具中建立vVols資料儲存庫，請完成下列步驟：
+
+. 在ONTAP工具中選擇 *概覽*，然後從 *入門* 標籤中按一下 *配置* 以啟動精靈。
++
+image:vmware-vcf-asa-041.png["配置資料儲存區"]
+
+. 在新資料儲存精靈的「常規」頁面上，選擇 vSphere 資料中心或叢集目標。選擇 * vVols* 作為資料儲存類型，填寫資料儲存的名稱，並選擇 *NFS* 作為協定。按一下“*下一步*”繼續。
++
+image:vmware-vcf-aff-046.png["常規頁面"]
+
+. 在*儲存系統*頁面上選擇儲存功能設定檔、儲存系統和 SVM。按一下“*下一步*”繼續。
++
+image:vmware-vcf-aff-043.png["儲存系統"]
+
+. 在*儲存屬性*頁面上選擇為資料儲存建立一個新的捲，並填寫要建立的捲的儲存屬性。按一下「*新增*」建立卷，然後按一下「*下一步*」繼續。
++
+image:vmware-vcf-aff-047.png["儲存屬性"]
+
++
+image:vmware-vcf-aff-048.png["儲存屬性 - 下一步"]
+
+. 最後，查看*摘要*並點擊*完成*以啟動 vVol 資料儲存建立程序。
++
+image:vmware-vcf-aff-049.png["摘要頁面"]
+
+
+
+====
+
+
+== 附加資訊
+
+有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
+
+有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf.html["VMware 雲端基礎文檔"]。

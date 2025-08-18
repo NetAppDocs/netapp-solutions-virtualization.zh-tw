@@ -1,0 +1,78 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-workflow-clone-vm.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用 Red Hat OpenShift Virtualization 複製虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用Trident在 OpenShift Virtualization 中克隆 VM。此過程包括利用Trident CSI 磁碟區克隆，可讓您透過關閉來源 VM 或保持其運作來建立新 VM。
+
+
+
+== 虛擬機器克隆
+
+在 Trident 的 Volume CSI 克隆功能的支援下，可以克隆 OpenShift 中現有的 VM。 CSI 卷克隆允許透過複製 PV 來使用現有 PVC 作為資料來源建立新的 PVC。新的 PVC 建立新之後，它將作為一個獨立的實體運行，並且與來源 PVC 沒有任何連結或依賴關係。
+
+image:redhat-openshift-057.png["VM克隆架構"]
+
+對於 CSI 卷克隆，需要考慮以下某些限制：
+
+. 來源 PVC 和目標 PVC 必須在同一個專案中。
+. 同一儲存類別內支援克隆。
+. 僅當來源磁碟區和目標磁碟區使用相同的 VolumeMode 設定時才可以執行複製；例如，一個區塊磁碟區只能複製到另一個區塊磁碟區。
+
+
+OpenShift 叢集中的虛擬機器可以透過兩種方式複製：
+
+. 透過關閉來源虛擬機
+. 透過保持來源虛擬機器處於活動狀態
+
+
+
+
+=== 透過關閉來源虛擬機
+
+透過關閉 VM 來複製現有 VM 是 OpenShift 的原生功能，是在Trident的支援下實現的。完成以下步驟來複製虛擬機器。
+
+. 導覽至工作負載>虛擬化>虛擬機，然後按一下要複製的虛擬機旁的省略號。
+. 點擊複製虛擬機器並提供新虛擬機器的詳細資訊。
++
+image:redhat-openshift-058.png["克隆虛擬機"]
+
+. 按一下複製虛擬機器；這將關閉來源虛擬機器並啟動複製虛擬機器的建立。
+. 此步驟完成後，您可以存取並驗證複製的VM的內容。
+
+
+
+
+=== 透過保持來源虛擬機器處於活動狀態
+
+也可以透過克隆來源 VM 的現有 PVC，然後使用克隆的 PVC 建立新 VM 來複製現有 VM。此方法不需要您關閉來源虛擬機器。完成以下步驟即可在不關閉虛擬機器的情況下複製虛擬機器。
+
+. 導覽至儲存 > 持久性磁碟區聲明，然後按一下連接到來源虛擬機器的 PVC 旁的省略號。
+. 點擊克隆 PVC 並提供新 PVC 的詳細資訊。
++
+image:redhat-openshift-059.png["克隆PVC"]
+
+. 然後點擊克隆。這會為新的 VM 建立 PVC。
+. 導覽至“工作負載”>“虛擬化”>“虛擬機器”，然後按一下“建立”>“使用 YAML”。
+. 在 spec > template > spec >volumes 部分中，附加克隆的 PVC 而不是容器磁碟。根據您的要求提供新虛擬機器的所有其他詳細資訊。
++
+[source, cli]
+----
+- name: rootdisk
+  persistentVolumeClaim:
+    claimName: rhel8-short-frog-rootdisk-28dvb-clone
+----
+. 按一下「建立」以建立新的虛擬機器。
+. VM建立成功後，存取並驗證新VM是否為來源VM的複製。
+

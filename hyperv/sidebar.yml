@@ -1,0 +1,26 @@
+---
+section: hyperv
+title: Hyper-V 虛擬化
+url: "/hyperv/index.html"
+entries:
+- title: 在NetApp儲存上部署 Hyper-V
+  pdf-filename: 在NetApp儲存上部署 Hyper-V
+  entries:
+  - title: 關於使用ONTAP進行 Hyper-V 部署
+    url: "/hyperv/hyperv-deploy.html"
+  - title: 準備部署
+    url: "/hyperv/hyperv-deploy-prereqs.html"
+  - title: 部署指南
+    url: "/hyperv/hyperv-deploy-considerations.html"
+  - title: 部署 Hyper-V
+    url: "/hyperv/hyperv-deploy-data-protection.html"
+  - title: 總結
+    url: "/hyperv/hyperv-deploy-conclusion.html"
+  - title: 將虛擬機器遷移到 Hyper-V
+    url: "/hyperv/hyperv-deploy-script.html"
+- title: 使用SnapMirror Active Sync 設定複製
+  pdf-filename: 使用SnapMirror Active Sync 設定複製
+  url: "/hyperv/hyperv-smas.html"
+- title: 使用 Hyper-V 的 SMI-S 提供者
+  pdf-filename: 使用適用於 Microsoft Hyper-V 的 SMI-S 提供者
+  url: "/hyperv/hyperv-smis.html"

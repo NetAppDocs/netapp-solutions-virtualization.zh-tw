@@ -1,0 +1,270 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vvf-overview.html 
+keywords: netapp, vmware, cloud, foundation, vcf, asa, all-flash, san, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi, fc, fibre channel, nvme 
+summary:  
+---
+= 了解如何在 VMware vSphere 8 的ONTAP儲存系統上使用 NFS v3 資料存儲
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp ONTAP和 VMware vSphere 8 協同工作，使用NetApp全快閃陣列為混合雲環境提供可擴展且安全的基於 NFS v3 的儲存解決方案。了解 VMware vSphere Foundation 支援的儲存選項和主要用例，包括用於災難復原的 VMware Live Site Recovery 和用於 NFS 儲存的 NetApp 自主勒索軟體防護 (ARP)。
+
+
+
+== 將 NFS v3 與 vSphere 8 和ONTAP儲存系統結合使用
+
+本文檔提供有關使用NetApp全快閃陣列的 VMware Cloud vSphere Foundation 可用的儲存選項的資訊。支援的儲存選項包含部署 NFS 資料儲存的具體說明。此外，也示範了用於 NFS 資料儲存災難復原的 VMware Live Site Recovery。最後，回顧了 NetApp 針對 NFS 儲存的自主勒索軟體防護。
+
+
+
+=== 用例
+
+本文檔涵蓋的用例：
+
+* 為尋求跨私有雲和公有雲的統一環境的客戶提供儲存選項。
+* 為工作負載部署虛擬基礎架構。
+* 可擴充的儲存解決方案可滿足不斷變化的需求，即使與運算資源需求不直接相關。
+* 使用適用SnapCenter Plug-in for VMware vSphere保護虛擬機器和資料儲存區。
+* 使用 VMware Live Site Recovery 對 NFS 資料儲存進行災難復原。
+* 勒索軟體偵測策略，包括 ESXi 主機和客戶 VM 層級的多層保護。
+
+
+
+
+=== 對象
+
+此解決方案適用於以下人群：
+
+* 解決方案架構師正在為 VMware 環境尋找更靈活的儲存選項，以最大程度地提高 TCO。
+* 解決方案架構師正在尋找能夠為主要雲端供應商提供資料保護和災難復原選項的 VVF 儲存選項。
+* 儲存管理員希望獲得有關如何使用 NFS 儲存配置 VVF 的具體指導。
+* 儲存管理員希望獲得有關如何保護ONTAP儲存上的虛擬機器和資料儲存區的具體說明。
+
+
+
+
+== 技術概述
+
+vSphere 8 的 NFS v3 VVF 參考指南由下列主要元件組成：
+
+
+
+=== VMware vSphere 基金會
+
+VMware vCenter 是 vSphere Foundation 的核心元件，它是一個集中式管理平台，用於提供 vSphere 環境的配置、控制和管理。 vCenter 是管理虛擬化基礎架構的基礎，可讓管理員在虛擬環境中部署、監控和管理虛擬機器、容器和 ESXi 主機。
+
+VVF 解決方案支援原生 Kubernetes 和基於虛擬機器的工作負載。關鍵組件包括：
+
+* VMware vSphere
+* VMware vSAN
+* Aria 標準
+* 適用於 vSphere 的 VMware Tanzu Kubernetes Grid 服務
+* vSphere 分散式交換機
+
+
+有關 VVF 所含組件的更多信息，請參閱架構和規劃，請參閱 https://www.vmware.com/docs/vmw-datasheet-vsphere-product-line-comparison["VMware vSphere 產品即時比較"]。
+
+
+
+=== VVF 儲存選項
+
+成功且強大的虛擬環境的核心是儲存。無論是透過 VMware 資料儲存區還是透過來賓連接的用例進行存儲，都可以釋放您的工作負載的功能，因為您可以選擇每 GB 的最佳價格，以提供最大的價值，同時減少利用不足。近二十年來， ONTAP一直是 VMware vSphere 環境的領先儲存解決方案，並不斷添加創新功能以簡化管理並降低成本。
+
+VMware 儲存選項通常分為傳統儲存和軟體定義儲存產品。傳統儲存模型包括本地儲存和網路存儲，而軟體定義儲存模型包括 vSAN 和 VMware 虛擬磁碟區 (vVols)。
+
+image:vmware-nfs-overview-001.png["虛擬機器儲存選項"]{nbsp}
+
+參考 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/introduction-to-storage-in-vsphere-environment.html["vSphere 環境中的儲存簡介"]有關 VMware vSphere Foundation 支援的儲存類型的詳細資訊。
+
+
+
+=== NetApp ONTAP
+
+數以萬計的客戶選擇ONTAP作為 vSphere 的主要儲存解決方案，有許多令人信服的理由。其中包括：
+
+. *統一儲存系統*： ONTAP提供支援 SAN 和 NAS 協定的統一儲存系統。這種多功能性允許在單一解決方案中無縫整合各種儲存技術。
+. *強大的資料保護：* ONTAP透過節省空間的快照提供強大的資料保護功能。這些快照可以實現高效的備份和復原過程，確保應用程式資料的安全性和完整性。
+. *全面的管理工具*： ONTAP提供了豐富的工具，旨在幫助有效地管理應用程式資料。這些工具簡化了儲存管理任務，提高了營運效率並簡化了管理。
+. *儲存效率：* ONTAP包含多個預設啟用的儲存效率功能，旨在優化儲存利用率、降低成本並提高整體系統效能。
+
+
+當滿足特定的應用程式需求時，將ONTAP與 VMware 結合使用可提供極大的靈活性。使用ONTAP支援以下協定作為 VMware 資料儲存：* FCP * FCoE * NVMe/FC * NVMe/TCP * iSCSI * NFS v3 * NFS v4.1
+
+使用與虛擬機器管理程式分離的儲存系統可讓您卸載許多功能並最大化您對 vSphere 主機系統的投資。這種方法不僅可以確保您的主機資源專注於應用程式工作負載，還可以避免儲存操作對應用程式的隨機效能產生影響。
+
+ONTAP與 vSphere 結合使用是一種很好的組合，可讓您減少主機硬體和 VMware 軟體的費用。您還可以以較低的成本保護您的資料並保持一致的高效能。由於虛擬化工作負載是移動的，您可以探索使用 Storage vMotion 的不同方法在同一儲存系統上跨 VMFS、NFS 或vVols資料儲存移動虛擬機器。
+
+
+
+=== NetApp全快閃陣列
+
+NetApp AFF （All Flash FAS）是全快閃儲存陣列的產品線。它旨在為企業工作負載提供高效能、低延遲的儲存解決方案。  AFF系列將快閃記憶體技術的優勢與 NetApp 的資料管理功能結合，為企業提供強大且有效率的儲存平台。
+
+AFF系列包括 A 系列和 C 系列型號。
+
+NetApp A 系列全 NVMe 快閃記憶體陣列專為高效能工作負載而設計，提供超低延遲和高彈性，使其適用於關鍵任務應用程式。
+
+image:vmware-nfs-overview-002.png["AFF陣列"]{nbsp}
+
+C 系列 QLC 快閃記憶體陣列針對更高容量的用例，提供快閃記憶體的速度和混合快閃記憶體的經濟性。
+
+image:vmware-nfs-overview-003.png["C系列陣列"]
+
+
+
+==== 儲存協定支援
+
+AFF支援用於虛擬化的所有標準協議，包括資料儲存和客戶機連接存儲，包括 NFS、SMB、iSCSI、光纖通道 (FC)、乙太網路光纖通道 (FCoE)、NVME over fabrics 和 S3。客戶可以自由選擇最適合其工作負載和應用程式的解決方案。
+
+*NFS* - NetApp AFF提供對 NFS 的支持，允許基於檔案存取 VMware 資料儲存。許多 ESXi 主機的 NFS 連線資料儲存遠遠超出了對 VMFS 檔案系統施加的限制。將 NFS 與 vSphere 結合使用可提供一些易用性和儲存效率可見性優勢。 ONTAP包括適用於 NFS 協定的檔案存取功能。您可以啟用 NFS 伺服器並匯出磁碟區或 qtree。
+
+有關 NFS 配置的設計指導，請參閱 https://docs.netapp.com/us-en/ontap/nas-management/index.html["NAS 儲存管理文檔"]。
+
+*iSCSI* - NetApp AFF為 iSCSI 提供強大的支持，允許透過 IP 網路對儲存裝置進行區塊級存取。它提供與 iSCSI 啟動器的無縫集成，從而實現 iSCSI LUN 的高效配置和管理。  ONTAP 的進階功能，例如多路徑、CHAP 驗證和 ALUA 支援。
+
+有關 iSCSI 配置的設計指導，請參閱 https://docs.netapp.com/us-en/ontap/san-config/configure-iscsi-san-hosts-ha-pairs-reference.html["SAN 配置參考文檔"]。
+
+*光纖通道* - NetApp AFF為光纖通道 (FC) 提供全面支持，光纖通道是一種常用於儲存區域網路 (SAN) 的高速網路技術。 ONTAP與 FC 基礎架構無縫集成，提供可靠、高效的儲存設備區塊級存取。它提供分區、多路徑和結構登入（FLOGI）等功能，以優化效能、增強安全性並確保 FC 環境中的無縫連接。
+
+有關光纖通道配置的設計指導，請參閱 https://docs.netapp.com/us-en/ontap/san-config/configure-fc-nvme-hosts-ha-pairs-reference.html["SAN 配置參考文檔"]。
+
+*NVMe over Fabrics* - NetApp ONTAP支援 NVMe over fabrics。  NVMe/FC 支援透過光纖通道基礎架構使用 NVMe 儲存設備，並透過儲存 IP 網路使用 NVMe/TCP。
+
+有關 NVMe 的設計指導，請參閱 https://docs.netapp.com/us-en/ontap/nvme/support-limitations.html["NVMe 配置、支援和限制"]。
+
+
+
+==== 雙活技術
+
+NetApp全快閃陣列可透過兩個控制器實現主動-主動路徑，從而無需主機作業系統等待主動路徑發生故障後再啟動備用路徑。這意味著主機可以利用所有控制器上的所有可用路徑，確保無論系統處於穩定狀態還是正在進行控制器故障轉移操作，活動路徑始終存在。
+
+有關詳細信息，請參閱 https://docs.netapp.com/us-en/ontap/data-protection-disaster-recovery/index.html["資料保護和災難復原"]文件.
+
+
+
+==== 儲存保證
+
+NetApp透過NetApp全快閃陣列提供一套獨特的儲存保證。其獨特的優勢包括：
+
+*儲存效率保證：*透過儲存效率保證，在最大限度地降低儲存成本的同時實現高效能。對於 SAN 工作負載而言，比例為 4:1。  *勒索軟體復原保證：*在發生勒索軟體攻擊時保證資料恢復。
+
+有關詳細信息，請參閱 https://www.netapp.com/data-storage/aff-a-series/["NetApp AFF登入頁面"]。
+
+
+
+=== 適用於 VMware vSphere 的NetApp ONTAP工具
+
+vCenter 的一個強大組件是能夠整合插件或擴展，從而進一步增強其功能並提供額外的特性和能力。這些外掛程式擴展了 vCenter 的管理功能，並允許管理員將第三方解決方案、工具和服務整合到他們的 vSphere 環境中。
+
+NetApp ONTAP工具 for VMware 是一套全面的工具，旨在透過其 vCenter 外掛程式架構促進 VMware 環境中的虛擬機器生命週期管理。這些工具與 VMware 生態系統無縫集成，可實現高效的資料儲存配置並為虛擬機器提供必要的保護。透過適用於 VMware vSphere 的ONTAP工具，管理員可以輕鬆管理儲存生命週期管理任務。
+
+全面的ONTAP工具 10 個資源可供尋找 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["ONTAP tools for VMware vSphere文件資源"]。
+
+查看ONTAP Tools 10 部署解決方案link:vmw-nfs-otv10.html["使用ONTAP工具 10 為 vSphere 8 設定 NFS 資料儲存區"]
+
+
+
+=== 適用於 VMware VAAI 的NetApp NFS 插件
+
+適用於 VAAI（陣列整合的 vStorage API）的NetApp NFS 外掛程式可透過將某些任務卸載到NetApp儲存系統來增強儲存操作，從而提高效能和效率。這包括完整複製、區塊清零和硬體輔助鎖定等操作。此外，VAAI 外掛程式可透過減少虛擬機器配置和複製操作期間透過網路傳輸的資料量來優化儲存利用率。
+
+可從NetApp支援站點下載適用於 VAAI 的NetApp NFS 插件，然後使用適用ONTAP tools for VMware vSphere將其上傳並安裝在 ESXi 主機上。
+
+參考 https://docs.netapp.com/us-en/nfs-plugin-vmware-vaai/["適用於 VMware VAAI 的NetApp NFS 外掛程式文檔"]了解更多。
+
+
+
+=== SnapCenter Plug-in for VMware vSphere
+
+SnapCenter Plug-in for VMware vSphere (SCV) 是NetApp推出的軟體解決方案，可為 VMware vSphere 環境提供全面的資料保護。它旨在簡化和精簡保護和管理虛擬機器 (VM) 和資料儲存的過程。  SCV 使用基於儲存的快照和複製到輔助陣列來滿足較低的復原時間目標。
+
+SnapCenter Plug-in for VMware vSphere在統一介面中提供以下功能，並與 vSphere 用戶端整合：
+
+*基於政策的快照* - SnapCenter可讓您定義用於建立和管理 VMware vSphere 中虛擬機器 (VM) 的應用程式一致性快照的政策。
+
+*自動化*－根據定義的策略自動建立和管理快照有助於確保一致、有效率的資料保護。
+
+*虛擬機器等級保護* - 虛擬機器層級的細微保護允許對單一虛擬機器進行有效的管理和復原。
+
+*儲存效率功能* - 與NetApp儲存技術整合可提供儲存效率功能，如快照的重複資料刪除和壓縮，從而最大限度地減少儲存需求。
+
+SnapCenter插件可以協調虛擬機器的靜止狀態以及NetApp儲存陣列上基於硬體的快照。  SnapMirror技術用於將備份副本複製到包括雲端中的二級儲存系統。
+
+更多資訊請參閱 https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere["SnapCenter Plug-in for VMware vSphere文檔"]。
+
+BlueXP整合支援 3-2-1 備份策略，將資料副本擴展到雲端中的物件儲存。
+
+有關BlueXP的 3-2-1 備份策略的更多信息，請訪問link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-321-dp-scv.html["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"^]。
+
+有關SnapCenter插件的逐步部署說明，請參閱解決方案link:vmw-vcf-scv-viwld.html["使用SnapCenter Plug-in for VMware vSphere保護 VCF 工作負載域上的虛擬機"]。
+
+
+
+=== 儲存注意事項
+
+利用ONTAP NFS 資料儲存庫和 VMware vSphere 可實現高效能、易於管理且可擴展的環境，從而提供基於區塊的儲存協定無法實現的虛擬機器與資料儲存庫比率。這種架構可以使資料儲存密度增加十倍，同時資料儲存數量也相應減少。
+
+*nConnect for NFS*：使用 NFS 的另一個好處是能夠利用 *nConnect* 功能。 nConnect 為 NFS v3 資料儲存卷啟用多個 TCP 連接，從而實現更高的吞吐量。這有助於提高並行性和 NFS 資料儲存。使用 NFS 版本 3 部署資料儲存的客戶可以增加與 NFS 伺服器的連線數量，從而最大限度地提高高速網路介面卡的使用率。
+
+有關 nConnect 的詳細信息，請參閱link:vmw-vsphere8-nfs-nconnect.html["VMware 和NetApp的 NFS nConnect 功能"]。
+
+*NFS 會話中繼：*從ONTAP 9.14.1 開始，使用 NFSv4.1 的用戶端可以利用會話中繼與 NFS 伺服器上的各種 LIF 建立多個連線。透過利用多路徑，可以實現更快的資料傳輸並增強彈性。當將FlexVol磁碟區匯出到支援中繼的客戶端（例如 VMware 和 Linux 用戶端）時，或在使用 NFS over RDMA、TCP 或 pNFS 協定時，中繼特別有用。
+
+參考 https://docs.netapp.com/us-en/ontap/nfs-trunking/["NFS 中繼概述"]了解更多。
+
+* FlexVol磁碟區：* NetApp建議對大多數 NFS 資料儲存使用 * FlexVol* 磁碟區。雖然更大的資料儲存庫可以提高儲存效率和營運優勢，但建議考慮使用至少四個資料儲存庫（FlexVol磁碟區）在單一ONTAP控制器上儲存虛擬機器。通常，管理員會部署由FlexVol磁碟區支援的資料儲存庫，容量範圍為 4TB 到 8TB。這種規模在效能、易於管理和資料保護之間取得了良好的平衡。管理員可以從小規模開始，並根據需要擴展資料儲存（最多可達 100TB）。較小的資料儲存有利於更快地從備份或災難中恢復，並且可以在叢集中快速移動。這種方法可以最大限度地利用硬體資源的效能，並支援具有不同復原策略的資料儲存。
+
+* FlexGroup磁碟區：*對於需要大型資料儲存的場景， NetApp建議使用 * FlexGroup* 磁碟區。 FlexGroup磁碟區幾乎沒有容量或檔案數量限制，使管理員能夠輕鬆配置龐大的單一命名空間。使用FlexGroup磁碟區不會產生額外的維護或管理開銷。 FlexGroup磁碟區的效能不需要多個資料存儲，因為它們本身就可以擴展。透過將ONTAP和FlexGroup磁碟區與 VMware vSphere 結合使用，您可以建立簡單且可擴充的資料儲存庫，充分利用整個ONTAP叢集的全部功能。
+
+
+
+=== 勒索軟體防護
+
+NetApp ONTAP資料管理軟體具有一套全面的整合技術，可協助您保護、偵測和復原勒索軟體攻擊。 ONTAP內建的NetApp SnapLock Compliance功能可使用具有進階資料保留功能的 WORM（一次寫入，多次讀取）技術來防止刪除已啟用磁碟區中儲存的資料。確定保留期並鎖定 Snapshot 副本後，即使具有完全系統權限的儲存管理員或NetApp支援團隊的成員也無法刪除 Snapshot 副本。但更重要的是，擁有洩漏憑證的駭客無法刪除資料。
+
+NetApp保證我們能夠在符合條件的陣列上恢復您受保護的NetApp Snapshot 副本，如果我們無法恢復，我們將對您的組織進行賠償。
+
+有關勒索軟體恢復保證的更多信息，請參閱： https://www.netapp.com/media/103031-SB-4279-Ransomware_Recovery_Guarantee.pdf["勒索軟體恢復保證"] 。
+
+請參閱 https://docs.netapp.com/us-en/ontap/anti-ransomware/["自主勒索軟體防護概述"]了解更多深入資訊。
+
+請參閱 NetApps 解決方案文件中心的完整解決方案：link:vmw-nfs-arp.html["自主防禦 NFS 儲存勒索軟體"]
+
+
+
+=== 災難復原註意事項
+
+NetApp提供全球最安全的儲存。  NetApp可以幫助保護數據和應用程式基礎架構，在本地儲存和雲端之間移動數據，並幫助確保跨雲端的數據可用性。  ONTAP配備強大的資料保護和安全技術，可透過主動偵測威脅並快速恢復資料和應用程式來協助保護客戶免受災難。
+
+*VMware Live Site Recovery*（以前稱為 VMware Site Recovery Manager）提供簡化的、基於政策的自動化功能，用於保護 vSphere Web 用戶端中的虛擬機器。此解決方案透過儲存複製適配器（作為ONTAP Tools for VMware 的一部分）利用 NetApp 先進的資料管理技術。透過利用NetApp SnapMirror的基於陣列的複製功能，VMware 環境可以從 ONTAP 最可靠、最成熟的技術之一中受益。 SnapMirror僅複製更改的檔案系統區塊（而不是整個虛擬機器或資料儲存區），從而確保安全、高效的資料傳輸。此外，這些區塊利用了重複資料刪除、壓縮和壓縮等節省空間的技術。透過在現代ONTAP系統中引入與版本無關的SnapMirror ，您可以靈活地選擇來源叢集和目標叢集。  SnapMirror確實已成為一種強大的災難復原工具，並且與即時網站復原相結合時，與本地儲存替代方案相比，它提供了增強的可擴展性、效能和成本節省。
+
+更多資訊請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/live-recovery/site-recovery-manager/8-7/site-recovery-manager-installation-and-configuration-8-7/overview-of-vmware-site-recovery-manager.html["VMware Site Recovery Manager 概述"]。
+
+請參閱 NetApps 解決方案文件中心的完整解決方案：link:vmw-nfs-vlsr.html["自主防禦 NFS 儲存勒索軟體"]
+
+* BlueXP DRaaS*（災難復原即服務）是一種經濟高效的災難復原解決方案，專為在具有 NFS 資料儲存的本地ONTAP系統上運行的 VMware 工作負載而設計。它利用NetApp SnapMirror複製來防止網站中斷和資料損壞事件（例如勒索軟體攻擊）。該服務與NetApp BlueXP控制台集成，可輕鬆管理和自動發現 VMware vCenters 和ONTAP儲存。組織可以建立和測試災難復原計劃，透過區塊級複製實現長達 5 分鐘的復原點目標 (RPO)。 BlueXP DRaaS 利用 ONTAP 的FlexClone技術進行節省空間的測試，而不會影響生產資源。該服務協調故障轉移和故障復原過程，允許以最少的努力將受保護的虛擬機器啟動到指定的災難復原站點。與其他知名替代方案相比， BlueXP DRaaS 以極低的成本提供了這些功能，使其成為組織使用ONTAP儲存系統為其 VMware 環境設定、測試和執行災難復原作業的有效解決方案。
+
+請參閱 NetApps 解決方案文件中心的完整解決方案：link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-nfs.html["使用BlueXP DRaaS 對 NFS 資料儲存進行災難復原"^]
+
+
+
+=== 解決方案概述
+
+本文檔涵蓋的解決方案：
+
+* *NFS nConnect 功能與NetApp和 VMware 相容*。點選link:vmw-vsphere8-nfs-nconnect.html["*這裡*"]了解部署步驟。
++
+** *使用ONTAP工具 10 為 vSphere 8 設定 NFS 資料儲存*。點選link:vmw-nfs-otv10.html["*這裡*"]了解部署步驟。
+** *部署並使用SnapCenter Plug-in for VMware vSphere來保護和還原虛擬機器*。點選link:vmw-vcf-scv-viwld.html["*這裡*"]了解部署步驟。
+** *使用 VMware Site Recovery Manager 進行 NFS 資料儲存的災難復原*。點選link:vmw-nfs-vlsr.html["*這裡*"]了解部署步驟。
+** *NFS 儲存的自主勒索軟體保護*。點選link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-nfs.html["*這裡*"^]了解部署步驟。
+
+
+

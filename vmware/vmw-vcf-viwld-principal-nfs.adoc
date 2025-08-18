@@ -1,0 +1,307 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-viwld-principal-nfs.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
+summary:  
+---
+= 使用ONTAP上的 NFS 資料儲存庫作為 VI 工作負載域的主存儲
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在此用例中，我們概述了在ONTAP上配置 NFS 資料儲存作為 VMware Cloud Foundation (VCF) 虛擬基礎架構 (VI) 工作負載域的主要儲存解決方案的過程。此流程總結了所需的元件、設定步驟和部署流程。
+
+
+
+== NFS 的優勢
+
+*簡單易用：*NFS 設定和管理簡單，使其成為需要快速簡單的文件共享環境的絕佳選擇。
+
+*可擴展性*：ONTAP 的架構允許 NFS 有效擴展，從而無需對基礎架構進行重大更改即可支援不斷增長的資料需求。
+
+*靈活性*：NFS 支援廣泛的應用程式和工作負載，使其適用於各種用例，包括虛擬化環境。
+
+有關更多信息，請參閱 vSphere 8 的 NFS v3 參考指南。
+
+有關使用光纖通道與NetApp儲存系統的更多信息，請參閱link:vmw-vvf-overview.html["適用於 vSphere 8 的 NFS v3 參考指南"]。
+
+
+
+== 場景概述
+
+此場景涵蓋以下進階步驟：
+
+* 為 NFS 流量建立具有邏輯介面 (LIF) 的儲存虛擬機器 (SVM)
+* 驗證ONTAP儲存虛擬機器 (SVM) 的網路以及是否存在用於承載 NFS 流量的邏輯介面 (LIF)。
+* 建立導出策略以允許 ESXi 主機存取 NFS 磁碟區。
+* 在ONTAP儲存系統上建立 NFS 磁碟區。
+* 在 SDDC Manager 中為 NFS 和 vMotion 流量建立網路池。
+* 委託 VCF 中的主機用於 VI 工作負載域。
+* 使用 NFS 資料儲存作為主要儲存在 VCF 中部署 VI 工作負載域。
+* 為 VMware VAAI 安裝NetApp NFS 插件
+
+
+
+NOTE: 此解決方案適用於支援NFS儲存的ONTAP平台，包括NetApp AFF和FAS。
+
+
+
+== 先決條件
+
+此場景中使用以下元件和配置：
+
+* NetApp AFF儲存系統，其儲存虛擬機器 (SVM) 配置為允許 NFS 流量。
+* 已在 IP 網路上建立用於承載 NFS 流量並與 SVM 關聯的邏輯介面 (LIF)。
+* VCF管理域部署完成，可以存取SDDC Manager介面。
+* 配置 4 個 ESXi 主機用於 VCF 管理網路上的通訊。
+* 為此目的建立的 VLAN 或網路段上為 vMotion 和 NFS 儲存流量保留的 IP 位址。
+
+
+
+NOTE: 部署 VI 工作負載域時，VCF 會驗證與 NFS 伺服器的連線。這是在使用 NFS IP 位址新增任何額外的 vmkernel 適配器之前，使用 ESXi 主機上的管理適配器完成的。因此，必須確保 1) 管理網路可路由至 NFS 伺服器，或 2) 已將管理網路的 LIF 新增至託管 NFS 資料儲存庫磁碟區的 SVM，以確保驗證可以繼續。
+
+有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
+
+有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf.html["VMware 雲端基礎文檔"]。
+
+有關在 vSphere 群集中使用 NFS 的更多信息，請參閱link:vmw-vvf-overview.html["適用於 vSphere 8 的 NFS v3 參考指南"]。
+
+{nbsp}image:vmware-vcf-aff-070.png["NFS架構圖"] {nbsp}
+
+
+
+== 部署步驟
+
+若要部署以 NFS 資料儲存區為主要儲存的 VI 工作負載域，請完成下列步驟：
+
+.驗證ONTAP SVM 的網路連接
+[%collapsible%open]
+====
+驗證是否已為在ONTAP儲存叢集和 VI 工作負載域之間傳輸 NFS 流量的網路建立了所需的邏輯介面。
+
+. 從ONTAP系統管理員導覽至左側選單中的 *儲存虛擬機器*，然後按一下要用於 NFS 流量的 SVM。在「*概述*」標籤上的「*網路 IP 介面*」下，按一下「*NFS*」右側的數字。在清單中驗證是否列出了所需的 LIF IP 位址。
++
+image:vmware-vcf-aff-003.png["驗證 SVM 的 LIF"]
+
+
+
+或者，使用以下命令從ONTAP CLI 驗證與 SVM 關聯的 LIF：
+
+[source, cli]
+----
+network interface show -vserver <SVM_NAME>
+----
+. 驗證 ESXi 主機是否可以與ONTAP NFS 伺服器通訊。透過 SSH 登入 ESXi 主機並對 SVM LIF 執行 ping 操作：
+
+
+[source, cli]
+----
+vmkping <IP Address>
+----
+
+NOTE: 部署 VI 工作負載域時，VCF 會驗證與 NFS 伺服器的連線。這是在使用 NFS IP 位址新增任何額外的 vmkernel 適配器之前，使用 ESXi 主機上的管理適配器完成的。因此，必須確保 1) 管理網路可路由至 NFS 伺服器，或 2) 已將管理網路的 LIF 新增至託管 NFS 資料儲存庫磁碟區的 SVM，以確保驗證可以繼續。
+
+====
+.建立共用 NFS 磁碟區的匯出策略
+[%collapsible%open]
+====
+在ONTAP系統管理員中建立導出策略來定義 NFS 磁碟區的存取控制。
+
+. 在ONTAP系統管理員中，按一下左側選單中的“*儲存虛擬機器*”，然後從清單中選擇一個 SVM。
+. 在*設定*標籤上找到*匯出策略*並點擊箭頭進行存取。
++
+image:vmware-vcf-aff-006.png["訪問出口政策"]
+
++
+{nbsp}
+
+. 在*新匯出策略*視窗中新增策略名稱，按一下*新增規則*按鈕，然後按一下*+新增*按鈕開始新增規則。
++
+image:vmware-vcf-aff-007.png["新的出口政策"]
+
++
+{nbsp}
+
+. 填寫您希望包含在規則中的 IP 位址、IP 位址範圍或網路。取消選取 *SMB/Cifs* 和 * FlexCache* 方塊並選擇下方的存取詳細資訊。選擇 UNIX 框足以進行 ESXi 主機存取。
++
+image:vmware-vcf-aff-008.png["儲存新規則"]
+
++
+
+NOTE: 部署 VI 工作負載域時，VCF 會驗證與 NFS 伺服器的連線。這是在使用 NFS IP 位址新增任何額外的 vmkernel 適配器之前，使用 ESXi 主機上的管理適配器完成的。因此，必須確保出口政策包括 VCF 管理網絡，以便驗證能夠繼續進行。
+
+. 輸入所有規則後，按一下「儲存」按鈕儲存新的匯出策略。
+. 或者，您可以在ONTAP CLI 中建立匯出策略和規則。請參閱ONTAP文件中建立匯出策略和新增規則的步驟。
++
+** 使用ONTAP CLIlink:https://docs.netapp.com/us-en/ontap/nfs-config/create-export-policy-task.html["建立導出策略"] 。
+** 使用ONTAP CLIlink:https://docs.netapp.com/us-en/ontap/nfs-config/add-rule-export-policy-task.html["在匯出策略中新增規則"] 。
+
+
+
+
+====
+.建立 NFS 卷
+[%collapsible%open]
+====
+在ONTAP儲存系統上建立一個 NFS 卷，用作工作負載域部署中的資料儲存。
+
+. 從ONTAP系統管理員導覽至左側選單中的 *儲存 > 磁碟區*，然後按一下 *+新增* 以建立新磁碟區。
++
+image:vmware-vcf-aff-009.png["新增磁碟區"]
+
++
+{nbsp}
+
+. 新增磁碟區的名稱，填寫所需的容量並選擇將託管該磁碟區的儲存虛擬機器。按一下“*更多選項*”繼續。
++
+image:vmware-vcf-aff-010.png["添加卷詳細信息"]
+
++
+{nbsp}
+
+. 在存取權限下，選擇匯出策略，其中包括 VCF 管理網路或 IP 位址和 NFS 網路 IP 位址，這些位址將用於驗證 NFS 伺服器和 NFS 流量。
++
+image:vmware-vcf-aff-011.png["添加卷詳細信息"]
+
++
++ {nbsp}
+
++
+
+NOTE: 部署 VI 工作負載域時，VCF 會驗證與 NFS 伺服器的連線。這是在使用 NFS IP 位址新增任何額外的 vmkernel 適配器之前，使用 ESXi 主機上的管理適配器完成的。因此，必須確保 1) 管理網路可路由至 NFS 伺服器，或 2) 已將管理網路的 LIF 新增至託管 NFS 資料儲存庫磁碟區的 SVM，以確保驗證可以繼續。
+
+. 或者，可以在ONTAP CLI 中建立ONTAP區。更多資訊請參閱link:https://docs.netapp.com/us-en/ontap-cli-9141//lun-create.html["lun 創建"]ONTAP指令文件中的命令。
+
+
+====
+.在 SDDC Manager 中建立網路池
+[%collapsible%open]
+====
+在偵錯 ESXi 主機之前，必須在 SDDC Manager 中建立網路池，為在 VI 工作負載域中部署它們做準備。網路池必須包含用於與 NFS 伺服器通訊的 VMkernel 適配器的網路資訊和 IP 位址範圍。
+
+. 從 SDDC 管理器 Web 介面導覽至左側選單中的 *網路設定*，然後按一下 *+ 建立網路池* 按鈕。
++
+image:vmware-vcf-aff-004.png["建立網路池"]
+
++
+{nbsp}
+
+. 填寫網路池的名稱，選取 NFS 的複選框並填寫所有網路詳細資料。對 vMotion 網路資訊重複此操作。
++
+image:vmware-vcf-aff-005.png["網路池配置"]
+
++
+{nbsp}
+
+. 點選「*儲存*」按鈕完成網路池的建立。
+
+
+====
+.委員會主辦單位
+[%collapsible%open]
+====
+在將 ESXi 主機部署為工作負載域之前，必須將其新增至 SDDC 管理器清單中。這涉及提供所需資訊、通過驗證並啟動調試過程。
+
+有關詳細信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/commission-hosts.html["委員會主辦單位"]在 VCF 管理指南中。
+
+. 從 SDDC 管理器介面導覽到左側選單中的 *Hosts*，然後按一下 *Commission Hosts* 按鈕。
++
+image:vmware-vcf-aff-016.png["開始委託主機"]
+
++
+{nbsp}
+
+. 第一頁是先決條件清單。仔細檢查所有先決條件並選中所有複選框以繼續。
++
+image:vmware-vcf-aff-017.png["確認先決條件"]
+
++
+{nbsp}
+
+. 在*主機新增和驗證*視窗中填入*主機 FQDN*、*儲存類型*、*網路池*名稱（包括用於工作負載域的 vMotion 和 NFS 儲存 IP 位址）以及存取 ESXi 主機的憑證。按一下「*新增*」將主機新增至要驗證的主機群組。
++
+image:vmware-vcf-aff-018.png["主機新增和驗證視窗"]
+
++
+{nbsp}
+
+. 新增所有需要驗證的主機後，按一下「驗證全部」按鈕繼續。
+. 假設所有主機都已驗證，請按一下「下一步」繼續。
++
+image:vmware-vcf-aff-019.png["驗證全部並點擊下一步"]
+
++
+{nbsp}
+
+. 查看要調試的主機列表，然後按一下“調試”按鈕開始該過程。從 SDDC 管理器中的任務窗格監控調試過程。
++
+image:vmware-vcf-aff-020.png["驗證全部並點擊下一步"]
+
+
+
+====
+.部署 VI 工作負載域
+[%collapsible%open]
+====
+使用 VCF 雲端管理器介面可以部署 VI 工作負載域。這裡僅介紹與儲存配置相關的步驟。
+
+有關部署 VI 工作負載域的逐步說明，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/working-with-workload-domains-admin/about-virtual-infrastructure-workload-domains-admin/deploy-a-vi-workload-domain-using-the-sddc-manager-ui-admin.html["使用 SDDC Manager UI 部署 VI 工作負載域"]。
+
+. 從 SDDC 管理器儀表板點擊右上角的 *+ 工作負載域* 以建立新工作負載域。
++
+image:vmware-vcf-aff-012.png["建立新的工作負載域"]
+
++
+{nbsp}
+
+. 在 VI 設定精靈中，根據需要填寫*常規資訊、叢集、運算、網路*和*主機選擇*部分。
+
+
+有關填寫 VI 配置精靈中所需資訊的詳細信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/working-with-workload-domains-admin/about-virtual-infrastructure-workload-domains-admin/deploy-a-vi-workload-domain-using-the-sddc-manager-ui-admin.html["使用 SDDC Manager UI 部署 VI 工作負載域"]。
+
++image:vmware-vcf-aff-013.png["VI配置精靈"]
+
+. 在 NFS 儲存部分填入資料儲存名稱、NFS 磁碟區的資料夾掛載點和ONTAP NFS 儲存 VM LIF 的 IP 位址。
++
+image:vmware-vcf-aff-014.png["新增 NFS 儲存信息"]
+
++
+{nbsp}
+
+. 在 VI 設定精靈中完成交換器設定和授權步驟，然後按一下 *完成* 開始工作負載域建立程序。
++
+image:vmware-vcf-aff-015.png["完整的VI配置精靈"]
+
++
+{nbsp}
+
+. 監控流程並解決流程中出現的任何驗證問題。
+
+
+====
+.為 VMware VAAI 安裝NetApp NFS 插件
+[%collapsible%open]
+====
+適用於 VMware VAAI 的NetApp NFS 外掛程式整合了安裝在 ESXi 主機上的 VMware 虛擬磁碟庫，並提供了更快完成的更高效能複製操作。當使用ONTAP儲存系統和 VMware vSphere 時，建議執行此程序。
+
+有關為 VMware VAAI 部署NetApp NFS 外掛程式的逐步說明，請按照以下說明進行操作link:https://docs.netapp.com/us-en/nfs-plugin-vmware-vaai/task-install-netapp-nfs-plugin-for-vmware-vaai.html["為 VMware VAAI 安裝NetApp NFS 插件"]。
+
+====
+
+
+== 此解決方案的視訊演示
+
+.NFS 資料存儲作為 VCF 工作負載域的主要存儲
+video::9b66ac8d-d2b1-4ac4-a33c-b16900f67df6[panopto,width=360]
+
+
+== 附加資訊
+
+有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
+
+有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf.html["VMware 雲端基礎文檔"]。

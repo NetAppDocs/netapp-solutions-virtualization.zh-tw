@@ -1,0 +1,408 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-trident-install.html 
+keywords: OpenShift, OCP, Trident, Trident protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 在 Red Hat OpenShift 叢集上安裝Trident並建立儲存對象
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 Red Hat 認證的Trident Operator 在 OpenShift 叢集上安裝Trident ，並準備工作節點以進行區塊存取。為ONTAP和 FSxN 儲存建立Trident後端和儲存類別對象，以實現容器和虛擬機器的動態磁碟區配置。
+
+
+NOTE: 如果您需要在 OpenShift Virtualization 中建立虛擬機，則必須安裝Trident ，並且必須在叢集（本機和 ROSA）上安裝 OpenShift Virtualization 之前在 openShift 叢集中建立後端物件和儲存類別物件。預設儲存類別和預設磁碟區快照類別必須設定為叢集中的Trident儲存和快照類別。只有在配置完成後，OpenShift Virtualization 才能在本機提供黃金映像，以便使用範本建立 VM。
+
+
+NOTE: 如果在安裝Trident之前安裝了 OpenShift Virtualization Operator，則可以使用以下命令刪除使用不同儲存類別建立的黃金映像，然後透過確保設定了Trident Storage 和 Volume Snapshot 類別預設值，讓 OpenShift Virtualization 使用Trident儲存類別建立黃金映像。
+
+[source, yaml]
+----
+oc delete dv,VolumeSnapshot -n openshift-virtualization-os-images --selector=cdi.kubevirt.io/dataImportCron
+----
+
+NOTE: 若要取得範例 yaml 檔案來為 ROSA 叢集的 FSxN 儲存建立 trident 對象，以及取得 VolumeSnapshotClass 的範例 yaml 文件，請向下捲動此頁面。
+
+**安裝Trident**
+
+.使用 Red Hat 認證作業員安裝Trident
+[%collapsible%open]
+====
+本節將提供使用 Red Hat 認證Trident Operator 安裝Trident的詳細信息link:https://docs.netapp.com/us-en/trident/trident-get-started/kubernetes-deploy.html["請參閱Trident文檔"]了解安裝Trident的其他方法。隨著Trident 25.02 的發布，Red Hat OpenShift 本地和雲端的Trident用戶以及 AWS 上的 Red Hat OpenShift Service 等託管服務現在可以使用來自 Operator Hub 的Trident Certified Operator 安裝Trident 。這對 OpenShift 用戶社群來說意義重大，因為Trident之前僅作為社群營運商提供。
+
+Red Hat 認證Trident操作員的優勢在於，當與 OpenShift 一起使用時（無論是在本地、在雲端，還是作為 ROSA 的託管服務），操作員及其容器的基礎完全受到NetApp的支援。此外， NetApp Trident對客戶免費，因此您只需使用經過驗證可與 Red Hat OpenShift 無縫協作且打包以便於生命週期管理的認證操作員進行安裝即可。
+
+此外， Trident 25.02 操作員（以及未來版本）提供了為 iSCSI 準備工作節點的可選好處。如果您打算在 ROSA 叢集上部署工作負載並打算將 iSCSI 協定與 FSxN 一起使用，這尤其有利，尤其是對於 OpenShift Virtualization VM 工作負載。在叢集上安裝Trident時，此功能減輕了使用 FSxN 在 ROSA 叢集上為 iSCSI 準備工作節點的挑戰。
+
+無論您是在本機叢集還是在 ROSA 上安裝，使用操作員的安裝步驟都是相同的。若要使用 Operator 安裝Trident ，請按一下 Operator hub 並選擇 Certified NetApp Trident。在安裝頁面中，預設選擇最新版本。按一下“安裝”。image:rh-os-n-use-case-osv-trident-install-001.png["營運商樞紐"]
+
+image:rh-os-n-use-case-osv-trident-install-002.png["安裝"]
+
+安裝操作員後，按一下查看操作員，然後建立Trident Orchestrator 的實例。如果要為 iSCSI 儲存存取準備工作節點，請前往 yaml 視圖並透過新增 iscsi 來修改 nodePrep 參數。
+
+image:rh-os-n-use-case-osv-trident-install-003.png["新增 iscsi 以準備節點"]
+
+現在，所有 trident pod 都應該在叢集中執行。image:rh-os-n-use-case-osv-trident-install-004.png["安裝Trident"]
+
+若要驗證 OpenShift 叢集的工作節點上是否已啟用 iSCSI 工具，請登入工作節點並驗證您是否看到 iscsid、multipathd active 和 multipath.conf 檔案中的項目，如圖所示。
+
+image:rh-os-n-use-case-osv-trident-install-005.png["iscsid 正在運行"]
+
+image:rh-os-n-use-case-osv-trident-install-006.png["多路徑運行"]
+
+image:rh-os-n-use-case-osv-trident-install-007.png["multipathconf 檔案正在運行"]
+
+====
+
+
+== 影片示範
+
+以下影片示範如何使用 Red Hat 認證Trident Operator 安裝Trident
+
+.在 OpenShift 中使用經過認證的Trident Operator 安裝Trident 25.02.1
+video::15c225f3-13ef-41ba-b255-b2d500f927c0[panopto,width=360]
+
+
+== 本地 OpenShift 叢集的Trident配置
+
+.Trident後端和 NAS 儲存類
+[%collapsible%open]
+====
+[source, yaml]
+----
+cat tbc-nas.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tbc-nas-secret
+type: Opaque
+stringData:
+  username: <cluster admin username>
+  password: <cluster admin password>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: tbc-nas
+spec:
+  version: 1
+  storageDriverName: ontap-nas
+  managementLIF: <cluster management lif>
+  backendName: tbc-nas
+  svm: zoneb
+  storagePrefix: testzoneb
+  defaults:
+    nameTemplate: "{{ .config.StoragePrefix }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+  credentials:
+    name: tbc-nas-secret
+----
+[source, yaml]
+----
+cat sc-nas.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-nas
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-nas"
+  media: "ssd"
+  provisioningType: "thin"
+  snapshots: "true"
+allowVolumeExpansion: true
+----
+====
+.用於 iSCSI 的Trident後端和儲存類
+[%collapsible%open]
+====
+[source, yaml]
+----
+# cat tbc-iscsi.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-ontap-iscsi-secret
+type: Opaque
+stringData:
+  username: <cluster admin username>
+  password: <cluster admin password>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: ontap-iscsi
+spec:
+  version: 1
+  storageDriverName: ontap-san
+  managementLIF: <management LIF>
+  backendName: ontap-iscsi
+  svm: <SVM name>
+  credentials:
+    name: backend-tbc-ontap-iscsi-secret
+----
+[source, yaml]
+----
+# cat sc-iscsi.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-iscsi
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  media: "ssd"
+  provisioningType: "thin"
+  fsType: ext4
+  snapshots: "true"
+allowVolumeExpansion: true
+----
+====
+.NVMe/TCP 的Trident後端與儲存類
+[%collapsible%open]
+====
+[source, yaml]
+----
+# cat tbc-nvme.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-ontap-nvme-secret
+type: Opaque
+stringData:
+  username: <cluster admin password>
+  password: <cluster admin password>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-tbc-ontap-nvme
+spec:
+  version: 1
+  storageDriverName: ontap-san
+  managementLIF: <cluster management LIF>
+  backendName: backend-tbc-ontap-nvme
+  svm: <SVM name>
+  credentials:
+    name: backend-tbc-ontap-nvme-secret
+----
+[source, yaml]
+----
+# cat sc-nvme.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-nvme
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  media: "ssd"
+  provisioningType: "thin"
+  fsType: ext4
+  snapshots: "true"
+allowVolumeExpansion: true
+----
+====
+.FC 的Trident後端和儲存類
+[%collapsible%open]
+====
+[source, yaml]
+----
+# cat tbc-fc.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tbc-fc-secret
+type: Opaque
+stringData:
+  username: <cluster admin password>
+  password: <cluster admin password>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: tbc-fc
+spec:
+  version: 1
+  storageDriverName: ontap-san
+  managementLIF: <cluster mgmt lif>
+  backendName: tbc-fc
+  svm: openshift-fc
+  sanType: fcp
+  storagePrefix: demofc
+  defaults:
+    nameTemplate: "{{ .config.StoragePrefix }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+  credentials:
+    name: tbc-fc-secret
+----
+[source, yaml]
+----
+# cat sc-fc.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-fc
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  media: "ssd"
+  provisioningType: "thin"
+  fsType: ext4
+  snapshots: "true"
+allowVolumeExpansion: true
+----
+====
+
+
+== 使用 FSxN 儲存的 ROSA 叢集的Trident配置
+
+.FSxN NAS 的Trident後端和儲存類
+[%collapsible%open]
+====
+[source, yaml]
+----
+#cat tbc-fsx-nas.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-fsx-ontap-nas-secret
+  namespace: trident
+type: Opaque
+stringData:
+  username: <cluster admin lif>
+  password: <cluster admin passwd>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: backend-fsx-ontap-nas
+  namespace: trident
+spec:
+  version: 1
+  backendName: fsx-ontap
+  storageDriverName: ontap-nas
+  managementLIF: <Management DNS name>
+  dataLIF: <NFS DNS name>
+  svm: <SVM NAME>
+  credentials:
+    name: backend-fsx-ontap-nas-secret
+----
+[source, yaml]
+----
+# cat sc-fsx-nas.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: trident-csi
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-nas"
+  fsType: "ext4"
+allowVolumeExpansion: True
+reclaimPolicy: Retain
+----
+====
+.FSxN iSCSI 的Trident後端和儲存類
+[%collapsible%open]
+====
+[source, yaml]
+----
+# cat tbc-fsx-iscsi.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-tbc-fsx-iscsi-secret
+type: Opaque
+stringData:
+  username: <cluster admin username>
+  password: <cluster admin password>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: fsx-iscsi
+spec:
+  version: 1
+  storageDriverName: ontap-san
+  managementLIF: <management LIF>
+  backendName: fsx-iscsi
+  svm: <SVM name>
+  credentials:
+    name: backend-tbc-ontap-iscsi-secret
+----
+[source, yaml]
+----
+# cat sc-fsx-iscsi.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-fsx-iscsi
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  media: "ssd"
+  provisioningType: "thin"
+  fsType: ext4
+  snapshots: "true"
+allowVolumeExpansion: true
+----
+====
+
+
+== 建立Trident磁碟區快照類
+
+.Trident卷快照類
+[%collapsible%open]
+====
+[source, yaml]
+----
+# cat snapshot-class.yaml
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: trident-snapshotclass
+driver: csi.trident.netapp.io
+deletionPolicy: Retain
+----
+====
+準備好後端設定、儲存類別配置和快照配置所需的 yaml 檔案後，您可以使用下列命令建立 trident 後端、儲存類別和快照類別對象
+
+[source, yaml]
+----
+oc create -f <backend-filename.yaml> -n trident
+oc create -f < storageclass-filename.yaml>
+oc create -f <snapshotclass-filename.yaml>
+----
+
+
+== 使用Trident Storage 和 Snapshot Class 設定預設值
+
+.使用Trident Storage 和 Snapshot Class 設定預設值
+[%collapsible%open]
+====
+現在，您可以將所需的 trident 儲存類別和磁碟區快照類別設為 OpenShift 叢集中的預設類別。如前所述，需要設定預設儲存類別和磁碟區快照類，以允許 OpenShift Virtualization 使黃金映像來源可用於從預設範本建立虛擬機器。
+
+您可以從控制台編輯註解或從命令列進行修補，將Trident儲存類別和快照類別設定為預設值。
+
+[source, yaml]
+----
+storageclass.kubernetes.io/is-default-class:true
+or
+kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+storageclass.kubevirt.io/is-default-virt-class: true
+or
+kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubevirt.io/is-default-virt-class": "true"}}}'
+----
+設定完成後，您可以使用以下命令刪除任何預先存在的 dv 和 VolumeSnapShot 物件：
+
+[source, yaml]
+----
+oc delete dv,VolumeSnapshot -n openshift-virtualization-os-images --selector=cdi.kubevirt.io/dataImportCron
+----
+====

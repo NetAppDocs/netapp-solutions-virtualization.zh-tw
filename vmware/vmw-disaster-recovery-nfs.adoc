@@ -1,0 +1,300 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-disaster-recovery-nfs.html 
+keywords: dr, draas, bluexp, disaster recovery, nfs datastore 
+summary: 本文檔的此部分介紹了BlueXP DRaaS 的配置，以便為本地 VMware VM 設定災難復原到另一個指定站點。 
+---
+= 使用BlueXP disaster recovery
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在此用例中，我們概述了使用BlueXP disaster recovery為使用 NFS 資料儲存的本機 VMware VM 設定災難復原的過程。此過程包括設定BlueXP帳戶和連接器、新增ONTAP陣列以啟用 VMware vCenter 和ONTAP儲存之間的通訊、配置站點之間的複製以及建立和測試復原計畫。
+
+透過從生產站點到災難復原站點的區塊級複製來實現災難復原是一種具有彈性且經濟高效的方法，可保護工作負載免受網站中斷和資料損壞事件（例如勒索軟體攻擊）的影響。使用NetApp SnapMirror複製，在具有 NFS 資料儲存的本機ONTAP系統上執行的 VMware 工作負載可以複製到位於指定復原資料中心的另一個ONTAP儲存系統，該資料中心也部署了 VMware。
+
+
+
+== 介紹
+
+本文檔的此部分介紹了BlueXP DRaaS 的配置，以便為本地 VMware VM 設定災難復原到另一個指定站點。作為此設定的一部分， BlueXP帳戶、 BlueXP連接器、 BlueXP工作區內新增的ONTAP陣列是實現從 VMware vCenter 到ONTAP儲存的通訊所必需的。此外，本文檔詳細介紹如何設定網站之間的複製以及如何設定和測試復原計畫。最後一部分介紹如何執行完整網站故障轉移以及在主網站恢復並在線上購買後如何進行故障復原。
+
+利用整合到NetApp BlueXP控制台的BlueXP disaster recovery服務，公司可以輕鬆發現其內部部署的 VMware vCenter 和ONTAP儲存。然後，組織可以建立資源群組、建立災難復原計畫、將其與資源群組關聯，以及測試或執行故障轉移和故障復原。SnapMirror提供儲存層級區塊複製，使兩個網站保持最新的增量變化，從而實現長達 5 分鐘的復原點目標 (RPO)。此外，還可以模擬災難復原程序，而不會影響生產或產生額外的儲存成本。
+
+BlueXP disaster recovery利用 ONTAP 的FlexClone技術從災難復原站點上最後複製的快照建立 NFS 資料儲存庫的空間高效副本。完成災難復原測試後，客戶可以輕鬆刪除測試環境，而不會影響實際複製的生產資源。如果發生實際故障轉移， BlueXP disaster recovery服務會協調所有必要步驟，只需點擊幾下即可自動在指定的災難復原站點上啟動受保護的虛擬機器。該服務還將逆轉與主站點的SnapMirror關係，並在需要時將任何變更從輔助站點複製到主站點以進行故障恢復操作。與其他知名的替代品相比，所有這些功能的成本只是其一小部分。
+
+image:dr-draas-nfs-001.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== 入門
+
+若要開始使用BlueXP disaster recovery，請使用BlueXP控制台，然後存取服務。
+
+. 登入BlueXP。
+. 從BlueXP左側導覽中，選擇保護 > 災難復原。
+. 出現BlueXP disaster recovery儀表板。
++
+image:dr-draas-nfs-002.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+在配置災難復原計畫之前，請確保滿足以下先決條件：
+
+* BlueXP Connector 在NetApp BlueXP中設定。
+* BlueXP連接器執行個體與來源和目標 vCenter 和儲存系統具有連線。
+* NetApp Data ONTAP叢集提供儲存 NFS 資料儲存區。
+* BlueXP中新增了為 VMware 託管 NFS 資料儲存區的本機NetApp儲存系統。
+* 使用 DNS 名稱時應該進行 DNS 解析。否則，請使用 vCenter 的 IP 位址。
+* SnapMirror複製是為指定的基於 NFS 的資料儲存磁碟區配置的。
+* 確保環境具有支援的 vCenter Server 和 ESXi 伺服器版本。
+
+
+一旦來源站點和目標站點之間建立了連接，請繼續執行設定步驟，這需要幾次點擊和大約 3 到 5 分鐘的時間。
+
+
+NOTE: NetApp建議在目標站點或第三個站點部署BlueXP連接器，以便BlueXP連接器可以透過網路與來源資源和目標資源進行通訊。
+
+image:dr-draas-nfs-003.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== BlueXP disaster recovery配置
+
+準備災難復原的第一步是發現並將內部部署 vCenter 和儲存資源新增至BlueXP disaster recovery。
+
+開啟BlueXP控制台並從左側導覽中選擇 *保護 > 災難復原*。選擇*發現 vCenter 伺服器*或使用頂部選單，選擇*網站 > 新增 > 新增 vCenter*。
+
+image:dr-draas-nfs-004.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+新增以下平台：
+
+* *來源*。本機 vCenter。
++
+image:dr-draas-nfs-005.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+* *目的地*。VMC SDDC vCenter。
++
+image:dr-draas-nfs-006.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+一旦新增了 vCenter，就會觸發自動發現。
+
+
+
+== 配置來源站點陣列和目標站點陣列之間的儲存複製
+
+SnapMirror在NetApp環境中提供資料複製。SnapMirror複製是基於NetApp Snapshot 技術構建，非常高效，因為它僅複製自上次更新以來已更改或添加的區塊。可以使用NetApp OnCommand System Manager或ONTAP CLI 輕鬆設定SnapMirror 。如果預先配置了叢集和 SVM 對等連接， BlueXP DRaaS 也會建立SnapMirror關係。
+
+對於主儲存沒有完全遺失的情況， SnapMirror提供了重新同步主網站和 DR 網站的有效方法。SnapMirror可以重新同步兩個站點，只需反轉SnapMirror關係即可將變更的資料或新資料從 DR 站點傳回主站點。這意味著BlueXP DRaaS 中的複製計劃可以在故障轉移後在任一方向重新同步，而無需重新複製整個磁碟區。如果以相反方向重新同步關係，則只有自上次成功同步 Snapshot 副本以來寫入的新資料才會傳回目標。
+
+
+NOTE: 如果已經透過 CLI 或系統管理員為磁碟區配置了SnapMirror關係， BlueXP DRaaS 將取得該關係並繼續其餘工作流程作業。
+
+
+
+== 如何設定 VMware 災難復原
+
+對於任何給定的應用程序，創建SnapMirror複製的過程都是相同的。過程可以是手動的，也可以是自動的。最簡單的方法是利用BlueXP配置SnapMirror複製，只需將環境中的來源ONTAP系統拖曳到目標上即可觸發指導其餘流程的精靈。
+
+image:dr-draas-nfs-007.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+如果滿足以下兩個條件， BlueXP DRaaS 也可以自動執行相同的操作：
+
+* 源集群和目標集群具有對等關係。
+* 源 SVM 和目標 SVM 具有對等關係。
++
+image:dr-draas-nfs-008.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+NOTE: 如果已經透過 CLI 為磁碟區配置了SnapMirror關係， BlueXP DRaaS 將取得該關係並繼續其餘工作流程操作。
+
+
+
+== BlueXP disaster recovery能為您做什麼？
+
+在新增來源站點和目標站點後， BlueXP disaster recovery將執行自動深度發現並顯示虛擬機器及其相關元資料。BlueXP disaster recovery也會自動偵測虛擬機器使用的網路和連接埠群組並填入它們。
+
+image:dr-draas-nfs-009.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+新增網站後，虛擬機器可以分組到資源組。BlueXP disaster recovery資源群組可讓您將一組依賴的虛擬機器分組為邏輯群組，這些邏輯群組包含可在復原時執行的啟動順序和啟動延遲。若要開始建立資源組，請導覽至*資源組*並點選*建立新資源組*。
+
+image:dr-draas-nfs-010.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:dr-draas-nfs-011.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+NOTE: 在建立複製計劃時也可以建立資源組。
+
+可以透過簡單的拖放機制在建立資源群組期間定義或修改虛擬機器的啟動順序。
+
+image:dr-draas-nfs-012.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+建立資源群組後，下一步是建立執行藍圖或在災難發生時復原虛擬機器和應用程式的計畫。如先決條件中所述，可以預先配置SnapMirror複製，或者 DRaaS 可以使用在建立複製計劃期間指定的 RPO 和保留計數來配置它。
+
+image:dr-draas-nfs-013.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:dr-draas-nfs-014.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+透過從下拉式選單中選擇來源和目標 vCenter 平台來設定複製計劃，並選擇要包含在計劃中的資源群組，以及如何復原和啟動應用程式的分組以及叢集和網路的對應。若要定義復原計劃，請導覽至「*複製計劃*」標籤並按一下「*新增計劃*」。
+
+首先，選擇來源 vCenter，然後選擇目標 vCenter。
+
+image:dr-draas-nfs-015.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+下一步是選擇現有的資源組。如果沒有建立資源組，則精靈將協助根據復原目標對所需的虛擬機器進行分組（基本上建立功能資源組）。這也有助於定義如何恢復應用程式虛擬機器的操作順序。
+
+image:dr-draas-nfs-016.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+NOTE: 資源組允許使用拖放功能設定啟動順序。它可用於輕鬆修改復原過程中虛擬機器的啟動順序。
+
+
+NOTE: 資源組內的各個虛擬機器依序依序啟動。兩個資源組並行啟動。
+
+如果未事先建立資源群組，則下列螢幕截圖顯示了根據組織要求過濾虛擬機器或特定資料儲存的選項。
+
+image:dr-draas-nfs-017.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+選擇資源組後，建立故障轉移對映。在此步驟中，指定來源環境中的資源如何對應到目標。這包括運算資源、虛擬網路。IP 自訂、前腳本和後腳本、啟動延遲、應用程式一致性等。有關詳細信息，請參閱link:https://docs.netapp.com/us-en/bluexp-disaster-recovery/use/drplan-create.html#select-applications-to-replicate-and-assign-resource-groups["建立複製計劃"]。
+
+image:dr-draas-nfs-018.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+NOTE: 預設情況下，測試和故障轉移操作使用相同的映射參數。若要為測試環境設定不同的映射，請取消勾選方塊後選擇測試映射選項，如下所示：
+
+image:dr-draas-nfs-019.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+資源映射完成後，按一下下一步。
+
+image:dr-draas-nfs-020.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+選擇重複類型。簡單來說，選擇遷移（使用故障轉移的一次性遷移）或重複連續複製選項。在本演練中，選擇了「複製」選項。
+
+image:dr-draas-nfs-021.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+完成後，檢查已建立的映射，然後按一下*新增計劃*。
+
+
+NOTE: 複製計劃中可以包含來自不同磁碟區和 SVM 的虛擬機器。根據 VM 的放置位置（位於同一磁碟區上、同一 SVM 內的單獨磁碟區上、不同 SVM 上的單獨磁碟區上）， BlueXP disaster recovery會建立一致性群組快照。
+
+image:dr-draas-nfs-022.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:dr-draas-nfs-023.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+BlueXP DRaaS 包含以下工作流程：
+
+* 測試故障轉移（包括定期自動模擬）
+* 清理故障轉移測試
+* 故障轉移
+* 故障回覆
+
+
+
+
+== 測試故障轉移
+
+BlueXP DRaaS 中的測試故障轉移是一種操作程序，可讓 VMware 管理員在不中斷生產環境的情況下全面驗證其復原計畫。
+
+image:dr-draas-nfs-024.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+BlueXP DRaaS 結合了在測試故障轉移操作中選擇快照作為選用功能的能力。此功能可讓 VMware 管理員驗證環境中最近所做的任何變更是否都會複製到目標站點，從而在測試期間出現。這些變更包括對 VM 客戶作業系統的補丁
+
+image:dr-draas-nfs-025.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+當 VMware 管理員執行測試故障轉移操作時， BlueXP DRaaS 會自動執行下列任務：
+
+* 觸發SnapMirror關係，使用生產網站上所做的任何最新變更來更新目標網站上的儲存空間。
+* 在 DR 儲存陣列上建立FlexVol磁碟區的NetApp FlexClone磁碟區。
+* 將FlexClone磁碟區中的 NFS 資料儲存庫連接到 DR 站點的 ESXi 主機。
+* 將虛擬機器網路介面卡連接到映射期間指定的測試網路。
+* 依照 DR 站點的網路定義重新配置 VM 客戶作業系統網路設定。
+* 執行複製計劃中儲存的任何自訂命令。
+* 依照複製計畫中定義的順序啟動虛擬機器。
++
+image:dr-draas-nfs-026.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+
+
+== 清理故障轉移測試操作
+
+清理故障轉移測試操作在複製計劃測試完成並且 VMware 管理員回應清理提示後發生。
+
+image:dr-draas-nfs-027.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+此操作將虛擬機器 (VM) 和複製計劃的狀態重設為就緒狀態。
+
+當 VMware 管理員執行復原作業時， BlueXP DRaaS 完成下列程序：
+
+. 它關閉用於測試的FlexClone副本中的每個恢復的虛擬機器。
+. 它會刪除在測試期間用於呈現復原的虛擬機器的 FlexClone磁碟區。
+
+
+
+
+== 計劃遷移和故障轉移
+
+BlueXP DRaaS 有兩種執行實際故障轉移的方法：規劃遷移和故障轉移。第一種方法，計劃遷移，將虛擬機器關閉和儲存複製同步納入到恢復或有效地將虛擬機器移動到目標站點的過程中。計劃遷移需要存取來源站點。第二種方法，故障轉移，是計劃內/非計劃內故障轉移，其中虛擬機器從上次能夠完成的儲存複製間隔在目標站點恢復。根據解決方案中設計的 RPO，在 DR 場景中可能會出現一定程度的資料遺失。
+
+image:dr-draas-nfs-028.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+當 VMware 管理員執行故障轉移操作時， BlueXP DRaaS 會自動執行下列任務：
+
+* 中斷並故障轉移NetApp SnapMirror關係。
+* 將複製的 NFS 資料儲存連接到 DR 站點的 ESXi 主機。
+* 將 VM 網路介面卡連接到適當的目標站點網路。
+* 依照目標站點的網路定義重新配置 VM 客戶作業系統網路設定。
+* 執行複製計劃中儲存的任何自訂命令（如果有）。
+* 依照複製計畫中定義的順序啟動虛擬機器。
+
+
+image:dr-draas-nfs-029.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== 故障回覆
+
+故障回復是一種選用過程，可在復原後還原來源站台和目標站台的原始設定。
+
+image:dr-draas-nfs-030.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+當 VMware 管理員準備將服務還原到原始來源網站時，他們可以設定並執行故障回應程式。
+
+*注意：* BlueXP DRaaS 在反轉複製方向之前，會將任何變更複製（重新同步）回原始來源虛擬機器。此程序從已完成故障轉移到目標的關係開始，並涉及以下步驟：
+
+* 關閉並取消註冊虛擬機，並卸載目標網站上的磁碟區。
+* 打破原始來源上的SnapMirror關係，使其變成讀/寫。
+* 重新同步SnapMirror關係以逆轉複製。
+* 在來源上安裝卷，啟動並註冊來源虛擬機器。
+
+
+有關訪問和配置BlueXP DRaaS 的更多詳細信息，請參閱link:https://docs.netapp.com/us-en/bluexp-disaster-recovery/get-started/dr-intro.html["了解適用於 VMware 的BlueXP災難復原"]。
+
+
+
+== 監控和儀表板
+
+從BlueXP或ONTAP CLI，您可以監控對應資料儲存磁碟區的複製健康狀態，並且可以透過作業監控追蹤故障轉移或測試故障轉移的狀態。
+
+image:dr-draas-nfs-031.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+NOTE: 如果某項工作目前正在進行或排隊，而您希望停止它，則可以選擇取消它。
+
+使用BlueXP disaster recovery儀表板，可以自信地評估災難復原站點和複製計畫的狀態。這使管理員能夠快速識別健康、斷開連接或降級的站點和計劃。
+
+image:dr-draas-nfs-032.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+這為處理量身定制的災難復原計劃提供了強大的解決方案。當發生災難並決定啟動 DR 站點時，可以按計劃進行故障轉移或單擊按鈕進行故障轉移。
+
+要了解有關此過程的更多信息，請隨意觀看詳細的演示視頻或使用link:https://netapp.github.io/bluexp-draas-simulator/?frame-1["解決方案模擬器"]。

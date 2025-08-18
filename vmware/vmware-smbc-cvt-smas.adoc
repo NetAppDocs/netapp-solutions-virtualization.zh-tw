@@ -1,0 +1,110 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-smbc-cvt-smas.html 
+keywords: NetApp Solutions, vMSC, Metro Storage Cluster, SnapMirror active sync, Business Continuity, SMBC, ONTAP Tools, AFD, SCV, iSCSI, backup, restore 
+summary:  
+---
+= 使用 VMware vSphere Metro Storage Cluster 將 SM 主動同步從非對稱轉換為對稱主動/主動
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本文詳細介紹如何使用 VMware vSphere Metro Storage Cluster (VMSC) 將SnapMirror主動同步從非對稱轉換為對稱主動/主動。
+
+
+
+== 概況
+
+link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/["NetApp Snapmirror 主動同步（SM 主動同步）"]是在虛擬化環境中實現零復原時間目標 (RTO) 和零復原點目標 (RPO) 的強大解決方案。
+
+link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware_vmsc_overview.html["VMware vSphere Metro 儲存叢集 (vMSC)"]是一種跨不同故障域的延伸叢集解決方案，允許虛擬機器 (VM) 分佈在兩個地理位置分離的站點上，即使一個站點發生故障也能提供持續可用性。
+
+將 vMSC 與 SM 主動同步結合可確保兩個站點之間的資料一致性和即時故障轉移功能。這種設定對於關鍵任務應用程式尤其重要，因為任何資料遺失或停機都是不可接受的。
+
+SM 主動同步（以前稱為SnapMirror業務連續性 (SMBC)）使業務服務即使在整個站點發生故障時也能繼續運行，支援應用程式使用輔助副本透明地進行故障轉移。從ONTAP 9.15.1 開始，SM 主動同步支援對稱主動/主動功能。對稱主動/主動支援透過雙向同步複製從受保護 LUN 的兩個副本進行讀寫 I/O 操作，以便兩個 LUN 副本都可以在本地提供 I/O 操作。
+
+本文檔向您展示如何在 VMware 延伸叢集環境中將 SM 主動同步非對稱主動/主動轉換為 SM 主動同步對稱主動/主動的步驟，換句話說，將 SM 主動同步從自動故障轉移策略轉換為自動故障轉移雙工策略。有關如何使用 System Manager 和ONTAP Tools 設定帶有SnapMirror主動同步 (SM-as) 的 vMSC 的詳細信息，請查看link:vmw-vmsc-with-smas.html["具有SnapMirror主動同步功能的 VMware vSphere Metro 儲存集群"]。
+
+
+
+== 先決條件
+
+* NetApp儲存系統：確保您有兩個具有 Snapmirror 許可證的NetApp儲存叢集（來源和目標）。
+* 網路連線：驗證來源系統和目標系統之間的低延遲網路連線。
+* 叢集和 SVM 對等：在來源叢集和目標叢集之間設定叢集對等和儲存虛擬機器 (SVM) 對等。
+* ONTAP版本：確保兩個叢集都執行支援同步複製的ONTAP版本。對於 SM 主動同步，需要ONTAP 9.15.1 及更高版本。
+* VMware vMSC 基礎架構：延伸叢集使子系統能夠跨越地域，為兩個站點的 vSphere 叢集提供單一且通用的基礎架構資源集。它擴展了站點之間的網路和儲存。
+* 使用ONTAP工具 10.2 及更高版本可輕鬆使用NetApp SnapMirror，更多詳細資訊請查看link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/release-notes/ontap-tools-9-ontap-tools-10-feature-comparison.html["ONTAP tools for VMware vSphere。"]
+* 主集群和輔助集群之間必須存在零 RPO Snapmirror 同步關係。
+* 必須先取消已對應目標磁碟區上的所有 LUN，然後才能建立零 RTO Snapmirror 關係。
+* Snapmirror 主動同步僅支援 SAN 協定（不支援 NFS/CIFS）。確保一致性組的任何組成部分均未安裝用於 NAS 存取。
+
+
+
+
+== 從非對稱 SM 主動同步轉換為對稱 SM 主動同步的步驟
+
+在下面的範例中，selectrz1 是主站點，selectrz2 是輔助站點。
+
+. 從輔助站點對現有關係執行SnapMirror更新。
++
+....
+selectrz2::> snapmirror update -destination-path site2:/cg/CGsite1_dest
+....
+. 驗證SnapMirror更新是否成功完成。
++
+....
+selectrz2::> snapmirror show
+....
+. 暫停每個零 RPO 同步關係。
++
+....
+ selectrz2::> snapmirror quiesce -destination-path site2:/cg/CGsite1_dest
+....
+. 刪除每個零 RPO 同步關係。
++
+....
+selectrz2::> snapmirror delete -destination-path site2:/cg/CGsite1_dest
+....
+. 釋放來源SnapMirror關係但保留通用快照。
++
+....
+selectrz1::> snapmirror release -relationship-info-only  true -destination-path svm0.1:/cg/CGsite1_dest                                           ".
+....
+. 使用 AutomatedFailoverDuplex 政策建立零 RTO SnapMirror同步關係。
++
+....
+selectrz2::> snapmirror create -source-path svm0.1:/cg/CGsite1 -destination-path site2:/cg/CGsite1_dest -cg-item-mappings site1lun1:@site1lun1_dest -policy AutomatedFailOverDuplex
+....
+. 如果現有主機位於主叢集本機，則將主機新增至輔助叢集並與每個叢集的相應存取建立連線。
+. 在輔助網站上，刪除與遠端主機關聯的 igroup 上的 LUN 對應。
++
+....
+selectrz2::> lun mapping delete -vserver svm0 -igroup wlkd01 -path  /vol/wkld01/wkld01
+....
+. 在主站台上，修改現有主機的啟動器配置，以設定本機叢集上啟動器的近端路徑。
++
+....
+selectrz1::> set -privilege advanced
+selectrz1::*> igroup initiator add-proximal-vserver -vserver site1  -initiator iqn.1998-01.com.vmware:vcf-wkld-esx01.sddc.netapp.com:575556728:67 -proximal-vserver site1
+....
+. 為新主機新增新的 igroup 和啟動器，並將主機接近度設定為與本機網站具有主機親和性。啟用 igroup 複製以複製配置並反轉遠端叢集上的主機位置。
++
+....
+selectrz1::*> igroup modify -vserver site1  -igroup smbc2smas -replication-peer svm0.1
+selectrz1::*> igroup initiator add-proximal-vserver -vserver site1 -initiator iqn.1998-01.com.vmware:vcf-wkld-esx01.sddc.netapp.com:575556728:67 -proximal-vserver svm0.1
+....
+. 發現主機上的路徑並驗證主機是否具有從首選叢集到儲存 LUN 的活動/最佳化路徑。
+. 部署應用程式並在叢集之間指派 VM 工作負載。
+. 重新同步一致性組。
++
+....
+selectrz2::> snapmirror resync -destination-path site2:/cg/CGsite1_dest
+....
+. 重新掃描主機LUN的I/O路徑，恢復所有LUN的路徑。
+

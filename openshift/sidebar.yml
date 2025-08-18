@@ -1,0 +1,74 @@
+---
+section: osv
+title: OpenShift 虛擬化
+url: "/openshift/index.html"
+entries:
+- title: 開始
+  pdf-filename: Red Hat OpenShift 虛擬化概述
+  entries:
+  - title: 關於 OpenShift 虛擬化
+    url: "/openshift/osv-overview.html"
+  - title: OpenShift 的儲存配置
+    url: "/openshift/os-netapp-overview.html"
+  - title: NetApp Trident儲存集成
+    url: "/openshift/os-storint-overview.html"
+- title: 部署最佳實踐
+  pdf-filename: NetApp上的 Red Hat OpenShift 虛擬化最佳實踐
+  url: "/openshift/os-osv-bpg.html"
+- title: 安裝Trident
+  pdf-filename: 安裝Trident
+  url: "/openshift/osv-trident-install.html"
+- title: 本地部署
+  pdf-filename: 在本機部署 Red Hat OpenShift 虛擬化
+  entries:
+  - title: 部署要求
+    url: "/openshift/osv-deployment-prerequisites.html"
+  - title: 部署 OpenShift 虛擬化
+    url: "/openshift/osv-deployment.html"
+  - title: 建立虛擬機
+    url: "/openshift/osv-workflow-create-vm.html"
+  - title: 從 VMware 遷移虛擬機
+    url: "/openshift/osv-workflow-vm-migration-mtv.html"
+  - title: 在兩個叢集節點之間遷移虛擬機
+    url: "/openshift/osv-workflow-vm-live-migration.html"
+  - title: 克隆虛擬機
+    url: "/openshift/osv-workflow-clone-vm.html"
+  - title: 從快照建立虛擬機
+    url: "/openshift/osv-workflow-vm-from-snapshot.html"
+- title: 使用 FSxN 在 ROSA 上部署
+  pdf-filename: 使用Amazon FSx for ONTAP在 ROSA 上部署 Red Hat OpenShift Virtuzluation
+  entries:
+  - title: 在 ROSA 上部署 OpenShift
+    url: "/openshift/osv-rosa-overview.html"
+  - title: 重啟或即時遷移虛擬機
+    url: "/openshift/osv-rosa-vm-workflows.html"
+- title: 使用Trident Protect 保護數據
+  entries:
+  - title: 使用快照和備份保護虛擬機
+    url: "/openshift/osv-vm-dp-using-tp.html"
+  - title: 設定故障轉移和故障回复
+    url: "/openshift/osv-vm-dr-using-tp.html"
+- title: 使用第三方工具保護數據
+  pdf-filename: Red Hat OpenShift 虛擬化資料保護
+  entries:
+  - title: 使用 OADP 和 Velero 保護虛擬機
+    url: "/openshift/osv-vm-dp-using-velero-overview.html"
+  - title: 安裝 OADP
+    url: "/openshift/osv-oadp-installation.html"
+  - title: 使用 Velero 備份虛擬機
+    url: "/openshift/osv-vm-dp-using-velero.html"
+  - title: 使用 Velero 恢復虛擬機
+    url: "/openshift/osv-vm-restore-using-velero.html"
+  - title: 刪除備份和還原
+    url: "/openshift/osv-vm-dp-delete-using-velero.html"
+- title: 使用 DII 監控虛擬機
+  pdf-filename: Red Hat OpenShift 虛擬化監控
+  entries:
+  - title: 關於DII
+    url: "/openshift/os-ci-overview.html"
+  - title: 配置 D II
+    url: "/openshift/os-ci-integration.html"
+  - title: 使用 DII 監控虛擬機
+    url: "/openshift/os-ci-samples.html"
+- title: 其他資源
+  url: "/openshift/os-additional-information.html"

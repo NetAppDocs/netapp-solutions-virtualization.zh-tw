@@ -1,0 +1,40 @@
+---
+sidebar: sidebar 
+permalink: migration/migrate-vms-to-ec2-fsxn-summary.html 
+keywords: netapp, vmware, amazon, ec2, fsxn, migration, iscsi, 
+summary: '本技術報告介紹如何使用 Cirrus Migrate Cloud (CMC) 的 MigrateOps「資料移動即程式碼」功能將本機 VMware vSphere VM 移轉至資料磁碟位於 FSx ONTAP iSCSI LUN 上的 Amazon EC2 執行個體。' 
+---
+= 使用Amazon FSx for ONTAP將虛擬機器移轉到 Amazon EC2 的更多選項
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+探索使用Amazon FSx for NetApp ONTAP將虛擬機器移轉到 Amazon EC2 的選項，包括使用客戶機內儲存複製。
+
+
+
+== 其他可能性
+
+可以將相同的方法擴展為使用本地虛擬機器上的客戶機儲存空間來遷移虛擬機器。可以使用 CMC 遷移作業系統 VMDK，並且可以使用SnapMirror複製來賓 iSCSI LUN。這個過程需要打破鏡像並將 LUN 附加到新遷移的 Amazon EC2 實例，如下圖所示。
+
+image:migrate-ec2-fsxn-013.png["此圖顯示了此遷移解決方案的另一種可能性"]
+
+
+
+== 結論
+
+本文檔提供了使用 CMC 的 MigrateOps 功能將儲存在本機 VMware 儲存庫中的資料遷移到使用 Amazon EC2 執行個體和 FSx ONTAP 的AWS 的完整演練。
+
+以下影片示範了從開始到結束的遷移過程：
+
+.將 VMware VM 移轉到 Amazon EC2
+video::317a0758-cba9-4bd8-a08b-b17000d88ae9[panopto]
+要查看 GUI 和基本的 Amazon EBS 到 FSx ONTAP本地遷移，請觀看這個五分鐘的演示影片：
+
+.使用 Cirrus Migrate Cloud 大規模遷移到任何存儲
+video::PeFNZxXeQAU[youtube]

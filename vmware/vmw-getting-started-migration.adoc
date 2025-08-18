@@ -1,0 +1,37 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-getting-started-migration.html 
+keywords: vmware, getting, started, overview, netapp 
+summary:  
+---
+= 了解從 VMware vSphere 到ONTAP資料儲存區的虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+VMware vSphere 管理員可以透過將工作負載遷移到NetApp ONTAP資料儲存來增強其基礎架構。 ONTAP提供虛擬機器感知快照、儲存高效複製和無縫 vMotion 操作，同時支援基於儲存策略的管理 (SPBM)。無論是從 vSAN、傳統儲存遷移，或是實施混合雲部署， ONTAP都能為 VMware 環境提供更高的效能和簡化的儲存作業。
+
+這種遷移實現了無縫整合、改進的資料保護以及管理虛擬化環境的更大靈活性，確保了平穩過渡和最少的停機時間。
+
+
+
+== 用例
+
+在考慮遷移到ONTAP支援的資料儲存時，在來源和目標方面有許多遷移選項。
+
+* 從第三方儲存系統（包括 vSAN）遷移到ONTAP資料儲存。
+* 同一 vSphere 叢集中的虛擬機器遷移
+* 跨多個 vSphere 叢集遷移虛擬機
+* 在同一 SSO 域中跨 vCenter 伺服器遷移虛擬機
+* 在不同 SSO 網域中的 vCenter 伺服器之間遷移虛擬機
+* 跨資料中心位置遷移虛擬機
+* 從第三方儲存系統（包括 vSAN）遷移到ONTAP資料儲存。
+* 混合雲環境中虛擬機器的遷移
+
+
+有關將 VMware 工作負載遷移到ONTAP支援的資料儲存庫的更多信息，請參閱link:migrate-vms-to-ontap-datastore.html["將虛擬機器遷移到ONTAP資料儲存庫"]。

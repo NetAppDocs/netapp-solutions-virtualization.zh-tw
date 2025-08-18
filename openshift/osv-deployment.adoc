@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-deployment.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用ONTAP部署 Red Hat OpenShift 虛擬化
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在 Red Hat OpenShift 裸機叢集上安裝 OpenShift Virtualization。此過程包括使用叢集管理員存取權限登入、導覽至 OperatorHub 以及安裝 OpenShift Virtualization 操作員。
+
+. 使用叢集管理員存取權限登入 Red Hat OpenShift 裸機叢集。
+. 從“視角”下拉式選單中選擇“管理員”。
+. 導覽至 Operators > OperatorHub 並蒐索 OpenShift Virtualization。
++
+image:redhat-openshift-045.png["OpenShift 操作員中心"]
+
+. 選擇 OpenShift 虛擬化磁貼並點選安裝。
++
+image:redhat-openshift-046.png["OpenShift 虛擬化操作員 Tile"]
+
+. 在「安裝操作員」畫面上，保留所有預設參數並按一下「安裝」。
++
+image:redhat-openshift-047.png["OpenShift 虛擬化操作員詳細信息"]
+
+. 等待操作員安裝完成。
++
+image:redhat-openshift-048.png["OpenShift 虛擬化操作員安裝"]
+
+. 操作員安裝完成後，按一下建立超融合。
++
+image:redhat-openshift-049.png["OpenShift 虛擬化操作員 - 創建超融合"]
+
+. 在“建立超融合”畫面上，按一下“建立”，接受所有預設參數。此步驟開始安裝 OpenShift Virtualization。
++
+image:redhat-openshift-050.png["OpenShift 虛擬化操作員 - 超融合詳細信息"]
+
+. 當 openshift-cnv 命名空間中的所有 pod 都轉為 Running 狀態，並且 OpenShift Virtualization Operator 處於 Succeeded 狀態後，該 Operator 即可使用。現在可以在 OpenShift 叢集上建立虛擬機器。
++
+image:redhat-openshift-051.png["OpenShift Virtualization Operator 安裝完成"]
+
+

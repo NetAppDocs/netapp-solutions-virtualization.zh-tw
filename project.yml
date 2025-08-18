@@ -1,0 +1,44 @@
+---
+settings:
+  name: NetApp virtualization solutions
+  internal:
+    pdf_enabled: true
+    lipi_enabled: true
+  prod:
+    pdf_enabled: true
+    harmony_enabled: false
+    lipi_enabled: true
+  pdf:
+    gen-type: named-only
+    zip-level: 1
+    zip-filename: netapp-solutions-virtualization.zip
+  langs: zh-tw,us-en,de-de,es-es,fr-fr,it-it,pt-br,ja-jp,ko-kr,zh-cn
+sidebar:
+  entries:
+  - title: 虛擬化解決方案
+    url: "/index.html"
+  - title: 什麼是新的
+    url: "/whats-new.html"
+  - section: virtualization
+  - section: vmware
+  - section: hyperv
+  - section: osv
+  - section: proxmox
+  - section: kvm
+  - section: migration
+  - title: 影片
+    url: "/videos/index.html"
+    entries:
+    - title: OpenShift 虛擬化
+      url: "/videos/openshift-videos.html"
+    - title: VMware虛擬化
+      url: "/videos/vmware-videos.html"
+    - title: 混合多雲虛擬化
+      url: "/videos/hybrid-cloud-videos.html"
+  - title: 部落格
+    url: "/blogs.html"
+  - title: 法律聲明
+    url: "/legal-notices.html"
+product-family:
+  name: NetApp solutions
+  repo: netapp-solutions-family

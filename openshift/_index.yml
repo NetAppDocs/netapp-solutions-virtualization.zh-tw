@@ -1,0 +1,78 @@
+---
+indexpage:
+  title: NetApp OpenShift 虛擬化解決方案
+  summary: NetApp OpenShift 虛擬化解決方案是一組策略和技術能力，展示了使用 Red Hat OpenShift Virtualization
+    進行虛擬化的NetApp儲存能力。
+  lead: NetApp OpenShift 虛擬化解決方案是一組策略和技術能力，展示了使用 Red Hat OpenShift Virtualization
+    進行虛擬化的NetApp儲存能力。
+  tiles:
+  - title: 開始
+    links:
+    - title: 關於 OpenShift 虛擬化
+      url: osv-overview.html
+    - title: OpenShift 的儲存配置
+      url: os-netapp-overview.html
+    - title: NetApp Trident儲存集成
+      url: os-storint-overview.html
+    - title: 部署最佳實踐
+      url: os-osv-bpg.html
+    - title: 部落格
+      url: "../blogs.html"
+    - title: 影片
+      url: "../videos/openshift-videos.html"
+  - title: 本地部署
+    links:
+    - title: 部署要求
+      url: osv-deployment-prerequisites.html
+    - title: 使用ONTAP部署 Red Hat OpenShift 虛擬化
+      url: osv-deployment.html
+    - title: 建立虛擬機
+      url: osv-workflow-create-vm.html
+    - title: 克隆虛擬機
+      url: osv-workflow-clone-vm.html
+    - title: 從快照建立虛擬機
+      url: osv-workflow-vm-from-snapshot.html
+  - title: 遷移虛擬機
+    links:
+    - title: 將虛擬機器從 VMware 遷移到 OpenShift 集群
+      url: osv-workflow-vm-migration-mtv.html
+    - title: 在兩個叢集節點之間遷移虛擬機
+      url: osv-workflow-vm-live-migration.html
+  - title: 使用Trident Protect 保護數據
+    links:
+    - title: 安裝Trident
+      url: osv-trident-install.html
+    - title: 使用快照和備份保護虛擬機
+      url: osv-vm-dp-using-tp.html
+    - title: 設定故障轉移和故障回复
+      url: osv-vm-dr-using-tp.html
+  - title: 使用第三方工具保護數據
+    links:
+    - title: 使用 OADP 和 Velero 保護虛擬機
+      url: osv-vm-dp-using-velero-overview.html
+    - title: 安裝 OADP
+      url: osv-oadp-installation.html
+    - title: 使用 Velero 備份虛擬機
+      url: osv-vm-dp-using-velero.html
+    - title: 使用 Velero 恢復虛擬機
+      url: osv-vm-restore-using-velero.html
+    - title: 刪除備份和還原
+      url: osv-vm-dp-delete-using-velero.html
+  - title: 使用Data Infrastructure Insights監控虛擬機
+    links:
+    - title: 關於Data Infrastructure Insights
+      url: os-ci-overview.html
+    - title: 配置Data Infrastructure Insights
+      url: os-ci-integration.html
+    - title: 使用Data Infrastructure Insights監控虛擬機
+      url: os-ci-samples.html
+  - title: 其他資源
+    links:
+    - title: Red Hat OpenShift 虛擬化
+      url: https://www.redhat.com/en/technologies/cloud-computing/openshift/virtualization
+    - title: OpenShift 虛擬化：釋放虛擬環境的力量
+      url: https://www.redhat.com/en/blog/openshift-virtualization-unleashing-the-power-of-cloud-native-virtual-environments
+    - title: Red Hat OpenShift 文檔
+      url: https://docs.openshift.com/container-platform/4.15/virt/about_virt/about-virt.html
+    - title: Red Hat 部落格
+      url: https://www.redhat.com/en/blog/products

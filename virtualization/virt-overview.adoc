@@ -1,0 +1,87 @@
+---
+sidebar: sidebar 
+permalink: virtualization/virt-overview.html 
+keywords: virtualization, overview, compute, storage, vmware, openshift, hyper-v 
+summary: 該文件從計算、網路和儲存的角度概述了虛擬化。 
+---
+= 了解如何使用ONTAP增強虛擬化 IT 環境
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+虛擬化優化了 IT 環境，實現了高效的資源利用和靈活性，同時支援 AI 系統等現代應用程式。了解它對網路、運算和儲存基礎架構的影響，以及NetApp ONTAP如何增強虛擬化系統。
+
+
+
+== 概況
+
+傳統上，資料中心由實體伺服器、網路和儲存組成，每個伺服器專用於特定的任務。這種方法造成了資源孤島，而這些資源往往未被充分利用。從本質上講，虛擬化涉及將實體資源與組織的需求和功能分開。這是透過建立三個主要基礎架構元件的虛擬表示來實現的：*網路*、*運算*和*儲存*。虛擬基礎設施的部署使組織能夠透過這些邏輯結構提高底層實體資源的利用率。
+
+image:virt-overview-001.png["“運算、網路和儲存虛擬化元件圖”，寬度=40%"]
+
+虛擬化是透過自動化、策略驅動的工作流程和可擴展性來實現整體大於部分總和的案例。透過提高效率、靈活性並降低 IT 基礎架構的 TCO，虛擬化使組織能夠更大程度地優化其技術資源。由NetApp支援的虛擬基礎架構繼承了ONTAP的主要優勢：
+
+* 使用業界領先的插件和整合進行配置、備份和資料保護
+* 企業級儲存效率
+* 多協定支援不同的工作負載需求
+* 策略驅動的儲存配置和自適應QoS
+* 透過一個儲存作業系統支援本地或公有雲中的應用程式和工作負載
+
+
+要了解有關NetApp ONTAP 的更多信息，請參閱以下內容：
+
+* link:https://www.netapp.com/data-management/ontap-data-management-software/["ONTAP：領先的統一儲存作業系統"]
+
+
+
+
+== 網路虛擬化
+
+網路虛擬化是指將實體網路元件（交換器、路由器、防火牆、介面等）抽象化為邏輯結構。這些邏輯結構獨立於底層實體基礎設施運行，在網路中的用戶端、儲存和其他元件之間提供安全通訊。網路虛擬化是營運業務的關鍵，因為它允許共享資源，同時允許根據策略限制網路流量。
+
+網路虛擬化可以將多個實體網路組合成一個虛擬結構，也可以將實體網路劃分為獨立的、離散的虛擬網路。可以創建和自訂多個網路以滿足特定的 IT 要求。網路虛擬化通常是指基於乙太網路的用例，但在許多情況下，虛擬結構可以根據交換器製造商的功能進行設定。無論採用虛擬 LAN 或虛擬 SAN，組織都可以透過網路虛擬化實現更高的營運效率和整體改善的網路效能。
+
+有關網路虛擬化的更多信息，請參閱以下內容：
+
+* link:https://www.cisco.com/c/en/us/products/switches/virtual-networking/index.html["Cisco虛擬網路"]
+* link:https://www.vmware.com/topics/glossary/content/virtual-networking.html["VMware 虛擬網絡"]
+
+
+
+
+== 計算虛擬化
+
+計算或伺服器虛擬化可能是最著名的虛擬化形式。透過運算虛擬化，虛擬機器管理程式可以模擬實體伺服器的功能，從而允許營運團隊在單一實體節點上運行多個虛擬機器。透過運算虛擬化，伺服器記憶體和 CPU 等資源可以共享。這種共享允許對底層資源進行超額認購，以達到所部署的工作負載和應用程式可接受的程度。
+
+透過運算虛擬化，每個虛擬機器都有自己的作業系統和安裝的應用程式和資源；彼此獨立運作。運算虛擬化具有眾多優勢，包括提高伺服器使用率、降低硬體支出、使用虛擬機器管理程式的使用者介面 (UI) 簡化管理以及改善災難復原功能。此外，透過虛擬機器管理程式插件，可以配置儲存管理、備份和保護關係，以進一步簡化操作任務。
+
+有關計算虛擬化的更多信息，請參閱以下內容：
+
+* link:https://www.vmware.com/solutions/virtualization.html["VMware vSphere"]
+* link:https://www.redhat.com/en/technologies/cloud-computing/openshift/virtualization["Red Hat OpenShift 虛擬化"]
+* link:https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-on-windows-server["微軟 Hyper-V"]
+
+
+
+
+== 儲存虛擬化
+
+與網路和運算虛擬化一樣，儲存虛擬化對於現代資料中心也很重要。  NetApp ONTAP透過向用戶端和主機提供資料的儲存虛擬機器 (SVM) 促進儲存虛擬化。 SVM 是邏輯實體，允許儲存資源不與實體媒體綁定。可以根據工作負載類型、應用程式需求和組織群組來部署 SVM 以供存取。
+
+有多種類型的 SVM 可協助執行資料存取、管理以及叢集和系統級任務。資料 SVM 透過一個或多個網路邏輯介面 (LIF) 從一個或多個磁碟區向用戶端和主機提供資料。這些捲和 LIF 是邏輯構造，並映射到儲存聚合和物理或邏輯網路連接埠。這種邏輯資料存取允許在維護場景或資源重新平衡期間移動磁碟區或 LIF，就像計算虛擬機器一樣。
+
+有關儲存虛擬化的更多信息，請參閱以下內容：
+
+* link:https://docs.netapp.com/us-en/ontap/concepts/storage-virtualization-concept.html["ONTAP儲存虛擬化概述"]
+
+
+
+
+== 結束語
+
+這裡描述的虛擬基礎架構的元件：網路、運算和儲存透過軟體提供與典型實體資源相同的功能。虛擬資源相對於實體資源的分配加快了價值實現時間，並允許策略驅動的資源配置。將ONTAP與運算和網路虛擬化結合，讓用戶端和主機透過軟體定義的虛擬基礎架構存取資源。

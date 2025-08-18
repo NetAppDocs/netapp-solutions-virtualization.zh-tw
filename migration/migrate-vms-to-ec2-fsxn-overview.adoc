@@ -1,0 +1,124 @@
+---
+sidebar: sidebar 
+permalink: migration/migrate-vms-to-ec2-fsxn-overview.html 
+keywords: netapp, vmware, amazon, ec2, fsxn, migration, iscsi, 
+summary: '本技術報告介紹如何使用 Cirrus Migrate Cloud (CMC) 的 MigrateOps「資料移動即程式碼」功能將本機 VMware vSphere VM 移轉至資料磁碟位於 FSx ONTAP iSCSI LUN 上的 Amazon EC2 執行個體。' 
+---
+= 了解如何使用Amazon FSx for ONTAP將虛擬機器移轉到 Amazon EC2
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Amazon FSx for NetApp ONTAP可以輕鬆地將 VMware vSphere VM 移轉到 Amazon EC2，同時保留快照、精簡配置和複製等重要的儲存功能。它支援熟悉的工具和協議，簡化了遷移過程並降低了成本和複雜性。
+
+各組織正在加速向 AWS 上的雲端運算解決方案遷移，利用 Amazon Elastic Compute Cloud (Amazon EC2) 執行個體和Amazon FSx for NetApp ONTAP (FSx ONTAP) 等服務來實現 IT 基礎架構的現代化、節省成本並提高營運效率。這些 AWS 產品支援遷移，透過基於消費的定價模型和企業儲存功能來優化整體擁有成本 (TCO)，提供靈活性和可擴展性以滿足不斷變化的全球業務需求。
+
+
+
+== 概況
+
+對於在 VMware vSphere 上投入大量資金的企業來說，考慮到當前的市場狀況，遷移到 AWS 是一種經濟高效的選擇，也是一個獨特的機會。
+
+當這些組織過渡到 AWS 時，他們尋求利用雲端的靈活性和成本優勢，同時保留熟悉的功能集，尤其是在儲存方面。在遷移工作負載或設定災難復原解決方案時，使用熟悉的儲存協定（尤其是 iSCSI）流程、工具和技能組合來保持無縫操作至關重要。
+
+使用 AWS 託管儲存服務 FSx ONTAP來保留企業儲存功能（這些功能也來自本地的任何第三方供應商儲存），企業可以釋放 AWS 的強大功能，同時最大限度地減少中斷並最大化其未來投資。
+
+本技術報告介紹如何使用 Cirrus Migrate Cloud (CMC) 的 MigrateOps「資料移動即程式碼」功能將本機 VMware vSphere VM 移轉至將資料磁碟放置在 FSx ONTAP iSCSI LUN 上的 Amazon EC2 執行個體。
+
+
+
+== 解決方案要求
+
+VMware 客戶目前正在尋求解決許多挑戰。這些組織希望：
+
+. 利用企業儲存功能，例如精簡配置、儲存效率技術、零佔用複製、整合備份、區塊級複製和分層。這有助於從第一天起優化遷移工作並為 AWS 上的未來部署提供保障。
+. 透過結合 FSx ONTAP及其提供的成本最佳化功能，優化目前使用 Amazon EC2 執行個體的 AWS 上的儲存部署。
+. 透過調整 Amazon EC2 執行個體的大小以滿足所需的 IOPS 和吞吐量參數，降低使用具有區塊儲存解決方案的 Amazon EC2 執行個體的總體擁有成本 (TCO)。使用區塊存儲，Amazon EC2 磁碟操作對頻寬和 I/O 速率有限制。使用 FSx ONTAP 的檔案儲存使用網路頻寬。換句話說，FSx ONTAP沒有 VM 等級 I/O 限制。
+
+
+
+
+== 技術組件概述
+
+
+
+=== FSx ONTAP概念
+
+Amazon FSx ONTAP是一項完全託管的 AWS 儲存服務，它為NetApp ONTAP檔案系統提供 AWS 上所有熟悉的ONTAP資料管理功能、效能和 API。其高效能儲存支援多種協定（NFS、SMB、iSCSI），為使用 Windows、Linux 和 macOS EC2 執行個體的工作負載提供單一服務。
+
+由於 FSx ONTAP是一個ONTAP檔案系統，它帶來了一系列熟悉的NetApp功能和服務，包括SnapMirror資料複製技術、精簡複製和NetApp Snapshot 副本。透過資料分層利用低成本容量層，FSx ONTAP具有彈性，可以達到幾乎無限的規模。此外，借助NetApp標誌性的儲存效率技術，它進一步降低了 AWS 上的儲存成本。有關詳細信息，請參閱link:https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/getting-started.html["Amazon FSx ONTAP入門"]。
+
+
+
+==== 檔案系統
+
+FSx ONTAP的核心資源是基於固態硬碟 (SSD) 儲存的檔案系統。在設定 FSx ONTAP檔案系統時，使用者輸入所需的吞吐量和儲存容量，並選擇檔案系統所在的 Amazon VPC。
+
+使用者還可以選擇檔案系統的兩種內建高可用性部署模型：多可用區 (AZ) 或單可用區部署。每個選項都提供其自身的耐用性和可用性級別，客戶可以根據其用例的業務連續性要求進行選擇。多可用區部署由跨兩個可用區無縫複製的雙節點組成。成本更優化的單可用區部署選項將檔案系統建置在兩個節點中，這兩個節點分佈在兩個獨立的故障域之間，這兩個故障域都位於單一可用區內。
+
+
+
+=== 儲存虛擬機
+
+FSx ONTAP檔案系統中的資料透過稱為儲存虛擬機器 (SVM) 的邏輯儲存分割區進行存取。 SVM 實際上是自己的檔案伺服器，配備了自己的資料和管理存取點。存取 FSx ONTAP檔案系統上的 iSCSI LUN 時，Amazon EC2 執行個體使用 SVM 的 iSCSI 端點 IP 位址直接與 SVM 互動。
+
+雖然可以在叢集中維護單一 SVM，但在叢集中執行多個 SVM 的選項具有廣泛的用途和好處。客戶可以根據其業務需求（包括對工作負載隔離的要求）來確定要配置的最佳 SVM 數量。
+
+
+
+==== 卷
+
+FSx ONTAP SVM 中的資料儲存和組織在稱為磁碟區的結構中，這些結構充當虛擬容器。單一磁碟區可以配置一個或多個 LUN。每個磁碟區中儲存的資料都會消耗檔案系統中的儲存容量。但是，由於 FSx ONTAP對磁碟區進行了精簡配置，因此該磁碟區僅佔用所儲存資料量的儲存容量。
+
+
+
+=== Cirrus Migrate Cloud MigrateOps 概念
+
+CMC 是 Cirrus Data Solutions, Inc. 提供的可交易軟體即服務 (SaaS) 產品，可透過 AWS Marketplace 取得。  MigrateOps 是 CMC 的資料移動即程式碼自動化功能，它允許您使用 YAML 中的簡單操作配置以聲明方式大規模管理資料移動操作。 MigrateOps 設定決定了您希望如何執行資料移動任務。要了解有關 MigrateOps 的更多信息，請參閱link:https://www.google.com/url?q=https://customer.cirrusdata.com/cdc/kb/articles/about-migrateops-hCCHcmhfbj&sa=D&source=docs&ust=1715480377722215&usg=AOvVaw033gzvuAlgxAWDT_kOYLg1["關於 MigrateOps"]。
+
+MigrateOps 採用自動化優先的方法，專門用於簡化整個流程，確保雲端規模的企業資料移動性而不會中斷營運。除了 CMC 為自動化提供的豐富功能外，MigrateOps 還添加了其他通常由外部管理的自動化功能，例如：
+
+* 作業系統修復
+* 應用程式切換和審批調度
+* 零停機叢集遷移
+* 公有/私有雲平台集成
+* 虛擬化平台集成
+* 企業儲存管理集成
+* SAN（iSCSI）配置
+
+
+透過完全自動化上述任務，只需在 YAML 檔案中指定參數，即可消除準備本機來源 VM（例如新增 AWS 代理程式和工具）、建立目標 FSx LUN、在 AWS 目標執行個體上設定 iSCSI 和 Multipath/MPIO 以及停止/啟動應用程式服務的所有繁瑣步驟。
+
+FSx ONTAP用於提供資料 LUN 並調整 Amazon EC2 執行個體類型的大小，同時提供組織先前在其本機環境中擁有的所有功能。  CMC 的 MigrateOps 功能將用於自動執行所有相關步驟，包括配置映射的 iSCSI LUN，將其轉換為可預測的聲明性操作。
+
+*注意*：CMC 需要在來源和目標虛擬機器實例上安裝非常精簡的代理，以確保從儲存來源儲存到 FSx ONTAP 的安全資料傳輸。
+
+
+
+== 將Amazon FSx ONTAP與 EC2 執行個體結合使用的優勢
+
+適用於 Amazon EC2 執行個體的 FSx ONTAP儲存具有多項優勢：
+
+* 高吞吐量和低延遲存儲，為最苛刻的工作負載提供一致的高效能
+* 智慧 NVMe 快取可提高效能
+* 可調節容量、吞吐量和 IOP 可隨時更改，並快速適應不斷變化的儲存需求
+* 從本地ONTAP儲存到 AWS 的基於區塊的資料複製
+* 多協定可存取性，包括廣泛用於本機 VMware 部署的 iSCSI
+* NetApp Snapshot 技術和SnapMirror協調的 DR 可防止資料遺失並加快恢復速度
+* 儲存效率功能可減少儲存佔用空間和成本，包括精簡配置、資料重複資料刪除、壓縮和壓縮
+* 高效的複製將創建備份所需的時間從數小時縮短至幾分鐘，從而優化了 RTO
+* 使用NetApp SnapCenter進行檔案備份和還原的精細選項
+
+
+使用 FSx ONTAP作為基於 iSCSI 的儲存層來部署 Amazon EC2 執行個體可提供高效能、關鍵任務資料管理功能以及降低成本的儲存效率功能，這些功能可以改變您在 AWS 上的部署。
+
+運行快閃記憶體快取、多個 iSCSI 會話並利用 5% 的工作集大小，FSx ONTAP可以提供約 350K 的 IOPS，從而提供滿足最密集工作負載的效能水準。
+
+由於僅針對 FSx ONTAP施加網路頻寬限制，而不是區塊儲存頻寬限制，因此使用者可以利用小型 Amazon EC2 執行個體類型，同時實現與更大執行個體類型相同的效能率。使用這種小型實例類型還可以保持較低的計算成本，從而優化 TCO。
+
+FSx ONTAP能夠服務多種協定是其另一個優勢，它有助於標準化單一 AWS 儲存服務，以滿足各種現有資料和檔案服務需求。對於在 VMware vSphere 上投入大量資金的企業來說，考慮到當前的市場狀況，遷移到 AWS 是一種經濟高效的選擇，也是一個獨特的機會。

@@ -1,0 +1,92 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vmfs-fc.html 
+keywords: vSphere, datastore, VMFS, FC, ONTAP tools, zone, WWPN 
+summary: 本頁面提供在 VMware vSphere 環境中部署NetApp ONTAP儲存 FC VMFS 資料儲存區的步驟。 
+---
+= vSphere VMFS 資料儲存區 - 帶有ONTAP 的光纖通道儲存後端
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節介紹如何使用ONTAP光纖通道 (FC) 儲存空間建立 VMFS 資料儲存庫。
+
+
+
+== 你需要什麼
+
+* 管理 vSphere 環境和ONTAP所需的基本技能
+* 運行 {ontap_version} 的ONTAP儲存系統 (FAS/ AFF/ CVO / ONTAP Select/ ASA)
+* ONTAP憑證（SVM 名稱、使用者 ID 和密碼）
+* 主機、目標以及 SVM 和 LUN 資訊的ONTAP WWPN
+* link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-429C4DDD-5EC0-4DBD-8EA8-76082AB7ADEC.html++["已完成的 FC 設定工作表"]
+* vCenter Server 憑證
+* vSphere 主機訊息
++
+** {vsphere_version}
+
+
+* 光纖交換機
++
+** 連接ONTAP FC 資料連接埠和 vSphere 主機
+** 啟用 N_port ID 虛擬化 (NPIV) 功能
+** 建立單啟動器單目標區域。
++
+*** 為每個啟動器建立一個區域（單啟動器區域）。
+*** 對於每個區域，包括一個目標，即 SVM 的ONTAP FC 邏輯介面 (WWPN)。每個 SVM 每個節點應至少有兩個邏輯介面。請勿使用實體連接埠的 WWPN。
+
+
+
+
+* 已部署、設定並準備使用適用於 VMware vSphere 的ONTAP工具。
+
+
+
+
+== 配置 VMFS 資料儲存區
+
+若要設定 VMFS 資料儲存區，請完成下列步驟：
+
+. 檢查與 https://mysupport.netapp.com/matrix["互通性矩陣工具（IMT）"]
+. 驗證link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-7D444A0D-02CE-4A21-8017-CB1DC99EFD9A.html++["支援FCP配置"]。
+
+
+
+
+=== ONTAP任務
+
+. link:https://docs.netapp.com/us-en/ontap-cli-98/system-license-show.html["驗證您是否擁有 FCP 的ONTAP許可證。"]
++
+.. 使用 `system license show`命令檢查 FCP 是否列出。
+.. 使用 `licen  se add -license-code <license code>`新增許可證。
+
+
+. 確保 SVM 上啟用了 FCP 協定。
++
+.. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-1C31DF2B-8453-4ED0-952A-DF68C3D8B76F.html++["驗證現有 SVM 上的 FCP。"]
+.. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-D322649F-0334-4AD7-9700-2A4494544CB9.html++["在現有 SVM 上配置 FCP。"]
+.. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-0FCB46AA-DA18-417B-A9EF-B6A665DB77FC.html++["使用 FCP 建立新的 SVM。"]
+
+
+. 確保 SVM 上有 FCP 邏輯介面。
++
+.. 使用 `Network Interface show`驗證 FCP 適配器。
+.. 當使用 GUI 建立 SVM 時，邏輯介面是這個過程的一部分。
+.. 若要重新命名網路接口，請使用 `Network Interface modify`。
+
+
+. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-sanag/GUID-D4DAC7DB-A6B0-4696-B972-7327EE99FD72.html++["建立並映射 LUN。"]如果您使用的是適用ONTAP tools for VMware vSphere，請跳過此步驟。
+
+
+
+
+=== VMware vSphere 任務
+
+. 驗證 HBA 驅動程式是否已安裝。  VMware 支援的 HBA 具有現成的驅動程序，並且應該在link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-storage-7-0/getting-started-with-a-traditional-storage-model-in-vsphere-environment/supported-storage-adapters/view-storage-adapters-available-on-an-esxi-host.html++["儲存適配器信息"]。
+. link:++https://docs.netapp.com/vapp-98/topic/com.netapp.doc.vsc-iag/GUID-D7CAD8AF-E722-40C2-A4CB-5B4089A14B00.html++["使用ONTAP工具配置 VMFS 資料儲存庫"] 。
+

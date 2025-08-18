@@ -1,0 +1,279 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-vmsc-mgmt-mcc.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, array, ontap tools, otv, sddc, sddc manager, ontap tools, metrocluster 
+summary:  
+---
+= 使用MetroCluster為 VCF 管理域配置延伸集群
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在此用例中，我們概述了使用ONTAP MetroCluster和 NFS 作為主資料儲存為 VMware Cloud Foundation (VCF) 管理域配置延伸叢集的過程。此程序包括部署 vSphere 主機和 vCenter Server、配置 NFS 資料儲存、使用 VCF 導入工具驗證叢集、配置 NSX 設定以及將環境轉換為 VCF 管理域。
+
+image:vmw-vcf-vmsc-mgmt-mcc-001.png["帶有 vMSC 的 VCF 管理域,寬度=500"]
+
+
+
+== 介紹
+
+在此解決方案中，我們將示範如何使用ONTAP MetroCluster實作以 NFS 為主要資料儲存的延伸 VCF 管理域。
+
+
+
+== 場景概述
+
+此場景涵蓋以下進階步驟：
+
+* 部署 vSphere 主機和 vCenter 伺服器。
+* 將 NFS 資料儲存配置給 vSphere 主機。
+* 在 vSphere 叢集中部署 SDDC 管理器。
+* 使用 VCF 導入工具驗證 vSphere 叢集。
+* 配置 JSON 檔案以在 VCF 轉換期間建立 NSX。
+* 使用 VCF 導入工具將 vSphere 8 環境轉換為 VCF 管理域。
+
+
+
+
+== 先決條件
+
+此場景需要以下組件和配置：
+
+* 支援的ONTAP MetroCluster配置
+* 配置為允許 NFS 流量的儲存虛擬機器 (SVM)。
+* 已在 IP 網路上建立用於承載 NFS 流量並與 SVM 關聯的邏輯介面 (LIF)。
+* 一個 vSphere 8 集群，其中有 4 個 ESXi 主機連接到網路交換器。
+* 下載 VCF 轉換所需的軟體。
+
+
+以下是系統管理員的範例螢幕截圖，顯示了MetroCluster配置。image:vmw-vcf-vmsc-mgmt-mcc-015.png["4 節點MetroCluster IP"]
+
+這是來自兩個故障域的 SVM 網路介面。image:vmw-vcf-vmsc-mgmt-mcc-013.png["故障域 1 中的 SVM 網路介面"]
+
+image:vmw-vcf-vmsc-mgmt-mcc-014.png["故障域 2 中的 SVM 網路介面"]
+
+[注意] SVM 將在MetroCluster中的某個故障域上處於活動狀態。
+
+image:vmw-vcf-vmsc-mgmt-mcc-016.png["故障域 1 上的 SVM"]
+
+image:vmw-vcf-vmsc-mgmt-mcc-017.png["故障域 2 上的 SVM"]
+
+參考 https://knowledge.broadcom.com/external/article/312183/vmware-vsphere-support-with-netapp-metro.html["帶有MetroCluster的 vMSC"]。
+
+有關將 vSphere 轉換或匯入 VCF 5.2 時支援的儲存和其他注意事項，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/considerations-before-converting-or-importing-existing-vsphere-environments-into-vcf-admin.html["將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項"]。
+
+在建立將轉換為 VCF 管理域的 vSphere 群集之前，請參閱 https://knowledge.broadcom.com/external/article/373968/vlcm-config-manager-is-enabled-on-this-c.html["vSphere 叢集上的 NSX 注意事項"]
+
+所需的軟體，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/download-software-for-converting-or-importing-existing-vsphere-environments-admin.html["下載用於轉換或匯入現有 vSphere 環境的軟體"]。
+
+有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
+
+有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware 雲端基礎文檔"]。
+
+
+
+== 部署步驟
+
+若要部署以 NFS 作為主要資料儲存的 VCF 延伸管理域，
+
+完成以下步驟：
+
+* 部署 vSphere 主機和 vCenter。
+* 建立 vSphere 叢集。
+* 配置 NFS 資料儲存。
+* 將 VCF 導入工具複製到 vCenter 設備。
+* 使用 VCF 導入工具對 vCenter 設備執行預檢查。
+* 在 vCenter 叢集上部署 SDDC 管理器虛擬機器。
+* 為 NSX 叢集建立一個 JSON 文件，以便在轉換過程中進行部署。
+* 將所需軟體上傳到 SDDC 管理器。
+* 將 vSphere 叢集轉換為 VCF 管理域。
+
+
+有關轉換過程的概述，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/convert-or-import-a-vsphere-environment-into-vmware-cloud-foundation-admin.html["在 VMware Cloud Foundation 中將 vSphere 環境轉換為管理網域或將 vSphere 環境匯入為 VI 工作負載域"]。
+
+
+
+=== 部署 vSphere 主機和 vCenter
+
+使用從 Broadcom 支援入口網站下載的 ISO 在主機上部署 vSphere，或使用 vSphere 主機的現有部署選項。
+
+.將 NFS 資料儲存掛載到主機虛擬機
+[%collapsible%open]
+====
+在此步驟中，我們建立 NFS 磁碟區並將其作為資料儲存安裝到主機虛擬機器。
+
+. 使用系統管理員建立一個磁碟區並附加到包含 vSphere 主機的 IP 子網路的匯出策略。image:vmw-vcf-vmsc-mgmt-mcc-002.png["使用系統管理員建立 NFS 卷"]
+. 透過 SSH 連接到 vSphere 主機並掛載 NFS 資料儲存。image:vmw-vcf-vmsc-mgmt-mcc-003.png["在 vSphere 主機上掛載 NFS 資料存儲"]
++
+[注意] 如果顯示不支援硬體加速，請確保在 vSphere 主機上安裝了最新的 NFS VAAI 元件（從NetApp支援入口網站下載）image:vmw-vcf-vmsc-mgmt-mcc-005.png["安裝NFS VAAI組件"]並且在託管該磁碟區的 SVM 上啟用了 vStorage。image:vmw-vcf-vmsc-mgmt-mcc-004.png["在 SVM 上為 VAAI 啟用 vStorage"]
+
+. 針對額外的資料儲存需求重複上述步驟並確保支援硬體加速。image:vmw-vcf-vmsc-mgmt-mcc-006.png["資料儲存列表。每個故障域一個"]
+
+
+====
+在 NFS 資料儲存上部署 vCenter。確保 vCenter 設備上啟用了 SSH 和 Bash shell。
+
+
+
+=== 建立 vSphere 群集
+
+. 登入 vSphere Web 用戶端，透過新增部署了 NFS VAAI 的主機之一來建立資料中心和 vSphere 叢集。我們選擇使用單一影像選項來管理叢集中的所有主機。 [提示] 不要選擇在叢集層級管理配置。有關更多詳細信息，請參閱 https://knowledge.broadcom.com/external/article/373968/vlcm-config-manager-is-enabled-on-this-c.html["vSphere 叢集上的 NSX 注意事項"]。有關使用ONTAP MetroCluster 的vMSC 最佳實踐，請查看 https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware_vmsc_design.html#netapp-storage-configuration["vMSC 設計與實作指南"]
+. 將其他 vSphere 主機新增至叢集。
+. 建立分散式交換器並新增連接埠群組。
+. https://techdocs.broadcom.com/us/en/vmware-cis/vsan/vsan/8-0/vsan-network-design/migrating-from-standard-to-distributed-vswitch.html["將網路從標準 vSwitch 遷移到分散式交換器。"]
+
+
+
+
+=== 將 vSphere 環境轉換為 VCF 管理域
+
+以下部分介紹部署 SDDC 管理器以及將 vSphere 8 叢集轉換為 VCF 5.2 管理域的步驟。在適當的情況下，將參考 VMware 文件以取得更多詳細資訊。
+
+VCF 導入工具由 VMware by Broadcom 提供，是一款實用程序，可在 vCenter 設備和 SDDC 管理器上使用，以驗證配置並為 vSphere 和 VCF 環境提供轉換和導入服務。
+
+有關更多信息，請參閱 https://docs.vmware.com/en/VMware-Cloud-Foundation/5.2/vcf-admin/GUID-44CBCB85-C001-41B2-BBB4-E71928B8D955.html["VCF 導入工具選項和參數"] 。
+
+.複製並提取 VCF 導入工具
+[%collapsible%open]
+====
+VCF 匯入工具用於 vCenter 設備上，以驗證 vSphere 叢集在 VCF 轉換或匯入過程中是否處於健康狀態。
+
+完成以下步驟：
+
+. 請依照以下步驟操作 https://docs.vmware.com/en/VMware-Cloud-Foundation/5.2/vcf-admin/GUID-6ACE3794-BF52-4923-9FA2-2338E774B7CB.html["將 VCF 匯入工具複製到目標 vCenter Appliance"]在 VMware Docs 上將 VCF 匯入工具複製到正確的位置。
+. 使用以下命令提取捆綁包：
++
+....
+tar -xvf vcf-brownfield-import-<buildnumber>.tar.gz
+....
+
+
+====
+.驗證 vCenter 設備
+[%collapsible%open]
+====
+轉換之前，使用 VCF 導入工具驗證 vCenter 設備。
+
+. 請依照以下步驟操作 https://docs.vmware.com/en/VMware-Cloud-Foundation/5.2/vcf-admin/GUID-AC6BF714-E0DB-4ADE-A884-DBDD7D6473BB.html["轉換前對目標 vCenter 執行預檢查"]運行驗證。
+. 以下輸出顯示 vCenter 設備已通過預先檢查。
++
+image:vmw-vcf-vmsc-mgmt-mcc-007.png["vcf 導入工具預檢查"]
+
+
+
+====
+.部署 SDDC 管理器
+[%collapsible%open]
+====
+SDDC 管理器必須位於將轉換為 VCF 管理域的 vSphere 叢集上。
+
+依照 VMware Docs 上的部署說明完成部署。
+
+image:vmw-vcf-vmsc-mgmt-mcc-008.png["VCF 轉換之前"]
+
+參考 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/convert-or-import-a-vsphere-environment-into-vmware-cloud-foundation-admin/deploy-the-sddc-manager-appliance-on-the-target-vcenter-admin.html["在目標 vCenter 上部署 SDDC 管理器設備"]。
+
+====
+.為 NSX 部署建立 JSON 文件
+[%collapsible%open]
+====
+若要在將 vSphere 環境匯入或轉換至 VMware Cloud Foundation 時部署 NSX Manager，請建立 NSX 部署規格。  NSX 部署至少需要 3 台主機。
+
+
+NOTE: 在轉換或匯入作業中部署 NSX Manager 叢集時，將使用 NSX VLAN 支援的區段。有關 NSX-VLAN 支援段的限制的詳細信息，請參閱「將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項」部分。有關 NSX-VLAN 網路限制的信息，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/considerations-before-converting-or-importing-existing-vsphere-environments-into-vcf-admin.html["將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項"]。
+
+以下是 NSX 部署的 JSON 檔案範例：
+
+....
+{
+  "deploy_without_license_keys": true,
+  "form_factor": "small",
+  "admin_password": "******************",
+  "install_bundle_path": "/nfs/vmware/vcf/nfs-mount/bundle/bundle-133764.zip",
+  "cluster_ip": "10.61.185.114",
+  "cluster_fqdn": "mcc-nsx.sddc.netapp.com",
+  "manager_specs": [{
+    "fqdn": "mcc-nsxa.sddc.netapp.com",
+    "name": "mcc-nsxa",
+    "ip_address": "10.61.185.111",
+    "gateway": "10.61.185.1",
+    "subnet_mask": "255.255.255.0"
+  },
+  {
+    "fqdn": "mcc-nsxb.sddc.netapp.com",
+    "name": "mcc-nsxb",
+    "ip_address": "10.61.185.112",
+    "gateway": "10.61.185.1",
+    "subnet_mask": "255.255.255.0"
+  },
+  {
+    "fqdn": "mcc-nsxc.sddc.netapp.com",
+    "name": "mcc-nsxc",
+    "ip_address": "10.61.185.113",
+    "gateway": "10.61.185.1",
+    "subnet_mask": "255.255.255.0"
+  }]
+}
+....
+將 JSON 檔案複製到 SDDC 管理員上的 vcf 使用者主資料夾。
+
+====
+.將軟體上傳到 SDDC Manager
+[%collapsible%open]
+====
+將 VCF 匯入工具複製到 vcf 使用者的主資料夾，並將 NSX 部署套件複製到 SDDC 管理員上的 /nfs/vmware/vcf/nfs-mount/bundle/ 資料夾。
+
+看 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/convert-or-import-a-vsphere-environment-into-vmware-cloud-foundation-admin/seed-software-on-sddc-manager-admin.html["將所需軟體上傳至 SDDC 管理器設備"]以獲得詳細說明。
+
+====
+.轉換前對 vCenter 進行詳細檢查
+[%collapsible%open]
+====
+在執行管理網域轉換作業或 VI 工作負載域匯入作業之前，必須執行詳細檢查以確保現有 vSphere 環境的設定支援轉換或匯入。。以使用者 vcf 身分透過 SSH 存取 SDDC Manager 設備。。導航到您複製 VCF 導入工具的目錄。。執行以下命令檢查 vSphere 環境是否可以轉換
+
+....
+python3 vcf_brownfield.py check --vcenter '<vcenter-fqdn>' --sso-user '<sso-user>' --sso-password '********' --local-admin-password '****************' --accept-trust
+....
+====
+.將 vSphere 群集轉換為 VCF 管理域
+[%collapsible%open]
+====
+VCF 導入工具用於進行轉換過程。
+
+執行下列指令將vSphere叢集轉換為VCF管理網域，並部署NSX叢集：
+
+....
+python3 vcf_brownfield.py convert --vcenter '<vcenter-fqdn>' --sso-user '<sso-user>' --sso-password '******' --vcenter-root-password '********' --local-admin-password '****************' --backup-password '****************' --domain-name '<Mgmt-domain-name>' --accept-trust --nsx-deployment-spec-path /home/vcf/nsx.json
+....
+當 vSphere 主機上有多個資料存儲可用時，它會提示需要將哪個資料存儲視為主資料存儲，NSX VM 將預設部署在該主資料存儲上。image:vmw-vcf-vmsc-mgmt-mcc-012.png["選擇主要資料存儲"]
+
+有關完整說明，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/convert-or-import-a-vsphere-environment-into-vmware-cloud-foundation-admin.html["VCF 轉換程序"]。
+
+NSX VM 將部署至 vCenter。image:vmw-vcf-vmsc-mgmt-mcc-009.png["VCF轉換後"]
+
+SDDC 管理器顯示使用提供的名稱建立的管理網域，並將 NFS 作為資料儲存。image:vmw-vcf-vmsc-mgmt-mcc-010.png["帶有 NFS 的 VCF 管理域"]
+
+在檢查叢集時，它提供了 NFS 資料儲存的資訊。image:vmw-vcf-vmsc-mgmt-mcc-011.png["來自 VCF 的 NFS 數據存儲詳細信息"]
+
+====
+.向 VCF 新增許可
+[%collapsible%open]
+====
+完成轉換後，必須將許可證新增至環境。
+
+. 登入 SDDC 管理器 UI。
+. 在導覽窗格中導覽至*管理>許可*。
+. 點選“*+ 許可證密鑰*”。
+. 從下拉式選單中選擇一個產品。
+. 輸入許可證密鑰。
+. 提供許可證的描述。
+. 按一下“*新增*”。
+. 對每個許可證重複這些步驟。
+
+
+====

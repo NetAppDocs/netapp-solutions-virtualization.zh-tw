@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-sovereign-cloud.html 
+keywords: NetApp Solutions, vmware, sovereign cloud 
+summary:  
+---
+= 了解 VMware Sovereign Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+VMware Sovereign Cloud 是一個雲端運算框架，它優先考慮處理敏感資料的組織的資料主權、司法控制和法規遵循。這種方法確保數據始終處於收集數據的國家的獨家控制和權威之下，同時提供現代雲端基礎設施的靈活性和功能。
+
+對於許多處理和維護高度敏感資料的實體（例如國家和州政府）以及金融和醫療保健等受到嚴格監管的行業來說，主權概念正在成為雲端運算的必要組成部分。各國政府也尋求擴大數位經濟能力，減少對跨國公司雲端服務的依賴。
+
+
+
+== VMware 主權雲端計劃
+
+VMware 將主權雲端定義為：
+
+* 保護和釋放私營和公共部門組織的關鍵資料（例如國家資料、公司資料和個人資料）的價值
+* 提供國家數位經濟能力
+* 透過審計的安全控制保護數據
+* 確保遵守資料隱私法
+* 透過提供資料駐留和資料主權以及完全的司法控制來改善對資料的控制
+
+
+
+
+== 與值得信賴的 VMware 主權雲端服務供應商合作
+
+為了確保成功，組織必須與他們信任的合作夥伴合作，而這些合作夥伴能夠託管真實且自主的主權雲端平台。  VMware Sovereign Cloud 計畫中認可的 VMware 雲端供應商致力於基於現代軟體定義架構設計和運行雲端解決方案，這些架構體現了 VMware Sovereign Cloud 框架中概述的關鍵原則和最佳實踐。
+
+* *資料主權和司法控制*－所有資料都屬於資料收集地的國家，並受其專屬控制和管轄。營運完全在管轄範圍內進行管理
+* *資料存取和完整性*－雲端基礎架構具有彈性，在管轄範圍內至少有兩個資料中心位置可用，並提供安全和私有的連線選項。
+* *資料安全與合規性*－資訊安全管理系統控制經過業界認可的全球（或區域）標準認證，並定期接受審核。
+* *資料獨立性與移動性*－支援現代應用程式架構，防止供應商雲端鎖定，並實現應用程式的可攜性和獨立性
+
+
+如需了解 VMware 的更多信息，請訪問：
+
+* link:https://www.vmware.com/content/dam/digitalmarketing/vmware/en/pdf/docs/vmw-sovereign-cloud-solution-brief-customer.pdf["VMware Sovereign Cloud 概述"]
+* link:https://www.vmware.com/topics/glossary/content/sovereign-cloud.html["什麼是 VMware Sovereign Cloud？"]
+* link:https://blogs.vmware.com/cloud/2021/10/06/vmware-sovereign-cloud/["推出全新 VMware 主權雲端計劃"]
+* link:https://www.vmware.com/solutions/cloud-infrastructure/sovereign-cloud["VMware 主權雲端解決方案"]
+

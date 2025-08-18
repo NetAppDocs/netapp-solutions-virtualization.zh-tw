@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-deployment-prerequisites.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用ONTAP部署 Red Hat OpenShift Virtualization 的需求
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+查看使用ONTAP儲存系統安裝和部署 OpenShift 虛擬化的需求。
+
+
+
+== 先決條件
+
+* 安裝在裸機基礎架構上並帶有 RHCOS 工作節點的 Red Hat OpenShift 叢集（高於 4.6 版本）
+* 部署機器健康檢查以維護虛擬機器的高可用性
+* NetApp ONTAP集群，其中 SVM 配置了正確的協定。
+* 在 OpenShift 叢集上安裝Trident
+* 建立Trident後端配置
+* 在 OpenShift 叢集上設定 StorageClass，並使用Trident作為配置器
+
+
+有關上述Trident先決條件，請參閱link:osv-trident-install.html["Trident安裝部分"]了解詳情。
+
+* 叢集管理員存取 Red Hat OpenShift 叢集
+* NetApp ONTAP叢集的管理員存取權限
+* 安裝了 tridentctl 和 oc 工具並新增至 $PATH 的管理員工作站
+
+
+由於 OpenShift 虛擬化由安裝在 OpenShift 叢集上的操作員管理，因此它會對記憶體、CPU 和儲存產生額外的開銷，在規劃叢集的硬體需求時必須考慮到這些開銷。查看文件 https://docs.openshift.com/container-platform/4.7/virt/install/preparing-cluster-for-virt.html#virt-cluster-resource-requirements_preparing-cluster-for-virt["這裡"]了解更多詳情。
+
+或者，您也可以透過設定節點放置規則來指定 OpenShift 叢集節點的子集來託管 OpenShift 虛擬化操作員、控制器和虛擬機器。若要設定 OpenShift 虛擬化的節點放置規則，請依照文檔 https://docs.openshift.com/container-platform/4.7/virt/install/virt-specifying-nodes-for-virtualization-components.html["這裡"]。
+
+對於支援 OpenShift Virtualization 的存儲， NetApp建議使用專用的 StorageClass，該 StorageClass 從特定的Trident後端請求存儲，而該後端又由專用的 SVM 支援。這對於為 OpenShift 叢集上基於 VM 的工作負載提供的資料保持了一定程度的多租用戶等級。

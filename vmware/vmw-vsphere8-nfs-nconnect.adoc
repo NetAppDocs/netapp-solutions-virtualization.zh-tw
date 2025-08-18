@@ -1,0 +1,145 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vsphere8-nfs-nconnect.html 
+keywords: netapp, vmware, nfsv3, nconnect, performance 
+summary:  
+---
+= 在 NFS v3 資料儲存上使用 nConnect 來提高資料儲存效能
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 NFS nConnect 功能來提高 VMware vSphere 8 環境中的資料儲存效能。此過程包括為每個 NFS 資料儲存託管虛擬機器、提升 NFS 資料儲存效能以及為基於虛擬機器和容器的應用程式配置更高層級。
+
+從 VMware vSphere 8.0 U1（作為技術預覽版）開始，nconnect 功能為 NFS v3 資料儲存磁碟區啟用多個 TCP 連線以實現更高的吞吐量。使用 NFS 資料儲存的客戶現在可以增加與 NFS 伺服器的連接數量，從而最大限度地利用高速網路介面卡。
+
+
+NOTE: 此功能通常適用於 8.0 U2 的 NFS v3，請參閱儲存部分link:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/release-notes/esxi-update-and-patch-release-notes/vsphere-esxi-802-release-notes.html["VMware vSphere 8.0 Update 2 發行說明"]。  vSphere 8.0 U3 新增了 NFS v4.1 支援。有關更多信息，請查看link:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/release-notes/esxi-update-and-patch-release-notes/vsphere-esxi-803-release-notes.html["vSphere 8.0 Update 3 發行說明"]
+
+
+
+== 用例
+
+* 在同一台主機上為每個 NFS 資料儲存託管更多虛擬機器。
+* 提高 NFS 資料儲存效能。
+* 為基於 VM 和容器的應用程式提供更高層級的服務選項。
+
+
+
+
+== 技術細節
+
+nconnect 的目的是為 vSphere 主機上的每個 NFS 資料儲存提供多個 TCP 連線。這有助於提高 NFS 資料儲存的並行性和效能。在ONTAP中，建立 NFS 掛載時，會建立連線 ID (CID)。此 CID 可提供最多 128 個同時飛行中操作。當客戶端超過該數量時， ONTAP會實施某種形式的流量控制，直到其他操作完成時它可以釋放一些可用資源。這些暫停通常只有幾微秒，但在數百萬次操作的過程中，這些暫停會累積起來並產生效能問題。 Nconnect 可以採用 128 的限制並將其乘以客戶端上的 nconnect 會話數，從而為每個 CID 提供更多的並發操作，並可能增加效能優勢。更多詳細資訊請參閱link:https://www.netapp.com/media/10720-tr-4067.pdf["NFS 最佳實務與實施指南"]
+
+
+
+=== 預設 NFS 資料存儲
+
+為了解決 NFS 資料儲存單一連線的效能限制，需要掛載額外的資料儲存或增加額外的主機來增加連線。
+
+image:vmware-vsphere8-nfs-wo-nconnect.png["不含 nconnect 功能的 NFS 資料存儲"]
+
+
+
+=== 使用 nConnect NFS 資料存儲
+
+使用ONTAP工具或其他選項建立 NFS 資料儲存庫後，可以使用 vSphere CLI、PowerCLI、govc 工具或其他 API 選項修改每個 NFS 資料儲存庫的連線數。為了避免 vMotion 出現效能問題，請保持 vSphere 群集中所有 vSphere 主機上的 NFS 資料儲存的連線數相同。
+
+image:vmware-vsphere8-nfs-nconnect.png["啟用了 nconnect 功能的 NFS 資料存儲"]
+
+
+
+== 先決條件
+
+要使用 nconnect 功能，應滿足下列依賴關係。
+
+[cols="25%, 25%, 50%"]
+|===
+
+
+| ONTAP版本 | vSphere 版本 | 評論 
+
+
+| 9.8或以上 | 8 更新 1 | 技術預覽，可選擇增加連線數量。必須卸載資料儲存以減少連線數。 
+
+
+| 9.8或以上 | 8 更新 2 | 通常可以選擇增加或減少連接數量。 
+
+
+| 9.8或以上 | 8 更新 3 | NFS 4.1 和多路徑支援。 
+|===
+
+
+== 更新與 NFS 資料儲存的連線數
+
+使用ONTAP工具或 vCenter 建立 NFS 資料儲存庫時，使用單一 TCP 連線。若要增加連線數量，可以使用 vSphere CLI。參考命令如下圖所示。
+
+[source, bash]
+----
+# Increase the number of connections while creating the NFS v3 datastore.
+esxcli storage nfs add -H <NFS_Server_FQDN_or_IP> -v <datastore_name> -s <remote_share> -c <number_of_connections>
+# To specify the number of connections while mounting the NFS 4.1 datastore.
+esxcli storage nfs41 add -H <NFS_Server_FQDN_or_IP> -v <datastore_name> -s <remote_share> -c <number_of_connections>
+# To utilize specific VMkernel adapters while mounting, use the -I switch
+esxcli storage nfs41 add -I <NFS_Server_FQDN_or_IP>:vmk1 -I <NFS_Server_FQDN_or_IP>:vmk2 -v <datastore_name> -s <remote_share> -c <number_of_connections>
+# To increase or decrease the number of connections for existing NFSv3 datastore.
+esxcli storage nfs param set -v <datastore_name> -c <number_of_connections>
+# For NFSv4.1 datastore
+esxcli storage nfs41 param set -v <datastore_name> -c <number_of_connections>
+# To set VMkernel adapter for an existing NFS 4.1 datastore
+esxcli storage nfs41 param set -I <NFS_Server_FQDN_or_IP>:vmk2 -v <datastore_name> -c <number_of_connections>
+----
+或使用類似下面顯示的 PowerCLI
+
+[source, powershell]
+----
+$datastoreSys = Get-View (Get-VMHost host01.vsphere.local).ExtensionData.ConfigManager.DatastoreSystem
+$nfsSpec = New-Object VMware.Vim.HostNasVolumeSpec
+$nfsSpec.RemoteHost = "nfs_server.ontap.local"
+$nfsSpec.RemotePath = "/DS01"
+$nfsSpec.LocalPath = "DS01"
+$nfsSpec.AccessMode = "readWrite"
+$nfsSpec.Type = "NFS"
+$nfsSpec.Connections = 4
+$datastoreSys.CreateNasDatastore($nfsSpec)
+----
+這是使用 govc 工具增加連線數量的範例。
+
+[source, powershell]
+----
+$env.GOVC_URL = 'vcenter.vsphere.local'
+$env.GOVC_USERNAME = 'administrator@vsphere.local'
+$env.GOVC_PASSWORD = 'XXXXXXXXX'
+$env.GOVC_Datastore = 'DS01'
+# $env.GOVC_INSECURE = 1
+$env.GOVC_HOST = 'host01.vsphere.local'
+# Increase number of connections while creating the datastore.
+govc host.esxcli storage nfs add -H nfs_server.ontap.local -v DS01 -s /DS01 -c 2
+# For NFS 4.1, replace nfs with nfs41
+govc host.esxcli storage nfs41 add -H <NFS_Server_FQDN_or_IP> -v <datastore_name> -s <remote_share> -c <number_of_connections>
+# To utilize specific VMkernel adapters while mounting, use the -I switch
+govc host.esxcli storage nfs41 add -I <NFS_Server_FQDN_or_IP>:vmk1 -I <NFS_Server_FQDN_or_IP>:vmk2 -v <datastore_name> -s <remote_share> -c <number_of_connections>
+# To increase or decrease the connections for existing datastore.
+govc host.esxcli storage nfs param set -v DS01 -c 4
+# For NFSv4.1 datastore
+govc host.esxcli storage nfs41 param set -v <datastore_name> -c <number_of_connections>
+# View the connection info
+govc host.esxcli storage nfs list
+----
+參考link:https://kb.vmware.com/s/article/91497["VMware 知識庫文章 91497"]了解更多。
+
+
+
+== 設計考慮
+
+ONTAP上支援的最大連接數取決於儲存平台型號。尋找 exec_ctxlink:https://www.netapp.com/media/10720-tr-4067.pdf["NFS 最佳實務與實施指南"]了解更多。
+
+隨著每個 NFSv3 資料儲存區的連線數增加，可掛載在該 vSphere 主機上的 NFS 資料儲存區的數量會減少。每個 vSphere 主機支援的連線總數為 256 個。查看link:https://knowledge.broadcom.com/external/article?legacyId=91481["VMware 知識庫文章 91481"]每個 vSphere 主機的資料儲存限制。
+
+
+NOTE: vVol 資料儲存不支援 nConnect 功能。但是，協定端點計入連線限制。建立 vVol 資料儲存時，會為 SVM 的每個資料生命週期建立一個協定端點。

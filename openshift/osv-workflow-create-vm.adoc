@@ -1,0 +1,74 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-workflow-create-vm.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用 Red Hat OpenShift Virtualization 在ONTAP儲存上建立虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 OpenShift 虛擬化建立虛擬機器。此過程包括選擇作業系統模板、配置儲存類別以及自訂 VM 參數以滿足特定要求。作為先決條件，您應該已經建立了 trident 後端、儲存類別和磁碟區快照類別物件。您可以參考link:osv-trident-install.html["Trident安裝部分"]了解詳情。
+
+
+
+== 建立VM
+
+虛擬機器是有狀態的部署，需要磁碟區來託管作業系統和資料。使用 CNV，由於虛擬機器作為 pod 運行，因此虛擬機器由透過Trident託管在NetApp ONTAP上的 PV 支援。這些磁碟區作為磁碟連接並儲存整個檔案系統，包括虛擬機器的啟動來源。
+
+image:redhat-openshift-052.png["創建虛擬機器架構"]
+
+若要在 OpenShift 叢集上快速建立虛擬機，請完成下列步驟：
+
+. 導航至“虛擬化”>“虛擬機器”，然後按一下“建立”。
+. 選擇來自模板。
+. 選擇所需的可用啟動來源的作業系統。
+. 勾選方塊「建立後啟動虛擬機器」。
+. 按一下快速建立虛擬機器。
+
+
+虛擬機器已建立並啟動，並進入*運行*狀態。它使用預設儲存類別自動為啟動磁碟建立 PVC 和相應的 PV。為了將來能夠即時遷移虛擬機，您必須確保用於磁碟的儲存類別可以支援 RWX 磁碟區。這是即時遷移的要求。 ontap-nas 和 ontap-san（iSCSI 和 NVMe/TCP 協定的volumeMode區塊）可以支援使用對應儲存類別建立的磁碟區的 RWX 存取模式。
+
+若要在叢集上配置 ontap-san 儲存類，請參閱link:osv-workflow-vm-migration-mtv.html["將虛擬機器從 VMware 遷移到 OpenShift 虛擬化的部分"]。
+
+
+NOTE: 按一下「快速建立虛擬機器」將使用預設儲存類別為虛擬機器的可啟動根磁碟建立 PVC 和 PV。您可以透過選擇自訂虛擬機器>自訂虛擬機器參數>磁碟，然後編輯磁碟以使用所需的儲存類別來為磁碟選擇不同的儲存類別。
+
+在配置虛擬機器磁碟時，通常與檔案系統相比，區塊存取模式更受歡迎。
+
+若要在選擇作業系統範本後自訂虛擬機器創建，請按一下「自訂虛擬機器」而不是「快速建立」。
+
+. 如果選擇的作業系統已經配置了啟動來源，可以點選*自訂虛擬機器參數*。
+. 如果所選作業系統沒有配置啟動來源，則必須配置它。您可以查看link:https://docs.openshift.com/container-platform/4.14/virt/virtual_machines/creating_vms_custom/virt-creating-vms-from-custom-images-overview.html["文件"]。
+. 配置啟動磁碟後，可以點選*自訂虛擬機器參數*。
+. 您可以從此頁面上的選項卡自訂虛擬機器。例如，按一下「*磁碟*」選項卡，然後按一下「*新增磁碟*」為虛擬機器新增另一個磁碟。
+. 按一下「建立虛擬機器」以建立虛擬機器；這會在背景啟動對應的 pod。
+
+
+
+NOTE: 當從 URL 或註冊表為模板或作業系統配置啟動來源時，它會在 `openshift-virtualization-os-images`專案並將 KVM 客戶映像下載到 PVC。您必須確保範本 PVC 具有足夠的配置空間來容納相應作業系統的 KVM 用戶機映像。然後，當使用任何專案中的相應範本建立虛擬機器時，這些 PVC 將被複製並作為根磁碟附加到虛擬機器。
+
+image:rh-os-n-use-case-vm-create-001.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:rh-os-n-use-case-vm-create-002.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:rh-os-n-use-case-vm-create-003.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:rh-os-n-use-case-vm-create-004.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+image:rh-os-n-use-case-vm-create-005.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+
+
+
+== 影片示範
+
+以下影片示範如何使用 iSCSI 儲存在 OpenShift Virtualization 中建立 VM。
+
+.使用區塊儲存在 OpenShift 虛擬化中建立虛擬機
+video::497b868d-2917-4824-bbaa-b2d500f92dda[panopto,width=360]

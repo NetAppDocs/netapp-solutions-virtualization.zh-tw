@@ -1,0 +1,33 @@
+---
+section: migration
+title: 虛擬機器遷移解決方案
+url: "/migration/index.html"
+entries:
+- title: 使用 Shift Toolkit 遷移或轉換虛擬機
+  pdf-filename: 使用 Shift Toolkit 遷移或轉換虛擬機
+  entries:
+  - title: 關於Shift Toolkit
+    url: "/migration/shift-toolkit-overview.html"
+  - title: 安裝 Shift Toolkit
+    url: "/migration/shift-toolkit-install.html"
+  - title: 配置 Shift Toolkit
+    url: "/migration/shift-toolkit-ui.html"
+  - title: 使用 Shift Toolkit 遷移虛擬機
+    url: "/migration/shift-toolkit-migration.html"
+  - title: 使用 Shift Toolkit 轉換虛擬機
+    url: "/migration/shift-toolkit-conversion.html"
+  - title: 後續步驟Next steps
+    url: "/migration/shift-toolkit-summary.html"
+- title: 將虛擬機器遷移到ONTAP
+  url: "/migration/migrate-vms-to-ontap-datastore.html"
+- title: 將虛擬機器移轉到 Amazon EC2
+  pdf-filename: 使用 FSx ONTAP將虛擬機器移轉到 Amazon EC2
+  entries:
+  - title: 關於將虛擬機器移轉到 Amazon EC2
+    url: "/migration/migrate-vms-to-ec2-fsxn-overview.html"
+  - title: 遷移要求
+    url: "/migration/migrate-vms-to-ec2-fsxn-arch.html"
+  - title: 將虛擬機器移轉到 Amazon EC2
+    url: "/migration/migrate-vms-to-ec2-fsxn-deploy.html"
+  - title: 更多遷移選項
+    url: "/migration/migrate-vms-to-ec2-fsxn-summary.html"

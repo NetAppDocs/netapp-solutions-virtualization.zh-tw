@@ -1,0 +1,22 @@
+---
+indexpage:
+  title: NetApp KVM 虛擬化解決方案
+  summary: NetApp KVM 解決方案是一組策略和技術功能，展示了NetApp儲存使用 libvirt 和 KVM 進行虛擬化的功能。
+  lead: NetApp KVM 虛擬化解決方案是一組策略和技術功能，展示了NetApp儲存體使用 libvirt 和 KVM 進行虛擬化的功能。
+  tiles:
+  - title: 開始
+    links:
+    - title: 使用 QEMU 和 Libvirt 實現 KVM 虛擬化
+      url: kvm-overview.html
+    - title: 適用於 KVM 虛擬化環境的NetApp ONTAP存儲
+      url: kvm-ontap.html
+  - title: 其他資源
+    links:
+    - title: 在 Rocky Linux 上設定 libvirt
+      url: https://docs.rockylinux.org/guides/virtualization/libvirt-rocky/
+    - title: 在 Ubuntu 上設定 libvirt
+      url: https://documentation.ubuntu.com/server/how-to/virtualisation/libvirt/index.html
+    - title: SUSE Linux 虛擬化指南
+      url: https://documentation.suse.com/sles/15-SP6/html/SLES-all/book-virtualization.html
+    - title: Libvirt 與 Arch Linux
+      url: https://wiki.archlinux.org/title/Libvirt

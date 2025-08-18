@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: whats-new.html 
+keywords: 'netapp, solutions, virtualization, what"s new, updates, change log' 
+summary: NetApp虛擬化解決方案附件的最新變更日誌。 
+---
+= NetApp虛擬化解決方案的新功能
+:allow-uri-read: 
+:icons: font
+:imagesdir: ./media/
+
+
+[role="lead"]
+了解虛擬化解決方案的新功能。
+
+
+
+== 2025年8月18日
+
+NetApp解決方案網站現在是link:https://docs.netapp.com/us-en/netapp-solutions-family/index.html["NetApp解決方案系列"^]，其中包括以下網站：
+
+* link:https://docs.netapp.com/us-en/netapp-solutions-ai/index.html["NetApp人工智慧解決方案"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-containers/index.html["NetApp容器解決方案"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-dataops/index.html["NetApp資料管理解決方案"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-databases/index.html["NetApp資料庫解決方案"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-cloud/index.html["NetApp公有雲與混合雲解決方案"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-sap/index.html["適用於 SAP 的NetApp解決方案"^]
+* NetApp虛擬化解決方案
+

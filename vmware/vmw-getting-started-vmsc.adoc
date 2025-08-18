@@ -1,0 +1,43 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-getting-started-vmsc.html 
+keywords: vmware, getting, started, overview, netapp, storage, metro, cluster 
+summary:  
+---
+= 了解如何使用MetroCluster和SnapMirror主動同步保護 VMware 環境
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+高階業務連續性對於保護 VMware 環境免受域內中斷至關重要。  NetApp和 VMware 提供NetApp MetroCluster、 SnapMirror active sync 和 VMware vSphere Metro Storage Cluster (vMSC) 等解決方案，以增強工作負載保護並確保高可用性。
+
+
+
+== 介紹
+
+除了產品內建的可用性之外，VMware 和NetApp還提供進階配置，進一步保護分佈在機架、建築物、校園甚至城市等故障域中的工作負載。
+
+
+
+== NetApp MetroCluster
+
+NetApp MetroCluster使用 NetApp 的高可用性 (HA) 功能來防止控制器故障。  MetroCluster還包括SyncMirror技術、按需叢集故障轉移 (CFOD)、硬體冗餘和地理分離，以實現高可用性。 SyncMirror在兩個 plex 之間同步鏡像資料：本地 plex 主動提供數據，遠端 plex 作為備用。所有MetroCluster組件（例如控制器、儲存、電纜、交換器和適配器）都具有硬體冗餘。
+
+
+
+== NetApp SnapMirror主動同步
+
+NetApp SnapMirror主動同步透過 FCP 和 iSCSI SAN 協定提供資料儲存粒度保護，選擇性地保護高優先權工作負載拓樸。與主動-備用MetroCluster不同，它提供對本地和遠端站點的主動-主動存取。從ONTAP 9.15.1 開始， SnapMirror主動同步支援對稱主動/主動功能，允許透過雙向同步複製從受保護 LUN 的兩個副本執行讀寫 I/O 操作。
+
+
+
+== VMware vSphere Metro 儲存群集
+
+VMware vSphere Metro Storage Cluster (vMSC) 透過主動-主動延伸儲存增強了 VMware HA。此經過認證的配置可保護虛擬機器和容器免受故障影響。這是透過使用延伸儲存概念以及 vSphere 主機叢集來實現的。這些主機分佈在不同的故障域。 NetApp MetroCluster和SnapMirror主動同步儲存技術用於提供保護和支援的儲存產品。透過利用 vMSC， NetApp認證的解決方案可跨故障域提供強大且具彈性的 IT 營運。
+
+有關詳細信息，請參閱 https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware_vmsc_overview.html#continuous-availability-solutions-for-vsphere-environments["採用ONTAP 的vSphere Metro 儲存集群"]。{nbsp}

@@ -1,0 +1,123 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vmsc-with-smas.html 
+keywords: NetApp Solutions, vMSC, Metro Storage Cluster, SnapMirror active sync, Business Continuity, SMBC, ONTAP Tools, AFD, SCV, iSCSI, backup, restore 
+summary:  
+---
+= 具有SnapMirror主動同步功能的 VMware vSphere Metro 儲存集群
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware_vmsc_overview.html["VMware vSphere Metro 儲存叢集 (vMSC)"]是一種跨不同故障域的延伸叢集解決方案，可提供* 跨可用區域或站點的工作負載移動性。  * 避免停機 * 避免災難 * 快速恢復
+
+本文檔提供了 vMSC 實作細節link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync["SnapMirror主動同步 (SM-as)"]利用系統管理器和ONTAP工具。此外，它還展示瞭如何透過複製到第三個網站來保護虛擬機器並使用 VMware vSphere 的SnapCenter插件進行管理。
+
+image:vmware-vmsc-with-smas-001.png["具有SnapMirror主動同步架構的 vMSC"]
+
+SnapMirror主動同步支援ASA、 AFF和FAS儲存陣列。建議在兩個故障域上使用相同類型（效能/容量模型）。目前僅支援 FC 和 iSCSI 等區塊協定。有關進一步的支援指南，請參閱link:https://imt.netapp.com/matrix/["互通性矩陣工具"]和link:https://hwu.netapp.com/["Hardware Universe"]
+
+vMSC 支援兩種不同的部署模型：統一主機存取和非統一主機存取。在統一主機存取配置中，叢集上的每個主機都可以存取兩個故障域上的 LUN。它通常用於同一資料中心的不同可用區域。
+
+image:vmware-vmsc-with-smas-002.png["vMSC 統一與非統一主機存取模式"]
+
+在非統一主機存取配置中，主機只能存取本機故障域。它通常用於不同的站點，在這些站點中，跨故障域運行多條電纜是一種限制性選擇。
+
+
+NOTE: 在非統一主機存取模式下，虛擬機器將由 vSphere HA 在其他故障域中重新啟動。應用程式可用性將受到其設計的影響。僅ONTAP 9.15 及更高版本支援非統一主機存取模式。
+
+
+
+== 先決條件
+
+* link:vmw-vcf-mgmt-supplemental-iscsi.html["每個主機部署有雙儲存結構（兩個 HBA 或用於 iSCSI 的雙 VLAN）的 VMware vSphere 主機"] 。
+* link:https://docs.netapp.com/us-en/ontap/networking/combine_physical_ports_to_create_interface_groups.html["儲存陣列部署了資料連接埠鏈路聚合（用於 iSCSI）"] 。
+* link:vmw-vcf-mgmt-supplemental-iscsi.html["儲存虛擬機器和 LIF 可用"]
+* link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/prerequisites-reference.html#networking-environment["群集間延遲往返時間必須小於 10 毫秒"] 。
+* link:https://docs.netapp.com/us-en/ontap/mediator/index.html["ONTAP Mediator VM 部署在不同的故障域上"]
+* link:https://docs.netapp.com/us-en/ontap/task_dp_prepare_mirror.html["集群對等關係已建立"]
+* link:https://docs.netapp.com/us-en/ontap/peering/create-intercluster-svm-peer-relationship-93-later-task.html["SVM對等關係已建立"]
+* link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/mediator-install-task.html#initialize-the-ontap-mediator["ONTAP調解器已註冊到ONTAP集群"]
+
+
+
+TIP: 如果使用自簽章證書，則可以從中介虛擬機器上的 <安裝路徑>/ontap_mediator/server_config/ca.crt 中擷取 CA 憑證。
+
+
+
+== vMSC 與ONTAP系統管理器 UI 的非統一主機存取。
+
+注意： ONTAP Tools 10.2 或更高版本可用於配置具有非統一主機存取模式的延伸資料儲存庫，而無需切換多個使用者介面。若不使用ONTAP工具，本節僅供參考。
+
+. 記下本機故障域儲存陣列中的一個 iSCSI 資料生命週期 IP 位址。image:vmware-vmsc-with-smas-004.png["系統管理員 iSCSI Lifs"]
+. 在 vSphere 主機 iSCSI 儲存適配器上，在動態發現標籤下新增該 iSCSI IP。image:vmware-vmsc-with-smas-003.png["新增用於動態發現的 iSCSI 伺服器"]
++
+
+NOTE: 對於統一存取模式，需要提供來源和目標故障域 iSCSI 資料 lif 位址。
+
+. 在其他故障域的 vSphere 主機上重複上述步驟，在「動態發現」標籤上新增其本機 iSCSI 資料 lif IP。
+. 透過適當的網路連接，每個 vSphere 主機應該存在四個 iSCSI 連接，每個儲存控制器具有兩個 iSCSI VMKernel nic 和兩個 iSCSI 資料 lif。image:vmware-vmsc-with-smas-005.png["iSCSI 連線訊息"]
+. 使用ONTAP系統管理員建立 LUN，使用複製原則 AutomatedFailOverDuplex 設定SnapMirror ，選擇主機啟動器並設定主機接近度。image:vmware-vmsc-with-smas-006.png["使用 AutomatedFailOverDuplex 建立 LUN"]
+. 在其他故障域儲存陣列上，使用其 vSphere 主機啟動器建立 SAN 啟動器群組並設定主機鄰近度。image:vmware-vmsc-with-smas-009.png["SAN 啟動器組"]
++
+
+NOTE: 對於統一存取模式，可以從來源故障域複製 igroup。
+
+. 使用與來源故障域中相同的對應 ID 來對應複製的 LUN。image:vmware-vmsc-with-smas-010.png["LUN映射ID"]
+. 在 vCenter 上，右鍵點擊 vSphere 群集並選擇重新掃描儲存選項。image:vmware-vmsc-with-smas-007.png["重新掃描儲存"]
+. 在叢集中的一台 vSphere 主機上，檢查新建立的裝置是否與顯示「未使用」的資料儲存空間一起顯示。image:vmware-vmsc-with-smas-008.png["vSphere 主機上的 iSCSI 設備列表"]
+. 在 vCenter 上，右鍵點選 vSphere 叢集並選擇新資料儲存選項。image:vmware-vmsc-with-smas-007.png["新的資料存儲"]
+. 在精靈中，請記住提供資料儲存名稱並選擇具有正確容量和裝置 ID 的裝置。image:vmware-vmsc-with-smas-011.png["在 iSCSI 設備上建立資料存儲"]
+. 驗證資料儲存是否已安裝在跨兩個故障域的叢集上的所有主機上。image:vmware-vmsc-with-smas-012.png["來源主機上的資料存儲"]
++
+image:vmware-vmsc-with-smas-013.png["目標主機上的資料存儲"]
+
++
+
+NOTE: 由於我們使用了AFF，所以上面的螢幕截圖顯示了單一控制器上的活動 I/O。對於ASA，它將在所有路徑上具有活動 IO。
+
+. 當新增其他資料儲存時，需要記住擴充現有的一致性群組以使其在整個 vSphere 叢集中保持一致。image:vmware-vmsc-with-smas-014.png["CG保護政策"]
+
+
+
+
+== 採用ONTAP工具的 vMSC 統一主機存取模式。
+
+. 確保NetApp ONTAP Tools 已部署並註冊至 vCenter。image:vmware-vmsc-with-smas-015.png["ONTAP工具插件已註冊至 vCenter"]如果沒有，請關注link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/ontap-tools-deployment.html["ONTAP工具部署"]和link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-vcenter.html["新增 vCenter 伺服器實例"]
+. 確保ONTAP儲存系統已註冊到ONTAP工具。這包括兩個故障域儲存系統和第三個用於非同步遠端複製的系統，用於透過 VMware vSphere 的SnapCenter插件進行虛擬機器保護。image:vmware-vmsc-with-smas-016.png["註冊儲存後端"]如果沒有，請關注link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html#add-storage-backend-using-vsphere-client-ui["使用 vSphere 用戶端 UI 新增儲存後端"]
+. 更新主機資料以與ONTAP工具同步，然後link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-vvols-datastore.html#create-a-vmfs-datastore["建立資料儲存區"]。image:vmware-vmsc-with-smas-017.png["更新主機數據"]
+. 若要啟用 SM-as，請右鍵單擊 vSphere 集群，然後在NetApp ONTAP工具上選擇「保護集群」（請參閱上面的螢幕截圖）
+. 它將顯示該叢集的現有資料儲存以及 SVM 詳細資訊。預設 CG 名稱為 <vSphere 叢集名稱>_<SVM 名稱>。點選新增關係按鈕。image:vmware-vmsc-with-smas-018.png["保護叢集"]
+. 選擇目標 SVM 並將 SM-as 的策略設定為 AutomatedFailOverDuplex。有一個用於統一主機配置的切換開關。設定每個主機的接近度。image:vmware-vmsc-with-smas-019.png["新增SnapMirror關係"]
+. 驗證主機有效性資訊和其他詳細資訊。如果需要，使用非同步複製策略為第三個網站新增另一個關係。然後，點選保護。image:vmware-vmsc-with-smas-020.png["添加關係"]注意：如果計劃使用適用SnapCenter Plug-in for VMware vSphere，則需要在磁碟區層級而不是一致性群組層級設定複製。
+. 透過統一主機訪問，主機可以與兩個容錯域儲存陣列建立 iSCSI 連接。image:vmware-vmsc-with-smas-021.png["iSCSI 多路徑資訊"]注意：以上螢幕截圖來自AFF。如果是ASA，則 ACTIVE I/O 應該位於所有具有正確網路連線的路徑中。
+. ONTAP Tools 插件也可以指示磁碟區是否受到保護。image:vmware-vmsc-with-smas-022.png["磁碟區保護狀態"]
+. 如需了解更多詳細資訊並更新主機鄰近度信息，可以使用ONTAP工具下的主機叢集關係選項。image:vmware-vmsc-with-smas-023.png["主機集群關係"]
+
+
+
+
+== 使用適用於 VMware vSphere 的SnapCenter外掛程式保護虛擬機器。
+
+SnapCenter Plug-in for VMware vSphere支援SnapMirror主動同步，並且還支援與SnapMirror Async 結合使用以複製到第三個故障域。
+
+image:vmware-vmsc-with-smas-033.png["三站點拓撲"]
+
+image:vmware-vmsc-with-smas-024.png["具有非同步故障轉移的三站點拓撲"]
+
+支援的用例包括：* 使用SnapMirror活動同步從任一故障域備份和還原虛擬機器或資料儲存區。  * 從第三個故障域恢復資源。
+
+. 新增計劃在 SCV 中使用的所有ONTAP儲存系統。image:vmware-vmsc-with-smas-025.png["註冊儲存陣列"]
+. 建立策略。確保在備份後檢查 SM-as 的“更新SnapMirror” ，並在備份後檢查SnapVault 的“非同步複製”是否到第三個故障域。image:vmware-vmsc-with-smas-026.png["備份策略"]
+. 建立包含需要保護的專案的資源群組，並與策略和計劃關聯。image:vmware-vmsc-with-smas-027.png["資源組"]注意：SM-as 不支援以 _recent 結尾的快照名稱。
+. 備份根據與資源組關聯的策略在預定的時間進行。可以從儀表板作業監視器或這些資源的備份資訊監視作業。image:vmware-vmsc-with-smas-028.png["SCV 儀表板"] image:vmware-vmsc-with-smas-029.png["資料儲存區的資源備份訊息"] image:vmware-vmsc-with-smas-030.png["VM 的資源備份訊息"]
+. 可以從主故障域上的 SVM 或從其中一個輔助位置將虛擬機器還原到相同或備用 vCenter。image:vmware-vmsc-with-smas-031.png["VM 還原位置選項"]
+. 資料儲存掛載操作也有類似的選項。image:vmware-vmsc-with-smas-032.png["資料儲存區還原位置選項"]
+
+
+如需 SCV 附加操作的協助，請參閱link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/index.html["SnapCenter Plug-in for VMware vSphere文檔"]

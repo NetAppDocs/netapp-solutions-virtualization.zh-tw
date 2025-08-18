@@ -1,0 +1,77 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vmfs-nvmeof.html 
+keywords: vSphere, datastore, VMFS, NVMeoF, ONTAP tools, zone, network interface, namespace, storage subsystem 
+summary: 本頁面提供在 VMware vSphere 環境中為 VMFS 資料儲存部署NetApp ONTAP NVMe/FC 儲存的步驟。 
+---
+= vSphere VMFS 資料儲存 - 帶有ONTAP 的NVMe/FC
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節介紹如何使用 NVMe/FC 建立具有ONTAP儲存的 VMFS 資料儲存庫。
+
+
+
+== 你需要什麼
+
+* 管理 vSphere 環境和ONTAP所需的基本技能。
+* link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-storage-7-0/about-vmware-nvme-storage/vmware-nvme-concepts/basic-vmware-nvme-architecture.html++["對 NVMe/FC 的基本了解"] 。
+* 運行 {ontap_version} 的ONTAP儲存系統 (FAS/ AFF/ CVO / ONTAP Select/ ASA)
+* ONTAP憑證（SVM 名稱、使用者 ID 和密碼）
+* 主機、目標、SVM 和 LUN 資訊的ONTAP WWPN
+* link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-429C4DDD-5EC0-4DBD-8EA8-76082AB7ADEC.html++["已完成的 FC 設定工作表"]
+* vCenter 伺服器
+* vSphere 主機資訊 ({vsphere_version})
+* 光纖交換機
++
+** 已連接ONTAP FC 資料連接埠和 vSphere 主機。
+** 啟用 N_port ID 虛擬化 (NPIV) 功能。
+** 建立單一啟動器目標區域。
+** 為每個啟動器建立一個區域（單啟動器區域）。
+** 對於每個區域，包括一個目標，即 SVM 的ONTAP FC 邏輯介面 (WWPN)。每個 SVM 每個節點應至少有兩個邏輯介面。請勿使用實體連接埠的 WWPN。
+
+
+
+
+
+
+== 配置 VMFS 資料存儲
+
+. 檢查與 https://mysupport.netapp.com/matrix["互通性矩陣工具（IMT）"]。
+. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-fc-esx-cpg/GUID-7D444A0D-02CE-4A21-8017-CB1DC99EFD9A.html++["驗證是否支援 NVMe/FC 配置。"]
+
+
+
+
+== ONTAP任務
+
+. link:https://docs.netapp.com/us-en/ontap-cli-98/system-license-show.html["驗證 FCP 的ONTAP許可證。"]使用 `system license show`命令並檢查是否列出了 NVMe_oF。使用 `license add -license-code <license code>`新增許可證。
+. 驗證 SVM 上是否啟用了 NVMe 協定。
++
+.. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-sanag/GUID-CDDBD7F4-2089-4466-892F-F2DFF5798B1C.html++["為 NVMe 設定 SVM。"]
+
+
+. 驗證 SVM 上是否有可用的 NVMe/FC 邏輯介面。
++
+.. 使用 `Network Interface show`驗證 FCP 適配器。
+.. 當使用 GUI 建立 SVM 時，邏輯介面是這個過程的一部分。
+.. 若要重新命名網路接口，請使用命令 `Network Interface modify`。
+
+
+. link:++https://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-sanag/GUID-BBBAB2E4-E106-4355-B95C-C3626DCD5088.html++["建立 NVMe 命名空間和子系統"]
+
+
+
+
+== VMware vSphere 任務
+
+. 驗證 HBA 驅動程式是否已安裝。  VMware 支援的 HBA 已部署了驅動程序，並且應該在link:++https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-ED20B7BE-0D1C-4BF7-85C9-631D45D96FEC.html++["儲存適配器信息"]
+. link:++https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html++["執行 vSphere Host NVMe 驅動程式安裝和驗證任務"]
+. link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-storage-7-0/working-with-datastores-in-vsphere-storage-environment/creating-vsphere-datastores/create-a-vsphere-vmfs-datastore.html++["建立 VMFS 資料存儲"]
+

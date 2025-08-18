@@ -1,0 +1,74 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-vmsc-mgmt-smas.html 
+keywords: netapp, vmware, cloud, foundation, vcf, asa, all-flash, array, ontap tools, otv, sddc, iscsi 
+summary:  
+---
+= 使用SnapMirror Active Sync 為 VCF 管理網域配置延伸集群
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在此用例中，我們概述了使用ONTAP tools for VMware vSphere為 VCF 管理域配置延伸叢集的過程。此流程包括部署 vSphere 主機和 vCenter Server、安裝ONTAP工具、使用SnapMirror Active Sync 保護資料儲存庫、將虛擬機器移轉到受保護的資料儲存庫以及配置補充儲存。
+
+image:vmware-vcf-asa-mgmt-stretchcluster-001.png["單一實例 - 多可用區域"]
+
+
+
+== 場景概述
+
+延伸叢集解決方案可以在預設叢集上實現，也可以在 VCF 管理或工作負載域中的附加叢集上實現。主資料儲存和補充資料儲存均支援 FC 上的 VMFS。 iSCSI 上的 VMFS 僅支援補充資料儲存。請參閱IMT以了解具有SnapMirror主動同步的 NVMe-oF 上的 VMFS 支援。
+
+image:vmware-vcf-asa-mgmt-stretchcluster-002.png["使用ONTAP為 VCF 管理域延伸集群"]
+
+.管理域上的主體存儲
+[%collapsible%open]
+====
+從 VCF 5.2 開始，可以使用 VCF 導入工具在沒有 VSAN 的情況下部署管理域。  VCF 導入工具的轉換選項允許link:vmw-vcf-mgmt-fc.html["將現有 vCenter 部署到管理域中"]。  vCenter 中的所有叢集都將成為管理域的一部分。
+
+. 部署 vSphere 主機
+. 在本機資料儲存上部署 vCenter 伺服器（vCenter 需要與將轉換為管理網域的 vSphere 主機共存）
+. ONTAP tools for VMware vSphere
+. 為 VMware vSphere 部署SnapCenter插件（選用）
+. 建立資料儲存（FC 區域配置應該到位）
+. 保護 vSphere 群集
+. 將虛擬機器遷移到新建立的資料存儲
+
+
+
+NOTE: 每當叢集擴展或縮小時，都需要更新叢集的ONTAP工具上的主機叢集關係，以指示對來源或目標所做的變更。
+
+====
+.管理域上的補充存儲
+[%collapsible%open]
+====
+一旦管理網域啟動並執行，就可以使用ONTAP工具建立額外的資料儲存庫，這將觸發一致性群組擴充功能。
+
+
+TIP: 如果 vSphere 叢集受到保護，則叢集中的所有資料儲存都將受到保護。
+
+如果使用 Cloud Builder 工具部署 VCF 環境，若要使用 iSCSI 建立補充存儲，請部署ONTAP工具來建立 iSCSI 資料儲存並保護 vSphere 叢集。
+
+
+NOTE: 每當叢集擴展或縮小時，都需要更新叢集的ONTAP工具上的主機叢集關係，以指示對來源或目標所做的變更。
+
+====
+
+
+== 附加資訊
+
+有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
+
+有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware Cloud Foundation 5.2 文檔"]。
+
+
+
+== 此解決方案的視訊演示
+
+.使用ONTAP工具為 VCF 擴展集群
+video::569a91a9-2679-4414-b6dc-b25d00ff0c5a[panopto,width=360]

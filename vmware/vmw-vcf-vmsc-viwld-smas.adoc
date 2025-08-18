@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-vmsc-viwld-smas.html 
+keywords: netapp, vmware, cloud, foundation, vcf, asa, all-flash, array, ontap tools, otv, sddc, iscsi 
+summary:  
+---
+= 使用SnapMirror Active Sync 為 VI 工作負載域配置延伸集群
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在此用例中，我們概述了使用SnapMirror Active Sync 和適用於ONTAP tools for VMware vSphere虛擬基礎架構 (VI) 工作負載域配置延伸叢集的過程。此程序包括在光纖通道上使用 VMFS 建立 VCF 工作負載域、使用ONTAP工具註冊 vCenter、註冊儲存系統以及保護 vSphere 叢集。
+
+image:vmware-vcf-asa-mgmt-stretchcluster-001.png["單一實例 - 多可用區域"]
+
+
+
+== 場景概述
+
+可以使用SnapMirror主動同步保護 VCF 工作負載域上的資料存儲，以提供延伸叢集解決方案。此保護在 vSphere 叢集層級啟用，且叢集中的所有ONTAP區塊資料儲存都將受到保護。
+
+.工作負載域上的主存儲
+[%collapsible%open]
+====
+可以使用 VCF 匯入工具匯入來建立工作負載域，也可以使用 SDDC 管理器部署工作負載域。使用 SDDC 管理器進行部署將比導入現有環境提供更多的網路選項。
+
+. 在 FC 上使用 VMFS 建立工作負載域
+. link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-vcenter.html["將工作負載域 vCenter 註冊到ONTAP工具管理器以部署 vCenter 插件"]
+. link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["在ONTAP工具上註冊儲存系統"]
+. link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/protect-cluster.html["保護 vSphere 群集"]
+
+
+
+NOTE: 每當叢集擴展或縮小時，都需要更新叢集的ONTAP工具上的主機叢集關係，以指示對來源或目標所做的變更。
+
+====
+.工作負載域上的補充存儲
+[%collapsible%open]
+====
+一旦工作負載域啟動並運行，就可以使用ONTAP工具建立額外的資料存儲，這將觸發一致性組擴展。
+
+
+TIP: 如果 vSphere 叢集受到保護，則叢集中的所有資料儲存都將受到保護。
+
+====
+
+
+== 附加資訊
+
+有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
+
+有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf.html["VMware 雲端基礎文檔"]。
+
+
+
+== 此解決方案的視訊演示
+
+.使用ONTAP工具為 VCF 擴展集群
+video::569a91a9-2679-4414-b6dc-b25d00ff0c5a[panopto,width=360]
