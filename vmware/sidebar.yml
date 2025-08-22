@@ -41,6 +41,10 @@ entries:
   entries:
   - title: 關於 VMware Cloud Foundation 和ONTAP
     url: "/vmware/vmw-vcf-overview.html"
+  - title: 採用ONTAP 的VCF 9 設計選項
+    url: "/vmware/vmw-vcf-design.html"
+  - title: 使用ONTAP部署 VCF 9
+    url: "/vmware/vmw-vcf-deployment.html"
   - title: 將現有 vSphere 叢集轉換為 VCF
     entries:
     - title: 關於將現有 vSphere 群集轉換為 VCF
