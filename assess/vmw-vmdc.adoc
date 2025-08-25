@@ -192,7 +192,7 @@ image:vmdc-017.png["此圖顯示輸入/輸出對話框或表示書面內容"]
 
 隨著即將發生的授權變更，各組織正在積極應對總體擁有成本 (TCO) 的潛在增加。他們透過積極的資源管理和適當的規模策略性地優化其 VMware 基礎架構，以提高資源利用率並簡化容量規劃。透過有效使用專門的工具，組織可以有效地識別和回收浪費的資源，從而減少核心數量和整體授權費用。  VMDC 提供快速收集可切片的 VM 資料的能力，以報告和最佳化現有環境。
 
-使用 VMDC 進行快速評估以找出未充分利用的資源，然後使用NetAppData Infrastructure Insights(DII) 為 VM 回收提供詳細的分析和建議。這使客戶能夠了解部署和配置NetAppData Infrastructure Insights(DII) 時的潛在成本節約和最佳化。 NetAppData Infrastructure Insights(DII) 可以幫助企業就優化其 VM 環境做出明智的決策。它可以確定哪些地方可以回收資源或哪些地方可以退役主機，對生產的影響最小，從而幫助企業以深思熟慮、策略性的方式應對博通收購 VMware 帶來的變化。換句話說，VMDC 和 DII 作為一種詳細的分析機制，可幫助企業在決策中擺脫情緒因素的影響。他們不必驚慌或沮喪地應對變化，而是可以利用這兩種工具提供的見解來做出合理的策略決策，在成本優化與營運效率和生產力之間取得平衡。
+使用 VMDC 進行快速評估以找出未充分利用的資源，然後使用NetAppData Infrastructure Insights(DII) 為 VM 回收提供詳細的分析和建議。這使客戶能夠了解部署和配置NetAppData Infrastructure Insights(DII) 時的潛在成本節約和最佳化。NetAppData Infrastructure Insights(DII) 可以幫助企業就優化其 VM 環境做出明智的決策。它可以確定哪些地方可以回收資源或哪些地方可以退役主機，對生產的影響最小，從而幫助企業以深思熟慮、策略性的方式應對 Broadcom 收購 VMware 帶來的變化。換句話說，VMDC 和 DII 作為一種詳細的分析機制，可幫助企業在決策中擺脫情緒因素的影響。他們不必驚慌或沮喪地應對變化，而是可以利用這兩種工具提供的見解來做出合理的策略決策，在成本優化與營運效率和生產力之間取得平衡。
 
 透過NetApp，您可以適當調整虛擬化環境的規模，並引入經濟高效的快閃儲存效能以及簡化的資料管理和勒索軟體解決方案，以確保組織為新的訂閱模式做好準備，同時優化現有的 IT 資源。
 
@@ -202,4 +202,4 @@ image:vmdc-018.png["此圖顯示輸入/輸出對話框或表示書面內容"]
 
 == 後續步驟
 
-下載 VMDC 套件並收集資料並使用link:https://mhcsolengg.com/vmwntaptco/["vSAN TCO 估算器"]方便投影然後使用link:https://docs.netapp.com/us-en/data-infrastructure-insights/task_cloud_insights_onboarding_1.html["直接投資"]不斷提供智能，影響現在和未來的 IT，以確保它能夠適應新的需求。
+下載 VMDC 套件並收集資料並使用link:https://tco.solutions.netapp.com/vmwntaptco/["vSAN TCO 估算器"]方便投影然後使用link:https://docs.netapp.com/us-en/data-infrastructure-insights/task_cloud_insights_onboarding_1.html["直接投資"]不斷提供智能，影響現在和未來的 IT，以確保它能夠適應新的需求。

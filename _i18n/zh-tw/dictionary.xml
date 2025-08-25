@@ -192,7 +192,6 @@
   <block id="3aa8568d7b491636b5161045b0420bf9" category="paragraph">虛擬機器資料收集器 (VMDC) 是一個免費、輕量級、基於簡單 GUI 的 VMware 環境工具包，可讓使用者收集有關其虛擬機器 (VM)、主機、儲存和網路的詳細庫存資訊。</block>
   <block id="51404ce40a1aee88db03fc9457a8a6f5" category="admonition">*這是 VMDC 的預覽版。 *</block>
   <block id="3b878279a04dc47d60932cb294d96259" category="section-title">概況</block>
-  <block id="6c975fe86d9d823de5930a5bb5f5d408" category="paragraph">VMDC 的主要功能是報告 vCenter、ESXi 伺服器以及駐留在 vSphere 環境中的虛擬機器 (VM) 的配置，包括叢集配置、網路、儲存和效能資料。一旦收集到全面的環境數據，就可以利用這些數據來產生有關基礎設施的深刻資訊。報告輸出顯示為電子表格樣式的 GUI，其各個部分有多個選項卡。它提供易於閱讀的報告並有助於優化資源使用和規劃容量。</block>
   <block id="94ad1ae30cf339fc2ec42b97a97e1097" category="inline-link-macro">NetAppData Infrastructure Insights</block>
   <block id="198c11349ad64969391e8716100095b4" category="paragraph">VMDC 只是收集快速即時統計資料的墊腳石，用於預測 VMWare 核心授權以及 vCPU 和 RAM 的最佳化可能性。<block ref="ab300fecc3ded19ec8196356be1888c0" category="inline-link-macro-rx"></block>這需要安裝 AU 和資料收集器，這顯然是理解詳細 VM 拓撲、使用註釋對 VM 進行分組的下一步，以便正確調整工作負載的大小並確保基礎設施的未來發展。</block>
   <block id="6c92285fa6d3e827b198d120ea3ac674" category="inline-link-macro">這裡</block>
@@ -267,12 +266,10 @@
   <block id="2cf91f92dd73b22f90f61440fede6bfd" category="paragraph"><block ref="2cf91f92dd73b22f90f61440fede6bfd" category="inline-image-macro-rx" type="image"></block></block>
   <block id="6f8b794f3246b0c1e1780bb4d4d5dc53" category="section-title">結論</block>
   <block id="053e3bac74ac0f651ba700f73e445666" category="paragraph">隨著即將發生的授權變更，各組織正在積極應對總體擁有成本 (TCO) 的潛在增加。他們透過積極的資源管理和適當的規模策略性地優化其 VMware 基礎架構，以提高資源利用率並簡化容量規劃。透過有效使用專門的工具，組織可以有效地識別和回收浪費的資源，從而減少核心數量和整體授權費用。  VMDC 提供快速收集可切片的 VM 資料的能力，以報告和最佳化現有環境。</block>
-  <block id="054e9b3c2ccececc1451f5e410a479cc" category="paragraph">使用 VMDC 進行快速評估以找出未充分利用的資源，然後使用NetAppData Infrastructure Insights(DII) 為 VM 回收提供詳細的分析和建議。這使客戶能夠了解部署和配置NetAppData Infrastructure Insights(DII) 時的潛在成本節約和最佳化。 NetAppData Infrastructure Insights(DII) 可以幫助企業就優化其 VM 環境做出明智的決策。它可以確定哪些地方可以回收資源或哪些地方可以退役主機，對生產的影響最小，從而幫助企業以深思熟慮、策略性的方式應對博通收購 VMware 帶來的變化。換句話說，VMDC 和 DII 作為一種詳細的分析機制，可幫助企業在決策中擺脫情緒因素的影響。他們不必驚慌或沮喪地應對變化，而是可以利用這兩種工具提供的見解來做出合理的策略決策，在成本優化與營運效率和生產力之間取得平衡。</block>
   <block id="daeeee3b4d7cf28d3e75a6bd9dc0d0fc" category="paragraph">透過NetApp，您可以適當調整虛擬化環境的規模，並引入經濟高效的快閃儲存效能以及簡化的資料管理和勒索軟體解決方案，以確保組織為新的訂閱模式做好準備，同時優化現有的 IT 資源。</block>
   <block id="09629d953b35a882c56710848803a676" category="paragraph"><block ref="09629d953b35a882c56710848803a676" category="inline-image-macro-rx" type="image"></block></block>
   <block id="2934a6ffd8e25f7c2f2e9c5b13787cac" category="inline-link-macro">vSAN TCO 估算器</block>
   <block id="911a18fdbb1ef8e4cfc48e8b2ac18561" category="inline-link-macro">直接投資</block>
-  <block id="a1db154d784f0498b3fcbc7df03d0417" category="paragraph">下載 VMDC 套件並收集資料並使用<block ref="8b8dd88331ec48e68fc93111fdd4fa04" category="inline-link-macro-rx"></block>方便投影然後使用<block ref="f17088cac6f7d4dbeb71411d15c29a3d" category="inline-link-macro-rx"></block>不斷提供智能，影響現在和未來的 IT，以確保它能夠適應新的需求。</block>
   <block id="9582ace4b7d1c17255bc81f1b72cd943" category="summary">閱讀博客，了解有關將ONTAP儲存與NetApp虛擬化解決方案整合的實用指導和最佳實踐。</block>
   <block id="d96f5d7ed73895d182fe448a5d0ae1f3" category="doc">閱讀NetApp專家的虛擬化解決方案博客</block>
   <block id="95e5ff389c2796a171f904ad5b9322f6" category="list-text">NetApp和 VMware 雲端基金會 (VCF)</block>
@@ -7431,4 +7428,8 @@
   <block id="90334da6700cfe14e0c9acaf46941f69" category="sidebar">採用ONTAP 的VCF 9 設計選項</block>
   <block id="e259ef393201a8984594fdd1c6f93d51" category="sidebar">使用ONTAP部署 VCF 9</block>
   <block id="0eec06466a06793fe3f003b743729087" category="sidebar">帶有BlueXP 的VCF 9 DR</block>
+  <block id="f8acbdad34bfb71afe2fb24304a17fb5" category="paragraph">VMDC 的主要功能是報告 vCenter、ESXi 伺服器以及駐留在 vSphere 環境中的虛擬機器 (VM) 的配置，包括叢集配置、網路、儲存和效能資料。一旦收集到全面的環境數據，就可以利用這些數據來產生有關基礎設施的深刻資訊。報告輸出顯示為電子表格樣式的 GUI，其各個部分有多個選項卡。它提供易於閱讀的報告並有助於優化資源使用和規劃容量。</block>
+  <block id="f04d223e3a2e34e08719285cb2c36cc5" category="paragraph">使用 VMDC 進行快速評估以找出未充分利用的資源，然後使用NetAppData Infrastructure Insights(DII) 為 VM 回收提供詳細的分析和建議。這使客戶能夠了解部署和配置NetAppData Infrastructure Insights(DII) 時的潛在成本節約和最佳化。NetAppData Infrastructure Insights(DII) 可以幫助企業就優化其 VM 環境做出明智的決策。它可以確定哪些地方可以回收資源或哪些地方可以退役主機，對生產的影響最小，從而幫助企業以深思熟慮、策略性的方式應對 Broadcom 收購 VMware 帶來的變化。換句話說，VMDC 和 DII 作為一種詳細的分析機制，可幫助企業在決策中擺脫情緒因素的影響。他們不必驚慌或沮喪地應對變化，而是可以利用這兩種工具提供的見解來做出合理的策略決策，在成本優化與營運效率和生產力之間取得平衡。</block>
+  <block id="5e406bfc196571a2a424ad95e52b9e13" category="paragraph">透過NetApp，您可以適當調整虛擬化環境的規模，並引入經濟高效的快閃儲存效能以及簡化的資料管理和勒索軟體解決方案，以確保組織為新的訂閱模式做好準備，同時優化現有的 IT 資源。</block>
+  <block id="59fc14373d85269b06b27bed407eef66" category="paragraph">下載 VMDC 套件並收集資料並使用<block ref="f87d68376749f3a505ead27b1818548d" category="inline-link-macro-rx"></block>方便投影然後使用<block ref="f17088cac6f7d4dbeb71411d15c29a3d" category="inline-link-macro-rx"></block>不斷提供智能，影響現在和未來的 IT，以確保它能夠適應新的需求。</block>
 </blocks>
