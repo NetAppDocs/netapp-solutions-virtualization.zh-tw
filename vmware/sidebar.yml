@@ -30,6 +30,8 @@ entries:
       url: "/vmware/vmw-getting-started-vmsc.html"
     - title: 使用ONTAP進行安全和勒索軟體防護
       url: "/vmware/vmw-getting-started-security.html"
+    - title: 針對 NFS 和 VMFS 的勒索軟體防護
+      url: "/vmware/vmw-arp-nfs-vmfs.html"
   - title: 備份和災難復原解決方案
     entries:
     - title: SnapCenter Plug-in for VMware vSphere
@@ -45,6 +47,8 @@ entries:
     url: "/vmware/vmw-vcf-design.html"
   - title: 使用ONTAP部署 VCF 9
     url: "/vmware/vmw-vcf-deployment.html"
+  - title: 帶有BlueXP 的VCF 9 DR
+    url: "/vmware/vmw-vcf-dr-bxp-nfs.html"
   - title: 將現有 vSphere 叢集轉換為 VCF
     entries:
     - title: 關於將現有 vSphere 群集轉換為 VCF

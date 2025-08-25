@@ -72,7 +72,7 @@ NetApp建議對 FC LUN 使用多路徑。
 
 * link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/ontap-tools-deployment.html["在管理域上部署ONTAP工具"]
 * link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["使用 vSphere 用戶端介面定義儲存後端"]
-* link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-vvols-datastore.html["在 FC 上配置 VMFS"]
+* link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["在 FC 上配置 VMFS"]
 
 
 

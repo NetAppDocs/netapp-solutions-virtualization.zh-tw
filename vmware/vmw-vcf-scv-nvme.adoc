@@ -56,7 +56,7 @@ SCV 是一個強大的工具，旨在為 VMware 環境中的虛擬機器、資�
 * 一對一關係：每個 VCF 域都需要一個專用的 SCV 實例，以確保隔離且有效率的備份和復原作業。
 
 
-在ONTAP 9.10.1 及更高版本中， NetApp AFF和ASA支援 NVMe over TCP。位於AFF或ASA主系統上並可複製到ONTAP AFF或ASA輔助系統的資料。 SCV 也與SnapCenter Server 搭配使用，支援 VMware 環境中針對SnapCenter應用程式特定外掛程式的基於應用程式的備份和復原作業。欲了解更多信息，請查看link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/index.html["SnapCenter Plug-in for VMware vSphere文檔"]和link:https://docs.netapp.com/us-en/netapp-solutions/vmware/vmware_vcf_aff_multi_wkld_scv.html#audience["SnapCenter Plug-in for VMware vSphere文件以及使用NetApp SnapCenter for VMWare vSphere (SCV) 保護 VCF 管理網域和多個工作負載網域。"]
+在ONTAP 9.10.1 及更高版本中， NetApp AFF和ASA支援 NVMe over TCP。位於AFF或ASA主系統上並可複製到ONTAP AFF或ASA輔助系統的資料。SCV 也與SnapCenter Server 搭配使用，支援 VMware 環境中針對SnapCenter應用程式特定外掛程式的基於應用程式的備份和復原作業。欲了解更多信息，請查看link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/index.html["SnapCenter Plug-in for VMware vSphere文檔"]和link:vmw-vcf-protect-sc.html["使用SnapCenter保護工作負載"]
 
 image:vmware-vcf-aff-050.png["具有 SCV 的 VCF 多重工作負載域"]
 
@@ -68,8 +68,8 @@ image:vmware-vcf-aff-050.png["具有 SCV 的 VCF 多重工作負載域"]
 
 這link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere/index.html["ONTAP tools for VMware vSphere"]（OTV）為在 VMware 環境中管理NetApp儲存提供了強大且高效的解決方案。透過與 vCenter Server 直接集成，OTV 簡化了儲存管理、增強了資料保護並優化了效能。雖然是可選的，但部署 OTV 可以顯著提高 VMware 環境的管理能力和整體效率。
 
-* link:https://docs.netapp.com/us-en/netapp-solutions/vmware/vmware_vcf_asa_supp_wkld_nvme.html#scenario-overview["為 VCF 工作負載域建立 NVMe/TCP 存儲"]
-* link:https://docs.netapp.com/us-en/netapp-solutions/vmware/vmware_vcf_aff_multi_wkld_scv.html#architecture-overview["為 VMware vSphere (SCV) 設定NetApp SnapCenter"]
+* link:vmw-vcf-viwld-supp-nvme.html["為 VCF 工作負載域建立 NVMe/TCP 存儲"]
+* link:vmw-vcf-scv-nvme.html["為 VMware vSphere (SCV) 設定NetApp SnapCenter"]
 
 
 .恢復虛擬機器、資料儲存、虛擬磁碟和檔案或資料夾

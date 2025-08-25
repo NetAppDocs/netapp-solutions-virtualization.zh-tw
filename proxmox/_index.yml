@@ -19,4 +19,4 @@ indexpage:
     - title: 備份和恢復 Proxmox VE
       url: https://pve.proxmox.com/pve-docs/chapter-vzdump.html
     - title: Proxmox VE 的存儲
-      url: https://pve.proxmox.com/pve-docs/chapter-storage.html
+      url: https://pve.proxmox.com/pve-docs/chapter-pvesm.html

@@ -1,0 +1,126 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-arp-nfs-vmfs.html 
+keywords: netapp, vmware, cloud, foundation, vcf, flexpod 
+summary: 針對 NFS 和 VMFS 資料儲存的自主勒索軟體防護 
+---
+= 自主防禦 NFS 和 VMFS 勒索軟體
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解NetApp ONTAP 的自主勒索軟體防護 (ARP) 如何使用機器學習來保護 VMware 環境中的 NFS 和 VMFS 資料存儲，提供早期威脅檢測、防篡改快照和快速恢復，以增強虛擬化和雲端工作負載的資料彈性。
+
+
+
+== 概況
+
+勒索軟體威脅正在迅速演變，變得更加複雜和破壞性。傳統的安全措施往往無法保護關鍵資料資產。 NetApp ONTAP儲存提供內建安全功能，可主動保護資料。如果發生安全漏洞， ONTAP會提供即時警報和快速復原選項，以減少停機時間並限制資料遺失。  ONTAP使客戶能夠保護、恢復和移動其資料和應用程序，從而增強勒索軟體的抵禦能力。
+
+
+
+== 使用案例 – 保護 VMware 虛擬機器及其文件
+
+在 VMware 環境中儘早偵測勒索軟體對於阻止其傳播和最大限度地減少停機時間至關重要。有效的策略是在 ESXi 主機和客戶虛擬機器之間使用多層保護。雖然許多安全控制措施有助於建立強大的防禦，但NetApp ONTAP增加了必要的儲存等級保護措施，進一步加強了保護。
+
+ONTAP 的主要功能包括用於時間點復原的快照技術、由內建機器學習提供支援的自主勒索軟體保護 (ARP)、多重管理員驗證和可保持資料完整性的防篡改快照。這些功能協同作用，增強了勒索軟體的抵禦能力，並在需要時快速恢復。
+
+保護 vSphere 環境和客戶虛擬機器需要採取全面的方法。關鍵措施包括網路分段、部署 EDR/XDR/SIEM 解決方案進行端點監控、及時應用安全更新以及遵循既定的強化指南。每個虛擬機器通常都會執行一個標準作業系統，因此作為多層勒索軟體防禦策略的一部分，安裝和定期更新企業級反惡意軟體解決方案至關重要。
+
+
+
+== ONTAP如何提供協助
+
+ONTAP透過多層防禦加強資料保護。主要功能包括快照、自主勒索軟體保護 (ARP)、防篡改快照、多重管理員驗證等。本文檔重點介紹 9.17.1 版本中引入的 ARP 增強功能。
+
+您可以在支援 VMware 資料儲存區的 NAS 或 SAN 磁碟區上啟用 ARP。 ARP 使用 ONTAP 的內建機器學習來監控工作負載模式和資料熵，自動偵測勒索軟體活動的跡象，並提供智慧、主動的安全層。使用 ONTAP 的 CLI 或系統管理器介面配置每個磁碟區的 ARP。
+
+
+
+== ARP特性演進
+
+從ONTAP版本 9.10.1 開始，ARP 可用於現有磁碟區或新磁碟區。在ONTAP版本 9.16.1 中，您可以使用系統管理員或 CLI 啟用 ARP。 ARP/AI 保護立即生效，無需學習期。在 9.17.1 版本中，ARP 支援 SAN 磁碟區。當您在 SAN 磁碟區上啟用 ARP 時，ARP/AI 會在評估期間持續監控數據，以確定工作負載的適用性並設定最佳偵測加密閾值。
+
+ARP 內建於ONTAP中，提供與其他ONTAP功能的整合控制和協調。 ARP 即時運作，在寫入或讀取資料時進行處理，並快速偵測和回應潛在的勒索軟體攻擊。它會定期建立鎖定快照以及預定的快照，並在未偵測到異常時透過回收快照來智慧地管理快照保留。如果 ARP 偵測到可疑活動，它會將攻擊前拍攝的快照保存較長時間，以確保可靠的復原點。
+
+有關詳細信息，請參閱link:https://docs.netapp.com/us-en/ontap/anti-ransomware/#what-arp-detects["ARP 偵測到什麼"]。
+
+
+NOTE: ONTAP ONE 授權包含 ARP 支援。
+
+
+
+== 在 NAS 磁碟區上配置 ARP 並模擬對 VM 的攻擊
+
+了解如何在用於 VMware 資料儲存區的 NAS 和 SAN 磁碟區上啟用NetApp ONTAP自主勒索軟體防護 (ARP)，並模擬勒索軟體攻擊以了解 ARP 如何偵測威脅並促進快速復原。
+
+當使用系統管理員或 CLI 在 NAS 磁碟區上啟用 ARP 時，ARP/AI 保護將立即啟用並處於作用中狀態。無需學習期。
+
+image::vmw-arp-nfs-vmfs-001.png[主動模式下啟用反勒索軟體]
+
+在此範例中，使用腳本修改檔案或透過修改檔案副檔名來觸發模擬，以模擬駐留在作為資料儲存附加到 vCenter 的 NFS 磁碟區上的 VM 內的攻擊。
+
+image::vmw-arp-nfs-vmfs-002.png[加密檔案]
+
+如下所示，ARP偵測到了異常活動。
+
+image::vmw-arp-nfs-vmfs-003.png[例外活動]
+
+ARP 可提前偵測到攻擊，並能夠從接近攻擊時間的快照中復原資料。若要回滾，請使用事件觸發先前產生的 ARP 定期快照。下面的螢幕截圖顯示了創建的快照：
+
+image::vmw-arp-nfs-vmfs-004.png[快照已建立]
+
+有關在用作資料儲存的 NFS 磁碟區上啟用 ARP 並在發生攻擊時復原的詳細指導，請參閱link:https://docs.netapp.com/us-en/netapp-solutions-virtualization/vmware/vmw-nfs-arp.html["NFS 儲存的 ARP"]。
+
+
+
+== 在 SAN 磁碟區上配置 ARP 並模擬對 VM 的攻擊
+
+當在 SAN 磁碟區上啟用 ARP 時，它會從評估階段開始，類似於 NAS 環境中使用的學習模式，然後自動轉換為主動偵測。
+
+image::vmw-arp-nfs-vmfs-005.png[SAN主動模式]
+
+ARP 啟動為期兩到四週的評估期，閾值為 75%，以建立加密行為的基線。可以使用以下方式監控此階段的進度 `security anti-ransomware volume show`透過檢查*區塊設備偵測狀態*指令。評估完成後，*Active_suitable_workload* 狀態確認觀察到的熵水準適合持續監控。根據收集的數據，ARP 會自動調整其自適應閾值，以確保準確、靈敏的威脅偵測。根據需求，快照建立間隔可以從預設的 4 小時變更為 1 小時。請謹慎執行此修改。
+
+從ONTAP 9.17.1 開始，NAS 和 SAN 磁碟區都會定期產生 ARP 快照。 ONTAP
+
+image::vmw-arp-nfs-vmfs-006.png[SAN AI 工作流程]
+
+有關詳細信息，請參閱link:https://docs.netapp.com/us-en/ontap/anti-ransomware/#san-environments-and-mode-types["SAN 環境和模式類型"]
+
+現在是模擬攻擊的時候了。為了示範目的，檔案在基於 ISCSI 的資料儲存體上執行的虛擬機器內進行加密。生成的檔案接近 7000 個，不幸的是，這些檔案受到了勒索軟體攻擊的影響。
+
+image::vmw-arp-nfs-vmfs-007.png[來賓虛擬機器文件加密]
+
+在 10 分鐘內，根據高熵資料偵測到磁碟區上的異常活動，並且 ARP 產生威脅警報，因為它偵測到 VM 內部的熵異常。
+
+image::vmw-arp-nfs-vmfs-008.png[系統管理員 - 磁碟區安全]
+
+
+
+== 勒索軟體攻擊後恢復虛擬機器及其數據
+
+根據上述步驟確認攻擊後，使用其中一個 ARP 快照或磁碟區的另一個快照來還原資料。
+
+image::vmw-arp-nfs-vmfs-009.png[系統管理員 - 磁碟區快照]
+
+一旦恢復，文件就全部恢復了。
+
+image::vmw-arp-nfs-vmfs-010.png[來賓虛擬機器文件]
+
+有關詳細指導，請參閱link:https://docs.netapp.com/us-en/ontap/anti-ransomware/recover-data-task.html["勒索軟體攻擊後從 ARP 快照恢復數據"]
+
+
+
+== ONTAP作為 VMware 及其他系統的防禦層
+
+只需點擊幾下，企業就可以無縫增強其資料保護策略。 ONTAP採用基於機器學習的先進偵測機制，在 VMware 環境中引入了強大的防禦層。這種智慧保護不僅可提前識別威脅，還可協助在威脅升級之前減輕潛在損害。
+
+此用例不僅適用於 VMware。您可以將相同的原則擴展到任何基於 NAS 或 SAN 的應用程序，以建立多層安全架構。攻擊者被迫穿越多個強化層，大大降低了成功入侵的風險。
+
+ONTAP不僅保護數據，它還能幫助組織在不斷演變的威脅面前保持彈性。

@@ -82,7 +82,7 @@ NOTE: NetApp建議對 FC LUN 使用多路徑。
 
 === 管理域 - 附加集群
 
-管理網域上的附加 vSphere 叢集可以透過下列選項進行部署：* 在 vSphere 環境中擁有附加集群，並使用 VCF 棕地匯入工具將 vSphere 環境轉換為管理網域。 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-vvols-datastore.html["ONTAP tools for VMware vSphere"] ， https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]可用於將 VMFS 資料儲存部署到 vSphere 叢集。  * 使用 SDDC API 部署額外的叢集。 vSphere 主機應該配置 VMFS 資料儲存。使用 https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]將 LUN 部署到 vSphere 主機。 * 使用 SDDC Manager UI 部署額外的叢集。但此選項僅建立 VSAN 資料儲存至 5.2.x 版本。
+管理網域上的附加 vSphere 叢集可以透過下列選項進行部署：* 在 vSphere 環境中擁有附加集群，並使用 VCF 棕地匯入工具將 vSphere 環境轉換為管理網域。 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["ONTAP tools for VMware vSphere"] ， https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]可用於將 VMFS 資料儲存部署到 vSphere 叢集。* 使用 SDDC API 部署額外的叢集。vSphere 主機應該配置 VMFS 資料儲存。使用 https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]將 LUN 部署到 vSphere 主機。* 使用 SDDC Manager UI 部署額外的叢集。但此選項僅建立 VSAN 資料儲存至 5.2.x 版本。
 
 
 
