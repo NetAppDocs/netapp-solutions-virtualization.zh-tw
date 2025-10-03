@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-viwld-supp-nvme-requirements.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
+summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 NVMe vVols ，您需要一個完全設定的ONTAP AFF或ASA儲存系統、一個完整的 VCF 管理網域和一個現有的 VI 工作負載域。審查建議的網路設計和基礎設施要求，以確保可靠、高效能的儲存整合。 
+---
+= VI 工作負載域中 NVMe vVols的部署需求
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+查看在 VMware Cloud Foundation VI 工作負載域中部署 NVMe vVols 的建議網路設計和基礎架構要求。您需要一個完全設定的ONTAP AFF或ASA儲存系統、一個已部署的 VCF 管理網域和一個現有的 VI 工作負載域。
+
+
+
+== 基礎設施需求
+
+* ONTAP AFF或ASA儲存系統，其乙太網路交換器上的實體資料連接埠專用於儲存流量。
+* VCF管理網域部署已完成，並且可以存取vSphere客戶端。
+* 之前已部署 VI 工作負載域。
+
+
+
+
+== 建議的 NVMe/TCP 網路設計
+
+NetApp建議對 NVMe/TCP 採用完全冗餘的網路設計。下圖說明了冗餘配置的範例，為儲存系統、交換器、網路適配器和主機系統提供容錯功能。
+
+image:vmware-vcf-asa-074.png["NVMe-tcp網路設計"]
+
+對於跨多路徑的多路徑和故障轉移，請為 NVMe/TCP 配置中的所有 SVM 在單獨的乙太網路中為每個儲存節點配置至少兩個 LIF。
+
+
+
+== 下一步是什麼？
+
+在審查了部署要求之後，link:vmw-vcf-viwld-supp-nvme-svm-lifs.html["建立 SVM 和 LIF"] 。

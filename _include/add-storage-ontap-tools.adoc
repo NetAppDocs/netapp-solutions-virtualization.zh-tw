@@ -1,0 +1,28 @@
+= 
+:allow-uri-read: 
+
+
+.步驟
+. 在 vSphere 用戶端中導覽至主選單並選擇 * NetApp ONTAP工具*。
++
+image:vmware-vcf-asa-014.png["導航到ONTAP工具"]
+
+. 進入 * ONTAP工具* 後，從「入門」頁面（或從 *儲存系統*）按 *新增* 以新增新的儲存系統。
++
+image:vmware-vcf-asa-015.png["新增儲存系統"]
+
++
+{nbsp}
+
+. 提供ONTAP儲存系統的 IP 位址和憑證，然後按一下「新增」。
++
+image:vmware-vcf-asa-016.png["提供ONTAP系統的 IP 和憑證"]
+
++
+{nbsp}
+
+. 按一下「*是*」授權叢集憑證並新增儲存系統。
++
+image:vmware-vcf-asa-017.png["授權集群證書"]
+
+

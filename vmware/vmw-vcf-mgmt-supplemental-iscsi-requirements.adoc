@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-mgmt-supplemental-iscsi-requirements.html 
+keywords: netapp, vmware, cloud, foundation, vcf, iscsi, requirements 
+summary: 查看將 iSCSI 資料儲存作為補充儲存新增至 VCF 管理域的要求。 
+---
+= 將 iSCSI 資料儲存新增至 VCF 管理域的部署需求
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+查看將 iSCSI 資料儲存作為補充儲存新增至 VMware Cloud Foundation (VCF) 管理網域的要求。若要在 VMware Cloud Foundation 管理網域中部署 iSCSI vVols ，您需要一個完全設定的ONTAP AFF或ASA儲存系統和一個已部署的 VCF 管理網域。
+
+
+
+== 基礎設施需求
+
+確保以下組件和配置已到位。
+
+* ONTAP AFF或ASA儲存系統，其乙太網路交換器上的實體資料連接埠專用於儲存流量。
+* VCF管理網域部署已完成，並且可以存取vSphere客戶端。
+
+
+
+
+== 推薦的 iSCSI 網路設計
+
+您應該為 iSCSI 配置完全冗餘的網路設計。下圖顯示了冗餘配置的範例，為儲存系統、交換器、網路適配器和主機系統提供容錯功能。請參閱NetApplink:https://docs.netapp.com/us-en/ontap/san-config/index.html["SAN 配置參考"]了解更多。
+
+image:vmware-vcf-asa-074.png["iSCSI網路設計"]{nbsp}
+
+對於跨多路徑的多路徑和故障轉移，請在單獨的乙太網路中為 iSCSI 配置中的所有 SVM 每個儲存節點建立至少兩個 LIF。
+
+
+TIP: 在同一 IP 網路上配置多個 VMkernel 適配器的情況下，建議在 ESXi 主機上使用軟體 iSCSI 連接埠綁定，以確保跨適配器實現負載平衡。請參閱知識庫文章link:https://knowledge.broadcom.com/external/article?legacyId=2038869["在 ESX/ESXi 中使用軟體 iSCSI 連接埠綁定的注意事項"^]。
+
+
+
+== 下一步是什麼？
+
+在審查了部署要求之後，link:vmw-vcf-mgmt-supplemental-iscsi-svm-lifs.html["建立 SVM 和 LIF"] 。

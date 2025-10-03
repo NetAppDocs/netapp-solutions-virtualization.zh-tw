@@ -24,6 +24,8 @@ keywords: vmware, vsphere, vcf, tanzu, snapcenter, ontap tools, videos, demos
 video::e8071955-f6f1-45a0-a868-b12a010bba44[panopto]
 .使用ONTAP配置 VMware iSCSI 資料存儲
 video::5c047271-aecc-437c-a444-b01200f9671a[panopto]
+.VMFS（FC）資料儲存作為VCF管理域的補充存儲
+video::3135c36f-3a13-4c95-aac9-b2a0001816dc[panopto,width=360]
 .使用ONTAP配置 VMware NFS 資料儲存庫
 video::a34bcd1c-3aaa-4917-9a5d-b01200f97f08[panopto]
 

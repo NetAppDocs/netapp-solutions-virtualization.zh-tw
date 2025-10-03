@@ -38,15 +38,17 @@ indexpage:
       url: osv-workflow-vm-migration-mtv.html
     - title: 在兩個叢集節點之間遷移虛擬機
       url: osv-workflow-vm-live-migration.html
-  - title: 使用Trident Protect 保護數據
+  - title: 使用Trident和Trident Protect 保護虛擬機
     links:
     - title: 安裝Trident
       url: osv-trident-install.html
+    - title: 使用磁碟區組快照保護虛擬機
+      url: osv-vm-dp-using-vgs.html
     - title: 使用快照和備份保護虛擬機
       url: osv-vm-dp-using-tp.html
     - title: 設定故障轉移和故障回复
       url: osv-vm-dr-using-tp.html
-  - title: 使用第三方工具保護數據
+  - title: 使用第三方工具保護虛擬機
     links:
     - title: 使用 OADP 和 Velero 保護虛擬機
       url: osv-vm-dp-using-velero-overview.html

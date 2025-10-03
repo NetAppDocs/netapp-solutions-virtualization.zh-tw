@@ -1,0 +1,36 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols-svm-lifs.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
+summary: '在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 (LIF)，以支援 VMware Cloud Foundation VI 工作負載域中vVols資料儲存區的 NFS 流量。' 
+---
+= 為 VCF VI 工作負載域中的 NFS vVols資料儲存建立 SVM 和 LIF
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 (LIF)，以支援 VMware Cloud Foundation VI 工作負載域中vVols資料儲存區的 NFS 流量。
+
+若要為現有 SVM 新增新的 LIF，請參閱ONTAP文件：link:https://docs.netapp.com/us-en/ontap/networking/create_a_lif.html["創建ONTAP LIF"^] 。
+
+.步驟
+. 在ONTAP系統管理員中，導覽至左側選單中的 *儲存虛擬機器*，然後按一下 *+ 新增* 開始。
+. 在“新增儲存虛擬機器”精靈中，為 SVM 提供“名稱”，選擇“IP 空間”，然後在“存取協定”下按一下“SMB/CIFS、NFS、S3”標籤並選取“啟用 NFS”複選框。
++
+
+TIP: 您不需要選取「允許 NFS 用戶端存取」複選框。  ONTAP tools for VMware vSphere將用於自動化資料儲存部署流程，其中包括為 ESXi 主機提供用戶端存取。
+
+. 在 *網路介面* 部分中，填寫第一個 LIF 的 *IP 位址*、*子網路遮罩* 和 *廣播域和連接埠*。對於後續 LIF，您可以使用單獨的設置，也可以啟用複選框以在所有剩餘 LIF 中使用通用設定。
+. 選擇是否啟用儲存虛擬機器管理帳戶（適用於多租用戶環境），然後按一下「*儲存*」以建立 SVM。
+
+
+
+
+== 下一步是什麼？
+
+建立 SVM 和 LIF 後，link:vmw-vcf-viwld-supp-nfs-vvols-network.html["在 ESXi 主機上設定 NFS 網路"] 。

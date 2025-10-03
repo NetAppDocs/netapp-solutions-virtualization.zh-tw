@@ -1,0 +1,57 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-viwld-supp-iscsi-vvols-svm-lifs.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
+summary: '在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 (LIF)，以支援 VMware Cloud Foundation VI 工作負載域中vVols資料儲存區的 iSCSI 流量。您將新增一個新的 SVM，啟用 iSCSI，設定 LIF，並選擇性地啟用儲存 VM 管理帳戶。' 
+---
+= 為 VCF VI 工作負載域中的 iSCSI vVols資料儲存建立 SVM 和 LIF
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 (LIF)，以支援 VMware Cloud Foundation VI 工作負載域中vVols資料儲存區的 iSCSI 流量。您將新增一個新的 SVM，啟用 iSCSI，設定 LIF，並選擇性地啟用儲存 VM 管理帳戶。
+
+若要為現有 SVM 新增新的 LIF，請參閱ONTAP文件：link:https://docs.netapp.com/us-en/ontap/networking/create_a_lif.html["創建ONTAP LIF"^] 。
+
+.步驟
+. 從ONTAP系統管理員導覽到左側選單中的 *儲存虛擬機器*，然後按一下 *+ 新增* 開始。
++
+image:vmware-vcf-asa-001.png["點擊“+新增”開始建立 SVM"]
+
++
+{nbsp}
+
+. 在“新增儲存虛擬機器”精靈中，為 SVM 提供“名稱”，選擇“IP 空間”，然後在“存取協定”下按一下“iSCSI”標籤並選取“啟用 iSCSI”複選框。
++
+image:vmware-vcf-asa-002.png["新增儲存虛擬機器精靈 - 啟用 iSCSI"]
+
++
+{nbsp}
+
+. 在 *網路介面* 部分填寫第一個 LIF 的 *IP 位址*、*子網路遮罩* 和 *廣播域和連接埠*。對於後續 LIF，您可以使用單獨的設置，也可以啟用複選框以在所有剩餘 LIF 中使用通用設定。
++
+
+NOTE: 對於跨多路徑的多路徑和故障轉移，請在單獨的乙太網路中為 iSCSI 配置中的所有 SVM 每個儲存節點建立至少兩個 LIF。
+
++
+image:vmware-vcf-asa-003.png["填寫 LIF 的網路訊息"]
+
++
+{nbsp}
+
+. 選擇是否啟用儲存虛擬機器管理帳戶（適用於多租用戶環境），然後按一下「*儲存*」以建立 SVM。
++
+image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
+
+
+
+
+
+== 下一步是什麼？
+
+建立 SVM 和 LIF 後，link:vmw-vcf-viwld-supp-iscsi-vvols-network.html["在 ESXi 主機上設定 iSCSI 網路"] 。

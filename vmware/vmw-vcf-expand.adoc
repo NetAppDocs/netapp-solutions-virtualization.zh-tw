@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-expand.html 
 keywords: vmware, vcf, expand, supplemental, storage 
-summary:  
+summary: 'VMware Cloud Foundation (VCF) 支援多種補充儲存選項，以擴充 VCF 管理域和虛擬基礎架構 (VI) 工作負載域上的儲存。' 
 ---
 = 了解如何使用補充存儲擴展 VCF 環境的存儲
 :hardbreaks:
@@ -16,9 +16,68 @@ summary:
 [role="lead"]
 VMware Cloud Foundation (VCF) 支援多種補充儲存選項，以擴充 VCF 管理域和虛擬基礎架構 (VI) 工作負載域上的儲存。
 
-NetApp 的ONTAP Tools for VMware vSphere 透過將NetApp儲存量無縫整合到 VCF 環境中，為此擴充功能提供了有效的解決方案。  ONTAP工具簡化了資料儲存庫的設定和管理，讓管理員可以直接從 vSphere Client 配置和管理儲存。  ONTAP 的快照、複製和資料保護等進階功能，可增強 VCF 環境內的儲存效能、效率和可擴充性。
+NetApp 的ONTAP tools for VMware vSphere透過將NetApp儲存無縫整合到 VCF 環境中，為此擴充提供了有效的解決方案。
 
-有關擴展 VCF 環境的技術細節，請參考以下解決方案。
+ONTAP工具簡化了資料儲存區的設定和管理，讓管理員可以直接從 vSphere Client 配置和管理儲存。  ONTAP 的進階功能（例如快照、複製和資料保護）可增強 VCF 環境內的儲存效能、效率和可擴充性。
+
+
+
+== 擴充儲存支援的協議
+
+VCF 環境可以使用多種儲存協定進行擴展，每種協定都提供獨特的優勢和用例。
+
+您可以使用下列協定擴充 VCF 管理域和 VI 工作負載域中的儲存。選擇最適合您環境的選項，將補充儲存無縫整合到您的 VCF 部署中。
+
+.iSCSI
+使用標準乙太網路的基於區塊的協定。非常適合需要高性能、靈活性和經濟高效擴展的環境。
+
+iSCSI 廣泛用於 VMFS 資料存儲，並支援進階ONTAP功能，例如快照和複製。
+
+* *高效能：*提供高效能，以實現快速、高效的資料傳輸速率和低延遲。非常適合要求嚴格的企業應用程式和虛擬化環境。
+* *易於管理：*透過使用熟悉的基於 IP 的工具和協定簡化儲存管理。
+* *成本效益：*使用現有的乙太網路基礎設施，減少對專用硬體的需求，並允許組織實現可靠且可擴展的儲存解決方案。
+
+
+有關將 iSCSI 與NetApp儲存系統結合使用的更多信息，請參閱 https://docs.netapp.com/us-en/ontap/san-admin/san-host-provisioning-concept.html["使用 iSCSI 進行 SAN 配置"]。
+
+.光纖通道（FC）
+使用專用 FC 網路的高速、低延遲協定。對於需要可靠性、專用頻寬和強大糾錯能力的關鍵任務工作負載來說，FC 是首選。它通常用於企業環境中的 VMFS 資料儲存。
+
+* *高效能：* FC 提供高速資料傳輸速率，使其成為需要快速可靠地存取大量資料的應用程式的理想選擇。
+* *低延遲*：非常低的延遲，這對於資料庫和虛擬化環境等效能敏感的應用程式至關重要。
+* *可靠性：*FC 網路以其穩健性和可靠性而聞名，具有內建冗餘和糾錯等功能。
+* *專用頻寬：* FC 為儲存流量提供專用頻寬，降低網路擁塞的風險。
+
+
+有關使用光纖通道與NetApp儲存系統的更多信息，請參閱 https://docs.netapp.com/us-en/ontap/san-admin/san-provisioning-fc-concept.html["使用 FC 進行 SAN 配置"]。
+
+.NFS（網路檔案系統）
+基於文件的協議，可輕鬆實現跨主機的文件共享和管理。  NFS 設定簡單且擴充高效，適用於需要靈活檔案存取的虛擬化工作負載和環境。
+
+ONTAP和 vSphere 支援用於管理網域和工作負載域的 NFS 資料儲存庫。
+
+* *簡單易用：*NFS 設定和管理簡單，使其成為需要快速簡單的文件共享環境的絕佳選擇。
+* *可擴展性*：ONTAP 的架構允許 NFS 有效擴展，從而無需對基礎架構進行重大更改即可支援不斷增長的資料需求。
+* *靈活性*：NFS 支援廣泛的應用程式和工作負載，使其適用於各種用例，包括虛擬化環境。
+
+
+欲了解更多信息，請參閱link:vmw-vvf-overview.html["適用於 vSphere 8 的 NFS v3 參考指南"] 。
+
+.NVMe/TCP
+使用 TCP/IP 透過標準乙太網路提供高效能和低延遲的現代協定。  NVMe/TCP 非常適合要求嚴格的應用程式和大規模資料操作，無需專門的硬體即可提供可擴展性和成本效率。
+
+* *高效能：*以低延遲和高資料傳輸速率提供卓越的效能。這對於要求嚴格的應用程式和大規模資料操作至關重要。
+* *可擴充性：*支援可擴充配置，讓 IT 管理員隨著資料需求的成長無縫擴展其基礎架構。
+* *成本效益：*在標準乙太網路交換器上運作並封裝在 TCP 資料報內。無需特殊設備即可實施。
+
+
+有關 NVMe 優勢的更多信息，請參閱 https://www.netapp.com/data-storage/nvme/what-is-nvme/["什麼是 NVME？"]。
+
+
+
+== 新增補充儲存的用例
+
+以下用例示範如何使用不同的協定和配置為 VCF 管理域和虛擬基礎架構 (VI) 工作負載域新增補充儲存。
 
 * link:vmw-vcf-mgmt-supplemental-iscsi.html["具有 iSCSI 的管理域"]
 * link:vmw-vcf-mgmt-supplemental-fc.html["帶有 FC 的管理域"]

@@ -1,0 +1,337 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-vm-dp-using-vgs.html 
+keywords: OpenShift, OCP, Trident, Trident protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization,Data Protection, Data Management for VMs, VM protection, Volume Group Snapshots 
+summary: 使用Trident磁碟區組快照保護 Red Hat OpenShift 虛擬化中的虛擬機，以確保崩潰一致的備份和快速復原。此程序示範如何使用 Kubernetes 和NetApp ONTAP配置、快照和還原多個 VM 磁碟。 
+---
+= 使用Trident磁碟區組快照保護 Red Hat OpenShift 虛擬化中的虛擬機
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+設定卷組快照以使用Trident 25.06 和NetApp ONTAP儲存保護 Red Hat OpenShift Virtualization 中的虛擬機器。此程序包括安裝具有 iSCSI 支援的Trident 、配置ONTAP後端和儲存類別、建立具有多個持久磁碟的 VM，以及實施磁碟區組快照以確保同時擷取所有 VM 磁碟的快照以實現可靠的復原作業。
+
+磁碟區組快照是 Kubernetes 的功能，它解決了在為容器或虛擬機器的多個 PersistentVolumeClaims（PVC）拍攝快照時出現的一致性問題。
+
+此功能可讓您同時建立多個 PVC 的崩潰一致性快照。此功能在 Kubernetes 版本 v1.32 中處於 Beta 階段。  Trident從Trident 25.06 版本開始支援此 Beta 功能（目前僅適用於 iSCSI 協定）。
+
+為了支援卷宗組快照功能，Kubernetes 引入了三個新的 API 物件：
+
+* *VolumeGroupSnapshotClass：*由叢集管理員創建，用於描述如何建立磁碟區組快照。
+* *VolumeGroupSnapshot：* Kubernetes 使用者要求為多個 PVC 建立磁碟區組快照。
+* *VolumeGroupSnapshotContent：*由快照控制器為動態創建的 VolumeGroupSnapshots 創建。
+
+
+Trident 25.06 自動偵測新的 CRD（為磁碟區組快照功能指定），以啟用Trident CSI 邊車中的相關功能門。
+
+
+NOTE: Trident在 25.06 版本中僅支援 iSCSI 協定的磁碟區組快照。
+
+
+
+== 步驟 1：安裝 OpenShift 4.19 並為磁碟區組快照啟用 FeatureGate
+
+使用 Kubernetes 版本 1.32 安裝 OpenShift 4.19 叢集。此版本將磁碟區組快照功能提升至 Beta 狀態。  OpenShift 的後續版本可能包含 v1.32 以上的 Kubernetes 版本，這些版本也支援此功能。
+
+.步驟
+. 請依照 Red Hat 文件中的說明安裝 OpenShift Cluster 版本 4.19： https://docs.openshift.com/container-platform/4.19/installing/index.html["安裝 OpenShift 容器平台"] 。
+. 驗證 OpenShift 叢集中的 Kubernetes 版本。
++
+下圖顯示了安裝有 Kubernetes v1.32 的 OpenShift Cluster v4.19。
+
++
+image:redhat-openshift-ocpv-vgs-001.png["帶有 K8s V1.32 的 OpenShift 集群"]
+
+. 使用 OpenShift Web 控制台為 VolumeGroupSnapshot 開啟 FeatureGate：導航至 *管理 -> 自訂資源定義*。
+. 搜尋並點擊 *FeatureGate*。
+. 按一下“*實例*”標籤並選擇“*叢集*”實例。
+. 選擇 *YAML* 選項卡，並編輯 FeatureGate/cluster 物件以將 VolumeGroupSnapshot 包含在 *customNoUpgrade* 下的啟用清單中。
++
+image:redhat-openshift-ocpv-vgs-002.png["啟用 VolumeGroupSnapshot FeatureGate"]
+
+
+
+
+
+== 步驟 2：安裝並設定Trident 25.06 以用於磁碟區組快照
+
+Trident 25.06 中僅支援 iSCSI 協定的磁碟區組Trident功能。注意：您需要安裝Trident版本 25.06.1 才能在 OpenShift Cluster 4.19 上啟用 iSCSI 協定。
+
+安裝Trident並配置必要的儲存基礎架構，以便為您的虛擬機器啟用磁碟區組快照。這包括設定到ONTAP 的iSCSI 後端連接、定義 VM 持久性磁碟區的儲存類別以及配置單一和群組快照類別。
+
+
+NOTE: 最佳做法是將Trident儲存類別和快照類別都設定為預設值，以便您在建立新虛擬機器時可以利用黃金映像快照中的快速 FlexCloning 機制。
+
+.開始之前
+* 確保 VolumeGroupSnapshots 的功能門控已開啟。
+* 使用 node-prep 安裝 iSCSI 工具。
+
+
+.步驟
+. 使用以下指令安裝Trident ：
++
+image:redhat-openshift-ocpv-vgs-003.png["使用 iscsi nodeprep 安裝Trident"]
+
+. 驗證是否安裝了 VolumeGroupSnapshots 所需的 CRD。
++
+image:redhat-openshift-ocpv-vgs-004.png["所需的 CRD 可用"]
+
+. 使用以下 YAML 定義建立Trident iSCSI 後端。
++
+[source, yaml]
+----
+#tbc-iscsi.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tbc-iscsi-secret
+type: Opaque
+stringData:
+  username: admin
+  password: <passwd to log into ONTAP ClI>
+---
+apiVersion: trident.netapp.io/v1
+kind: TridentBackendConfig
+metadata:
+  name: tbc-iscsi
+spec:
+  version: 1
+  storageDriverName: ontap-san
+  managementLIF: <mgmt-lif>
+  backendName: tbc-iscsi
+  svm: openshift
+  storagePrefix: openshift-iscsi
+  defaults:
+    formatOptions: "-E nodiscard"
+    nameTemplate: "{{ .config.StoragePrefix }}_{{ .volume.Namespace }}_{{ .volume.RequestName }}"
+  credentials:
+    name: tbc-iscsi-secret
+----
+. 使用以下 YAML 定義建立 iSCSI 儲存類別。
++
+[source, yaml]
+----
+# sc-iscsi.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sc-iscsi
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "ontap-san"
+  provisioningType: "thin"
+  fsType: ext4
+  snapshots: "true"
+reclaimPolicy: "Delete"
+allowVolumeExpansion: true
+----
+. 使用以下 YAML 定義建立 VolumeSnapshotClass 物件。
++
+[source, yaml]
+----
+# snapshotclass.yaml
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: trident-snapshotclass
+driver: csi.trident.netapp.io
+deletionPolicy: Retain
+----
++
+image:redhat-openshift-ocpv-vgs-005.png["儲存類別和磁碟區快照類"]
+
+. 設定叢集中儲存類別和 VolumeSnapshotClass 的預設值。
++
+[source, cli]
+----
+kubectl patch storageclass <storage-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+----
++
+[source, cli]
+----
+kubectl patch volumesnapshotclass <volumesnapshotclass-name> --type=merge -p '{"metadata":{"annotations":{"snapshot.storage.kubernetes.io/is-default-class":"true"}}}'
+----
+. 使用以下 YAML 定義建立 VolumeGroupSnapshotClass 物件。
++
+[source, cli]
+----
+apiVersion: groupsnapshot.storage.k8s.io/v1beta1
+kind: VolumeGroupSnapshotClass
+metadata:
+  name: trident-groupsnapshotclass
+  annotations:
+    kubernetes.io/description: "Trident group snapshot class"
+driver: csi.trident.netapp.io
+deletionPolicy: Delete
+----
++
+image:redhat-openshift-ocpv-vgs-006.png["卷冊組快照類"]
+
+
+
+
+
+== 步驟 3：安裝 OpenShift Virtualization 並建立具有多個磁碟的測試 VM
+
+安裝 OpenShift Virtualization Operator 以在叢集中啟用 VM 管理功能。安裝後，建立一個具有多個持久性磁碟的測試虛擬機器來示範磁碟區組快照功能。
+
+.步驟
+. 安裝 OpenShift 虛擬化操作員。
++
+
+NOTE: 這需要在使用Trident設定預設儲存類別和 Snapshot 類別之後完成，以便使用Trident CSI 將黃金映像作為叢集中的 VolumeSnapshots 提供。
+
+. 驗證黃金映像是否位於磁碟區快照中。
++
+image:redhat-openshift-ocpv-vgs-007.png["卷快照中的黃金映像"]
+
+. 從預設模板建立虛擬機器。為虛擬機器新增 2 個額外的磁碟。  （一個根磁碟和兩個附加磁碟）。
++
+image:redhat-openshift-ocpv-vgs-008.png["具有 3 個 PVC 的虛擬機"]
+
+. 檢查ONTAP後端中的對應磁碟區。
++
+根磁碟區是帶有黃金映像的快照的彈性克隆磁碟區。虛擬機器的另外 2 個磁碟的另外 2 個磁碟區是FlexVol磁碟區。
+
+. 使用 virtctl 工具登入虛擬機器。
+. 格式化並掛載 2 個磁碟，如下所示：
++
+image:redhat-openshift-ocpv-vgs-009.png["VM 磁碟"]
+
+
+
+
+
+== 步驟 4：標記 VM 磁碟以進行群組快照保護
+
+磁碟區組快照使用標籤選擇器來識別哪些 PVC 屬於一起，確保所有相關的 VM 磁碟在同一時間點同時擷取。
+
+.步驟
+. 使用相同的鍵/值標記 PVC 並進行驗證。
++
+[source, cli]
+----
+#oc label pvc fedora-vm1 consistencygroup=group1
+persistentvolumeclaim/fedora-vm1 labeled
+# oc label pvc dv-fedora-vm1-disk1-ulsgg2 consistencygroup=group1
+persistentvolumeclaim/dv-fedora-vm1-disk1-ulsgg2 labeled
+# oc label pvc dv-fedora-vm1-disk2-86oq76 consistencygroup=group1
+persistentvolumeclaim/dv-fedora-vm1-disk2-86oq76 labeled
+----
+. 檢查 PVC 的標籤。
++
+[source, cli]
+----
+# oc get pvc fedora-vm1 -o jsonpath='{.metadata.labels.consistencygroup'}
+group1
+# oc get pvc dv-fedora-vm1-disk1-ulsgg2 -o jsonpath='{.metadata.labels.consistencygroup'}
+group1
+# oc get pvc dv-fedora-vm1-disk2-86oq76 -o jsonpath='{.metadata.labels.consistencygroup'}
+group1
+----
+. 使用以下 YAML 定義建立一個自動發現所有標記 PVC 的 VolumeGroupSnapshot。
++
+[source, yaml]
+----
+#vgs.yaml
+apiVersion: groupsnapshot.storage.k8s.io/v1beta1
+kind: VolumeGroupSnapshot
+metadata:
+  name: vgs1
+spec:
+  volumeGroupSnapshotClassName: trident-groupsnapshotclass
+  source:
+    selector:
+      matchLabels:
+        consistencygroup: group1
+----
++
+[source, cli]
+----
+# oc create -f vgs1.yaml
+volumegroupsnapshot.groupsnapshot.storage.k8s.io/vgs1 created
+----
++
+image:redhat-openshift-ocpv-vgs-010.png["VGS 創建"]
+
++
+.結果
+將建立具有標籤鍵/值對**consistencygroup: group1**的所有 PVC 的快照。  Trident VolumeGroupSnapshots 使用ONTAP後端的ONTAP一致性群組。
+
+
+
+
+NOTE: Trident VolumeGroupSnapshots 在ONTAP後端使用ONTAP一致性組 (CG)。如果您使用 REST API，則會建立一個包含屬於 VM 的所有磁碟區（按標籤分組）的 CG，以一致的方式取得每個磁碟區的快照，然後刪除該 CG。根據時間，您可能能夠或可能無法看到在ONTAP中建立和刪除的一致性群組。
+
+下圖顯示了在ONTAP中建立並刪除的一致性群組：
+
+image:redhat-openshift-ocpv-vgs-011.png["ONTAP一致性組"]
+
+
+
+== 步驟 5：從快照還原 VM 磁碟
+
+此步驟驗證快照是否可以在需要時成功還原虛擬機器資料。假設我們失去了 `sample.txt`來自兩個資料磁碟的每個檔案。
+
+image:redhat-openshift-ocpv-vgs-012.png["文件遺失"]
+
+
+NOTE: 儘管我們創建了一組磁碟區作為單一單元的快照，但我們只能從單一快照進行還原。
+
+Trident使用 *TridentActionSnapshotRestore (TASR) CR* 從快照提供快速、就地捲復原。此 CR 作為強制性 Kubernetes 操作，在操作完成後不會持續存在。
+
+.步驟
+. 停止虛擬機器。
+. 使用 YAML 還原第一個磁碟/PVC 及其對應快照的內容，如下所示。
++
+[source, yaml]
+----
+# cat tasr1.yaml
+apiVersion: trident.netapp.io/v1
+kind: TridentActionSnapshotRestore
+metadata:
+  name: trident-snap-disk1
+  namespace: default
+spec:
+  pvcName: dv-fedora-vm1-disk1-ulsgg2
+  volumeSnapshotName: snapshot-4d47c9f45423bfca625a0f1b6c5a5ec456ac59d3e583157be919bb7237317c65
+----
++
+[source, cli]
+----
+# oc create -f tasr1.yaml
+tridentactionsnapshotrestore.trident.netapp.io/trident-snap created
+----
+. 類似地，使用 PVC 及其對應的快照為第二個磁碟建立另一個 TASR 物件。
++
+[source, yaml]
+----
+# cat tasr2.yaml
+apiVersion: trident.netapp.io/v1
+kind: TridentActionSnapshotRestore
+metadata:
+  name: trident-snap-disk2
+  namespace: default
+spec:
+  pvcName: dv-fedora-vm1-disk2-86oq76
+  volumeSnapshotName: snapshot-afb4c4833460e233c4e86f1108c921b86a6f4d0eb182e99e579081ff6f743f56
+----
++
+[source, cli]
+----
+# oc create -f tasr2.yaml
+----
+. 驗證還原操作是否顯示成功狀態。
++
+image:redhat-openshift-ocpv-vgs-013.png["TASR 成功"]
+
+. 現在啟動虛擬機，登入並驗證 sample.txt 檔案是否已返回磁碟。
++
+image:redhat-openshift-ocpv-vgs-014.png["快照恢復"]
+
+

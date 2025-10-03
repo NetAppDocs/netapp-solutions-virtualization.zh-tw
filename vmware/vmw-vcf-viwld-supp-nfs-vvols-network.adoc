@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols-network.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
+summary: 在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS 網路以實現與ONTAP儲存系統的連線。您將建立具有 VLAN 分離的分散式連接埠群組，配置上行鏈路組合以實現冗餘，並在每個 ESXi 主機上設定 VMkernel 適配器以建立專用的 NFS 路徑來實現故障轉移功能。 
+---
+= 在 VCF VI 工作負載域中的 ESXi 主機上設定 NFS 網路
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS 網路以實現與ONTAP儲存系統的連線。您將建立具有 VLAN 分離的分散式連接埠群組，配置上行鏈路組合以實現冗餘，並在每個 ESXi 主機上設定 VMkernel 適配器以建立專用的 NFS 路徑來實現故障轉移功能。
+
+使用 vSphere 用戶端在 VI 工作負載域叢集上執行下列步驟。在這種情況下，使用 vCenter Single Sign-On，因此 vSphere 用戶端在管理和工作負載域中是通用的。
+
+
+
+== 步驟 1：為 NFS 流量建立分散式連接埠組
+
+完成以下步驟，為網路建立一個新的分散式連接埠群組來承載 NFS 流量。
+
+.步驟
+. 從 vSphere 用戶端，導覽至工作負載域的 *Inventory > Networking*。導航至現有的分散式交換器並選擇建立*新分散式連接埠群組...*的操作。
+. 在「新分散式連接埠群組」精靈中，填寫新連接埠群組的名稱，然後按一下「下一步」繼續。
+. 在*配置設定*頁面上，填寫所有設定。如果正在使用 VLAN，請確保提供正確的 VLAN ID。按一下“*下一步*”繼續。
+. 在*準備完成*頁面上，檢查變更並按一下*完成*以建立新的分散式連接埠群組。
+. 建立連接埠組後，導覽至該連接埠組並選擇操作*編輯設定...*。
+. 在*分散式連接埠群組 - 編輯設定*頁面上，導覽至左側選單中的*組合和故障轉移*。確保上行鏈路位於「活動上行鏈路」區域中，以啟用用於 NFS 流量的上行鏈路組合。將任何未使用的上行鏈路移至*未使用的上行鏈路*。
+. 對叢集中的每個 ESXi 主機重複此程序。
+
+
+
+
+== 步驟 2：在每個 ESXi 主機上建立 VMkernel 適配器
+
+在工作負載域中的每個 ESXi 主機上建立一個 VMkernel 適配器。
+
+.步驟
+. 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
+. 在*選擇連線類型*視窗中，選擇*VMkernel 網路介面卡*，然後按一下*下一步*繼續。
+. 在「選擇目標裝置」頁面上，選擇先前建立的 NFS 分散式連接埠群組之一。
+. 在*連接埠屬性*頁面上，保留預設設定（未啟用服務）並按一下*下一步*繼續。
+. 在 *IPv4 設定* 頁面上，填寫 *IP 位址*、*子網路遮罩*，並提供新的網關 IP 位址（僅在需要時）。按一下“*下一步*”繼續。
+. 在*準備完成*頁面上檢查您的選擇，然後按一下*完成*以建立 VMkernel 適配器。
+
+
+
+
+== 下一步是什麼？
+
+在工作負載域中的所有 ESXi 主機上設定 NFS 網路後，link:vmw-vcf-viwld-supp-nfs-vvols-storage.html["為 NFS vVols配置存儲"] 。

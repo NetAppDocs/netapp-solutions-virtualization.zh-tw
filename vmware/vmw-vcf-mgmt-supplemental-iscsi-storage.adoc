@@ -1,0 +1,153 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-mgmt-supplemental-iscsi-storage.html 
+keywords: netapp, vmware, cloud, foundation, vcf, iscsi, create, svm, lif 
+summary: 設定補充 iSCSI 儲存以擴充 VMware Cloud Foundation 管理域。您將部署ONTAP工具，在管理網域上設定 iSCSI 資料儲存庫，並將管理虛擬機器遷移到新的資料儲存庫。 
+---
+= 使用ONTAP工具在 VCF 管理域中設定 iSCSI 存儲
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+設定補充 iSCSI 儲存以擴充 VMware Cloud Foundation 管理域。您將部署ONTAP工具，在管理網域上設定 iSCSI 資料儲存庫，並將管理虛擬機器遷移到新的資料儲存庫。
+
+請在VCF管理域叢集上透過vSphere Client執行下列步驟。
+
+
+
+== 步驟 1：ONTAP tools for VMware vSphere
+
+ONTAP tools for VMware vSphere以 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。
+
+.步驟
+. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並下載到本機資料夾。
+. 登入 VCF 管理網域的 vCenter 設備。
+. 在 vCenter 裝置介面中右鍵單擊管理叢集並選擇“部署 OVF 範本...”
++
+image:vmware-vcf-aff-021.png["部署 OVF 範本..."]
+
++
+{nbsp}
+
+. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇上一個步驟下載的ONTAP工具 OVA 檔案。
++
+image:vmware-vcf-aff-022.png["選擇 OVA 文件"]
+
++
+{nbsp}
+
+. 對於精靈的第 2 步到第 5 步，選擇 VM 的名稱和資料夾，選擇計算資源，查看詳細信息，然後接受許可協議。
+. 配置和磁碟檔案的儲存位置選擇VCF管理域叢集的vSAN資料儲存。
++
+image:vmware-vcf-aff-023.png["選擇 OVA 文件"]
+
++
+{nbsp}
+
+. 在*選擇網路*頁面上，選擇用於管理流量的網路。
++
+image:vmware-vcf-aff-024.png["選擇網路"]
+
++
+{nbsp}
+
+. 在「自訂範本」頁面上，輸入所有必要的資訊：
++
+** 用於對ONTAP工具進行管理存取的密碼。
+** NTP 伺服器 IP 位址。
+** ONTAP工具維護帳戶密碼。
+** ONTAP工具 Derby DB 密碼。
+** 不要選取「啟用 VMware Cloud Foundation (VCF)」複選框。部署補充儲存不需要 VCF 模式。
+** *VI 工作負載域* 的 vCenter 設備的 FQDN 或 IP 位址
+** *VI 工作負載域* 的 vCenter 設備的憑證
+** 所需的網路屬性。
+
+
+. 按一下“*下一步*”繼續。
++
+image:vmware-vcf-aff-025.png["自訂OTV模板1"]
+
++
+image:vmware-vcf-asa-035.png["自訂OTV模板2"]
+
+. 查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署ONTAP工具設備。
+
+
+
+
+== 步驟 2：新增儲存系統
+
+執行下列步驟使用ONTAP工具新增儲存系統。
+
+.步驟
+. 在 vSphere 用戶端中導覽至主選單並選擇 * NetApp ONTAP工具*。
++
+image:vmware-vcf-asa-014.png["導航到ONTAP工具"]
+
+. 進入 * ONTAP工具* 後，從「入門」頁面（或從 *儲存系統*）按 *新增* 以新增新的儲存系統。
++
+image:vmware-vcf-asa-015.png["新增儲存系統"]
+
++
+{nbsp}
+
+. 提供ONTAP儲存系統的 IP 位址和憑證，然後按一下「新增」。
++
+image:vmware-vcf-asa-016.png["提供ONTAP系統的 IP 和憑證"]
+
++
+{nbsp}
+
+. 按一下「*是*」授權叢集憑證並新增儲存系統。
++
+image:vmware-vcf-asa-017.png["授權集群證書"]
+
+
+
+
+
+== 選用：將管理虛擬機器遷移到 iSCSI 資料儲存區
+
+如果您希望使用ONTAP儲存來保護 VCF 管理虛擬機，請使用 vMotion 將虛擬機遷移到新建立的 iSCSI 資料儲存區。
+
+.步驟
+. 從 vSphere Client 導覽至管理網域叢集並點選 *VMs* 標籤。
+. 選擇要遷移到 iSCSI 資料儲存的虛擬機，右鍵單擊並選擇“遷移...”。
++
+image:vmware-vcf-asa-018.png["選擇要遷移的虛擬機"]
+
++
+{nbsp}
+
+. 在「虛擬機器 - 遷移」精靈中，選擇「僅變更儲存」作為遷移類型，然後按一下「下一步」繼續。
++
+image:vmware-vcf-asa-019.png["選擇遷移類型"]
+
++
+{nbsp}
+
+. 在*選擇儲存*頁面上，選擇 iSCSi 資料儲存並選擇*下一步*繼續。
++
+image:vmware-vcf-asa-020.png["選擇目標資料存儲"]
+
++
+{nbsp}
+
+. 檢查選擇並點擊“*完成*”開始遷移。
+. 可以從「最近任務」窗格查看重新定位狀態。
++
+image:vmware-vcf-asa-021.png["vSphere Client 的近期任務窗格"]
+
+
+
+
+
+== 附加資訊
+
+* 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"^]。
+* 有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us-en/vmware-cis/vcf.html["VMware Cloud Foundation 文檔"^]。
+* 有關在 VMware 中使用 VMFS iSCSI 資料儲存的信息，請參閱link:vmw-vmfs-iscsi.html["vSphere VMFS 資料儲存區 - 帶有ONTAP 的iSCSI 儲存後端"]。
+* 有關此解決方案的視訊演示，請參閱link:../videos/vmware-videos.html#vmware-datastore-provisioning-with-ontap["VMware 資料儲存區配置"]。
+

@@ -71,18 +71,58 @@ entries:
       url: "/vmware/vmw-vcf-viwld-principal-nfs.html"
   - title: 使用補充儲存擴充 VCF
     entries:
-    - title: 關於擴充存儲
+    - title: 了解擴充存儲
       url: "/vmware/vmw-vcf-expand.html"
     - title: 使用 iSCSI 擴充管理域
-      url: "/vmware/vmw-vcf-mgmt-supplemental-iscsi.html"
+      entries:
+      - title: 部署工作流程
+        url: "/vmware/vmw-vcf-mgmt-supplemental-iscsi.html"
+      - title: 審核要求
+        url: "/vmware/vmw-vcf-mgmt-supplemental-iscsi-requirements.html"
+      - title: 建立 SVM 和 LIF
+        url: "/vmware/vmw-vcf-mgmt-supplemental-iscsi-svm-lifs.html"
+      - title: 設定網路
+        url: "/vmware/vmw-vcf-mgmt-supplemental-iscsi-network.html"
+      - title: 配置儲存
+        url: "/vmware/vmw-vcf-mgmt-supplemental-iscsi-storage.html"
     - title: 利用FC擴充管理域
       url: "/vmware/vmw-vcf-mgmt-supplemental-fc.html"
     - title: 使用vVols iSCSI 擴充 VI 工作負載域
-      url: "/vmware/vmw-vcf-viwld-supp-iscsi-vvols.html"
+      entries:
+      - title: 部署工作流程
+        url: "/vmware/vmw-vcf-viwld-supp-iscsi-vvols.html"
+      - title: 審核要求
+        url: "/vmware/vmw-vcf-viwld-supp-iscsi-vvols-requirements.html"
+      - title: 建立 SVM 和 LIF
+        url: "/vmware/vmw-vcf-viwld-supp-iscsi-vvols-svm-lifs.html"
+      - title: 設定網路
+        url: "/vmware/vmw-vcf-viwld-supp-iscsi-vvols-network.html"
+      - title: 配置儲存
+        url: "/vmware/vmw-vcf-viwld-supp-iscsi-vvols-storage.html"
     - title: 使用vVols NFS 擴充 VI 工作負載域
-      url: "/vmware/vmw-vcf-viwld-supp-nfs-vvols.html"
+      entries:
+      - title: 部署工作流程
+        url: "/vmware/vmw-vcf-viwld-supp-nfs-vvols.html"
+      - title: 審核要求
+        url: "/vmware/vmw-vcf-viwld-supp-nfs-vvols-requirements.html"
+      - title: 建立 SVM 和 LIF
+        url: "/vmware/vmw-vcf-viwld-supp-nfs-vvols-svm-lifs.html"
+      - title: 設定網路
+        url: "/vmware/vmw-vcf-viwld-supp-nfs-vvols-network.html"
+      - title: 配置儲存
+        url: "/vmware/vmw-vcf-viwld-supp-nfs-vvols-storage.html"
     - title: 使用 NVMe/TCP 擴充 VI 工作負載域
-      url: "/vmware/vmw-vcf-viwld-supp-nvme.html"
+      entries:
+      - title: 部署工作流程
+        url: "/vmware/vmw-vcf-viwld-supp-nvme.html"
+      - title: 審核要求
+        url: "/vmware/vmw-vcf-viwld-supp-nvme-requirements.html"
+      - title: 建立 SVM 和 LIF
+        url: "/vmware/vmw-vcf-viwld-supp-nvme-svm-lifs.html"
+      - title: 設定網路
+        url: "/vmware/vmw-vcf-viwld-supp-nvme-network.html"
+      - title: 配置儲存
+        url: "/vmware/vmw-vcf-viwld-supp-nvme-storage.html"
     - title: 使用 FC 擴充 VI 工作負載域
       url: "/vmware/vmw-vcf-viwld-supp-fc.html"
   - title: 使用SnapCenter保護 VCF
