@@ -25,37 +25,41 @@ summary: 使用ONTAP工具在 VI 工作負載域中設定 iSCSI vVols儲存。�
 ONTAP tools for VMware vSphere作為 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。
 
 .步驟
-. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並下載到本機資料夾。
+. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並將其下載到本機資料夾。
 . 登入 VCF 管理網域的 vCenter 設備。
 . 在 vCenter 裝置介面中右鍵單擊管理叢集並選擇“部署 OVF 範本...”
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-021.png["部署 OVF 範本..."]
 
+====
+. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇您在上一個步驟下載的ONTAP工具 OVA 檔案。
 +
-{nbsp}
-
-. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇上一個步驟下載的ONTAP工具 OVA 檔案。
-+
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-022.png["選擇 OVA 文件"]
 
-+
-{nbsp}
-
+====
 . 對於精靈的第 2 步到第 5 步，選擇 VM 的名稱和資料夾，選擇計算資源，查看詳細信息，然後接受許可協議。
 . 配置和磁碟檔案的儲存位置選擇VCF管理域叢集的vSAN資料儲存。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-023.png["選擇 OVA 文件"]
 
-+
-{nbsp}
-
+====
 . 在*選擇網路*頁面上，選擇用於管理流量的網路。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-024.png["選擇網路"]
 
-+
-{nbsp}
-
+====
 . 在「自訂範本」頁面上，輸入所有必要的資訊：
 +
 ** 用於對ONTAP工具進行管理存取的密碼。
@@ -70,11 +74,14 @@ image:vmware-vcf-aff-024.png["選擇網路"]
 
 . 按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-025.png["自訂OTV模板1"]
 
-+
 image:vmware-vcf-asa-035.png["自訂OTV模板2"]
 
+====
 . 查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署ONTAP工具設備。
 
 
@@ -90,26 +97,36 @@ NOTE: vVol 需要ONTAP叢集憑證而不是 SVM 憑證。如需更多信息，�
 .步驟
 . 在 vSphere 用戶端中導覽至主選單並選擇 * NetApp ONTAP工具*。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-014.png["導航到ONTAP工具"]
 
+====
 . 進入 * ONTAP工具* 後，從「入門」頁面（或從 *儲存系統*）按 *新增* 以新增新的儲存系統。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-015.png["新增儲存系統"]
 
-+
-{nbsp}
-
+====
 . 提供ONTAP儲存系統的 IP 位址和憑證，然後按一下「新增」。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-016.png["提供ONTAP系統的 IP 和憑證"]
 
-+
-{nbsp}
-
+====
 . 按一下「*是*」授權叢集憑證並新增儲存系統。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-017.png["授權集群證書"]
 
+====
 
 
 
@@ -121,33 +138,61 @@ image:vmware-vcf-asa-017.png["授權集群證書"]
 .步驟
 . 在ONTAP工具中，從左側選單中選擇 *儲存功能設定檔*，然後按 *建立*。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-039.png["儲存能力概況"]
 
+====
 . 在「建立儲存能力設定檔」精靈中，提供設定檔的名稱和描述，然後按一下「下一步」。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-asa-010.png["為 SCP 新增名稱"]
 
+====
 . 選擇平台類型並指定儲存系統為全快閃 SAN 陣列，將 *Asymmetric* 設為 false。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-asa-011.png["SCP平台"]
 
+====
 . 選擇您選擇的協議或選擇*任意*以允許所有可能的協議。
 . 按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-asa-012.png["SCP協定"]
 
+====
 . *效能*頁面允許以允許的最小和最大 IOP 的形式設定服務品質。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-asa-013.png["SCP 的 QoS"]
 
+====
 . 根據需要選擇儲存效率、空間預留、加密和任何分層策略，完成*儲存屬性*頁面。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-asa-014.png["SCP 的屬性"]
 
+====
 . 查看摘要並點擊“*完成*”以建立設定檔。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-040.png["SCP摘要"]
 
+====
 
 
 
@@ -159,28 +204,48 @@ image:vmware-vcf-asa-040.png["SCP摘要"]
 .步驟
 . 在ONTAP工具中，選擇 *概覽*，然後從 *入門* 標籤中按一下 *配置* 以啟動精靈。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-041.png["配置資料儲存區"]
 
+====
 . 在新資料儲存精靈的「常規」頁面上，選擇 vSphere 資料中心或叢集目標。
 . 選擇 * vVols* 作為資料儲存類型，輸入資料儲存的名稱，然後選擇 *iSCSI* 作為協定。
 . 按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-042.png["常規頁面"]
 
+====
 . 在「儲存系統」頁面上，選擇儲存能力設定檔、儲存系統和虛擬機器。
 . 按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-043.png["儲存系統"]
 
+====
 . 在「儲存屬性」頁面上，選擇為資料儲存建立一個新磁碟區，並輸入要建立的磁碟區的儲存屬性。
 . 按一下「*新增*」建立卷，然後按一下「*下一步*」繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-044.png["儲存屬性"]
 
+====
 . 查看摘要並按一下「*完成*」以啟動 vVol 資料儲存建立程序。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-045.png["摘要頁面"]
 
+====
 
 
 

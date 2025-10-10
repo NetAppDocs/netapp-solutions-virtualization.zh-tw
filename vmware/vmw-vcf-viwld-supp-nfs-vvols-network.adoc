@@ -26,11 +26,39 @@ summary: 在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS �
 
 .步驟
 . 從 vSphere 用戶端，導覽至工作負載域的 *Inventory > Networking*。導航至現有的分散式交換器並選擇建立*新分散式連接埠群組...*的操作。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-022.png["選擇建立新的連接埠群組"]
+
+====
 . 在「新分散式連接埠群組」精靈中，填寫新連接埠群組的名稱，然後按一下「下一步」繼續。
 . 在*配置設定*頁面上，填寫所有設定。如果正在使用 VLAN，請確保提供正確的 VLAN ID。按一下“*下一步*”繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-023.png["填寫VLAN ID"]
+
+====
 . 在*準備完成*頁面上，檢查變更並按一下*完成*以建立新的分散式連接埠群組。
 . 建立連接埠組後，導覽至該連接埠組並選擇操作*編輯設定...*。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-037.png["DPG－編輯設置"]
+
+====
 . 在*分散式連接埠群組 - 編輯設定*頁面上，導覽至左側選單中的*組合和故障轉移*。確保上行鏈路位於「活動上行鏈路」區域中，以啟用用於 NFS 流量的上行鏈路組合。將任何未使用的上行鏈路移至*未使用的上行鏈路*。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-038.png["DPG-- 團隊上行鏈路"]
+
+====
 . 對叢集中的每個 ESXi 主機重複此程序。
 
 
@@ -42,11 +70,46 @@ summary: 在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS �
 
 .步驟
 . 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-030.png["啟動新增網路精靈"]
+
+====
 . 在*選擇連線類型*視窗中，選擇*VMkernel 網路介面卡*，然後按一下*下一步*繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-008.png["選擇 VMkernel 網路適配器"]
+
+====
 . 在「選擇目標裝置」頁面上，選擇先前建立的 NFS 分散式連接埠群組之一。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-039.png["選擇目標連接埠群組"]
+
+====
 . 在*連接埠屬性*頁面上，保留預設設定（未啟用服務）並按一下*下一步*繼續。
 . 在 *IPv4 設定* 頁面上，填寫 *IP 位址*、*子網路遮罩*，並提供新的網關 IP 位址（僅在需要時）。按一下“*下一步*”繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-040.png["VMkernel IPv4 設定"]
+
+====
 . 在*準備完成*頁面上檢查您的選擇，然後按一下*完成*以建立 VMkernel 適配器。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-041.png["檢查 VMkernel 選擇"]
+
+====
 
 
 

@@ -20,13 +20,41 @@ summary: '在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 
 
 .步驟
 . 在ONTAP系統管理員中，導覽至左側選單中的 *儲存虛擬機器*，然後按一下 *+ 新增* 開始。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-001.png["按一下「新增」開始建立 SVM"]
+
+====
 . 在“新增儲存虛擬機器”精靈中，為 SVM 提供“名稱”，選擇“IP 空間”，然後在“存取協定”下按一下“SMB/CIFS、NFS、S3”標籤並選取“啟用 NFS”複選框。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-035.png["新增儲存虛擬機器精靈 - 啟用 NFS"]
+
+====
 +
 
 TIP: 您不需要選取「允許 NFS 用戶端存取」複選框。  ONTAP tools for VMware vSphere將用於自動化資料儲存部署流程，其中包括為 ESXi 主機提供用戶端存取。
 
 . 在 *網路介面* 部分中，填寫第一個 LIF 的 *IP 位址*、*子網路遮罩* 和 *廣播域和連接埠*。對於後續 LIF，您可以使用單獨的設置，也可以啟用複選框以在所有剩餘 LIF 中使用通用設定。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-036.png["填寫 LIF 的網路訊息"]
+
+====
 . 選擇是否啟用儲存虛擬機器管理帳戶（適用於多租用戶環境），然後按一下「*儲存*」以建立 SVM。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
+
+====
 
 
 

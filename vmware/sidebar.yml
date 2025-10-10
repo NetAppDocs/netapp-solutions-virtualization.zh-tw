@@ -51,12 +51,28 @@ entries:
     url: "/vmware/vmw-vcf-dr-bxp-nfs.html"
   - title: 將現有 vSphere 叢集轉換為 VCF
     entries:
-    - title: 關於將現有 vSphere 群集轉換為 VCF
+    - title: 了解如何轉換 vSphere 集群
       url: "/vmware/vmw-vcf-migrate.html"
-    - title: 使用 NFS 資料儲存轉換現有的 vSphere 集群
-      url: "/vmware/vmw-vcf-mgmt-nfs.html"
-    - title: 使用 FC 資料儲存轉換現有的 vSphere 叢集
-      url: "/vmware/vmw-vcf-mgmt-fc.html"
+    - title: 使用 NFS 資料儲存轉換 vSphere 集群
+      entries:
+      - title: 部署工作流程
+        url: "/vmware/vmw-vcf-mgmt-nfs.html"
+      - title: 審核要求
+        url: "/vmware/vmw-vcf-mgmt-nfs-requirements.html"
+      - title: 部署ONTAP工具並配置 NFS 資料儲存區
+        url: "/vmware/vmw-vcf-mgmt-nfs-deploy.html"
+      - title: 將 vSphere 群集轉換為 VCF
+        url: "/vmware/vmw-vcf-mgmt-nfs-conversion.html"
+    - title: 使用 FC 資料儲存轉換 vSphere 叢集
+      entries:
+      - title: 部署工作流程
+        url: "/vmware/vmw-vcf-mgmt-fc.html"
+      - title: 審核要求
+        url: "/vmware/vmw-vcf-mgmt-fc-requirements.html"
+      - title: 部署ONTAP工具並配置 FC 資料儲存區
+        url: "/vmware/vmw-vcf-mgmt-fc-deploy.html"
+      - title: 將 vSphere 群集轉換為 VCF
+        url: "/vmware/vmw-vcf-mgmt-fc-conversion.html"
   - title: 為 VCF 提供主要存儲
     entries:
     - title: 關於配置主體存儲

@@ -27,18 +27,20 @@ summary: '建立具有多個邏輯介面 (LIF) 的儲存虛擬機器 (SVM)，為
 .步驟
 . 從ONTAP系統管理員中，導覽至左側選單中的 *儲存虛擬機器*，然後按一下 *+ 新增*。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-001.png["點擊“+新增”開始建立 SVM"]
 
-+
-{nbsp}
-
+====
 . 在“新增儲存虛擬機器”精靈中，輸入 SVM 的“名稱”，選擇“IP 空間”，然後在“存取協定”下按一下“NVMe”標籤並勾選“啟用 NVMe/TCP”複選框。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-075.png["新增儲存虛擬機器精靈 - 啟用 NVMe/TCP"]
 
-+
-{nbsp}
-
+====
 . 在 *網路介面* 部分中，輸入第一個 LIF 的 *IP 位址*、*子網路遮罩* 和 *廣播域和連接埠*。對於後續 LIF，您可以使用單獨的設置，也可以啟用複選框以在所有剩餘 LIF 中使用通用設定。
 +
 
@@ -46,15 +48,21 @@ NOTE: 對於跨多路徑的多路徑和故障轉移，請在單獨的乙太網�
 
 . 選擇是否啟用儲存虛擬機器管理帳戶（適用於多租用戶環境），然後按一下「*儲存*」以建立 SVM。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
 
+====
 
 
 
 
 == 步驟 2：建立 NVMe 命名空間
 
-NVMe 命名空間類似 iSCSi 或 FC 的 LUN。您必須先建立 NVMe 命名空間，然後才能從 vSphere Client 部署 VMFS 資料儲存區。若要建立 NVMe 命名空間，請從叢集中的每個 ESXi 主機取得 NVMe 限定名稱 (NQN)。  ONTAP使用 NQN 為命名空間提供存取控制。
+NVMe 命名空間類似 iSCSi 或 FC 的 LUN。您必須先建立 NVMe 命名空間，然後才能從 vSphere Client 部署 VMFS 資料儲存區。
+
+若要建立 NVMe 命名空間，請從叢集中的每個 ESXi 主機取得 NVMe 限定名稱 (NQN)。  ONTAP使用 NQN 為命名空間提供存取控制。
 
 .步驟
 . 開啟與叢集中的 ESXi 主機的 SSH 會話以取得其 NQN。從 CLI 使用以下命令：
@@ -74,18 +82,23 @@ Host NQN: nqn.2014-08.com.netapp.sddc:nvme:vcf-wkld-esx01
 . 記錄叢集中每個 ESXi 主機的 NQN。
 . 從ONTAP系統管理員中，導覽至左側選單中的 *NVMe 命名空間*，然後按一下 *+ 新增* 開始。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-093.png["按一下「+新增」以建立 NVMe 命名空間"]
 
-+
-{nbsp}
-
+====
 . 在「新增 NVMe 命名空間」頁面上，填寫名稱前綴、要建立的命名空間數量、命名空間的大小以及將存取命名空間的主機作業系統。
 . 在 *Host NQN* 部分中，建立一個以逗號分隔的列表，其中包含先前從將存取命名空間的 ESXi 主機收集的 NQN。
 . 按一下「更多選項」以配置其他項目，例如快照保護策略。
 . 最後，按一下「儲存」以建立 NVMe 命名空間。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-093.png["按一下「+新增」以建立 NVMe 命名空間"]
 
+====
 
 
 

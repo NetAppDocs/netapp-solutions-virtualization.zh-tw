@@ -2,37 +2,41 @@
 :allow-uri-read: 
 
 
-. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並下載到本機資料夾。
+. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並將其下載到本機資料夾。
 . 登入 VCF 管理網域的 vCenter 設備。
 . 在 vCenter 裝置介面中右鍵單擊管理叢集並選擇“部署 OVF 範本...”
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-021.png["部署 OVF 範本..."]
 
+====
+. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇您在上一個步驟下載的ONTAP工具 OVA 檔案。
 +
-{nbsp}
-
-. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇上一個步驟下載的ONTAP工具 OVA 檔案。
-+
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-022.png["選擇 OVA 文件"]
 
-+
-{nbsp}
-
+====
 . 對於精靈的第 2 步到第 5 步，選擇 VM 的名稱和資料夾，選擇計算資源，查看詳細信息，然後接受許可協議。
 . 配置和磁碟檔案的儲存位置選擇VCF管理域叢集的vSAN資料儲存。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-023.png["選擇 OVA 文件"]
 
-+
-{nbsp}
-
+====
 . 在*選擇網路*頁面上，選擇用於管理流量的網路。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-024.png["選擇網路"]
 
-+
-{nbsp}
-
+====
 . 在「自訂範本」頁面上，輸入所有必要的資訊：
 +
 ** 用於對ONTAP工具進行管理存取的密碼。
@@ -47,10 +51,13 @@ image:vmware-vcf-aff-024.png["選擇網路"]
 
 . 按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-025.png["自訂OTV模板1"]
 
-+
 image:vmware-vcf-asa-035.png["自訂OTV模板2"]
 
+====
 . 查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署ONTAP工具設備。
 

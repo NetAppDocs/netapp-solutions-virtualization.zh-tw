@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-mgmt-nfs-requirements.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, array, ontap tools, otv, sddc, sddc manager, ontap tools, ontap tools 10 
+summary: 查看將具有NetApp ONTAP NFS 資料儲存區的 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域的要求。 
+---
+= 使用 NFS 資料儲存將 vCenter Server 執行個體轉換為 VCF 管理域的部署需求
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+查看將具有NetApp ONTAP NFS 資料儲存區的 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域的要求。
+
+轉換過程需要AFF或ASA儲存系統、用於 FC 流量的 SVM 和 LIF、交換器上的 NFS 分區、帶有 ESXi 主機和 vCenter 的 vSphere 叢集以及用於 vMotion 的專用網路區段。
+
+
+
+== 基礎設施需求
+
+確保以下組件和配置已到位。
+
+* NetApp AFF儲存系統，其儲存虛擬機器 (SVM) 配置為允許 NFS 流量。
+* 在 IP 網路上建立的用於承載 NFS 流量並與 SVM 關聯的邏輯介面 (LIF)。
+* 一個 vSphere 集群，其中包含 4 個 ESXi 主機和一個位於該集群上的 vCenter 設備。
+* 為 vMotion 和 NFS 儲存流量在為此目的建立的 VLAN 或網路區段上配置的分散式連接埠群組。
+* VCF 轉換軟體。對於所需的軟體，請訪問 https://support.broadcom.com/["Broadcom 支援門戶"]。
+* ONTAP工具的先決條件。
++
+有關ONTAP工具前提條件的完整信息，請參閱 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html#system-requirements["適用於ONTAP tools for VMware vSphere的先決條件"]。
+
++
+ONTAP tools for VMware vSphere可以安裝在 HA 或非 HA 配置中。
+
+
+
+
+
+== 其他資源
+
+* 有關將 vSphere 轉換或匯入 VCF 5.2 時支援的儲存和其他注意事項，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/considerations-before-converting-or-importing-existing-vsphere-environments-into-vcf-admin.html["將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項"]。
+* 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]。
+* 有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware Cloud Foundation 5.2 文檔"]。
+
+
+
+
+== 下一步是什麼？
+
+查看部署要求後，link:vmw-vcf-mgmt-nfs-deploy.html["部署ONTAP工具並配置 NFS 資料儲存庫"] 。

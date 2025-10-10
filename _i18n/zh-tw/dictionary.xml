@@ -4758,141 +4758,79 @@
   <block id="5e57509f980ac5c871b42ef0b2cc8ea4" category="list-text"><block ref="5e57509f980ac5c871b42ef0b2cc8ea4" category="inline-link-macro-rx"></block></block>
   <block id="e4faf06dd683fe7a64916ed691ec0384" category="inline-link-macro">具有 FC 的虛擬基礎架構工作負載域</block>
   <block id="3823243648aea63be1b31936fe33abc0" category="list-text"><block ref="3823243648aea63be1b31936fe33abc0" category="inline-link-macro-rx"></block></block>
-  <block id="24509221eafa9190a2e5d2ec9081907a" category="doc">將 vCenter 伺服器執行個體轉換為 VCF 管理網域（FC 資料儲存）</block>
-  <block id="66dee681053aa002f6c13a6c8af76c12" category="paragraph">將使用ONTAP光纖通道資料儲存的 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理域。此程序包括配置 FC 儲存、為 VMware 部署ONTAP工具以及使用 VCF 導入工具在 VCF 環境內遷移和管理叢集。</block>
-  <block id="bf1e06538500268f42a2e6e93d0f1132" category="paragraph">轉換 vSphere 環境（現有光纖通道 (FC) 資料儲存在ONTAP上運作）涉及將現有基礎架構整合到現代私有雲架構中。此過程得益於 FC 儲存的穩健性，以確保無縫的資料存取和管理。透過轉換程序建立 VCF 管理網域後，管理員可以有效地將其他 vSphere 環境（包括使用 FC 資料儲存的環境）匯入 VCF 生態系統。這種整合不僅提高了資源利用率，還簡化了私有雲基礎架構的管理，確保了平穩過渡，並且對現有工作負載的干擾最小。</block>
-  <block id="14178b0419c4bc9e8b24af3edb9a58cf" category="paragraph">在此解決方案中，我們將示範當叢集轉換為 VCF 管理域時，vSphere 8 中的 FC 資料儲存如何成為主要儲存。</block>
-  <block id="c7ea9206b82bc44e70bb229c93c0c00a" category="list-text">ONTAP tools for VMware vSphere。</block>
-  <block id="2a80eb298c843d729abebb77020c247b" category="list-text">使用ONTAP工具配置 FC 資料儲存庫。</block>
   <block id="47b87c1fa9dba4c346a469143348e9c1" category="list-text">使用 VCF 導入工具驗證 vSphere 叢集。</block>
   <block id="9f3cf4b82b6ea4f161208fdce09b1523" category="list-text">在 vSphere 叢集中部署 SDDC 管理器。</block>
-  <block id="574ab4c857760a764437fe81b96be22b" category="list-text">配置 JSON 檔案以在 VCF 轉換期間建立 NSX。</block>
-  <block id="5399e70bdf99381ca71781b9960f8ce2" category="list-text">使用 VCF 匯入工具將 vSphere 8 叢集轉換為 VCF 5.2.1</block>
-  <block id="fd0815bd5938eba80a95b063c6385d05" category="list-text">NetApp ASA R2/ ASA/ AFF儲存系統，設定儲存虛擬機器 (SVM) 以允許光纖通道 (FC) 流量。</block>
-  <block id="e3e177f3cb35efddf595139991433add" category="list-text">已建立邏輯介面 (LIF) 來承載 FC 流量並與 SVM 關聯。</block>
-  <block id="8be39662dc9ded126a22c2d0b1da78f3" category="list-text">已在指定用於承載 FC 流量的交換器上設定了 FC 分割區。</block>
   <block id="94d834ba28d3771363b9a727636e85c9" category="list-text">一個 vSphere 8 集群，其中有 4 個 ESXi 主機和一個位於該集群上的 vCenter 設備。</block>
   <block id="7ce1dcdcb36b707e9b1aceed129516b2" category="list-text">在為此目的建立的 VLAN 或網路段上為 vMotion 配置的分散式連接埠群組。</block>
   <block id="449d5493c3eb6a93860c4fadcec924e0" category="list-text">下載 VCF 轉換所需的軟體。</block>
   <block id="ec40e9dacf33c1ee930d1b726ee5d873" category="inline-link">適用於ONTAP tools for VMware vSphere的先決條件</block>
-  <block id="db0370c63d576573b49c798d7bc2a252" category="paragraph">ONTAP tools for VMware vSphere可以安裝在 HA 或非 HA 設定中。有關ONTAP工具前提條件的完整信息，請參閱<block ref="6e428b14f85db028b0a1128f9751daf5" category="inline-link-rx"></block>。</block>
   <block id="1da1c873dfbf98f6c6090c0839f8c330" category="inline-link">將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項</block>
   <block id="b6683e8c1ed9e657cc01bf9e054b32aa" category="paragraph">有關將 vSphere 轉換或匯入 VCF 5.2 時支援的儲存和其他注意事項，請參閱<block ref="15b0d7b2c378c1ac4174c7fdeb8185e2" category="inline-link-rx"></block>。</block>
   <block id="09eabed0d7247295af9dc44b5c39e08f" category="inline-link">下載用於轉換或匯入現有 vSphere 環境的軟體</block>
   <block id="695255c7a5f26784d199bcd6066cab12" category="paragraph">所需的軟體，請參閱<block ref="c5d8c042d5b9378267bd1c031ecabe92" category="inline-link-rx"></block>。</block>
   <block id="4b5ab6628c3e4bc46771aec6bee8406b" category="inline-link-macro">VMware Cloud Foundation 5.2 文檔</block>
   <block id="22c02a271ac2a6259d9dc5fef0e2ed90" category="paragraph">有關配置 VCF 的信息，請參閱<block ref="463b3a495259d573f227b3e696445858" category="inline-link-macro-rx"></block>。</block>
-  <block id="33ce2bf8e8b69b7d3d6f232072237bb4" category="paragraph">此解決方案涵蓋使用ONTAP tools for VMware vSphere來設定 FC 資料儲存以及將現有 vSphere 8 叢集轉換為 VCF 管理域的過程。</block>
   <block id="c748e87bf277c912beee47669874feee" category="paragraph">完成以下步驟：</block>
   <block id="79bcabe982ac86e1bed50193f149cc44" category="list-text">將 VCF 導入工具複製到 vCenter 設備。</block>
   <block id="d3f8bf6eb3a34aabd5dcc59765ea2b45" category="list-text">使用 VCF 導入工具對 vCenter 設備執行預檢查。</block>
   <block id="661ee996cd583b2d0c47c00e7902ad5d" category="list-text">在 vCenter 叢集上部署 SDDC 管理器虛擬機器。</block>
   <block id="ab1264831064e2e7d9e0469b9dc9b3bb" category="list-text">為 NSX 叢集建立一個 JSON 文件，以便在轉換過程中進行部署。</block>
   <block id="de8816f9b7f3335d066a023246b73a82" category="list-text">將所需軟體上傳到 SDDC 管理器。</block>
-  <block id="073807da9205612c9934d53950a3de49" category="list-text">將 vSphere 叢集轉換為 SDDC 管理器清單。</block>
   <block id="82210a8fd13268e4307d475c9115950a" category="inline-link">在 VMware Cloud Foundation 中將 vSphere 環境轉換為管理網域或將 vSphere 環境匯入為 VI 工作負載域</block>
   <block id="01987f9ce5748c65cc7bf8d605d17e8b" category="paragraph">有關轉換過程的概述，請參閱<block ref="35ce577267ff8b5d6ae6beeddf158b44" category="inline-link-rx"></block>。</block>
   <block id="aadd33358a0cd81f00533c6c7d3a9e1c" category="section-title">部署ONTAP工具並配置 FC 資料儲存庫</block>
-  <block id="0a8f308dd5af0d4fc7ece4864d608e00" category="paragraph">ONTAP工具 10 的架構旨在與 VMware 環境無縫集成，利用包含ONTAP工具服務、vSphere 插件和 REST API 的模組化可擴展框架實現高效的儲存管理、自動化和資料保護。</block>
   <block id="dff26c9f4a2ba7baaf5ba11b950186e1" category="paragraph">ONTAP tools for VMware vSphere可以安裝在 HA 或非 HA 設定中。</block>
   <block id="6f006d358d5452b3531c5a41392da2c9" category="inline-image-macro">ONTAP工具架構</block>
-  <block id="a4c23d01b06dac4f9a209a1a2543a790" category="paragraph"><block ref="a4c23d01b06dac4f9a209a1a2543a790" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="b104ceed90f0f9fcd08ac3001e9a09a9" category="paragraph">在此步驟中， ONTAP工具 10 採用非 HA 配置進行部署。</block>
-  <block id="d1ad624181f62002597712a6723a5f05" category="paragraph">有關 HA 和非 HA 配置的更多部署詳細信息，請參閱<block ref="d69e3407d99522a3e12db48f870b8266" category="inline-link-rx"></block>。</block>
   <block id="5075ca510e41bc1df48cef9efa6a35b0" category="list-text">ONTAP<block ref="fd84ab456b2c9effbb119db417486410" category="inline-link-rx"></block>。</block>
-  <block id="241552a99431358206848d09f6d63bd3" category="list-text">在 vSphere 用戶端中，右鍵單擊集群，然後按一下“部署 OVF 範本”</block>
   <block id="56bd74324eb20ac49f1059d7c5f73e2a" category="inline-image-macro">部署 OVF 模板</block>
-  <block id="3f279c318966baa7425c911c26359ed3" category="paragraph"><block ref="3f279c318966baa7425c911c26359ed3" category="inline-image-macro-rx" type="image"></block></block>
   <block id="ba33ce31960b5fdf347a91e4e8de39f2" category="list-text">在*部署 OVF 範本*中完成以下步驟：</block>
   <block id="9a969f29cdde9cf54cafec8f8113e493" category="list-text">選擇一個 OVF 範本。</block>
   <block id="a14f880a53410788a59028e78c3bbfb0" category="list-text">選擇名稱和資料夾。</block>
   <block id="25b2b2bf11da11b9391144b51366482a" category="list-text">選擇計算資源。</block>
   <block id="b8ce3c461367ddd27700eaaef61da9e4" category="list-text">查看詳細資訊。</block>
   <block id="ae453256f38cb50f1e4ce2d486db7086" category="list-text">同意許可協議。</block>
-  <block id="df765b02331b79de17ee51543ad1139c" category="list-text">在範本的*配置*頁面上，選擇部署類型，包括是否在 HA 配置中部署ONTAP工具。按一下“*下一步*”繼續。</block>
   <block id="4333cf8ae789a9ca2fa869e0299da30e" category="inline-image-macro">配置 - 部署類型</block>
-  <block id="3ec77f050074dd0a05c57af9fea35ed8" category="paragraph"><block ref="3ec77f050074dd0a05c57af9fea35ed8" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="dea939377211c98a2ac571b6faaa2967" category="list-text">在*選擇儲存*頁面上選擇要安裝虛擬機器的資料存儲，然後按一下*下一步*。</block>
-  <block id="576eac3450b51403573d7b70a0ff127c" category="list-text">選擇ONTAP工具 VM 將在其上進行通訊的網路。按一下“*下一步*”繼續。</block>
-  <block id="f3235fa58ae204c3d0881acd9e2b30a4" category="list-text">在「自訂範本」視窗中，填寫所有必要的資訊。</block>
   <block id="da128fba13373e3fdfdced77fa61ee42" category="list-text">應用程式使用者名稱和密碼</block>
   <block id="d7117522f97f3879f2d1e92bcf14a6ba" category="list-text">選擇是否啟用包含代理 URL 的 ASUP（自動支援）。</block>
   <block id="08a93a333d2c57da8e5608baf0c9b839" category="list-text">維護使用者名稱和密碼（控制台使用的維護帳戶）。</block>
   <block id="6cc8af2a438e1cdfff7f39593b6452cc" category="list-text">提供部署配置所需的 IP 位址。</block>
   <block id="fa753efc9d223b098ba573ad55b6b03b" category="list-text">提供節點配置的所有網路資訊。</block>
   <block id="47d44ed4727a9bed10ad17773b1b922e" category="inline-image-macro">自訂模板</block>
-  <block id="4258429588e894cf035d5ec59c0e6606" category="paragraph"><block ref="4258429588e894cf035d5ec59c0e6606" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="83eff7e69abccc177a23b22ac3f6cdf7" category="list-text">最後，按一下「*下一步*」繼續，然後按一下「*完成*」開始部署。</block>
-  <block id="a7c1f19a0afcdde0b988ba73af98d366" category="example-title">配置ONTAP工具</block>
   <block id="26ffc687a7267f96a389530199971cd1" category="inline-link">ONTAP tools for VMware vSphere文檔</block>
-  <block id="fba0e00a0f8b91e64f1e276cc56a09c4" category="paragraph">一旦安裝並啟動ONTAP工具 VM，就需要進行一些基本配置，例如新增 vCenter 伺服器和ONTAP儲存系統進行管理。請參閱以下文檔<block ref="d01d94d571064fca3b7ecd1803960646" category="inline-link-rx"></block>了解詳細資訊。</block>
   <block id="2206918470c1e3545b622be8ff2321be" category="inline-link">新增 vCenter 實例</block>
-  <block id="bc4d2930e9299d2eb1eed7cbc26a9701" category="list-text">參考<block ref="e9bd7202a0777b9aafc13ac76eb3ea3e" category="inline-link-rx"></block>配置要使用ONTAP工具管理的 vCenter 實例。</block>
-  <block id="7c0fb27b9b457f72cef0b2f7e66410cc" category="list-text">若要新增ONTAP儲存系統，請登入 vSphere 用戶端並導覽至左側的主選單。按一下「NetApp ONTAP工具」以啟動使用者介面。</block>
   <block id="4a7b47400ec4f0854922dc54ffb6bc46" category="inline-image-macro">打開ONTAP工具</block>
-  <block id="77863d2759545c1102af769f13119795" category="paragraph"><block ref="77863d2759545c1102af769f13119795" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="9207194312e4679eb8edc497d64a7bd6" category="list-text">導覽至左側選單中的“*儲存後端*”，然後按一下“*新增*”以存取“*新增儲存後端*”視窗。</block>
-  <block id="b5a6b9a78342e7192d994801235eab46" category="list-text">填寫要管理的ONTAP儲存系統的 IP 位址和憑證。按一下“*新增*”完成。</block>
-  <block id="836a81553491247f64078a93cf9849d4" category="paragraph"><block ref="836a81553491247f64078a93cf9849d4" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="0b28e394797365445a49ef304065e244" category="admonition">這裡，使用叢集 IP 位址在 vSphere 用戶端 UI 中新增儲存後端。這允許對儲存系統中的所有 SVM 進行全面管理。或者，可以使用ONTAP工具管理器新增儲存後端並將其與 vCenter 執行個體關聯，網址為<block ref="8fd879a973e68e3c406be72d464b4816" prefix=" " category="inline-code"></block>。使用此方法，只能在 vSphere 用戶端 UI 上新增 SVM 憑證，從而提供對儲存存取的更精細的控制。</block>
-  <block id="6fda3ce6879d61466a5db6b1fe1560bf" category="example-title">使用ONTAP工具配置 FC 資料儲存庫</block>
-  <block id="d5b5c9215dade8df385dd905699283ce" category="paragraph">ONTAP工具整合了整個 vSphere 用戶端 UI 的功能。在此步驟中，將從主機庫存頁面配置 FC 資料儲存。</block>
   <block id="e8e94e04a6dd2b4ca9abbc982c311fed" category="list-text">在 vSphere 用戶端中，導覽至主機（或儲存）清單。</block>
   <block id="2cc166e63651aac51a3e4579b6f4089b" category="list-text">導覽至 *ACTIONS &gt; NetApp ONTAP工具 &gt; 建立資料儲存*。</block>
   <block id="a6c8effbd5f52a486aad6e241ab6f0ea" category="inline-image-macro">建立資料儲存區</block>
-  <block id="201a8aef578777efab22d056ded6d6c2" category="paragraph"><block ref="201a8aef578777efab22d056ded6d6c2" category="inline-image-macro-rx" type="image"></block></block>
   <block id="81a52fdc5866bf5f41d78f895cf92498" category="list-text">在「建立資料儲存」精靈中，選擇 VMFS 作為要建立的資料儲存類型。</block>
   <block id="5da6fe75801e2dbe00fee35b501f242b" category="inline-image-macro">資料儲存類型</block>
-  <block id="149cb14e7f874a82c6795976e512f6ab" category="paragraph"><block ref="149cb14e7f874a82c6795976e512f6ab" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="e8cfef4628180d8018a68e8d924499a9" category="list-text">在「名稱和協定」頁面上，填寫資料儲存的名稱、大小以及要使用的 FC 協定。</block>
   <block id="578eeca54b6d4e0f761d12b63b37f616" category="inline-image-macro">名稱和協議</block>
-  <block id="4b2411d0272047f421669054cfd3622b" category="paragraph"><block ref="4b2411d0272047f421669054cfd3622b" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="bf89c1369e19c8a6abf6a07f6ce1ecce" category="list-text">在「儲存」頁面上，選擇ONTAP儲存平台和儲存虛擬機器 (SVM)。您也可以在這裡選擇任何可用的自訂匯出策略。按一下“*下一步*”繼續。</block>
-  <block id="dbde31562a1737208056fc40889b30ff" category="paragraph"><block ref="dbde31562a1737208056fc40889b30ff" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="3bd0e723b81b80e86e2b0a8e2664c293" category="list-text">在*儲存屬性*頁面上選擇要使用的儲存聚合。按一下“*下一步*”繼續。</block>
-  <block id="7b18158b1c913ca30724ba9ca5081aba" category="list-text">在「*摘要*」頁面上，查看資訊並按一下「*完成*」以開始設定程序。  ONTAP工具將在ONTAP儲存系統上建立一個磁碟區，並將其作為 FC 資料儲存掛載到叢集中的所有 ESXi 主機。</block>
   <block id="89928728c928e719ef9ec5d911a3fddc" category="inline-image-macro">摘要頁面</block>
-  <block id="83818223ffaf45fc89e26c40967d6821" category="paragraph"><block ref="83818223ffaf45fc89e26c40967d6821" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="f049496f740ff13c8eb91183c268c101" category="section-title">將 vSphere 環境轉換為 VCF 5.2</block>
   <block id="482799c273b96aa15c1b589f2852571a" category="paragraph">以下部分介紹部署 SDDC 管理器以及將 vSphere 8 叢集轉換為 VCF 5.2 管理域的步驟。在適當的情況下，將參考 VMware 文件以取得更多詳細資訊。</block>
   <block id="14ef12b667451f4758ca1e5ca38aa76f" category="paragraph">VCF 導入工具由 VMware by Broadcom 提供，是一款實用程序，可在 vCenter 設備和 SDDC 管理器上使用，以驗證配置並為 vSphere 和 VCF 環境提供轉換和導入服務。</block>
   <block id="42050940ee07c4d157f7dde821c690b4" category="inline-link">VCF 導入工具選項和參數</block>
-  <block id="6b84fa78e6c7115e71095d5ed299c16b" category="paragraph">有關更多信息，請參閱<block ref="afe75234a4180b567fabf4a6a7fae16e" category="inline-link-rx"></block> 。</block>
   <block id="ccee5d3d0bc1dd2c1c47e37f8bcf5a97" category="example-title">複製並提取 VCF 導入工具</block>
-  <block id="c273899a1ea9d7652eec6b492bc12520" category="paragraph">VCF 匯入工具用於 vCenter 設備上，以驗證 vSphere 叢集在 VCF 轉換或匯入過程中是否處於健康狀態。</block>
   <block id="918f1aa6f5a5b3224d8535c1ebb02c69" category="inline-link">將 VCF 匯入工具複製到目標 vCenter Appliance</block>
-  <block id="6db756588d7ab0b4f463b54ba9ec111f" category="list-text">請依照以下步驟操作<block ref="1ec208d841b794dc72a133dc0e533b89" category="inline-link-rx"></block>在 VMware Docs 上將 VCF 匯入工具複製到正確的位置。</block>
   <block id="1ca4a82ee01774486b954f7ba7340895" category="list-text">使用以下命令提取捆綁包：</block>
   <block id="c2f0904ca47eedf853d1bd1af6be3544" category="example-title">驗證 vCenter 設備</block>
   <block id="15b696bef91649b67cbf2eeeb3b012a3" category="paragraph">轉換之前，使用 VCF 導入工具驗證 vCenter 設備。</block>
   <block id="d4c271b0a978f3665f3da392523defab" category="inline-link">轉換前對目標 vCenter 執行預檢查</block>
-  <block id="2f5f29487d8a4645a47110fe282680d2" category="list-text">請依照以下步驟操作<block ref="02a9fff0a4b20432a89ede46df2a515a" category="inline-link-rx"></block>運行驗證。</block>
   <block id="98d048fbf9f7b2cc382df6afc08b60d5" category="list-text">以下輸出顯示 vCenter 設備已通過預先檢查。</block>
   <block id="917d90b52d742637cbea6abca45a1cdf" category="inline-image-macro">vcf導入工具預檢</block>
-  <block id="db91184703f46e47a7327876a10a94dc" category="paragraph"><block ref="db91184703f46e47a7327876a10a94dc" category="inline-image-macro-rx" type="image"></block></block>
   <block id="c4c4fd7ecdad428e940e034d4ea30b1c" category="example-title">部署 SDDC 管理器</block>
   <block id="f5f85ecec5ca11adf0a11696ef65c8d5" category="paragraph">SDDC 管理器必須位於將轉換為 VCF 管理域的 vSphere 叢集上。</block>
   <block id="5e08c45027c95d295fb7951f9d9a270b" category="paragraph">依照 VMware Docs 上的部署說明完成部署。</block>
   <block id="58c419bd59aa86bf812ea9b11cb329da" category="inline-link">在目標 vCenter 上部署 SDDC 管理器設備</block>
-  <block id="97c4ad37db9df55732293fda81f255bb" category="paragraph">參考<block ref="158200b7329fc68ebf1696cec6cd18b2" category="inline-link-rx"></block>。</block>
   <block id="d35566195fd75953634eb0ed73abc24b" category="inline-link-macro">委員會主辦單位</block>
-  <block id="ebddc751448f815727f07cdcd2a0afe5" category="paragraph">有關詳細信息，請參閱<block ref="c7429a38bcdbeac0c8d7da85a644e2f8" category="inline-link-macro-rx"></block>在 VCF 管理指南中。</block>
   <block id="dc3ef408a2d542740bb60f874303de24" category="example-title">為 NSX 部署建立 JSON 文件</block>
   <block id="46fb6e7fb58e3f49016aab344688842b" category="paragraph">若要在將 vSphere 環境匯入或轉換至 VMware Cloud Foundation 時部署 NSX Manager，請建立 NSX 部署規格。  NSX 部署至少需要 3 台主機。</block>
-  <block id="717c52f67afb409234d29bac94be1b80" category="inline-link">產生用於轉換或匯入現有 vSphere 環境的 NSX 部署規範</block>
-  <block id="983c115046c58aea0543f55224849315" category="paragraph">有關完整信息，請參閱<block ref="d7467f6fb00d7c2a470b02d9607f7c04" category="inline-link-rx"></block>。</block>
-  <block id="db4eba53496a196b6219b98930e1ca7c" category="admonition">在轉換或匯入作業中部署 NSX Manager 叢集時，將使用 NSX-VLAN 網路。有關 NSX-VLAN 網路限制的詳細信息，請參閱「將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項」部分。有關 NSX-VLAN 網路限制的信息，請參閱<block ref="2b3ec7775e0b93210106da79d16024cd" category="inline-link-rx"></block>。</block>
   <block id="edcdcc94fa5f9afa647809d9b0e29d4c" category="paragraph">以下是 NSX 部署的 JSON 檔案範例：</block>
   <block id="2628315dfe52328f4438049398178f75" category="paragraph">將 JSON 檔案複製到 SDDC 管理員上的目錄。</block>
   <block id="90360db78572a9f5687c35ce0ed845ca" category="example-title">將軟體上傳到 SDDC Manager</block>
-  <block id="c7f9f000483a78eb221e38025580ed9d" category="paragraph">將 VCF 導入工具和 NSX 部署套件複製到 SDDC 管理員上的 /home/vcf/vcfimport 目錄。</block>
   <block id="72de8bc6417094104c70fd8bb6ec4de7" category="inline-link">將所需軟體上傳至 SDDC 管理器設備</block>
-  <block id="de2557a9321b6aedf87316df6a52be7b" category="paragraph">看<block ref="af4e0d4a07df976d61bf3063bf968c2e" category="inline-link-rx"></block>以獲得詳細說明。</block>
   <block id="e3aecc30db7646bfbd40733e6f611a20" category="example-title">將 vSphere 群集轉換為 VCF 管理域</block>
-  <block id="4322eadac3ff812688881ac6970108ed" category="paragraph">VCF 導入工具用於進行轉換過程。從 /home/vcf/vcf-import-package/vcf-brownfield-import-&lt;version&gt;/vcf-brownfield-toolset 目錄執行下列指令，請查看 VCF 匯入工具功能的列印輸出：</block>
   <block id="bed67f89579825f17711140c7a9c275b" category="paragraph">執行下列指令將vSphere叢集轉換為VCF管理網域，並部署NSX叢集：</block>
   <block id="eaf00451b4ca91ec9408411163999f93" category="inline-link">將 vSphere 環境轉換或匯入 SDDC Manager 清單中</block>
-  <block id="cc1459d3a8e7b0316323b670c53a4cfd" category="paragraph">有關完整說明，請參閱<block ref="57e25a8a5743e83a9bbbff963070b81d" category="inline-link-rx"></block>。</block>
   <block id="ce732495602f6d193790ead74cc53958" category="example-title">向 VCF 新增許可</block>
   <block id="3e7fa4142811bee7db6d69055d254487" category="paragraph">完成轉換後，必須將許可證新增至環境。</block>
   <block id="2bfc03db1d9b64b4eff1afbc1f6bb403" category="list-text">登入 SDDC 管理器 UI。</block>
@@ -4903,36 +4841,13 @@
   <block id="1abffa6323734df2eef969c134fe301e" category="list-text">提供許可證的描述。</block>
   <block id="7dee7e783d13b6d5d415926ce0bfc306" category="list-text">按一下“*新增*”。</block>
   <block id="03d8870efe22a4d98455d5a64c9d7093" category="list-text">對每個許可證重複這些步驟。</block>
-  <block id="1e8d3f566ef1083e6c68a7b120a8d3ee" category="section-title">ONTAP tools for VMware vSphere的視訊演示</block>
-  <block id="c14db7c6e5bd93388bb0bc5afa332fb8" category="video-title">ONTAP tools for VMware vSphere的 NFS 資料存儲</block>
-  <block id="dc46305b0afcad3e505a5872e00f27dd" category="doc">將 vCenter 伺服器執行個體轉換為 VCF 管理網域（NFS 資料儲存體）</block>
-  <block id="e95c6b41c762487d0b2e44aa96cf8468" category="paragraph">將具有NetApp ONTAP NFS 資料儲存區的現有 vSphere 8 叢集轉換為 VMware Cloud Foundation (VCF) 管理網域。此流程包括配置 NFS 儲存、為 VMware 部署ONTAP工具以及使用 VCF 導入工具轉換叢集以簡化管理和最佳化 VCF 內的資源利用率。</block>
-  <block id="9e4ccff75587e092d8989c7760ef53d6" category="paragraph">轉換在ONTAP上運行現有 NFS 資料儲存的叢集涉及將現有基礎架構整合到現代私有雲架構中。此流程受益於 NFS 儲存的靈活性，以確保無縫的資料存取和管理。透過轉換過程建立 VCF 管理網域後，管理員可以有效地將其他 vSphere 叢集（包括使用 NFS 資料儲存的叢集）匯入 VCF 生態系統。這種整合不僅提高了資源利用率，還簡化了私有雲基礎架構的管理，確保了平穩過渡，並且對現有工作負載的干擾最小。</block>
-  <block id="efc9eb400844914c066e62f4b3e9cb9a" category="paragraph">在此解決方案中，我們將示範當叢集轉換為 VCF 管理域時，vSphere 8 中的 NFS 資料儲存如何成為主要儲存。</block>
-  <block id="7af19b356e103808a404593e820a6e04" category="list-text">使用ONTAP工具配置 NFS 資料儲存庫。</block>
-  <block id="f454cc50f51a0198cec7766e99760960" category="list-text">使用 VCF 匯入工具將 vSphere 8 叢集轉換為 VCF 5.2。</block>
   <block id="b33c98a819b286666c0caf49f71f6e56" category="list-text">NetApp AFF儲存系統，其儲存虛擬機器 (SVM) 配置為允許 NFS 流量。</block>
   <block id="53a0542f2cfd8039738584dc0de0f46e" category="list-text">已在 IP 網路上建立用於承載 NFS 流量並與 SVM 關聯的邏輯介面 (LIF)。</block>
   <block id="bb41ae611292604642a1b6a9164a5120" category="list-text">為 vMotion 和 NFS 儲存流量在為此目的建立的 VLAN 或網路區段上配置的分散式連接埠群組。</block>
-  <block id="691ac8a8f3e60e3d8d9dc0b0ae1b251a" category="paragraph">ONTAP tools for VMware vSphere可以安裝在 HA 或非 HA 設定中。有關ONTAP工具前提條件的完整信息，請參閱<block ref="6e428b14f85db028b0a1128f9751daf5" category="inline-link-rx"></block>。</block>
-  <block id="8d3204ef6ae01372655ca6e5a741e3e6" category="paragraph">有關將 vSphere 轉換或匯入 VCF 5.2 時支援的儲存和其他注意事項，請參閱<block ref="f3964a9e03f9a89ea4d729a3257cae81" category="inline-link-rx"></block>。</block>
   <block id="7109b07ff808e78ed8dab5209c95b50c" category="inline-link">Broadcom 支援門戶</block>
-  <block id="ad2f6421fdccc7af4fac7779596a66d9" category="paragraph">對於所需的軟體，請訪問<block ref="484200331f4eb6a76c2aeede8927bf3e" category="inline-link-rx"></block>。</block>
-  <block id="26d0664c5e33fd7616f2a0e258f42d03" category="paragraph">此解決方案涵蓋使用ONTAP tools for VMware vSphere來設定 NFS 資料儲存以及將現有 vSphere 8 叢集轉換為 VCF 管理網域的過程。</block>
   <block id="d47d458f80069a0b941f7c912b9ae825" category="section-title">部署ONTAP工具並配置 NFS 資料儲存庫</block>
-  <block id="49a9bb819d924052d8eb3c40172a1b54" category="example-title">使用ONTAP工具設定 NFS 資料儲存庫</block>
-  <block id="42531685cc4cd549ad24b3a73a18436c" category="paragraph">ONTAP工具整合了整個 vSphere 用戶端 UI 的功能。在此步驟中，將從儲存清單頁面配置 NFS 資料儲存。</block>
   <block id="31131faaa977a5bfccd7eee6cfde499e" category="list-text">在 vSphere 用戶端中，導覽至儲存清單。</block>
-  <block id="e65705fc7d668b60153e6b4323b5ed97" category="paragraph"><block ref="e65705fc7d668b60153e6b4323b5ed97" category="inline-image-macro-rx" type="image"></block></block>
   <block id="b2e4ee0f7f71e03646fc11f28fbfc176" category="list-text">在「建立資料儲存」精靈中，選擇要建立的資料儲存的類型。選項有 NFS 或 VMFS。</block>
-  <block id="0e447452a067ac396b01ce8b6274f1eb" category="list-text">在「名稱和協定」頁面上，填寫資料儲存的名稱、大小以及要使用的 NFS 協定。</block>
-  <block id="35f0aa3a075d4f5f38a59f521871f3ac" category="paragraph"><block ref="35f0aa3a075d4f5f38a59f521871f3ac" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="6f7ed2172d45f575c5010792925de5a6" category="paragraph"><block ref="6f7ed2172d45f575c5010792925de5a6" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="7dac045e2ebee0d6ad405c275424b392" category="list-text">在「*摘要*」頁面上，查看資訊並按一下「*完成*」以開始設定程序。  ONTAP工具將在ONTAP儲存系統上建立一個磁碟區，並將其作為 NFS 資料儲存掛載到叢集中的所有 ESXi 主機。</block>
-  <block id="2ad367ba7996888a9591b78bcf2466f9" category="paragraph"><block ref="2ad367ba7996888a9591b78bcf2466f9" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="1cb32fae21cc252e0a3e85929ac36815" category="section-title">將 vSphere 群集轉換為 VCF 5.2</block>
-  <block id="1f363602f6445fea2e75dd2db970f13d" category="paragraph">有關詳細信息，請參閱<block ref="f644320b0e6b2e0e5df6fa3ad32a9548" category="inline-link-macro-rx"></block>在 VCF 管理指南中。</block>
-  <block id="0966b29172886bb84ff508f19a1a07ab" category="admonition">在轉換或匯入作業中部署 NSX Manager 叢集時，將使用 NSX-VLAN 網路。有關 NSX-VLAN 網路限制的詳細信息，請參閱「將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項」部分。有關 NSX-VLAN 網路限制的信息，請參閱<block ref="f3964a9e03f9a89ea4d729a3257cae81" category="inline-link-rx"></block>。</block>
   <block id="68023c4711ee3d8e297585eef2acd127" category="doc">使用ONTAP上基於 FC 的 VMFS 資料儲存庫作為 VCF 管理域的主要存儲</block>
   <block id="eb92b25e246350e9988dc1e2d17a13d3" category="paragraph">在此用例中，我們概述了使用ONTAP上現有的基於 FC 的 VMFS 資料儲存作為 VMware Cloud Foundation (VCF) 管理域的主儲存的過程。此過程總結了所需的元件、配置和部署步驟。</block>
   <block id="03c5c9f2f5c0607796519bddac473dd9" category="paragraph">在適當的情況下，我們將參考外部文檔，以了解必須在 VCF 的 SDDC 管理器中執行的步驟，並參考特定於儲存配置部分的步驟。</block>
@@ -5019,7 +4934,6 @@
   <block id="651d0e0694075918301d2c251e0d4435" category="inline-image-macro">VMkernel 連接埠屬性</block>
   <block id="6b699f5c7dbc44d7624bc8851ade6925" category="list-text">重複此程序為第二個 iSCSI 網路建立 VMkernel 適配器。</block>
   <block id="54b98b7fdf167272ca9441f0c9a03632" category="paragraph">ONTAP tools for VMware vSphere以 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。</block>
-  <block id="761d6de2eb49ac1bc8c002149dba9d6e" category="list-text">ONTAP<block ref="19383bb1e197833ea114614ea4b0992b" category="inline-link-macro-rx"></block>並下載到本機資料夾。</block>
   <block id="c0c3bb0dafadc093a48cffa2c0db0f2c" category="list-text">登入 VCF 管理網域的 vCenter 設備。</block>
   <block id="4af0c4522e42ed1a9851994118bbec5d" category="paragraph"><block ref="4af0c4522e42ed1a9851994118bbec5d" category="inline-image-macro-rx" type="image"></block></block>
   <block id="72123732ba7e10b992a8ac60efd5c813" category="list-text">配置和磁碟檔案的儲存位置選擇VCF管理域叢集的vSAN資料儲存。</block>
@@ -5044,14 +4958,6 @@
   <block id="3b0680cb60afc737eb8e0a472893a41a" category="list-text">可以從「最近任務」窗格查看重新定位狀態。</block>
   <block id="e6fe88cc8fc038a9cd996fe90954f81c" category="inline-image-macro">vSphere Client 的近期任務窗格</block>
   <block id="23c971c02c1c9abc13d19a76a9fb9a19" category="paragraph"><block ref="23c971c02c1c9abc13d19a76a9fb9a19" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="89d74723ee6a51937ef351816dbf1477" category="doc">了解如何將具有現有資料儲存的 vSphere 環境轉換為 VCF</block>
-  <block id="4d0d4d67f96efb1cca34ee1b0a554f5f" category="paragraph">將現有資料儲存在ONTAP上運行的 vSphere 環境轉換為 VMware Cloud Foundation (VCF) 環境涉及將目前基礎架構整合到現代私有雲架構中。</block>
-  <block id="e526c814e32d11ce1d3fb94d6560d44e" category="paragraph">此流程利用ONTAP儲存的靈活性實現無縫資料存取和管理。一旦建立了 VCF 管理網域，管理員就可以有效地將其他 vSphere 環境匯入 VCF 生態系統。這種整合提高了資源利用率，簡化了私有雲管理，並確保了平穩過渡，同時最大限度地減少了對現有工作負載的干擾。</block>
-  <block id="1638d723498a24313e5f71c171eead96" category="paragraph">有關轉換 vCenter 執行個體的技術細節，請參閱下列解決方案。</block>
-  <block id="5288f1061976c8f08446356d45bd2bd4" category="inline-link-macro">將現有 vCenter 執行個體轉換為 VCF 管理域 (NFS)</block>
-  <block id="29bb4da9ad1dbe396c68def7412e90f2" category="list-text"><block ref="29bb4da9ad1dbe396c68def7412e90f2" category="inline-link-macro-rx"></block></block>
-  <block id="bc38b9168f9118fbaf6f4e9d0fde892a" category="inline-link-macro">將 vCenter 執行個體（FC 資料儲存）轉換為 VCF 管理域</block>
-  <block id="a92a55113a823d51534f9ecad8004d83" category="list-text"><block ref="a92a55113a823d51534f9ecad8004d83" category="inline-link-macro-rx"></block></block>
   <block id="6e5e52afdd4cfaa6938acf4734136e78" category="doc">利用 VMware Cloud Foundation 和ONTAP簡化混合雲體驗</block>
   <block id="b6ad51a6fed6b65548c48ada0b45e892" category="paragraph">NetApp ONTAP與 VMware Cloud Foundation (VCF) 集成，提供支援區塊和文件協定的統一儲存解決方案。這種整合簡化了混合雲部署，改善了資料管理和效能，並確保了跨本地和雲端環境的一致資料服務。</block>
   <block id="776af1c9b36d926a91ed157d0710d3d8" category="paragraph">將NetApp與 VCF 結合使用可透過 NetApp 的重複資料刪除、壓縮和快照等進階功能增強資料管理和儲存效率。這種組合為虛擬化環境提供了無縫整合、高效能和可擴展性。此外，它還透過在本地和雲端基礎架構中實現一致的資料服務和管理，簡化了混合雲部署。</block>
@@ -6900,9 +6806,6 @@
   <block id="88d9287ce8827ff35be64010029a21df" category="sidebar">使用ONTAP進行安全和勒索軟體防護</block>
   <block id="6a2411994479b6388309805371d3b1a9" category="sidebar">備份和災難復原解決方案</block>
   <block id="1b676f46b48e5998e5ccab02ad455583" category="sidebar">將現有 vSphere 叢集轉換為 VCF</block>
-  <block id="72c2cb3a1c4fe511d4aa5e485a6894c5" category="sidebar">關於將現有 vSphere 群集轉換為 VCF</block>
-  <block id="29f9284e7442c54b5708da5878ed3103" category="sidebar">使用 NFS 資料儲存轉換現有的 vSphere 集群</block>
-  <block id="4a8a09e26d16c2590e0cd3a06a7ecedf" category="sidebar">使用 FC 資料儲存轉換現有的 vSphere 叢集</block>
   <block id="3351d1121b10126a6d4eb66dd2c346de" category="sidebar">為 VCF 提供主要存儲</block>
   <block id="3619337e6d5ec0ba5d72073a11fe2b27" category="sidebar">關於配置主體存儲</block>
   <block id="4f3402295f8f07bb3ead16c87445907f" category="sidebar">使用 FC 設定管理域</block>
@@ -7247,7 +7150,6 @@
   <block id="0d96540ab990da70d3d66c8aa90ab768" category="admonition">對於跨多路徑的多路徑和故障轉移，請在單獨的乙太網路中為 iSCSI 配置中的所有 SVM 每個儲存節點建立至少兩個 LIF。</block>
   <block id="50bd2b252d8071c7eff473b4380bdc47" category="list-text">選擇是否啟用儲存虛擬機器管理帳戶（適用於多租用戶環境），然後按一下「*儲存*」以建立 SVM。</block>
   <block id="1793c55da1be61fc74dfc9e6f6e1bbec" category="list-text">在 vCenter 裝置介面中右鍵單擊管理叢集並選擇“部署 OVF 範本...”</block>
-  <block id="c4e2b753cade8ed5dfdbb1a1c68545e9" category="list-text">在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇上一個步驟下載的ONTAP工具 OVA 檔案。</block>
   <block id="8f411127ebb3d9b60a747adfced77ee0" category="list-text">對於精靈的第 2 步到第 5 步，選擇 VM 的名稱和資料夾，選擇計算資源，查看詳細信息，然後接受許可協議。</block>
   <block id="4da334af76c65ad9f13477148b16f851" category="list-text">在*選擇網路*頁面上，選擇用於管理流量的網路。</block>
   <block id="5ccdb95adee4f5e5d73431e2d22ad4b5" category="list-text">在「自訂範本」頁面上，輸入所有必要的資訊：</block>
@@ -7256,7 +7158,6 @@
   <block id="12f8fffae463cc92f9c1532da5d5e0ea" category="list-text">ONTAP工具 Derby DB 密碼。</block>
   <block id="e95d4c1f12ed86c00f934b604c164c9d" category="list-text">所需的網路屬性。</block>
   <block id="3dcb2e1a782d534491a8c818a67ce2ad" category="list-text">按一下“*下一步*”繼續。</block>
-  <block id="84224a4966bd7ed75fe7b8c310fa2417" category="list-text">查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署ONTAP工具設備。</block>
   <block id="72db37ad524e8532d5359b4a65b6d66a" category="inline-link-macro">HyperV 的開機設定</block>
   <block id="04df8da32adcc9e17b531df72a2e62ac" category="paragraph">有關配置陣列的詳細步驟，請參閱<block ref="8f5c961e72b4b15903bdf32579063627" category="inline-link-macro-rx"></block>。</block>
   <block id="9eec50eb6e4df4b9d2c80a246146c82d" category="paragraph">有關所有受支援的還原選項的詳細步驟，請參閱<block ref="22b580b6230d474d97461f8fd733bbad" category="inline-link-macro-rx"></block>。</block>
@@ -7400,7 +7301,6 @@
   <block id="062aba62fac4d2c77766d65b1878fea5" category="paragraph">在工作負載域中的所有 ESXi 主機上設定 iSCSI 網路後，<block ref="2d0309663a1eb6c73e4ad6b3ca6928ba" category="inline-link-macro-rx"></block> 。</block>
   <block id="b6b3505fd0664c517f831fcaca8ef87f" category="summary">查看將 iSCSI 資料儲存作為補充儲存新增至 VCF 管理域的要求。</block>
   <block id="55b8fc8accbe0c63d7b3ec13410a5ca2" category="doc">將 iSCSI 資料儲存新增至 VCF 管理域的部署需求</block>
-  <block id="7c949ceed56723a84124d5f5d0bae05d" category="paragraph">查看將 iSCSI 資料儲存作為補充儲存新增至 VMware Cloud Foundation (VCF) 管理網域的要求。若要在 VMware Cloud Foundation 管理網域中部署 iSCSI vVols ，您需要一個完全設定的ONTAP AFF或ASA儲存系統和一個已部署的 VCF 管理網域。</block>
   <block id="439af0eafa830454ed233636672264ba" category="section-title">基礎設施需求</block>
   <block id="708fec064c241102ffc255e7376aa794" category="list-text">ONTAP AFF或ASA儲存系統，其乙太網路交換器上的實體資料連接埠專用於儲存流量。</block>
   <block id="54b752754c9cba43ef12c283cfa1eed3" category="section-title">推薦的 iSCSI 網路設計</block>
@@ -7581,7 +7481,6 @@
   <block id="d16d91e113a655cf068859947f84504e" category="list-text">在 *IPv4 設定* 頁面上，填寫 *IP 位址* 和 *子網路遮罩*，並提供新的網關 IP 位址（僅在需要時）。按一下“*下一步*”繼續。</block>
   <block id="a00ff116426909cbcc0b6242ca741a23" category="section-title">步驟 3：新增 NVMe/TCP 轉接器</block>
   <block id="e9422d59bc63e0236ef4baa64726987c" category="paragraph">工作負載域叢集中的每個 ESXi 主機都必須為每個專用於儲存流量的已建立 NVMe/TCP 網路安裝 NVMe/TCP 軟體適配器。</block>
-  <block id="9ebca89a66baa36afa27bf06a83aad28" category="paragraph">若要安裝 NVMe/TCP 轉接器並發現 NVMe 控制器，請完成以下步驟：</block>
   <block id="c5d81d1232a1a0ba8fea5b590a7cbde7" category="list-text">在 vSphere 用戶端中，導覽至工作負載域叢集中的其中一個 ESXi 主機。在「*配置*」標籤中，按一下選單中的「*儲存適配器*」。</block>
   <block id="7ddfa65b020ab63a15a147daefab6c45" category="list-text">從*新增軟體適配器*下拉選單中，選擇*新增 NVMe over TCP 適配器*。</block>
   <block id="21e6ae17243e8ded3e4ebccc1c930d69" category="inline-image-macro">添加 NVMe/TCP 適配器</block>
@@ -7625,7 +7524,6 @@
   <block id="69572f8c53ad06e3ec2a8d17fbc3bb04" category="list-text">在 *網路介面* 部分中，輸入第一個 LIF 的 *IP 位址*、*子網路遮罩* 和 *廣播域和連接埠*。對於後續 LIF，您可以使用單獨的設置，也可以啟用複選框以在所有剩餘 LIF 中使用通用設定。</block>
   <block id="14e2ee7b45024caf6f179f4df2601b5f" category="admonition">對於跨多路徑的多路徑和故障轉移，請在單獨的乙太網路中為 NVMe/TCP 配置中的所有 SVM 每個儲存節點建立至少兩個 LIF。</block>
   <block id="5e65d508d246f14ef4d4105a084849f7" category="section-title">步驟 2：建立 NVMe 命名空間</block>
-  <block id="d3c608449099dbfe5f41a2ce5db56af9" category="paragraph">NVMe 命名空間類似 iSCSi 或 FC 的 LUN。您必須先建立 NVMe 命名空間，然後才能從 vSphere Client 部署 VMFS 資料儲存區。若要建立 NVMe 命名空間，請從叢集中的每個 ESXi 主機取得 NVMe 限定名稱 (NQN)。  ONTAP使用 NQN 為命名空間提供存取控制。</block>
   <block id="989db3c2fc5551e827509b034d3f252b" category="paragraph">應顯示類似以下範例的輸出：</block>
   <block id="e9bc3c9be8f0b171177a0bf99d08adc9" category="list-text">記錄叢集中每個 ESXi 主機的 NQN。</block>
   <block id="0beaab4659773e0aaddf069445bf587b" category="list-text">從ONTAP系統管理員中，導覽至左側選單中的 *NVMe 命名空間*，然後按一下 *+ 新增* 開始。</block>
@@ -7655,4 +7553,184 @@
   <block id="ab3ccb0be518e752d20f706d36d252c9" category="sidebar">部署工作流程</block>
   <block id="2d0e9a7694bf5bc701c3af145a6bba71" category="sidebar">審核要求</block>
   <block id="c9d5bef67ab8090ce165e090036bc785" category="sidebar">建立 SVM 和 LIF</block>
+  <block id="6015ee0c3c4dbc37f534783a65239e72" category="example-title">顯示範例</block>
+  <block id="5bb25d064fc2236fc0ee7dbc2f31286d" category="list-text">從 vSphere 用戶端，導覽至工作負載域的 *Inventory &gt; Networking*。導航至現有的分散式交換器並選擇建立新的*分散式連接埠群組...*的操作。</block>
+  <block id="c94520aa42d994a3f068f40a588aa7b1" category="list-text">在「新分散式連接埠群組」精靈中，填寫新連接埠群組的名稱，然後按一下「下一步」繼續。</block>
+  <block id="5a0f1dd48286ac5ac466e7da042fe1f8" category="list-text">ONTAP<block ref="19383bb1e197833ea114614ea4b0992b" category="inline-link-macro-rx"></block>並將其下載到本機資料夾。</block>
+  <block id="ce726441db20b8b1c1b6300dab93edde" category="list-text">在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇您在上一個步驟下載的ONTAP工具 OVA 檔案。</block>
+  <block id="e626ecd95ab4d4026e96edcf0b19afd0" category="list-text">查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署ONTAP工具設備。</block>
+  <block id="0c289deae374d1d23739922a4d8a0920" category="summary">使用 VCF 匯入工具將現有的 vSphere 8 叢集轉換為 VCF 5.2 管理網域。您將驗證 vCenter 設備、部署 SDDC 管理器、建立 NSX 部署規格並執行轉換。</block>
+  <block id="d9d2fd36f55be7bc54678f3cdf34cae7" category="doc">使用 VCF 匯入工具將 vSphere 叢集轉換為 VCF 管理域</block>
+  <block id="30ee918a4e7083dd2a4d54e22b954d40" category="paragraph">Broadcom 的 VMware VCF 導入工具是一種實用程序，可在 vCenter 設備和 SDDC 管理器上使用，以驗證配置並為 vSphere 和 VCF 環境提供轉換和導入服務。有關詳細信息，請參閱<block ref="93f995e7f908dc81670abdd9cb6ac080" category="inline-link-macro-rx"></block> 。</block>
+  <block id="01406dd9a08206e12de9449d966c1037" category="paragraph">在適當的情況下，將參考 VMware 文件以取得逐步說明。</block>
+  <block id="0ca26a20034f43d41166742b38122df8" category="section-title">步驟 1：複製 VCF 導入工具並執行預檢查</block>
+  <block id="3913b12ced0b5c92edcd197dee358d93" category="list-text">請依照 VMware 文件中的說明將 VCF 導入工具複製到目標 vCenter 設備：<block ref="1ec208d841b794dc72a133dc0e533b89" category="inline-link-rx"></block> 。</block>
+  <block id="bc3bc457afd58c026368d88b986df6b6" category="list-text">請依照 VMware 文件中的說明執行驗證預檢查：<block ref="02a9fff0a4b20432a89ede46df2a515a" category="inline-link-rx"></block> 。</block>
+  <block id="d8c29dc4a5293dba9f1120d5aae2f972" category="paragraph">以下輸出範例顯示 vCenter 設備已通過預先檢查。</block>
+  <block id="74354c5175e29d979e559a06a474061f" category="section-title">步驟 2：部署 SDDC 管理器並建立 NSX 部署規範</block>
+  <block id="740e57481fdb86da0d80e4736c3606f2" category="paragraph">在您規劃轉換為 VCF 管理域的相同 vSphere 叢集上部署 SDDC Manager 設備。</block>
+  <block id="bdb3589f9410cdeca420377802f3acbb" category="list-text">請依照 VMware 文件中的說明部署 SDDC Manager 設備：<block ref="158200b7329fc68ebf1696cec6cd18b2" category="inline-link-rx"></block> 。</block>
+  <block id="cdab8470f73b80c9c6921a15629b64f8" category="list-text">請依照 VMware 文件中的說明將主機新增至 SDDC Manager 清單：<block ref="fc75de9eb1b6cf1852f09212de675f4a" category="inline-link-rx"></block> 。</block>
+  <block id="3d15a6254170a773ff99fef4b9a1dc59" category="paragraph">以下是 NSX 部署的 JSON 檔案範例。</block>
+  <block id="2811ec9f0ab222a78b86081f9a50f84a" category="admonition">在轉換或匯入作業中部署 NSX Manager 叢集時，將使用 NSX-VLAN 網路。有關 NSX-VLAN 網路限制的信息，請參閱<block ref="e9d03a18889a67bdabc61b8efb23e3c3" category="inline-link-rx"></block>。</block>
+  <block id="37d394f9c271dab012bd715b913648cf" category="section-title">步驟 3：將軟體上傳到 SDDC Manager</block>
+  <block id="77157579a5db755f5a3787b624b9c68b" category="paragraph">請依照 VMware 文件中的說明將 VCF 匯入工具包和 NSX 部署工具包上傳到 SDDC 管理員：<block ref="af4e0d4a07df976d61bf3063bf968c2e" category="inline-link-rx"></block> 。</block>
+  <block id="afb6d92838ce359c018ea6f375eed46b" category="paragraph">確保將 VCF 導入工具和 NSX 部署包複製到 SDDC 管理器上的下列目錄：<block ref="77a402313d8f5500be9d160fbe1ed710" prefix=" " category="inline-code"></block> 。</block>
+  <block id="6750779ae6a8510fc1b427f3270debd7" category="section-title">步驟4：將vSphere叢集轉換為VCF管理域</block>
+  <block id="9ce61c890064ef2d83da235df93111e8" category="paragraph">請依照 VMware 文件中的說明將 vSphere 叢集轉換為 VCF 管理域：<block ref="57e25a8a5743e83a9bbbff963070b81d" category="inline-link-rx"></block> 。</block>
+  <block id="c76d87f618f8cdb3648f888933f7db9f" category="paragraph">使用下列命令將vSphere叢集轉換為VCF管理網域並部署NSX叢集：</block>
+  <block id="4cd361459ea2bb087ed6c989579796c7" category="paragraph">在哪裡：</block>
+  <block id="b4eb7c6086ee8877126880c92c6c7711" category="list-text"><block ref="052e8424263a3e26d1e5fdd5930f99ff" prefix="" category="inline-code"></block>是您的 vCenter 伺服器的完全限定域名</block>
+  <block id="20bd490ab3a5c7ea62d1f81fcd282020" category="list-text"><block ref="e8202e152b361c60ea78a4cf439f1253" prefix="" category="inline-code"></block>是單一登入使用者帳戶</block>
+  <block id="46124b9a7597154df1a26807e3808a18" category="list-text"><block ref="cd82440c31f7151ffcf6be340808ab4a" prefix="" category="inline-code"></block>是您的工作負載域所需的名稱</block>
+  <block id="94a228f866a9644397e3aaa20cbc3757" category="list-text"><block ref="bd522ad5d878fdedcc641a3d6e410e96" prefix="" category="inline-code"></block>是步驟 2 中建立的 NSX 部署 JSON 檔案的路徑</block>
+  <block id="90da26d5d4e645d460e33c8b07aa02a7" category="admonition">您可以透過執行來查看所有可用的 VCF 匯入工具功能<block ref="b02a96912075904205fcf167cf0fd54d" prefix=" " category="inline-code"></block>從<block ref="c5f53450aa90891b903921e237fe587c" prefix=" " category="inline-code"></block>目錄。</block>
+  <block id="17b82b1265d9dbbd00f05d72d786e24c" category="section-title">步驟 5：向 VCF 新增許可</block>
+  <block id="c454d06f5940896de5ced5b2b954e480" category="list-text">按一下“*+ 許可證金鑰*”。</block>
+  <block id="4f95667534c63820ff2211b72e10826d" category="summary">ONTAP tools for VMware vSphere並配置光纖通道 (FC) 資料存儲，以實現與 VMware Cloud Foundation 的無縫整合。您將部署ONTAP工具、配置儲存後端並建立 FC 資料儲存區以支援 vSphere 8 叢集到 VCF 管理域的轉換。</block>
+  <block id="6d283a4481c453e03993ec362e70f6bf" category="doc">部署ONTAP工具並為 VCF 管理域轉換配置光纖通道資料儲存庫</block>
+  <block id="a4a4e8e49dc4c101b38ba31459873192" category="paragraph">在此步驟中， ONTAP工具 10 以非 HA 設定部署。有關 HA 和非 HA 配置的更多部署詳細信息，請參閱適用ONTAP tools for VMware vSphere文件：<block ref="d69e3407d99522a3e12db48f870b8266" category="inline-link-rx"></block> 。</block>
+  <block id="9f5cff589df5d0a73e9a7235dfde8b15" category="list-text">在 vSphere 用戶端中，右鍵按一下集群，然後按一下「部署 OVF 範本」。</block>
+  <block id="9603bec52d8bbb151a69aab900865ac4" category="list-text">在範本的「*配置*」頁面上，選擇部署類型，包括是否在 HA 配置中部署ONTAP工具，然後按一下「*下一步*」繼續。</block>
+  <block id="09dd59b4d9e770385d6b38ac627be748" category="list-text">在*選擇儲存*頁面上，選擇要安裝虛擬機器的資料存儲，然後按一下*下一步*。</block>
+  <block id="449f570241d6fc6252b0b2412fbbf2b3" category="list-text">選擇ONTAP工具 VM 將在其上進行通訊的網路。</block>
+  <block id="847d39df544e1fe434b87ad73d3f2781" category="list-text">在*自訂範本*視窗中，填寫所有必要的資訊。</block>
+  <block id="0747940a2af872f6383969a8c29c5621" category="list-text">按一下「*下一步*」繼續，然後按一下「*完成*」開始部署。</block>
+  <block id="dda1ff9be4eb2664e87e874bdfe268c8" category="section-title">步驟 2：設定ONTAP工具</block>
+  <block id="9ebfc02839f23daeddebd3fa48425a40" category="paragraph">安裝並啟動ONTAP工具 VM 後，新增 vCenter 伺服器和ONTAP儲存系統進行管理。請參閱<block ref="d01d94d571064fca3b7ecd1803960646" category="inline-link-rx"></block>了解更多。</block>
+  <block id="38698aa21c7d70b23665c633564ac3d7" category="list-text">依照適用於ONTAP tools for VMware vSphere文件中的說明新增 vCenter 執行個體：<block ref="e9bd7202a0777b9aafc13ac76eb3ea3e" category="inline-link-rx"></block> 。</block>
+  <block id="f360d744d72e8a269c4503a1be2a8fa8" category="list-text">若要新增ONTAP儲存系統，請登入 vSphere 用戶端並導覽至左側的主選單。點選* NetApp ONTAP工具* 啟動使用者介面。</block>
+  <block id="a8d4201f67be30afaeb576b75960f76e" category="list-text">導覽至左側選單中的“*儲存後端*”，然後按一下“*新增*”以存取“*新增儲存後端*”視窗。</block>
+  <block id="0e42a9a4f8c4742bc1356ccc750d6b4d" category="list-text">輸入要管理的ONTAP儲存系統的 IP 位址和憑證。按一下“*新增*”完成。</block>
+  <block id="4fc35e1d0a611da3696ed85c9b219813" category="admonition">使用叢集 IP 位址在 vSphere 用戶端 UI 中新增儲存後端。這允許對儲存系統中的所有 SVM 進行全面管理。或者，可以使用ONTAP工具管理器新增儲存後端並將其與 vCenter 執行個體關聯，網址為<block ref="8fd879a973e68e3c406be72d464b4816" prefix=" " category="inline-code"></block>。使用此方法，只能在 vSphere 用戶端 UI 上新增 SVM 憑證，從而提供對儲存存取的更精細的控制。</block>
+  <block id="43ed9e41bc89dddc379ad4e94f00df1c" category="section-title">步驟 3：使用ONTAP工具設定 FC 資料儲存庫</block>
+  <block id="c9fd57668c74d89072d37de59221e6ce" category="paragraph">ONTAP工具整合了整個 vSphere 用戶端 UI 的功能。在此步驟中，從主機清單頁面設定 FC 資料儲存。</block>
+  <block id="d7efb4fa1e7c50a48809148d2a4be256" category="list-text">在「名稱和協定」頁面上，輸入資料儲存的名稱、大小以及要使用的 FC 協定。</block>
+  <block id="a07ee8c3d3cd622b42e64707a2f738a3" category="list-text">在「儲存」頁面上，選擇ONTAP儲存平台和儲存虛擬機器 (SVM)。您也可以在這裡選擇任何可用的自訂匯出策略。按一下“*下一步*”繼續。</block>
+  <block id="16b53720296ff9d20a099b920f295eaf" category="list-text">在「儲存屬性」頁面上，選擇要使用的儲存聚合。按一下“*下一步*”繼續。</block>
+  <block id="96cebfa8c3fc3482ea758c66b3faf9a9" category="list-text">在「*摘要*」頁面上，檢視資訊並按一下「*完成*」開始設定程序。</block>
+  <block id="9acd1245bb7d8dfcc35b240ab375cecb" category="paragraph">ONTAP工具將在ONTAP儲存系統上建立一個磁碟區，並將其作為 FC 資料儲存掛載到叢集中的所有 ESXi 主機。</block>
+  <block id="c710269bd8e911c763b71fee3eaf577f" category="inline-link-macro">將 vSphere 叢集轉換為 VCF 管理域</block>
+  <block id="0125c300bbd8129a69a4a2bbf0ea05a7" category="paragraph">部署ONTAP工具並配置 FC 資料儲存庫後，<block ref="d4beca2956925bf310bd01ea75a0a887" category="inline-link-macro-rx"></block> 。</block>
+  <block id="9ca9a4d4845a6c9edf0d0f458909f2d3" category="summary">查看將具有NetApp ONTAP光纖通道 (FC) 資料儲存的 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域的要求。</block>
+  <block id="b31cf753c619cb10543ddeabd5b7a751" category="doc">將 vCenter 伺服器執行個體轉換為具有光纖通道資料儲存的 VCF 管理網域的部署需求</block>
+  <block id="8250e9dd897e4b2478741034bb4c717b" category="paragraph">查看將具有NetApp ONTAP FC 資料儲存的 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域的要求。</block>
+  <block id="ace3bb3b04882689e4ad381787cb771a" category="list-text">NetApp ASA R2/ ASA/ AFF儲存系統，設定儲存虛擬機器 (SVM) 以允許 FC 流量。</block>
+  <block id="60443b581b1c92744f089084d5c73503" category="list-text">建立用於承載 FC 流量並與 SVM 關聯的邏輯介面 (LIF)。</block>
+  <block id="b891f9020c231e6a6006c753818350be" category="list-text">在指定用於承載 FC 流量的交換器上設定 FC 分割區。</block>
+  <block id="c6a57def687136146246657a545b918f" category="list-text">下載 VCF 轉換所需的軟體。對於所需的軟體，請訪問<block ref="c5d8c042d5b9378267bd1c031ecabe92" category="inline-link-rx"></block>。</block>
+  <block id="617ae342a02c492e07bc65a1481053a0" category="list-text">滿足ONTAP工具的先決條件。</block>
+  <block id="e2171d6460530c783fbeadf74200fc5e" category="paragraph">有關ONTAP工具前提條件的完整信息，請參閱<block ref="6e428b14f85db028b0a1128f9751daf5" category="inline-link-rx"></block>。</block>
+  <block id="bf7f3c22bc5324218d6e35c4b144e128" category="list-text">有關配置ONTAP儲存系統的信息，請參閱<block ref="f0c19d3f5bc112feb1d30474db65aa4c" category="inline-link-macro-rx"></block>。</block>
+  <block id="bbcced008e3fc23f51997641c749aa76" category="inline-link-macro">VMware Cloud Foundation 5.2 文檔</block>
+  <block id="3d9283331b05cf38947d77dfe6fcae98" category="list-text">有關配置 VCF 的信息，請參閱<block ref="f39a75e719e60ced59c0da5d12efe59e" category="inline-link-macro-rx"></block>。</block>
+  <block id="38fc7eea00fd557a345ac53300360295" category="inline-link-macro">部署ONTAP工具並配置 FC 資料儲存區</block>
+  <block id="1d9415d4f238c639aba6c87a4747c739" category="paragraph">查看部署要求後，<block ref="96ed399cae735b3e28e4d5ef53b3ea9a" category="inline-link-macro-rx"></block> 。</block>
+  <block id="6e625396d533a140d3c2d429f09088e3" category="summary">將具有NetApp ONTAP光纖通道 (FC) 資料儲存的現有 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域。您將檢視設定需求、部署ONTAP工具和設定 FC 資料儲存庫，並使用 VCF 匯入工具來驗證和轉換叢集。</block>
+  <block id="9d89041d986ad02b4b0e1413fc77c1c1" category="doc">將 vCenter 伺服器執行個體轉換為具有光纖通道資料儲存的 VCF 管理網域的部署工作流程</block>
+  <block id="728b8371b897baa9673ae11622913b12" category="inline-link">將 vSphere 環境轉換為管理網域或在 VMware Cloud Foundation 中將 vSphere 環境匯入為 VI 工作負載域</block>
+  <block id="de191b3eac11a4d7294c3b55d6c17c97" category="paragraph">有關轉換過程的概述，請參閱 VMware 文件：<block ref="fd6dc6132434fcaee52a7dc81b95f2d4" category="inline-link-rx"></block> 。</block>
+  <block id="a83565177e04591255a835fde719da37" category="inline-link-macro">查看配置要求</block>
+  <block id="c42184a66cd47ee1f7884606380b4d18" category="paragraph-title"><block ref="58f667aaf05f87159670e12bd9bc076b" category="inline-image-macro-rx" type="image"></block><block ref="21590bfd3dabfdab789e838830c1febe" category="inline-link-macro-rx"></block></block>
+  <block id="fea138650803e3b9fd88d1bb75187d9a" category="paragraph">查看使用 FC 資料儲存將 vCenter 伺服器執行個體轉換為 VCF 管理網域的關鍵需求。</block>
+  <block id="8c3c1599de77e9222d23ff383a596431" category="paragraph-title"><block ref="54f425ce8d89f4ed6b8a546561af5d60" category="inline-image-macro-rx" type="image"></block><block ref="808ddbeaefd39557f522b64ccaed4970" category="inline-link-macro-rx"></block></block>
+  <block id="141d9872598e0f32de65e36e0dff503f" category="paragraph">ONTAP tools for VMware vSphere並配置 FC 資料儲存。</block>
+  <block id="35a89c78b8e0f2f389d26e1b0d1afc2d" category="paragraph-title"><block ref="05b2444faffd66d76e88602ea7dd353f" category="inline-image-macro-rx" type="image"></block><block ref="294a8c0fc17db0acfbe97d3e011bf1f5" category="inline-link-macro-rx"></block></block>
+  <block id="2470a3d35a829c29c246495ac4e0e775" category="paragraph">使用 VCF 匯入工具驗證並將 vSphere 8 叢集轉換為 VCF 管理網域。</block>
+  <block id="95c62c9f8a0dceb7888e826da7208904" category="paragraph">在 vCenter 設備和 SDDC 管理員上使用 Broadcom 的 VMware VCF 導入工具來驗證配置並為 vSphere 和 VCF 環境提供轉換和導入服務。</block>
+  <block id="6f73e87e3f4d712cd6c6c1d488e2e0d8" category="paragraph">在適當的情況下，可以參考 VMware 文件以取得更多說明。</block>
+  <block id="3270abeae9e1c7ee0caf47d8b266cf91" category="paragraph">使用 vCenter 設備上的 VCF 匯入工具來驗證 vSphere 叢集在 VCF 轉換或匯入過程中是否處於健康狀態。</block>
+  <block id="0fd7cf61933240030fa376e7bf38a8e5" category="paragraph"><block ref="0fd7cf61933240030fa376e7bf38a8e5" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="3a78fa6fd635c3d2c47776ebac1e10aa" category="section-title">步驟 2：部署 SDDC 管理器並建立 NSX 部署規範</block>
+  <block id="53866212cedfdab05438ec7419b0a70c" category="paragraph">在您計劃轉換為 VCF 管理域的相同 vSphere 叢集上部署 SDDC Manager 設備，然後為轉換程序建立 NSX 部署規格。</block>
+  <block id="3839be86fd617447fef659f6c7e588c2" category="admonition">在轉換或匯入作業中部署 NSX Manager 叢集時，使用 NSX-VLAN 網路。有關 NSX-VLAN 網路限制的信息，請參閱 VMware 文件：<block ref="f3964a9e03f9a89ea4d729a3257cae81" category="inline-link-rx"></block> 。</block>
+  <block id="4ed2d037568b2c11086f01761722e137" category="section-title">步驟 3：將軟體上傳到 SDDC 管理器</block>
+  <block id="f6feb2cba473ca653d6b3b8883bbf114" category="paragraph">完成轉換後，將許可證新增至VCF環境。</block>
+  <block id="ca77429c93db42be2cbb34cf2a604aa0" category="list-text">有關 VCF 導入工具的更多信息，請參閱 VMware 文件：<block ref="93f995e7f908dc81670abdd9cb6ac080" category="inline-link-macro-rx"></block> 。</block>
+  <block id="5d469690788fcd1f2ffc935c6877be10" category="summary">ONTAP tools for VMware vSphere並配置 NFS 資料儲存以實現與 VMware Cloud Foundation 的無縫整合。您將部署ONTAP工具、配置儲存後端並建立 NFS 資料儲存區以支援 vSphere 8cluster 到 VCF 管理網域的轉換。</block>
+  <block id="8f6538b1d1e6aeb94cbe1a5763df703d" category="doc">部署ONTAP工具並為 VCF 管理域轉換配置 NFS 資料存儲</block>
+  <block id="6c3e7c96a08e1149f0fa41931cb5a3a9" category="paragraph">ONTAP tools for VMware vSphere並配置 NFS 資料儲存以實現與 VMware Cloud Foundation 的無縫整合。您將部署ONTAP工具、配置儲存後端並建立 NFS 資料儲存區以支援 vSphere 8 叢集到 VCF 管理域的轉換。</block>
+  <block id="49d074afa9903af960ba0045c9d8669b" category="paragraph">在此步驟中， ONTAP工具部署在非 HA 配置中。有關 HA 和非 HA 配置的更多部署詳細信息，請參閱<block ref="d69e3407d99522a3e12db48f870b8266" category="inline-link-rx"></block>。</block>
+  <block id="07afd0f7aa0847171e3f341da179c82a" category="list-text">ONTAP<block ref="fd84ab456b2c9effbb119db417486410" category="inline-link-rx"></block>。</block>
+  <block id="ff6f0335880bacb1b0b9c3d1b6f7002a" category="list-text">在範本的「設定」頁面上，選擇部署類型，包括是否在 HA 配置中部署ONTAP工具。按一下“*下一步*”繼續。</block>
+  <block id="28e8af40093aabd27be8edbe78b188f5" category="list-text">在*選擇儲存*頁面上，選擇要安裝虛擬機器的資料存儲，然後按一下*下一步*。</block>
+  <block id="5a12b3f9f8e85532739dbb2cfd44a737" category="list-text">選擇ONTAP工具 VM 將在其上進行通訊的網路。按一下“*下一步*”繼續。</block>
+  <block id="fd316043b4080dbec58f725fe5b1478e" category="list-text">選擇是否啟用 ASUP (AutoSupport)。包含代理 URL。</block>
+  <block id="f3ca0a51386944005969c792e5e175ff" category="list-text">維護使用者名稱和密碼（控制台使用的“maint”帳戶）。</block>
+  <block id="82482c0ac9fef4217490b73b8b7407d6" category="list-text">按一下「*下一步*」繼續，然後按一下「*完成*」開始部署。</block>
+  <block id="0da3ac4253c0be36bf243970e10da85b" category="paragraph">安裝並啟動ONTAP工具 VM 後，新增要管理的 vCenter 伺服器和ONTAP儲存系統。</block>
+  <block id="d24768a9843c80d8258f662dce130952" category="list-text">若要新增ONTAP儲存系統，請登入 vSphere 用戶端並導覽至左側的主選單。按一下「NetApp ONTAP工具」以啟動使用者介面。</block>
+  <block id="fc8077b9c9904fac34d0e20b2beaebb7" category="admonition">若要允許對儲存系統中的所有 SVM 進行完全管理，請使用叢集 IP 位址在 vSphere 用戶端 UI 中新增儲存後端。或者，可以使用ONTAP工具管理器新增儲存後端並將其與 vCenter 執行個體關聯，網址為<block ref="8fd879a973e68e3c406be72d464b4816" prefix=" " category="inline-code"></block>。此替代方法可讓您在 vSphere 用戶端 UI 上僅新增 SVM 憑證，從而提供對儲存存取的更精細的控制。</block>
+  <block id="5bdcc4fcfadb87dda6802fa0387c4824" category="section-title">步驟 3：設定 NFS 資料存儲</block>
+  <block id="6e6d0e9494e5baddde271f24152f9204" category="paragraph">ONTAP工具整合了整個 vSphere 用戶端 UI 的功能。在此步驟中，從儲存清單頁面設定 NFS 資料儲存。</block>
+  <block id="b57d48034473aef1a2aaff2de57717db" category="list-text">在「名稱和協定」頁面上，輸入資料儲存的名稱、大小以及要使用的 NFS 協定。</block>
+  <block id="30953fe33a9bbb0f90806ac92e728899" category="list-text">在「儲存屬性」頁面上，選擇要使用的儲存聚合。按一下“*下一步*”繼續。</block>
+  <block id="3449151d94a8542b34b431e9d2a77945" category="paragraph">ONTAP工具在ONTAP儲存系統上建立一個卷，並將其作為 NFS 資料儲存掛載到叢集中的所有 ESXi 主機。</block>
+  <block id="07806f463bd04a3c25d8514d84ff14ca" category="inline-link-macro">將 vSphere 叢集轉換為 VCF 管理域</block>
+  <block id="2805d07c14c1e1d327cae5758dc29184" category="paragraph">部署ONTAP工具並配置 NFS 資料儲存庫後，<block ref="6e49cfcbe1e046b64ab9379b04daa4a9" category="inline-link-macro-rx"></block> 。</block>
+  <block id="0051c2fa1aff0d8354774118ab6ef912" category="summary">查看將具有NetApp ONTAP NFS 資料儲存區的 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域的要求。</block>
+  <block id="548febc66020c331b5dab6c99a31cb7e" category="doc">使用 NFS 資料儲存將 vCenter Server 執行個體轉換為 VCF 管理域的部署需求</block>
+  <block id="23ad64c4ac1fa5454f5a32957dfc53af" category="paragraph">轉換過程需要AFF或ASA儲存系統、用於 FC 流量的 SVM 和 LIF、交換器上的 NFS 分區、帶有 ESXi 主機和 vCenter 的 vSphere 叢集以及用於 vMotion 的專用網路區段。</block>
+  <block id="98634616038ca4d16845786ea8bb48e5" category="list-text">在 IP 網路上建立的用於承載 NFS 流量並與 SVM 關聯的邏輯介面 (LIF)。</block>
+  <block id="fbb1ccc7d13de63bc53248f9f725b55c" category="list-text">一個 vSphere 集群，其中包含 4 個 ESXi 主機和一個位於該集群上的 vCenter 設備。</block>
+  <block id="d89f9a5e65fc0ac91a422361dd274062" category="list-text">VCF 轉換軟體。對於所需的軟體，請訪問<block ref="484200331f4eb6a76c2aeede8927bf3e" category="inline-link-rx"></block>。</block>
+  <block id="b2524a7e56b3b5ae37113fb99af2748d" category="list-text">ONTAP工具的先決條件。</block>
+  <block id="8c35e037036f47078c8d4de57f8b8c19" category="paragraph">有關ONTAP工具前提條件的完整信息，請參閱<block ref="6e428b14f85db028b0a1128f9751daf5" category="inline-link-rx"></block>。</block>
+  <block id="594a5786595daccb7deb6e7267b91064" category="paragraph">ONTAP tools for VMware vSphere可以安裝在 HA 或非 HA 配置中。</block>
+  <block id="3818c1d9617d4f85b63035e4fa437637" category="list-text">有關配置ONTAP儲存系統的信息，請參閱<block ref="f0c19d3f5bc112feb1d30474db65aa4c" category="inline-link-macro-rx"></block>。</block>
+  <block id="fbdcc5c0abaa619096d4f199fcec6744" category="list-text">有關配置 VCF 的信息，請參閱<block ref="f39a75e719e60ced59c0da5d12efe59e" category="inline-link-macro-rx"></block>。</block>
+  <block id="a1ab6c79a54ea857ef12b0a3a55a07d3" category="inline-link-macro">部署ONTAP工具並配置 NFS 資料儲存庫</block>
+  <block id="b492ed29a54b26ac066c191a5eeae75d" category="paragraph">查看部署要求後，<block ref="e5c84a26e16ac49666d165b0e4527010" category="inline-link-macro-rx"></block> 。</block>
+  <block id="ac1071a8c252b4b57be86a8c3adfa57b" category="summary">將具有NetApp ONTAP NFS 資料儲存區的現有 vSphere 8 叢集轉換為 VMware Cloud Foundation 管理網域。您將查看設定需求、部署ONTAP工具和設定 NFS 資料儲存庫，並使用 VCF 匯入工具來驗證和轉換叢集。</block>
+  <block id="b7e7943196b20bd08eb9f7118e95098e" category="doc">將 vCenter 伺服器執行個體轉換為具有 NFS 資料儲存的 VCF 管理網域的部署工作流程</block>
+  <block id="bc0a6501be65ce74006a095bc588405c" category="paragraph-title"><block ref="58f667aaf05f87159670e12bd9bc076b" category="inline-image-macro-rx" type="image"></block><block ref="ac940502278dd2a69933b293959efda1" category="inline-link-macro-rx"></block></block>
+  <block id="8d0711f9dfb5c9cbd75b9a13ad677c91" category="paragraph">查看使用 NFS 資料儲存將 vCenter 伺服器執行個體轉換為 VCF 管理網域的關鍵需求。</block>
+  <block id="b27d5903e13d709e19de38264906f592" category="paragraph-title"><block ref="54f425ce8d89f4ed6b8a546561af5d60" category="inline-image-macro-rx" type="image"></block><block ref="c625feb865d7a2744da39e2b49f3689c" category="inline-link-macro-rx"></block></block>
+  <block id="f8b03b0a2534c97bd68c600162c59402" category="paragraph">ONTAP tools for VMware vSphere並配置 NFS 資料儲存區。</block>
+  <block id="e501129ec645f50fa21a8a1832942583" category="paragraph-title"><block ref="05b2444faffd66d76e88602ea7dd353f" category="inline-image-macro-rx" type="image"></block><block ref="d11d216b3b8a611b8626e50a0d58e71f" category="inline-link-macro-rx"></block></block>
+  <block id="62e327cbe86498969a3f917c97272c10" category="paragraph">使用 VCF 匯入工具驗證並將 vSphere 8 轉換為 VCF 管理網域。</block>
+  <block id="caf6340d6354e704290c407f7053b7bd" category="paragraph">查看將 iSCSI 資料儲存作為補充儲存新增至 VMware Cloud Foundation (VCF) 管理網域的要求。</block>
+  <block id="1efe2252a3e3d99b027724ac7330ae35" category="summary">轉換具有ONTAP上現有光纖通道或 NFS 資料儲存的 vSphere 環境涉及將目前基礎架構整合到現代私有雲架構中。</block>
+  <block id="d67a5b62babd1a283b32128d20ffe55e" category="doc">了解如何將具有現有資料儲存的 vSphere 環境轉換為 VCF 管理域</block>
+  <block id="c0c4b60d27032c028c91440e9d3be949" category="section-title">解決方案概述</block>
+  <block id="8da805da37d8f37959aa1ca314b83207" category="paragraph">此解決方案示範了當叢集轉換為 VCF 管理域時，vSphere 中現有的 FC 或 NFS 資料儲存如何成為主要儲存。</block>
+  <block id="3682b90746b57d51721ccbf16356bd25" category="paragraph">此流程受益於ONTAP儲存的穩健性和靈活性，可確保無縫的資料存取和管理。透過轉換過程建立 VCF 管理網域後，管理員可以有效地將其他 vSphere 環境（包括使用 FC 和 NFS 資料儲存的環境）匯入 VCF 生態系統。</block>
+  <block id="cf7b9cf3d681d94544666e3e650eea48" category="paragraph">這種整合不僅提高了資源利用率，還簡化了私有雲基礎架構的管理，確保了平穩過渡，並最大限度地減少了對現有工作負載的干擾。</block>
+  <block id="971839a38a5e0738cbc7687de2760b2c" category="paragraph">ONTAP工具的架構與 VMware 環境無縫集成，利用包含ONTAP工具服務、vSphere 外掛程式和 REST API 的模組化可擴充框架實現高效的儲存管理、自動化和資料保護。</block>
+  <block id="045aa5c6104aa7727c4b95bdb8bd2367" category="section-title">轉換 vSphere 環境的支援解決方案</block>
+  <block id="187110ef1ed170ad688e76248cd9d98b" category="paragraph">有關轉換 vCenter 執行個體的技術細節，請參閱下列解決方案。</block>
+  <block id="2fab23eeaba7c31345907f11e085105e" category="inline-link-macro">將 vCenter 執行個體轉換為 VCF 管理域（NFS 資料儲存）</block>
+  <block id="2bf769230e91283a014474a3552edc93" category="list-text"><block ref="2bf769230e91283a014474a3552edc93" category="inline-link-macro-rx"></block></block>
+  <block id="639472bae001dbd6b1f714755359dab6" category="inline-link-macro">將 vCenter 執行個體轉換為 VCF 管理域（FC 資料儲存）</block>
+  <block id="9e9c4bea1498b87d9c4c0f5f827a4619" category="list-text"><block ref="9e9c4bea1498b87d9c4c0f5f827a4619" category="inline-link-macro-rx"></block></block>
+  <block id="f466b3d43677debf40ee9a76b43ccff7" category="list-text">有關這些解決方案的視頻演示，請參閱<block ref="17695d0c3acf91b98258d31f752cdc74" category="inline-link-macro-rx"></block>。</block>
+  <block id="2f007ab8869dcb8778f2a5f9c0ffcb58" category="list-text">有關轉換過程的概述，請參閱<block ref="fd6dc6132434fcaee52a7dc81b95f2d4" category="inline-link-rx"></block>。</block>
+  <block id="b561d125e525812e5f905fb5e239e6ff" category="list-text">有關配置ONTAP儲存系統的信息，請參閱<block ref="f0c19d3f5bc112feb1d30474db65aa4c" category="inline-link-macro-rx"></block>。</block>
+  <block id="0261224e8f082fed69a9c93f1d025a7d" category="list-text">有關配置 VCF 的信息，請參閱<block ref="5b47b5050bd5838cf69c6b6c10e62156" category="inline-link-macro-rx"></block>。</block>
+  <block id="59428d03fb193edd846fa61fb216ca4b" category="inline-link">將現有 vSphere 環境轉換或匯入 VMware Cloud Foundation 之前的注意事項</block>
+  <block id="e547b42c6456160cafa8c3cb4e9e6758" category="list-text">有關支援的儲存空間以及將 vSphere 轉換或匯入 VCF 5.2 的其他注意事項，請參閱<block ref="4a28094c6b5683bd98d1d1e450d0a1ff" category="inline-link-rx"></block>。</block>
+  <block id="0a21973e257d4e9c9ee2361b4cd0d422" category="paragraph"><block ref="0a21973e257d4e9c9ee2361b4cd0d422" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="15de248f937a7a38ff74b56cd89c2ce7" category="paragraph"><block ref="15de248f937a7a38ff74b56cd89c2ce7" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="71968f6321b97a99916c70fc4666de3d" category="paragraph"><block ref="71968f6321b97a99916c70fc4666de3d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="8819f41a6e57c81d8f8d919ce502227b" category="paragraph"><block ref="8819f41a6e57c81d8f8d919ce502227b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="8586e2fa01275471686915bd663cd7bf" category="paragraph"><block ref="8586e2fa01275471686915bd663cd7bf" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="459677f92742b876ea7d87beba4c836c" category="paragraph"><block ref="459677f92742b876ea7d87beba4c836c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1e3b5bd5b47f2ad1b1c6f1914de9153b" category="paragraph"><block ref="1e3b5bd5b47f2ad1b1c6f1914de9153b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="5b6017402c497d8beef964f2a2668177" category="paragraph"><block ref="5b6017402c497d8beef964f2a2668177" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="625ab37a325f529249511a3a54e66c1d" category="paragraph"><block ref="625ab37a325f529249511a3a54e66c1d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="97af5d246b6d76a8c9986b380f3463ad" category="paragraph"><block ref="97af5d246b6d76a8c9986b380f3463ad" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="cc0d661db1d8ce993ebe23dfbaa65d65" category="inline-image-macro">儲存屬性 - 下一步</block>
+  <block id="4f04688300fe893344fde517120951a4" category="paragraph"><block ref="4f04688300fe893344fde517120951a4" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="5a78ff47d321d86fc233217bec73c1dc" category="paragraph"><block ref="5a78ff47d321d86fc233217bec73c1dc" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="bc912b24168c0af4a74f26ca04d7defb" category="inline-image-macro">按一下「新增」開始建立 SVM</block>
+  <block id="9831b95ed2acf748b0338ed6f23d5baf" category="paragraph"><block ref="9831b95ed2acf748b0338ed6f23d5baf" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="22502b478b00e918534b64dbf2c3ceed" category="paragraph">若要安裝 NVMe/TCP 轉接器並發現 NVMe 控制器，請完成以下步驟。</block>
+  <block id="8161f2b318036bef1f97c7e8a8a7e7c5" category="paragraph">NVMe 命名空間類似 iSCSi 或 FC 的 LUN。您必須先建立 NVMe 命名空間，然後才能從 vSphere Client 部署 VMFS 資料儲存區。</block>
+  <block id="d70245aba238a50b1645035fba3b889c" category="paragraph">若要建立 NVMe 命名空間，請從叢集中的每個 ESXi 主機取得 NVMe 限定名稱 (NQN)。  ONTAP使用 NQN 為命名空間提供存取控制。</block>
+  <block id="63d77c54c25d4d96f1d26d5d5d0cdc1f" category="sidebar">了解如何轉換 vSphere 集群</block>
+  <block id="59d41f8cf46b7b0c3dd94e18afd1676e" category="sidebar">使用 NFS 資料儲存轉換 vSphere 集群</block>
+  <block id="ca669a5fdb415cd4249caa3b85f420d1" category="sidebar">部署ONTAP工具並配置 NFS 資料儲存區</block>
+  <block id="28425bdbdef396f1aec8883562967014" category="sidebar">將 vSphere 群集轉換為 VCF</block>
+  <block id="ab5febdae5f3f0c5a30a718689093234" category="sidebar">使用 FC 資料儲存轉換 vSphere 叢集</block>
+  <block id="d8b72d69741e3404fbbca9934e6e1693" category="sidebar">部署ONTAP工具並配置 FC 資料儲存區</block>
 </blocks>

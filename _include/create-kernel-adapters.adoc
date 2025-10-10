@@ -4,45 +4,51 @@
 
 . 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-030.png["啟動新增網路精靈"]
 
-+
-{nbsp}
-
+====
 . 在*選擇連線類型*視窗中選擇*VMkernel 網路適配器*，然後按一下*下一步*繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-008.png["選擇 VMkernel 網路適配器"]
 
-+
-{nbsp}
-
+====
 . 在「選擇目標設備」頁面上，選擇先前建立的 iSCSI 分散式連接埠群組之一。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-031.png["選擇目標連接埠群組"]
 
-+
-{nbsp}
-
+====
 . 在*連接埠屬性*頁面上，保留預設設定並點擊*下一步*繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-032.png["VMkernel 連接埠屬性"]
 
-+
-{nbsp}
-
+====
 . 在 *IPv4 設定* 頁面上，填寫 *IP 位址*、*子網路遮罩*，並提供新的網關 IP 位址（僅在需要時）。按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-033.png["VMkernel IPv4 設定"]
 
-+
-{nbsp}
-
+====
 . 在「準備完成」頁面上檢查您的選擇，然後按一下「完成」以建立 VMkernel 適配器。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-034.png["檢查 VMkernel 選擇"]
 
-+
-{nbsp}
-
+====
 . 重複此程序為第二個 iSCSI 網路建立 VMkernel 適配器。
 

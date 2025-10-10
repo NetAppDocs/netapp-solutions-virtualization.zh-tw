@@ -25,37 +25,41 @@ summary: 在 VI 工作負載域中配置 NFS vVols儲存。ONTAP tools for VMwar
 ONTAP tools for VMware vSphere作為 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。
 
 .步驟
-. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並下載到本機資料夾。
+. ONTAPlink:https://mysupport.netapp.com/site/products/all/details/otv/downloads-tab["NetApp支援站點"]並將其下載到本機資料夾。
 . 登入 VCF 管理網域的 vCenter 設備。
 . 在 vCenter 裝置介面中右鍵單擊管理叢集並選擇“部署 OVF 範本...”
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-021.png["部署 OVF 範本..."]
 
+====
+. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇您在上一個步驟下載的ONTAP工具 OVA 檔案。
 +
-{nbsp}
-
-. 在 *部署 OVF 範本* 精靈中，按一下 *本機檔案* 單選按鈕並選擇上一個步驟下載的ONTAP工具 OVA 檔案。
-+
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-022.png["選擇 OVA 文件"]
 
-+
-{nbsp}
-
+====
 . 對於精靈的第 2 步到第 5 步，選擇 VM 的名稱和資料夾，選擇計算資源，查看詳細信息，然後接受許可協議。
 . 配置和磁碟檔案的儲存位置選擇VCF管理域叢集的vSAN資料儲存。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-023.png["選擇 OVA 文件"]
 
-+
-{nbsp}
-
+====
 . 在*選擇網路*頁面上，選擇用於管理流量的網路。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-024.png["選擇網路"]
 
-+
-{nbsp}
-
+====
 . 在「自訂範本」頁面上，輸入所有必要的資訊：
 +
 ** 用於對ONTAP工具進行管理存取的密碼。
@@ -70,11 +74,14 @@ image:vmware-vcf-aff-024.png["選擇網路"]
 
 . 按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-aff-025.png["自訂OTV模板1"]
 
-+
 image:vmware-vcf-asa-035.png["自訂OTV模板2"]
 
+====
 . 查看「準備完成」頁面上的所有信息，然後按一下「完成」開始部署ONTAP工具設備。
 
 
@@ -90,26 +97,36 @@ NOTE: vVol 需要ONTAP叢集憑證而不是 SVM 憑證。如需更多信息，�
 .步驟
 . 在 vSphere 用戶端中導覽至主選單並選擇 * NetApp ONTAP工具*。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-014.png["導航到ONTAP工具"]
 
+====
 . 進入 * ONTAP工具* 後，從「入門」頁面（或從 *儲存系統*）按 *新增* 以新增新的儲存系統。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-015.png["新增儲存系統"]
 
-+
-{nbsp}
-
+====
 . 提供ONTAP儲存系統的 IP 位址和憑證，然後按一下「新增」。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-016.png["提供ONTAP系統的 IP 和憑證"]
 
-+
-{nbsp}
-
+====
 . 按一下「*是*」授權叢集憑證並新增儲存系統。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-017.png["授權集群證書"]
 
+====
 
 
 
@@ -120,6 +137,13 @@ image:vmware-vcf-asa-017.png["授權集群證書"]
 
 .步驟
 . 在ONTAP工具中選擇 *概覽*，然後從 *入門* 標籤中按一下 *配置* 以啟動精靈。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-041.png["配置資料儲存區"]
+
+====
 . 在新資料儲存精靈的「常規」頁面上，選擇 vSphere 資料中心或叢集目標。
 . 選擇 *NFS* 作為資料儲存類型，輸入資料儲存的名稱，然後選擇協定。
 . 選擇是否使用FlexGroup磁碟區以及是否使用儲存功能檔案進行設定。
@@ -128,9 +152,37 @@ image:vmware-vcf-asa-017.png["授權集群證書"]
 
 NOTE: 選擇*在叢集中分發資料儲存資料*將建立底層磁碟區作為FlexGroup卷，這將阻止使用儲存功能設定檔。參考 https://docs.netapp.com/us-en/ontap/flexgroup/supported-unsupported-config-concept.html["FlexGroup卷支援和不支援的配置"^]有關使用FlexGroup磁碟區的詳細資訊。
 
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-042.png["常規頁面"]
+
+====
 . 在「儲存系統」頁面上，選擇儲存功能設定檔、儲存系統和 SVM。按一下“*下一步*”繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-043.png["儲存系統"]
+
+====
 . 在「儲存屬性」頁面上，選擇要使用的聚合，然後按一下「下一步」繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-044.png["儲存屬性"]
+
+====
 . 查看*摘要*並點擊*完成*開始建立 NFS 資料儲存。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-045.png["審核總結並完成"]
+
+====
 
 
 
@@ -141,14 +193,56 @@ NOTE: 選擇*在叢集中分發資料儲存資料*將建立底層磁碟區作為
 
 .步驟
 . 在ONTAP工具中，選擇 *概覽*，然後從 *入門* 標籤中按一下 *配置* 以啟動精靈。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-asa-041.png["配置資料儲存區"]
+
+====
 . 在新資料儲存精靈的「常規」頁面上，選擇 vSphere 資料中心或叢集目標。
 . 選擇 * vVols* 作為資料儲存類型，輸入資料儲存的名稱，然後選擇 *NFS* 作為協定。
 . 按一下“*下一步*”繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-046.png["常規頁面"]
+
+====
 . 在「儲存系統」頁面上，選擇儲存功能設定檔、儲存系統和 SVM。
 . 按一下“*下一步*”繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-043.png["儲存系統"]
+
+====
 . 在“儲存屬性”頁面中，選擇“建立新磁碟區”，並輸入要建立的磁碟區的儲存屬性。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-047.png["儲存屬性"]
+
+====
 . 按一下「*新增*」建立卷，然後按一下「*下一步*」繼續。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-048.png["儲存屬性 - 下一步"]
+
+====
 . 查看「*摘要*」頁面並按一下「*完成*」以啟動 vVol 資料儲存建立程序。
++
+.顯示範例
+[%collapsible]
+====
+image:vmware-vcf-aff-049.png["摘要頁面"]
+
+====
 
 
 

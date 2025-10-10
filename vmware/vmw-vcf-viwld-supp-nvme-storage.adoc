@@ -19,35 +19,39 @@ summary: '在 VI 工作負載域中配置 NVMe over TCP (NVMe/TCP) vVols儲存�
 .步驟
 . 在 vSphere 用戶端中，導覽至工作負載域叢集中的其中一個 ESXi 主機。從*操作*選單中選擇*儲存>新資料儲存...*。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-104.png["添加 NVMe/TCP 適配器"]
 
-+
-{nbsp}
-
+====
 . 在「新資料儲存」精靈中，選擇「VMFS」作為類型。按一下“*下一步*”繼續。
 . 在*名稱和裝置選擇*頁面上，提供資料儲存的名稱，並從可用裝置清單中選擇 NVMe 命名空間。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-105.png["名稱和設備選擇"]
 
-+
-{nbsp}
-
+====
 . 在 *VMFS 版本* 頁面上，選擇資料儲存區的 VMFS 版本。
 . 在「分區配置」頁面上，對預設分區方案進行任何所需的變更。按一下“*下一步*”繼續。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-106.png["NVMe 分割區配置"]
 
-+
-{nbsp}
-
+====
 . 在*準備完成*頁面上，查看摘要並點擊*完成*以建立資料儲存。
 . 導航到清單中的新資料儲存並點擊“*主機*”標籤。如果配置正確，則應列出叢集中的所有 ESXi 主機並可以存取新的資料儲存。
 +
+.顯示範例
+[%collapsible]
+====
 image:vmware-vcf-asa-107.png["連接到資料儲存區的主機"]
 
-+
-{nbsp}
-
+====
 
 
 
