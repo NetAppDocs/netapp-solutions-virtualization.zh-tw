@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: migration/shift-toolkit-migration.html 
 keywords: netapp, vmware, esxi, vm, migration, openshift, virtualization, hyper-v, proxmox 
-summary:  
+summary: 使用 Shift Toolkit 在虛擬化平台之間遷移虛擬機器。該過程包括準備虛擬機器、轉換磁碟格式以及在目標環境中配置網路設定。 
 ---
 = 使用 Shift Toolkit 遷移虛擬機
 :hardbreaks:
@@ -14,37 +14,49 @@ summary:
 
 
 [role="lead"]
-使用 Shift Toolkit 將虛擬機器從 VMware ESXi 移轉到 Microsoft Hyper-V。該過程包括準備虛擬機器、轉換磁碟格式以及在目標環境中配置網路設定。
+使用 Shift Toolkit 在虛擬化平台之間遷移虛擬機器。該過程包括準備虛擬機器、轉換磁碟格式以及在目標環境中配置網路設定。
 
 
 
-== 遷移
+== 支援的遷移
 
-一旦建立了藍圖，就可以行使「遷移」選項。在遷移選項期間，shift toolkit 執行一系列步驟來轉換磁碟格式並使用轉換後的磁碟按照藍圖的定義在 Hyper-V 主機上建立虛擬機器。
+Shift Toolkit 透過支援下列虛擬機器管理程式之間的雙向遷移，為多虛擬機器管理程式環境提供了靈活性：
 
-執行的進階步驟如下：
-
-先決條件：在啟動遷移之前，請確保虛擬機器 (VM) 已正常關閉，無論遷移是臨時的還是根據計劃的維護時間安排的。確認虛擬機器已完全關閉；如果作業系統正在等待更新，則僅在虛擬機器完全關閉後觸發遷移。
-
-* 刪除藍圖中所有虛擬機器的現有快照
-* 在來源觸發藍圖的虛擬機器快照
-* 磁碟轉換前觸發磁碟區快照
-* 複製所有虛擬機器的 VMDK 並將其轉換為 VHDx 格式
-* 啟動保護群組中的虛擬機器 – 達到目標
-* 在每個虛擬機器上註冊網絡
-* 移除 VMware 工具並根據作業系統類型使用觸發腳本或 cron 作業指派 IP 位址
+* link:shift-toolkit-migrate-esxi2hyperv.html["VMware ESXi 到 Microsoft Hyper-V"]
+* link:shift-toolkit-migrate-hyperv2esxi.html["Microsoft Hyper-V 到 VMware ESXi"]
+* link:shift-toolkit-migrate-esxi2olvm.html["VMware ESXi 到 Oracle Linux Virtualization Manager (OLVM)"]
+* link:shift-toolkit-migrate-esxi2osv.html["VMware ESXi 到 Red Hat OpenShift 虛擬化"]
+* link:shift-toolkit-migrate-esxi2osv.html["VMware ESXi 到 Red Hat OpenShift 虛擬化"]
 
 
 
 
-=== 需要考慮的因素
+== 遷移工作流程
 
-在開始遷移之前，請確保滿足所有先決條件（本文檔的先決條件部分詳細介紹了此內容）。以下是一份簡短回顧清單：
+建立藍圖後，即可啟動遷移程序。在遷移過程中，Shift Toolkit 會執行一系列步驟來轉換磁碟格式，並依照藍圖中的定義在目標主機上建立虛擬機器。
 
-* 確保 Shift VM 是網域的一部分
+Shift Toolkit 在遷移過程中執行下列步驟：
+
+. 刪除藍圖中所有虛擬機器的現有快照
+. 觸發來源藍圖的虛擬機器快照
+. 磁碟轉換前觸發磁碟區快照
+. 複製所有虛擬機器的 VMDK 並將其轉換為 VHDx 格式
+. 在目標位置啟動保護群組中的虛擬機
+. 在每個虛擬機器上註冊網絡
+. 移除 VMware Tools，並根據作業系統類型使用觸發腳本或 cron 作業指派 IP 位址。
+
+
+
+
+== 先決條件
+
+在計畫的維護窗口期內，虛擬機器必須正常關機。在開始遷移之前，請確認所有先決條件已滿足：
+
+* 確保 Shift Toolkit VM 屬於網域。
 * 確保 CIFS 共享配置了適當的權限
-* 用於遷移或轉換的 qtree 具有正確的安全模式
-* 作為快速測試，請嘗試使用 Hyper-V 管理員從叢集內的任何 Hyper-V 主機建立 VM，並將 VHDX 放在 CIFS 共用上（在專案符號 - a 中引用）。透過新增 Hyper-V 管理工具（透過「程式和功能」或使用「PowerShell」 - add-windowsfeature rsat-hyper-v-tools）嘗試從 Shift toolkit VM 執行相同操作
+* 驗證用於遷移或轉換的 qtree 是否具有正確的安全樣式
+* 使用叢集中任意 Hyper-V 主機上的 Hyper-V 管理器測試建立虛擬機，並將 VHDx 檔案放置在 CIFS 共用上。
+* 使用「程式和功能」或 PowerShell 新增 Hyper-V 管理工具，從 Shift Toolkit VM 測試建立 VM： `add-windowsfeature rsat-hyper-v-tools`
 
 
 
@@ -52,76 +64,87 @@ NOTE: 如果出現故障，link:https://learn.microsoft.com/en-us/windows-server
 
 
 
-=== 網路提示和注意事項
+== 網路技巧和注意事項
 
-必須考慮以下網路因素：
+規劃遷移時，請考慮以下網路需求和行為。  Shift Toolkit 會自動從來源虛擬機複製網路設定並將其重新套用至遷移的虛擬機，但 Windows 和 Linux 系統之間的介面命名和網路介面卡配置可能有所不同。
 
-* 確保靜態 IP 位址可用且未指派給其他 VM
-
-
-對於 Windows VM：
-
-* 準備腳本會複製網路配置詳細資訊（IP 位址空間、網關位址、DNS 伺服器），並且觸發腳本（在遷移期間）將重新套用網路設置，無論是基於藍圖映射的單一 NIC 或多個 NIC。
-* 遷移後，Windows 裝置管理員可能仍會顯示遷移前的舊網路介面卡資訊。雖然這不會影響遷移後創建的新網路適配器，也不會導致 IP 衝突，但腳本目前不會刪除這個舊註冊，因此它仍然可見。
+.一般要求
+* 確保靜態 IP 位址可用且未指派給其他虛擬機器。
 
 
-對於 Linux VM：
-
-* 準備腳本會複製網路設定詳細資訊（IP 位址空間、路由、DNS 伺服器、網路設備名稱），並根據 Linux 發行版識別所使用的網路類型並套用 IP 設定。網路重新分配腳本使用 crontab 設定為 cron 作業並在啟動時觸發。例如，cronjob 將在實例上執行腳本（遷移後）以重新套用網路設置，無論是基於藍圖映射的單一 NIC 還是多個 NIC。
-* 在某些情況下，轉換後的 Hyper-V VM 將具有諸如 eth0 或 eth1 之類的介面名稱，而不是來源端的 ens192 或 33。在這種情況下，腳本將更新網路配置詳細資訊以符合新的介面名稱。如果使用可預測的名稱（如現代系統）且介面名稱保留在 Hyper-V 端，則腳本將跳過網路端並僅刪除 VMware 工具，然後重新啟動 VM。
-* Shift 工具包目前支援 NetworkManager、Netplan 和 ifconfig 機制，並保留藍圖中指定的 IP。
-
-
+.Windows虛擬機
+* 準備腳本會複製網路設定詳細資訊（IP 位址空間、閘道位址、DNS 伺服器）。
+* 觸發腳本會在遷移過程中根據藍圖映射，並為單一或多個網路卡重新套用網路設定。
+* 遷移後，Windows 裝置管理員可能會顯示遷移前的舊網路介面卡訊息，但這不會影響新適配器，也不會導致 IP 位址衝突。
+* 升級至 v4.0 版本，即可自動從登錄機碼和裝置管理員中移除孤立的網路裝置。
 
 
-=== 階段和選項
+.Linux虛擬機
+* 準備腳本會複製網路設定詳細資訊（IP 位址空間、路由、DNS 伺服器、網路設備名稱）。
+* 此腳本會識別 Linux 發行版的網路類型，並據此套用對應的 IP 設定。
+* 網路重新分配腳本已配置為 cron 作業，使用 crontab 進行設置，並在啟動時觸發。
+* 此腳本根據藍圖映射重新套用單一或多個網卡的網路設定。
 
-以下是遷移過程的關鍵階段和選項。
 
-. 準備虛擬機 – 準備要遷移的虛擬機，確保所有先決條件都已徹底完成。
-. 遷移 - 準備工作完成後，選擇 VMware VM 並將其移轉到 Hyper-V。遷移完成後，驗證 VM 是否已成功啟動，以及資料是否已正確遷移。
-. 測試遷移 - 測試遷移透過將 VMDK 轉換為 VHDX 並使用駐留在 SMB 共用上的轉換後的 VHDX 檔案建立 Hyper-V VM 來模擬遷移。測試遷移不允許網路映射配置；此任務通常應手動執行到泡沫網路。
-. 重試遷移 - 如果遷移失敗，Shift 工具包會提供重試選項。此功能允許遷移作業從故障點復原。在重試該操作之前，請務必檢查並修正所有錯誤訊息。
+.介面命名
+* 轉換後的虛擬機器可能有類似這樣的介面名稱 `eth0`或者 `ensp0`而不是來源介面名稱（例如， `ens192`或者 `ens33`）
+* 該腳本會更新網路配置詳細信息，使其與新的介面名稱相符。
+* 如果使用符合 udev 符合規則的可預測名稱，且目標虛擬機器管理程式上保留了介面名稱，則腳本會跳過網路配置，移除 VMware Tools，並重新啟動虛擬機器。
 
 
 
-NOTE: Shift 工具包不會改變來源 VM，除了複製 VM 準備所需的腳本。這樣，在轉換失敗的情況下可以快速回滾。
+NOTE: Shift Toolkit 允許覆蓋網路準備，使管理員能夠執行自訂腳本進行 IP 分配或其他配置。
+
+.支援的網路機制
+* 網路管理器
+* 內特普蘭
+* ifconfig
+* 邪惡
+
+
+Shift Toolkit 會保留藍圖中指定的 IP 位址。
+
+
+
+== 遷移階段
+
+以下是使用 Shift Toolkit 遷移虛擬機器時需要遵循的遷移階段。
+
+. *準備虛擬機*：準備遷移所需的虛擬機，並驗證所有先決條件是否已完成。
+. *遷移與驗證*：準備工作完成後，將 VMware 虛擬機器遷移到目標虛擬機器管理程式。
++
+遷移完成後，驗證虛擬機器是否成功啟動以及資料是否已正確遷移。
+
+. *測試遷移*：測試遷移透過將 VMDK 轉換為適當的格式，並在 qtree 上使用轉換後的虛擬磁碟檔案建立虛擬機器來模擬遷移。
++
+測試遷移不包括網路映射配置，該配置應手動執行到測試網路。
+
+
+
+
+NOTE: Shift Toolkit 不會變更來源虛擬機，只會複製虛擬機器準備所需的腳本。這樣可以在轉換失敗的情況下快速回滾。
+
+
+
+== 執行遷移
 
 若要使用藍圖中指定的設定觸發遷移工作流程，請按一下「遷移」。
 
-image:shift-toolkit-050.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+image::shift-toolkit-030.png[顯示如何觸發虛擬機器遷移的對話框]
 
-一旦啟動，工作流程就會被激活，轉換過程將按照概述的步驟註冊虛擬機器。如果藍圖中的虛擬機器未關閉，Shift 工具包將提示正常關機後再繼續。
+一旦啟動，工作流程就會被激活，轉換過程將按照概述的步驟註冊虛擬機器。如果藍圖中的虛擬機器未關閉電源，Shift Toolkit 會在繼續操作之前提示使用者進行正常關機。
 
-image:shift-toolkit-051.png["此圖顯示輸入/輸出對話框或表示書面內容"]
-
-
-NOTE: 我們建議從同一 ESXi 來源到相同 Hyper-V 目標並行觸發的轉換不超過 10 個
-
-image:shift-toolkit-052.png["此圖顯示輸入/輸出對話框或表示書面內容"]
-
-VMDK 到 VHDx 的轉換只需幾秒鐘，這使得這種方法成為所有需要額外付費的選項中最快的。這也有助於減少遷移期間的虛擬機器停機時間。
-
-image:shift-toolkit-053.png["此圖顯示輸入/輸出對話框或表示書面內容"]
-
-一旦作業完成，藍圖的狀態將變成「遷移完成」。
-
-image:shift-toolkit-054.png["此圖顯示輸入/輸出對話框或表示書面內容"]
-
-遷移完成後，就該驗證 Hyper-V 端的虛擬機器了。下面的螢幕截圖顯示了在藍圖建立期間指定的 Hyper-V 主機上執行的虛擬機器。
-
-image:shift-toolkit-055.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+image::shift-toolkit-031.png[遷移過程確認]
 
 
-NOTE: Shift 工具包使用在啟動時執行的 cron 作業。一旦在 Hyper-V 主機上購買了虛擬機，就不會為基於 Linux 的虛擬機建立 ssh 連線或等效連線。
+NOTE: NetApp建議從相同來源到相同目標並行觸發的轉換次數不要超過十次。
 
-image:shift-toolkit-056.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+image::shift-toolkit-032.png[遷移進度]
 
+VMDK 轉換為任何文件格式只需幾秒鐘即可完成，這是目前最快的選擇。這種方法有助於減少遷移過程中虛擬機器的停機時間。
 
-NOTE: 對於 Windows VM，shift toolkit 使用 PowerShell direct 連線到這些基於 Windows 的客戶 VM。  PowerShell direct 允許連接到基於 Windows 的客戶虛擬機，而不管其網路配置或遠端管理設定如何。
+image::shift-toolkit-033.png[磁碟轉換進度]
 
+任務完成後，藍圖狀態將變成「遷移完成」。
 
-NOTE: 轉換後，Windows 作業系統上除作業系統磁碟之外的所有虛擬機器磁碟都將處於離線狀態。這是因為預設情況下，VMware VM 上的 NewDiskPolicy 參數設定為 OfflineALL。該問題是由預設的 Microsoft Windows SAN 策略引起的。此策略旨在防止在啟動 Windows Server 時啟動 LUN（如果多個伺服器正在存取它們）。這樣做是為了避免任何潛在的資料損壞問題。這可以透過執行 PowerShell 指令來處理：Set-StorageSetting -NewDiskPolicy OnlineAll
-
-
-NOTE: 利用多個磁碟區來暫存虛擬機，這意味著虛擬機應根據需要遷移到不同的磁碟區。如果資源組包含具有較大 VMDK 的虛擬機，請將它們分佈在不同的磁碟區上進行轉換。這種方法透過在單獨的磁碟區上並行運行克隆操作來幫助防止快照繁忙錯誤，同時克隆拆分在背景進行。
+image::shift-toolkit-034.png[遷移已完成狀態]

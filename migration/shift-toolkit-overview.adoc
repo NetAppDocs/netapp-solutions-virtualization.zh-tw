@@ -14,7 +14,7 @@ summary:
 
 
 [role="lead"]
-NetApp Shift Toolkit 是一款獨立產品，旨在簡化和加速跨虛擬機器管理程式（例如 VMware ESXi 和 Microsoft Hyper-V）的虛擬機器遷移。它還支援各種虛擬磁碟格式之間的磁碟級轉換。
+NetApp Shift Toolkit 是一款獨立產品，旨在簡化和加速跨虛擬機器管理程式（例如 VMware ESXi、Microsoft Hyper-V、Oracle Linux Virtualization Manager、Redhat OpenShift 等）的虛擬機器遷移。它還支援各種虛擬磁碟格式之間的磁碟級轉換。
 
 
 
@@ -28,27 +28,31 @@ NetApp Shift Toolkit 是一款獨立產品，旨在簡化和加速跨虛擬機�
 
 == 工具包概述
 
-NetApp Shift 工具包是一種易於使用的圖形使用者介面 (GUI) 解決方案，可在不同的虛擬機器管理程式之間遷移虛擬機器 (VM) 並轉換虛擬磁碟格式。它利用NetApp FlexClone技術快速轉換 VM 硬碟。此外，該工具包還管理目標虛擬機器的建立和配置。
+NetApp Shift 工具包是一種易於使用的圖形使用者介面 (GUI) 解決方案，可在不同的虛擬機器管理程式之間遷移虛擬機器 (VM) 並轉換虛擬磁碟格式。它利用NetApp FlexClone® 技術快速轉換 VM 硬碟。此外，該工具包還管理目標虛擬機器的建立和配置。
 
 Shift 工具包透過支援以下虛擬機器管理程式之間的雙向轉換，在多虛擬機器管理程式環境中提供了靈活性：
 
 * VMware ESXi 到 Microsoft Hyper-V
-* Microsoft Hyper-V 到 VMware ESXi（即將發布）
+* Microsoft Hyper-V 到 VMware ESXi
+* VMware ESXi 到 Oracle Linux Virtualization Manager (OLVM)
+* VMware ESXi 到 Red Hat OpenShift 虛擬化
 
 
 Shift 工具包支援虛擬機器管理程式之間對下列磁碟格式進行虛擬磁碟的磁碟級轉換：
 
 * VMware ESX 到 Microsoft Hyper-V（虛擬機器磁碟 [VMDK] 到虛擬硬碟格式 [VHDX]）
+* Microsoft Hyper-V 到 VMware ESX（虛擬硬碟格式 [VHDX] 到虛擬機器磁碟 [VMDK]）
 * VMware ESX 到 KVM 相容虛擬機器管理程式（VMDK 到 QCOW2）
+* VMware ESX 到 KVM 相容的虛擬機器管理程式（VMDK 到 RAW）
 
 
-image:shift-toolkit-001.png["此圖顯示輸入/輸出對話框或表示書面內容"]
+image::shift-toolkit-001.png[NetApp Shift 工具包概述]
 
-Shift 工具包可以下載link:https://mysupport.netapp.com/site/tools/tool-eula/netapp-shift-toolkit["這裡"]並且僅適用於 Windows 系統。
+Shift 工具包可以下載link:https://mysupport.netapp.com/site/tools/tool-eula/vm-data-collector["這裡"]僅適用於 Windows 系統。
 
 
 
-=== VM可移植性的好處
+== VM可移植性的好處
 
 ONTAP適用於任何虛擬機器管理程式和任何超標量。採用FlexClone技術。幾分鐘內即可實現虛擬機器可移植性，而無需等待更長的停機時間或使用直通選項來解決。
 
@@ -62,29 +66,20 @@ Shift 工具包：
 
 
 
-=== Shift 工具包的工作原理
+== Shift 工具包的工作原理
 
 在轉換時，Shift 工具包連接到 VMware ESXi 和 Microsoft Hyper-V 主機以及共享NetApp儲存。  Shift 工具包利用FlexClone並透過三項關鍵的NetApp技術將 VM 硬碟從一個虛擬機器管理程式轉換到另一個虛擬機器管理程式：
 
-* 單捲和多協議
-+
-借助NetApp ONTAP，可以輕鬆使用多種協定存取單一磁碟區。例如，VMware ESXi 可以存取啟用網路檔案系統 (NFS) 協定的捲，而 Microsoft Hyper-V 可以使用 CIFS/SMB 協定存取相同的磁碟區。
+* 單一磁碟區和多種協定 使用NetApp ONTAP，可以輕鬆地使用多種協定存取單一磁碟區。例如，VMware ESXi 可以存取啟用網路檔案系統 (NFS) 協定的捲，而 Microsoft Hyper-V 可以使用 CIFS/SMB 協定存取相同的磁碟區。
+* FlexClone技術FlexClone允許快速克隆整個文件或卷，而無需複製資料。儲存系統上的公共區塊在多個檔案或磁碟區之間共用。因此，可以非常快速地複製大型 VM 磁碟。
+* VM 磁碟轉換NetApp PowerShell 工具包和 Shift 工具包包含大量可用於對NetApp儲存控制器執行各種操作的工作流程。其中包括將虛擬磁碟轉換為不同格式的 PowerShell cmdlet。例如，VMware VMDK 可以轉換為 Microsoft VHDX，反之亦然。這些轉換由FlexClone執行，它能夠透過一個步驟非常快速地複製和轉換磁碟格式。
 
-* FlexClone技術
-+
-FlexClone允許快速克隆整個檔案或磁碟區，無需複製資料。儲存系統上的公共區塊在多個檔案或磁碟區之間共用。因此，可以非常快速地複製大型 VM 磁碟。
 
-* 虛擬機器磁碟轉換
-+
-NetApp PowerShell Toolkit 和 Shift Toolkit 包含大量工作流程，可用於在NetApp儲存控制器上執行各種操作。其中包括將虛擬磁碟轉換為不同格式的 PowerShell cmdlet。例如，VMware VMDK 可以轉換為 Microsoft VHDX，反之亦然。這些轉換由FlexClone執行，它能夠透過一個步驟非常快速地複製和轉換磁碟格式。
+image::shift-toolkit-002.png[NetApp Shift Toolkit 的工作原理示意圖]
 
 
 
-image:shift-toolkit-002.png["此圖顯示輸入/輸出對話框或表示書面內容"]
-
-
-
-==== 協定和通訊方法
+=== 協定和通訊方法
 
 Shift 工具包在轉換或遷移作業期間使用下列協定。
 
@@ -92,3 +87,25 @@ Shift 工具包在轉換或遷移作業期間使用下列協定。
 * VI Java（openJDK）、VMware PowerCLI - 用於與 VMware ESXi 通訊。
 * Windows PowerShell 模組 - 用於與 Microsoft Hyper-V 通訊。
 
+
+防火牆必須允許通過以下連接埠的流量：
+
+[cols="20%, 10%, 25%, 20%, 25%"]
+|===
+| 港口 | 協定 | 來源 | 目的地 | 目的 
+
+
+| 443 | TCP | Shift 工具包節點 | VMware vCenter | VMware 清單 
+
+
+| 443 | TCP | Shift 工具包節點 | VMware ESXi 節點 | Invoke-vmscript 依賴項（已路由） 
+
+
+| 443 | TCP | Shift 工具包節點 | 目標虛擬機器管理程序 | 目標庫存 
+
+
+| 443 | TCP | Shift 工具包節點 | ONTAP 系統 | ONTAP 訪問 
+
+
+| 5985/5986 | HTTP | Shift 工具包節點 | Hyper-V 主機 | WinRM 
+|===

@@ -1,0 +1,545 @@
+---
+sidebar: sidebar 
+permalink: migration/shift-toolkit-migrate-esxi2osv.html 
+keywords: netapp, vmware, esxi, vm, migration, openshift, virtualization, redhat, osv 
+summary: 使用 Shift Toolkit 將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization，方法是準備虛擬機器、轉換磁碟格式和設定目標環境。 
+---
+= 將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 Shift Toolkit 將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization，方法是準備虛擬機器、轉換磁碟格式和設定目標環境。
+
+Shift Toolkit 能夠透過目標環境中的磁碟格式轉換和網路重新配置，實現虛擬化平台之間的虛擬機器遷移。
+
+
+
+== 開始之前
+
+在開始遷移之前，請確認滿足以下先決條件。
+
+.紅帽 OpenShift 虛擬化需求
+* 安裝了以下運算子的 OpenShift 叢集端點：
++
+** OpenShift虛擬化操作員
+** NetApp Trident CSI 驅動程式
+** 新墨西哥州立大學
+
+
+* NetApp Trident CSI 設定了適當的後端和儲存類
+* 已配置正確的 VLAN 的 NodeNetworkConfigurationPolicy 和 NetworkAttachmentDefinitions (NAD)
+* OpenShift 叢集可透過目前主機檔案條目進行網路存取
+* 叢集管理員級別權限
+* Kubeconfig 檔案已下載
+
+
+.VMware 要求
+* 使用 svmotion 將 VMDK 放置在各個磁碟區上（模擬 VMDK 與 PVC/PV 結構的關係）。
++
+
+NOTE: 下一版本將取消此限制，屆時可以使用 NAS-economy 驅動程式進行 PVC 設定。
+
+* VMware 工具正在客戶虛擬機器上執行。
+* 待遷移的虛擬機器處於運作狀態，以便進行準備。
+* 必須先關閉虛擬機器電源才能觸發遷移
+* VMware Tools 的移除將在虛擬機器啟動後在目標虛擬機器管理程式上進行。
+
+
+.客戶機虛擬機器要求
+* 對於 Windows 虛擬機器：使用本機管理員憑證
+* 對於 Linux 虛擬機器：使用具有執行 sudo 命令而無需密碼提示權限的用戶
+* 對於 Windows 虛擬機器：將 VirtIO ISO 掛載到虛擬機器（從 [此處應填寫下載連結] 下載）。link:https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.271-1/virtio-win-0.1.271.iso["這裡"] ）
++
+
+NOTE: 準備腳本使用 .msi 套件來安裝驅動程式和 qemu-guest-agents。
+
+
+
+
+
+== 步驟 1：新增目標網站（OpenShift）
+
+將目標 OpenShift 虛擬化環境加入到 Shift 工具包。
+
+.步驟
+. 點擊“新增網站”，然後選擇“目標位置”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-100.png[選擇目的地]
+
+====
+. 請輸入目的地站點詳細資料：
++
+** *網站名稱*：請為網站提供一個名稱。
+** *虛擬機器管理程式*：選擇 OpenShift
+** *站點位置*：選擇預設選項
+** *連接器*：選擇預設選項
+
+
+. 按一下“繼續”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-101.png[目的地詳情]
+
+====
+. 請輸入 OpenShift 詳細資訊：
++
+** *端點*：OpenShift 叢集端點的完全限定網域名稱（例如，api.demomigsno.demoval.com）
+** *上傳 kubeconfig 檔案*：使用權限最小的 kubeconfig 檔案。
++
+
+NOTE: 檔案副檔名必須為yaml。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-102.png[目標 OpenShift 詳情]
+
+====
+
+
+. 按一下“建立網站”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-103.png[建立目標 OpenShift]
+
+====
++
+
+NOTE: 來源磁碟區和目標磁碟區將相同，因為磁碟格式轉換是在同一磁碟區內的磁碟區層級進行的。
+
+
+
+
+
+== 步驟 2：建立資源組
+
+將虛擬機器組織成資源群組，以保留啟動順序和啟動延遲配置。
+
+.開始之前
+確保將 VM VMDK 遷移到新建立的ONTAP SVM 上的各個資料儲存磁碟區。
+
+.步驟
+. 導航至“資源組”，然後按一下“建立新資源組”。
+. 從下拉式選單中選擇來源站點，然後按一下「建立」。
+. 提供資源組詳細資訊並選擇工作流程：
++
+** *基於複製的遷移*：執行從來源虛擬機器到目標虛擬機器的端對端遷移
+** *基於複製的轉換*：將磁碟格式轉換為選定的虛擬機器管理程式類型
+
+
+. 按一下“繼續”。
+. 使用搜尋選項選擇虛擬機器。
++
+
+NOTE: 資源組的虛擬機器選擇是基於虛擬機器本身，而不是資料儲存層級。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-104.png[與虛擬機器關聯的資料存儲]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-105.png[VM 資料儲存詳情]
+
+====
+. 更新遷移詳情：
++
+** 選擇*目標網站*
+** 選擇*目標 OpenShift 條目*
+** 選擇儲存等級
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-106.png[遷移詳情]
+
+====
++
+
+NOTE: 如果只有一個 TBC， Trident後端會自動對應到來源磁碟區；但是，如果有多個 TBC，則可以選擇後端。
+
+
+
+. 配置所有選定虛擬機器的啟動順序和啟動延遲：
++
+** *1*：第一台啟動的虛擬機
+** *3*：預設值
+** *5*：最後一個啟動的虛擬機
+
+
+. 按一下“建立資源組”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-107.png[遷移詳情配置]
+
+====
+
+
+.結果
+資源組已創建，可以進行藍圖配置。
+
+
+
+== 步驟 3：建立遷移藍圖
+
+建立遷移計劃藍圖，包括平台映射、網路配置和虛擬機器設定。
+
+.步驟
+. 導航至“藍圖”並點擊“建立新藍圖”。
+. 為藍圖命名並配置主機映射：
++
+** 選擇「來源站點」和關聯的 vCenter
+** 選擇*目標網站*和關聯的 OpenShift 目標
+** 配置叢集和主機映射
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-108.png[藍圖詳情]
+
+====
+
+
+. 選擇資源組詳細信息，然後按一下“繼續”。
+. 如果存在多個資源組，請設定資源組的執行順序。
+. 配置網路映射到對應的邏輯網路。
++
+
+NOTE: OpenShift 叢集中應該已經設定了網路連線定義，並且設定了對應的 VLAN 和 trunk 選項。對於測試遷移，請選擇「不配置網路」以避免生產網路衝突；轉換後手動分配網路設定。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-109.png[網路映射]
+
+====
+. 查看儲存類別和後端映射（根據虛擬機器選擇自動選擇）。
++
+
+NOTE: 確保事先將 VMDK 檔案遷移到各個磁碟區，以便可以從 PVC 建立虛擬機器並啟動虛擬機器。
+
+. 在虛擬機器詳細資訊下，選擇配置詳細信息，並為每種作業系統類型提供服務帳戶憑證：
++
+** *Windows系統*：使用具有本機管理員權限的使用者（也可以使用網域憑證）
+** *Linux*：使用可以無需密碼提示即可執行 sudo 命令的用戶
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-110.png[配置選擇]
+
+====
++
+
+NOTE: 配置選擇可讓您選擇磁碟映像格式、跳過覆蓋 prepareVM，以及選擇是否將磁碟區從父磁碟區分割。預設情況下，分割克隆功能已停用，工作流程預設使用 RAW 格式。
+
+
+
+. 配置IP設定：
++
+** *無需配置*：預設選項
+** *保留 IP 位址*：保持與來源系統相同的 IP 位址
+** *DHCP*：為目標虛擬機器指派 DHCP 權限
++
+在 prepareVM 階段，確保虛擬機器已啟動並安裝了 VMware Tools。
+
+
+
+. 配置虛擬機器設定：
++
+** 調整 CPU/RAM 參數（可選）
+** 修改啟動順序和啟動延遲
+** *開啟電源*：選擇在遷移後開啟虛擬機器電源（預設：開啟）
+** *移除 VMware Tools*：轉換後移除 VMware Tools（預設：已選取）
+** *虛擬機器韌體*：BIOS > BIOS 和 EFI > EFI（自動）
+** *保留 MAC 位址*：出於許可要求，請保留 MAC 位址。
++
+
+NOTE: 如果需要在保留 MAC 位址的同時保留介面名稱，請確保在來源 VM 上建立適當的 udev 規則。
+
+** *服務帳戶覆蓋*：如有需要，請指定單獨的服務帳戶
+
+
+. 按一下“繼續”。
+. （可選）選擇日期和時間安排遷移。
++
+
+NOTE: 至少提前 30 分鐘安排遷移，以便留出時間準備虛擬機器。
+
+. 點選「建立藍圖」。
+
+
+.結果
+Shift Toolkit 會啟動 prepareVM 作業，該作業會在來源虛擬機器上執行腳本，為遷移做好準備。
+
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-111.png[已準備好遷移的虛擬機]
+
+====
+準備過程：
+
+* 注入腳本以更新 VirtIO 驅動程式、安裝 qemu-agent、移除 VMware Tools、備份 IP 詳細資訊並更新 fstab 檔案。
+* 使用 PowerCLI 連接到客戶虛擬機器（Linux 或 Windows）並更新 VirtIO 驅動程式
+* 對於 Windows 虛擬機器：將腳本儲存在 `C:\NetApp`
+* 對於 Linux 虛擬機器：將腳本儲存在 `/NetApp`和 `/opt`
+
+
+
+NOTE: 對於任何支援的虛擬機器作業系統，Shift Toolkit 會在磁碟轉換之前自動安裝必要的 VirtIO 驅動程序，以確保轉換後成功啟動。
+
+當 prepareVM 成功完成時，藍圖狀態將更新為「PrepareVM 完成」。遷移將按計劃時間進行，或者也可以點擊「遷移」選項手動啟動。
+
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-112.png[PrepareVM 完成狀態]
+
+====
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-113.png[遷移藍圖已準備就緒]
+
+====
+
+
+== 步驟 4：執行遷移
+
+觸發遷移工作流程，將虛擬機器從 VMware ESXi 轉換為 OpenShift Virtualization。
+
+.開始之前
+所有虛擬機器均依照計畫的維護時間表正常關機。
+
+.步驟
+. 在藍圖上，按一下「遷移」。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-114.png[遷移步驟]
+
+====
+. Shift Toolkit 執行下列步驟：
++
+** 刪除藍圖中所有虛擬機器的現有快照
+** 觸發來源虛擬機器快照
+** 在磁碟轉換之前觸發磁碟區快照
+** 克隆各個磁碟區
+** 將每個 VMDK 的 VMDK 格式轉換為 RAW 格式
++
+Shift Toolkit 會自動尋找與每個虛擬機器關聯的所有 VMDK，包括主啟動磁碟。
+
+
+
+
+
+
+NOTE: 如果存在多個 VMDK 文件，則每個 VMDK 文件都會被轉換。在此版本（v4.0）中，每個 VMDK 都應該放置在單獨的磁碟區/資料儲存上。
+
+* 清理卷，使其僅保留 disk.img 文件
++
+將虛擬機器磁碟映像轉換為 RAW 格式後，Shift Toolkit 會清理卷，將原始檔案重新命名為 disk.img，並指派必要的權限。
+
+* 使用Trident導入功能以 PVC 格式匯入銷售量。
++
+然後使用NetApp Trident API 將磁碟區作為 PVC 匯入。
+
+* 使用虛擬機器特定的 YAML 檔案建立虛擬機
++
+PVC 匯入完畢且 PV 就位後，Shift Toolkit 使用 OC CLI 根據作業系統使用 yaml 檔案建立每個虛擬機器。
+
+
+
+
+NOTE: 虛擬機器在「預設」命名空間下建立。
+
+* 在目標位置啟動虛擬機
++
+根據虛擬機器作業系統，Shift Toolkit 會自動指派虛擬機器啟動選項以及儲存控制器介面。對於 Linux 發行版，可以使用 VirtIO 或 VirtIO SCSI。對於 Windows 系統，虛擬機器啟動時使用 SATA 接口，然後排程腳本會自動安裝 VirtIO 驅動程式並將介面變更為 VirtIO。
+
+* 在每個虛擬機器上註冊網絡
++
+網路是根據藍圖選擇進行分配的。
+
+* 使用 cron 作業移除 VMware Tools 並指派 IP 位址
+
+
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-115.png[Red Hat OpenShift 虛擬機器遷移]
+
+====
+
+
+== 使用遷移工具包進行虛擬化和 Shift 工具包
+
+本節介紹如何使用NetApp Shift Toolkit 和 Migration Toolkit for Virtualization (MTV) 實現向 Red Hat OpenShift Virtualization 的無縫遷移。
+
+.開始之前
+確保滿足以下先決條件：
+
+* 已安裝 OpenShift Virtualization Operator 和NetApp Trident CSI 驅動程式的 OpenShift 集群
+* MTV 2.9.4（含轉換模式）
+* link:https://mysupport.netapp.com/site/tools/tool-eula/netapp-shift-toolkit/download["Shift 工具包"]已安裝
++
+
+NOTE: 由於僅使用 Shift Toolkit API，因此無需配置 Shift Toolkit 資源群組或藍圖。
+
+* 在 OpenShift 叢集上擁有管理員等級權限
+* 安裝了 tridentctl 和 OC 命令列工具的 Linux 實例
++
+** 已匯出 Kubeconfig 或已執行 OC 登入以連線至叢集
+** 從 Shift Toolkit UI 下載名為「OpenShift-MTV」的腳本（*設定 > 開發者存取權 > 腳本攔截器*）
+** 解壓縮檔： `unzip openshift-mtv.zip`
+** 請確保已安裝 Python3： `dnf install python3`
+** 安裝 OpenJDK 8 或更高版本： `yum install java-1.8.0-openjdk`
+** 安裝要求： `pip install -r requirements.txt`
+
+
+* *MTV 的虛擬機器需求*：虛擬機器的 VMDK 必須放置在單獨的磁碟區上。對於具有 3 個磁碟的虛擬機，每個磁碟都應該位於其單獨的磁碟區上（將資料儲存對應到 PVC 結構）。這必須使用儲存 vMotion 手動完成。
+
+
+.步驟
+. 使用 MTV 創建遷移計劃。
++
+為了利用快速 VMDK 轉換，請為虛擬機器建立遷移計劃，並確保 YAML 檔案中包含以下參數：
+
++
+** `targetNamespace: default`
+** `type: conversion`
+** `storage: {}`
++
+
+NOTE: 應事先制定計劃，以確保 MTV 配置的 IP 設定得以保留。
+
+
+
+. 將 vCenter 中的虛擬機器和ONTAP儲存上的磁碟區進行對應。
++
+使用腳本建立必要的 PVC 並將其匯入到 OpenShift 叢集。  PVC必須帶有以下標籤和註釋：
+
++
+*標籤：*
+
++
+** PVC 中的 vmID 和 vmUUID（堆高機會找出這些值）
++
+*註：*
+
+** vmdk 磁碟名稱 `forklift.konveyor.io/disk-source`
++
+該腳本確保為每個PVC設定這些屬性，並更新disk.img的權限：
+
+** `"owner": { "id": 107 }`
+** `"group": { "id": 107 }`
+** `"mode": "0655"`
+
+
+. 請使用以下詳細資訊更新 JSON 檔案：
++
+** * ONTAP叢集*：可以是 SVM；可以使用 vsadmin。如果克隆卷不需要立即分離，請將 splitclone 設定為「False」。
+** *vCenter*：發現虛擬機器及其關聯 VMDK 檔案的最低 RBAC 權限
+** * Trident儲存類別*：應為 NFS 後端，且 YAML 檔案中版本資訊正確。
+** *OpenShift*：指定項目名稱（預設值僅用作範例）
++
+
+NOTE: 其餘值保持預設值。
+
+
+
+. 滿足先決條件後，執行 `python3 main.py`建立 PVC 並將其匯入到 OpenShift 叢集。
+. PVC 導入後，使用 MTV 觸發遷移，以建立具有相應規範的 VM。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-116.png[Python腳本執行]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-117.png[Shift Toolkit 中的結果]
+
+====
+. 使用 MTV 轉換 VMDK。
++
+腳本會自動尋找與每個虛擬機器關聯的所有 VMDK，包括主啟動磁碟。
+
++
+
+NOTE: 如果存在多個 VMDK 文件，則每個 VMDK 文件都會被轉換。
+
+. 上傳 RAW 鏡像到 OpenShift 虛擬化平台。
++
+此腳本使用Trident CSI 將磁碟區作為 PVC 匯入到叢集中。  PVC yaml 檔案中填入了標籤和註解。
+
+. 創建具有 MTV 的虛擬機器。
++
+導入完成後，呼叫 MTV 計畫開始遷移。  UI 顯示為“冷”，但根據轉換的 yaml 規範，MTV 會檢查每個 PVC 和 vmID/vmUUID，映射它們，並初始化遷移。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-118.png[遷移狀態]
+
+====
++
+
+NOTE: 虛擬機器是在「預設」虛擬機器專案下建立的，但可以在 MTV 遷移計劃 YAML 中修改此設定。
+
+. 首次使用 MTV 啟動 VM。
++
+根據虛擬機器作業系統，MTV 會自動分配虛擬機器啟動選項以及儲存控制器介面。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-119.png[移民史]
+
+====
++
+遷移在 6 分鐘內完成，虛擬機器擁有 1.5TB 資料磁碟（分佈在 3 個 PVC 上）。這展示了一種使用ONTAP儲存重新安置虛擬機器的精簡、低影響方法。
+
++
+
+NOTE: 在開始進行此特定整合之前，請聯絡您的紅帽客戶團隊。
+
+
+
+
+
+== 影片示範
+
+以下影片示範了本解決方案中概述的流程。
+
+.從 ESX 到 Oracle Linux Virtualization Manager (OLVM) 的零接觸遷移
+video::7e2abc5e-2919-43d6-a5c2-b3760100adaf[panopto]

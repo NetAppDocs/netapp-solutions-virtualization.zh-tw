@@ -132,30 +132,30 @@ VM 元資料以 XML 形式儲存在 /etc/libvirt/qemu 中。可以使用 virt-in
 
 VM 磁碟可以在儲存池上動態配置，也可以由儲存管理員為 VM 預先配置。 libvirt 支援多種池類型。以下是適用的池類型以及支援的儲存協定的清單。常用的選擇是 dir。然後是 netfs 和 logical。 iscsi 和 iscsi-direct 使用單一目標，不提供容錯功能。 mpath 提供多路徑，但不支援動態分配。它的使用方式更像是 vSphere 中的原始設備映射。對於文件協定（NFS/SMB/CIFS），可以在 https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/10/html/managing_file_systems/mounting-file-systems-on-demand#the-autofs-service["自動安裝程式"]或使用 fstab 和目錄池類型。對於區塊協定（iSCSI、FC、NVMe-oF），使用 ocfs2 或 gfs2 等共用檔案系統。
 
-[cols="20% 10% 10% 10% 10% 10% 10% 10%"]
+[cols="20%, 10%, 10%, 10%, 10%, 10%, 10%, 10%"]
 |===
-| 儲存協定 | 目錄 | 檔案系統 | 淨流表 | 邏輯 | 磁碟 | 網路連線 | iscsi直接 | mpath 
+| 儲存協定 | 目錄 | 檔案系統 | 淨流表 | 邏輯 | 磁碟 | 網路連線 | iscsi直接 
 
 
-| 中小企業/CIFS | 是的 | 不 | 是的 | 不 | 不 | 不 | 不 | 不 
+| mpath | 中小企業/CIFS | 是的 | 不 | 是的 | 不 | 不 | 不 
 
 
-| NFS | 是的 | 不 | 是的 | 不 | 不 | 不 | 不 | 不 
+| 不 | 不 | NFS | 是的 | 不 | 是的 | 不 | 不 
 
 
-| iSCSI | 是的 | 是的 | 不 | 是的 | 是的 | 是的 | 是的 | 是的 
+| 不 | 不 | 不 | iSCSI | 是的 | 是的 | 不 | 是的 
 
 
-| FC | 是的 | 是的 | 不 | 是的 | 是的 | 不 | 不 | 是的 
+| 是的 | 是的 | 是的 | 是的 | FC | 是的 | 是的 | 不 
 
 
-| NVMe-oF | 是的 | 是的 | 不 | 是的 | 是的 | 不 | 不 | 否^1^ 
+| 是的 | 是的 | 不 | 不 | 是的 | NVMe-oF | 是的 | 是的 
 |===
 *注意：* 1 - 可能需要額外的配置。
 
 根據所使用的儲存協議，主機上需要提供額外的包。這是範例列表。
 
-[cols="40% 20% 20% 20%"]
+[cols="40%, 20%, 20%, 20%"]
 |===
 | 儲存協定 | Fedora | Debian | 吃豆人 
 
