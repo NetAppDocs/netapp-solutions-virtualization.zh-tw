@@ -14,7 +14,7 @@ summary: 使用 Shift Toolkit 將虛擬機器從基於 SAN 的資料儲存遷移
 
 
 [role="lead"]
-使用 Shift Toolkit 將虛擬機器從基於 SAN 的資料儲存遷移到 NAS，然後使用 VMware Storage vMotion 和 Hyper-V Storage Live Migration 進行轉換，以保持業務連續性。
+使用 Shift Toolkit 將虛擬機器從基於 SAN 的資料儲存遷移到 NAS，然後再使用 VMware Storage vMotion 和 Storage Live Migration 進行轉換，以維持業務連續性。
 
 
 
@@ -32,14 +32,14 @@ image::shift-toolkit-260.png[遷移工作流程圖，展示了虛擬機器從SAN
 
 遷移過程包括三個主要階段：
 
-.從 SAN 遷移到 NAS（VMware 環境）*
+.從SAN遷移到NAS（VMware環境）
 使用 VMware vSphere Storage vMotion 將虛擬機器及其磁碟從 SAN 資料儲存遷移到 NFS 資料儲存。此操作無需虛擬機器停機即可完成。
 
-.使用 Shift Toolkit* 轉換虛擬機
-虛擬機器駐留在 NFS 資料儲存後，Shift Toolkit 使用NetApp FlexClone技術將虛擬機器從 VMware ESXi 轉換為 Hyper-V。轉換後的虛擬機器及其磁碟被放置在 Hyper-V 主機可存取的 CIFS 共用上。
+.使用 Shift 工具包轉換虛擬機
+虛擬機器駐留在 NFS 資料儲存上之後，Shift Toolkit 使用NetApp FlexClone技術將虛擬機器從 VMware ESXi 轉換為任何虛擬機器管理程式。轉換後的虛擬機器及其磁碟放置在對應的虛擬機器管理程式主機可存取的 qtree 中。
 
-.遷移回 SAN（Hyper-V 環境）*
-轉換完成後，使用 Hyper-V 儲存空間即時遷移將轉換後的虛擬機器及其磁碟從 CIFS 共用移至啟用 SAN 的叢集共用磁碟區 (CSV)。這樣您就可以在 Hyper-V 環境中維護您的 SAN 基礎架構。
+.遷移回SAN
+轉換完成後，使用儲存遷移將轉換後的虛擬機器及其磁碟從 qtree 移至啟用 SAN 的磁碟區。這樣，您就可以在對應的虛擬機器管理程式環境中維護您的 SAN 基礎架構。
 
 
 
