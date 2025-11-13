@@ -7392,7 +7392,6 @@
   <block id="3173e5dfb176e66e58d8dd7221d713ae" category="paragraph">轉換後的 qcow2 檔案與任何 KVM 虛擬機器管理程式相容。例如，可以使用 virt-manager 在基於 RHEL 的 KVM 中使用 qcow2 檔案來建立虛擬機，也可以使用 ubuntu KVM、基於 Rocky Linux 的 KVM 等。經過調整後，它可以與 Oracle Linux 虛擬化管理器一起使用，也可以在使用NetApp Trident導入後與 OpenShift 虛擬化一起使用。目標是提供磁碟（以秒到分鐘為單位），然後可以將其整合到組織用於配置虛擬機器和分配網路的現有自動化腳本中。這種方法有助於減少整體遷移時間，其中磁碟轉換由 Shift 工具包 API 處理，其餘腳本啟動虛擬機器。</block>
   <block id="4d407050aa86ad48312affa8e43a67d7" category="paragraph">Shift 工具包支援從 VMware 到其他相容的 KVM 虛擬機器管理程式的端對端遷移。但是，轉換選項使遷移管理員能夠運行這些轉換和遷移 API。</block>
   <block id="623c44ac4b1228e38622f3eedc5061a8" category="list-text">建立目標站點類型，指定 KVM（僅轉換）為虛擬機器管理程式。</block>
-  <block id="7988bc3b706c65b838400d38c7373d3f" category="paragraph">注意：KVM 不需要提供虛擬機器管理程式詳細資訊。</block>
   <block id="6fed993333f213fd751fe952dd9a1c6b" category="image-alt">建立目標網站步驟的對話框</block>
   <block id="8d05ac343d9e8675e947c40b11207891" category="image-alt">建立資源組步驟的對話框</block>
   <block id="2df1e028b15b06c600d5c22031c432c4" category="image-alt">建立藍圖步驟的對話框</block>
@@ -7403,9 +7402,7 @@
   <block id="e38469c1fc68ca83ddada045beacbb44" category="image-alt">用於驗證是否關閉虛擬機器步驟的對話框</block>
   <block id="f2470fd9acfc01b9d830d498196090dc" category="image-alt">轉換 VM 步驟的結果對話框</block>
   <block id="f89321da95ef8c5c384ca202700624c4" category="image-alt">手動轉換磁碟步驟對話框</block>
-  <block id="50ac124a54b0bb7ea8520a81095d4d0f" category="paragraph">注意：Shift 工具包僅支援 qcow2 格式的磁碟轉換。它不支援虛擬機器創建或註冊。若要使用轉換後的磁碟，請手動建立虛擬機器並附加磁碟。</block>
   <block id="4e175b4a0600a5af4a37d4c3b532492f" category="image-alt">轉換步驟的對話框</block>
-  <block id="130b7c31b80e0a57e3cb85e6585d497d" category="paragraph">注意：要在虛擬機中使用轉換後的 VHDX 磁碟，必須透過 Hyper-V 管理器或 PowerShell 命令手動建立虛擬機，並將磁碟附加到該虛擬機。除此之外，還應手動映射網路。</block>
   <block id="5000274a2d3250acac3a676012898380" category="section-title">轉換為 RAW 格式</block>
   <block id="17bce200723c9c733ec906c2e322e0cd" category="paragraph">若要使用NetApp Shift 工具包將虛擬磁碟轉換為 RAW 格式，請依照下列進階步驟操作：</block>
   <block id="50e8a71367194ed752207c6119258412" category="list-text">建立目標站點類型，指定 OpenShift 或 OLVM 作為虛擬機器管理程式。</block>
@@ -7414,50 +7411,31 @@
   <block id="83f66f08bf60fa09db9963b155860b84" category="list-text">手動建立虛擬機，使用轉換後的磁碟。</block>
   <block id="b0de87156ffe112f5f8166152cae5519" category="list-text">對於 OpenShift，使用 tridentctl 將磁碟區匯入為 PVC，然後使用匯入的磁碟建立虛擬機器。</block>
   <block id="a92b8813eb165b3c43549058ce1fa8db" category="list-text">對於 OLVM，請前往 ovirt 引擎 URL，並將 Shift 工具包轉換後的 RAW 檔案作為作業系統磁碟附加到虛擬機，從而建立一個新的虛擬機。請務必選擇合適的介面。</block>
-  <block id="9eeb2626626241fa30880b2de8304572" category="paragraph">注意：對於 OLVM，也可以使用 qcow2 檔案格式。此項目選擇可在建立藍圖時進行。</block>
   <block id="6e9a29234e1028e876f938bdd5681bc1" category="image-alt">編輯轉換計劃步驟的對話框</block>
-  <block id="2437c64c84dd38b17fc189250ddf7cab" category="paragraph">注意：要在虛擬機器中使用轉換後的 RAW 磁碟映像，必須透過 OpenShift 控制台或 OC 命令手動建立虛擬機器（透過 YAML 為 OpenShift 建立），或使用 OLVM REST API/UI 為 OLVM 創建，並且必須將磁碟附加到虛擬機器。除此之外，還應手動映射網路。</block>
-  <block id="4c819ee19ebd0991fa0314f20d36a548" category="paragraph">注意：手動建立虛擬機器時，請確保指定正確的啟動類型（EFI 或 BIOS）。</block>
   <block id="2821fbb86c99471cbce6ecd8b3c1687d" category="doc">安裝適用於ONTAP儲存的NetApp Shift 工具包</block>
   <block id="bc4e03f0d73b062d4fb7ae1f6a827d4c" category="paragraph">若要開始使用該工具包，請在指定的虛擬機器上使用 Windows 作業系統，並確保符合先決條件，然後安裝該軟體包。</block>
-  <block id="67ce7b132a7144fc8cbaea4fad51e24f" category="paragraph">Shift 工具包可在 Windows 2019、2022 和 2025 版本上運作。從此處下載 Shift 工具包<block ref="dd181abce2974d0dae870cc1951c581b" category="inline-link-macro-rx"></block>然後解壓縮軟體包，執行 exe 檔案進行安裝並啟動服務。 Shift 工具包提供 2 個軟體包－線上版（大小約 130MB）和離線版（大小約 1.2GB）。顧名思義，線上安裝套件會從網路下載並安裝必要的先決條件。</block>
   <block id="92f4abdcd256d7df6e79a1ad93294e19" category="image-alt">圖示 Shift Toolkit 下載選擇</block>
-  <block id="bf009931d4fdadd17dd14d83a27f2a21" category="paragraph">提示：請使用合適的部署軟體包。使用離線模式時，無需修改代理設置，因為所有必需的先決條件和檔案都已捆綁。</block>
-  <block id="2ae052fbbc764cd4eeaebe29c1aba7c5" category="paragraph">注意：請在專用虛擬機器上安裝 Shift 工具包。</block>
   <block id="e11da9afe91d381489a365c86cc614ab" category="section-title">先決條件</block>
   <block id="84089c84fe635e93a571c8d2078685e2" category="list-text">CPU – 4 個虛擬 CPU</block>
   <block id="c25de1656f530fa9c0e02e589a99b0b2" category="list-text">記憶體 – 最低 8 GB</block>
   <block id="01a9b91ccede03f628fdc87d2dadd2ca" category="list-text">磁碟空間 – 最低 100 GB</block>
-  <block id="282e13fea6054e5c4d616c6fa05dc945" category="paragraph">注意：安裝需要 900 MB 的可用磁碟空間。</block>
   <block id="211fbf3c943803d1e8ee2d9028d397c8" category="list-text">對於基於 Hyper-V 的遷移，Shift 伺服器、 Data ONTAP CIFS 伺服器和 Hyper-V 伺服器必須位於同一個 Windows Active Directory 網域中。</block>
   <block id="5ee9ac4214347b231d90ec0fe04ec7da" category="list-text">進行 VM 轉換時，支援將多個 CIFS 和 NFS LIF 與儲存虛擬機器一起使用。Hyper-V 伺服器和 ESXi 主機使用這些 LIF 的 IP 位址存取儲存虛擬機器 (SVM)。</block>
   <block id="1a08679970ec521864f514134592b9e3" category="paragraph">請按照此連結中的步驟配置新的 SVM，以支援 NFS 和 SMB 協定。</block>
-  <block id="3347f6bf3e8cab9408274a227d3c72f3" category="paragraph">注意：為了確保 SVM 符合 Shift 工具包的要求，同時避免對生產 SVM 進行可能造成乾擾的修改，建立新的 SVM 是一種良好的做法。</block>
-  <block id="e2dbf54fe0eb6dc74487bee43ad08766" category="paragraph">注意：對於 VMware 到 Hyper-V 之間的雙向遷移，新的 SVM 應同時啟用 NFS 和 SMB 協定。所配置的磁碟區也應啟用 NFS 和 SMB。</block>
   <block id="e4747dacfdeaf64a9f1da8c1e983cb88" category="list-text">對於 ESX 到 Hyper-V 的轉換，Shift 工具包會將轉換後的 VHDX 放置在同一磁碟區內的 qtree（採用 NTFS 安全樣式）中。</block>
   <block id="3c9fc53f2afbc9694a4df01009b70d37" category="list-text">對於 Hyper-V 到 ESX 的轉換，Shift 工具包會將轉換後的 VMDK 放置在同一磁碟區內的 qtree（具有 UNIX 安全性樣式）中。</block>
   <block id="5b8cf77d4e68f3259aec8c8c523c07af" category="list-text">對於 ESX VMDK 到 RAW 的轉換，應該使用具有 UNIX 安全風格的 qtree。</block>
   <block id="782281c56b4e89829f430b0e3a5be151" category="paragraph">Shift 工具包不會驗證 qtree 的安全風格。因此，根據目標虛擬機器管理程式和磁碟類型建立具有適當安全風格的 qtree 非常重要。</block>
-  <block id="8b4ce025817faabaa0617e7aa13e4cf2" category="paragraph">注意：目標路徑必須與來源虛擬機器位於同一磁碟區上。</block>
-  <block id="e426197e5ed7b611e44b6946ced57d2e" category="paragraph">注意：根據目標虛擬機器管理程式類型和磁碟格式，為 qtree 指派正確的安全樣式。</block>
-  <block id="0960a401a7c74ce515f31aa33ba7f6bd" category="paragraph">注意：如果轉換後的 qcow2 檔案打算與 OpenShift 虛擬化一起使用，則有一個例外：這些檔案可以直接放置在磁碟區上，而無需使用 qtree。為了實現這一點，可以使用 Shift 工具包 GUI 或使用 Shift 工具包 API 將 VMDK 檔案轉換為 qcow2 格式，並將它們直接放置在磁碟區中。</block>
   <block id="e3d5a5ace968edfbd09962cfa0dee29f" category="image-alt">基於遷移類型所建立的 q 樹類型示意圖</block>
   <block id="05e28166a1f92c3a776cf8a97a6b6ee9" category="image-alt">顯示要建立的 Q 樹類型的對話框</block>
   <block id="51f228208bf35769cace217e2c75b361" category="section-title">CIFS股份要求</block>
   <block id="4d191110824bda8df8aeb1a6e7b18c8e" category="paragraph">對於 Hyper-V 遷移，建立一個共用來儲存轉換後的 VM 資料。確保 NFS 共用（用於儲存要轉換的虛擬機器）和目標共用（用於儲存轉換後的虛擬機器）位於同一磁碟區上。</block>
   <block id="495c34aa343437cb8f198cd862f90c81" category="image-alt">顯示要建立的 CIFS 共享的對話框</block>
   <block id="ba3fb9aceb0ac7c1eb94ffbeb452a225" category="image-alt">顯示 CIFS 共享建立結果的對話框</block>
-  <block id="55e50708d5593637dc5ac91cd853b0f7" category="paragraph">注意：必須啟用 SMB 3.0，預設已啟用。</block>
-  <block id="728ab136002a6dc74f473e416573b625" category="paragraph">注意：請確保已啟用持續可用屬性。</block>
-  <block id="682675114425e9735aa2e70a47f8ce30" category="paragraph">注意：必須在儲存虛擬機器 (SVM) 上停用 SMB 匯出原則。</block>
-  <block id="b4d8d61dfa520ade1afa686010c3e960" category="paragraph">注意：CIFS 伺服器和 Hyper-V 伺服器所屬的網域必須同時允許 Kerberos 和 NTLMv2 驗證。</block>
-  <block id="192e3564614d93f8d5df4d9058dbbe24" category="paragraph">注意： ONTAP建立的共用具有 Windows 預設的共用權限，即「Everyone / 完全控制」。</block>
   <block id="7eab521ce07e2b1655041dc55cbbeede" category="section-title">支援的虛擬機器客戶作業系統</block>
   <block id="e87637b4c5507d05f5ab40e9b4f2ebeb" category="list-text">Alma Linux 7.x</block>
   <block id="61ae957360cbb9e779b4770da0706e03" category="list-text">SuSe 12</block>
   <block id="d0a61b5dcacd7a98d6ea9528d63dcb93" category="list-text">SuSe 15</block>
-  <block id="eaa4eab53048f73b6261960ce0c2f1af" category="paragraph">注意：不支援 Red Hat Enterprise Linux 5 和 6 的 CentOS Linux/RedHat。</block>
-  <block id="2e8696e7652fb7511860b42ad6311740" category="paragraph">注意：不支援 Windows Server 2008，但轉換過程應該可以正常運作。請自行承擔風險；但是，我們收到了成功使用 Shift 工具包轉換 Windows 2008 VM 的客戶報告。遷移後更新 IP 位址非常重要，因為用於自動指派 IP 的 PowerShell 版本與 Windows Server 2008 上執行的舊版本不相容。</block>
   <block id="6ad3fd15b4ece95a97a7bcb31427bec1" category="section-title">支援的 ONTAP 版本</block>
   <block id="01e9975649f2ec16d824f96c4fa7aeb8" category="section-title">支援的虛擬機器管理程式版本</block>
   <block id="95546e9760981229487527d6cf9a3d52" category="list-text">VMware - Shift 工具包已通過 vSphere 7.0.3 及更高版本的驗證</block>
@@ -7465,15 +7443,10 @@
   <block id="4548015f6d00a7f977186d6acc5f7902" category="list-text">OpenShift - Red Hat OpenShift 和 OpenShift Virtualization 運行版本 4.17 及更高版本</block>
   <block id="0d7435375bda68258e789bb228f91ebc" category="list-text">Oracle Linux KVM - Oracle Linux Virtualization Manager 版本 &gt;= 4.5</block>
   <block id="367c1e1c1b0fed55126cd44edcd92a67" category="list-text">Oracle Linux Virtualization Manager 主機上已安裝 ovirt-engine-4.5.4-1.el8 RPM 或更高版本</block>
-  <block id="da2ac70bce2d0ec6af2002c75cccc8d8" category="paragraph">注意：在目前版本中，僅 Hyper-V、VMware、OpenShift 和 Oracle Virtualization 支援端對端虛擬機器遷移。</block>
-  <block id="4c209b67ccc456b479fb83032a682caf" category="paragraph">注意：在目前版本中，對於 KVM 作為目標，VMDK 到 qcow2 或 RAW 轉換是唯一支援的工作流程。因此，如果從下拉式選單中選擇了 KVM，則不需要虛擬機器管理程式詳細資訊。qcow2 磁碟可用於在 KVM 變體上設定虛擬機器。</block>
-  <block id="0201d970862cf35319ea23520c58226a" category="list-text">下載<block ref="007da9a550a8944648c282b612decf50" category="inline-link-macro-rx"></block>打包並解壓縮。</block>
   <block id="6572eb27b5c6086cdd5bcbc4d1667e7b" category="image-alt">顯示 Shift Toolkit 下載選項的對話框</block>
   <block id="4ec292c048e8a4f9e319c6cb0de2483d" category="image-alt">顯示要執行的 Shift Toolkit 套件的對話框</block>
-  <block id="9ba651c3c5f2463d30951495821d85c6" category="paragraph">注意：所有預檢查均已執行，如果未滿足最低要求，則會顯示相應的錯誤或警告訊息。</block>
   <block id="c2892c9148b18c2c3e6d5b86db11172d" category="image-alt">顯示 Shift Toolkit 目標資料夾的對話框</block>
   <block id="e60c7bb55f0d3c05c05bae40b25ce40d" category="image-alt">顯示啟動 Shift 工具包的 IP 位址的對話框</block>
-  <block id="4318bd8cdde40d55306f3502c0865b2b" category="paragraph">注意：如果虛擬機器分配了多個網路卡，則設定過程中可以使用下拉選項選擇正確的 IP 位址。</block>
   <block id="dcae96231bba4c35e94accf7724b8cea" category="paragraph">按一下“下一步”。</block>
   <block id="7fa1f523d44084aabc1cd576f9320be1" category="image-alt">顯示待安裝軟體包的對話框</block>
   <block id="ee579445f71f17020d064463efed8355" category="image-alt">顯示 Java 許可資訊的對話框</block>
@@ -7481,12 +7454,9 @@
   <block id="422250d12ac22829224f1b621e63ac68" category="image-alt">顯示 Shift Toolkit 安裝選項的對話框</block>
   <block id="58cebf544833d2d2babd5e50c91061b1" category="image-alt">顯示 Shift Toolkit 安裝進度的對話框</block>
   <block id="9051840a1f4fd4f2bad1fc8681b84cad" category="list-text">Shift 工具包預設使用自簽名憑證。接受證書提示，然後按一下「下一步」。</block>
-  <block id="52de851295c6c158e4cb3c652c91ab8d" category="paragraph">注意：此憑證可以輕易地被第三方或 CA 產生的憑證取代。只需替換 certs 資料夾中的憑證即可。  certs 資料夾位於 &lt;安裝目錄&gt;Storage&gt;Certs 中。</block>
   <block id="b5cff33795d09607abcdb31ac9df352a" category="image-alt">顯示 Shift Toolkit SSL 憑證選擇的對話框</block>
   <block id="99e092ab9321d3856d51f3e4e55af66a" category="list-text">安裝完成後，安裝即告完成。</block>
-  <block id="0199e0f110ed08f00ecaa17084564276" category="paragraph">注意：如果 Shift 工具包 VM 沒有網路連接，離線安裝程式將執行相同的步驟，但會使用執行檔中包含的軟體包來安裝元件。</block>
   <block id="e63765367148f418cf687a4778e70038" category="image-alt">顯示 Shift 工具包精靈的對話框</block>
-  <block id="aee686fe73ad9a385c756152fb9cd868" category="paragraph">注意：安裝可能需要 10-15 分鐘。</block>
   <block id="16807519541f6a0f84b273fd8a3e9b70" category="paragraph">升級現已完全自動化，只需單擊即可完成。一項額外的服務使升級過程更加順暢。  Shit 工具包更新程式服務監聽 3002 端口，執行以下步驟：</block>
   <block id="38243a8449ba1b8388f98f8617180f9a" category="list-text">下載升級包。</block>
   <block id="d7696bad80895fa3cb6a1f79064ac9e1" category="list-text">停止換檔工具包服務</block>
@@ -7494,7 +7464,6 @@
   <block id="0d83db94a6f793e24bc275947796d6ad" category="list-text">執行更新並使用相同的 IP 位址（保留元資料不變）。</block>
   <block id="a081c9f4fbebfea5f37497319eeb3147" category="list-text">完成後，使用者介面將重定向到監聽連接埠 3001 的 Shift 工具包使用者介面。</block>
   <block id="8c57096463233c48527a2884538dc643" category="image-alt">顯示 Shift Toolkit 升級選項的對話框</block>
-  <block id="f8b3364d2c3529025a5164f050b187ef" category="paragraph">注意：對於沒有網路連線的部署，請從NetApp Toolchest 手動下載以「update」開頭的升級套件，並將其放置在指定資料夾（C:\NetApp_Shift）中。此資料夾路徑應在更新過程中建立並指定。其他步驟與線上升級流程相同。</block>
   <block id="000738c77e4719c5ca7216b3b1fd318c" category="summary">使用 Shift Toolkit 將虛擬機器從 VMware ESXi 移轉到 Microsoft Hyper-V，方法是準備虛擬機器、轉換磁碟格式和設定目標環境。</block>
   <block id="7c087000969c41966e005710d6aebb90" category="doc">使用 Shift Toolkit 將虛擬機器從 VMware ESXi 移轉到 Microsoft Hyper-V</block>
   <block id="82f049c181190bec5fa5f8b4f44c198a" category="paragraph">Shift Toolkit 能夠透過目標環境中的磁碟格式轉換和網路重新配置，實現虛擬化平台之間的虛擬機器遷移。</block>
@@ -7779,7 +7748,6 @@
   <block id="dd4ee610bd1d035c73bc0cbcd80e46da" category="paragraph">確保滿足以下先決條件：</block>
   <block id="075351692a1e60c7c93efefcf8f202b4" category="list-text">已安裝 OpenShift Virtualization Operator 和NetApp Trident CSI 驅動程式的 OpenShift 集群</block>
   <block id="62af718dafdac747b9a8c93d244cebef" category="list-text">MTV 2.9.4（含轉換模式）</block>
-  <block id="a669ea3f3f12cea8753fbb52402583c4" category="list-text"><block ref="8f9f1b51cb31c428b1d20d42b996bda1" category="inline-link-macro-rx"></block>已安裝</block>
   <block id="57d46182fb8d2a9fa64eac5d3f9d9da4" category="admonition">由於僅使用 Shift Toolkit API，因此無需配置 Shift Toolkit 資源群組或藍圖。</block>
   <block id="69a64b9f7cc895c19adf78a298196575" category="list-text">在 OpenShift 叢集上擁有管理員等級權限</block>
   <block id="89cdbaecbf44555ee5d12d57b8ed5562" category="list-text">安裝了 tridentctl 和 OC 命令列工具的 Linux 實例</block>
@@ -8018,7 +7986,6 @@
   <block id="825860267b7a5d90b93823d783710214" category="list-text">Microsoft Hyper-V 到 VMware ESX（虛擬硬碟格式 [VHDX] 到虛擬機器磁碟 [VMDK]）</block>
   <block id="52567f9a4b927b569287a168c92c53e5" category="list-text">VMware ESX 到 KVM 相容的虛擬機器管理程式（VMDK 到 RAW）</block>
   <block id="0866755dc8e08dc4c5c4e9013f9d8dca" category="image-alt">NetApp Shift 工具包概述</block>
-  <block id="ac755b6de8efaf835ed5faa2810bf8f9" category="paragraph">Shift 工具包可以下載<block ref="ce1999e8d7d946ea35ded70e868c8173" category="inline-link-macro-rx"></block>僅適用於 Windows 系統。</block>
   <block id="bad8794305fb794d7aac928ae93d8996" category="list-text">單一磁碟區和多種協定 使用NetApp ONTAP，可以輕鬆地使用多種協定存取單一磁碟區。例如，VMware ESXi 可以存取啟用網路檔案系統 (NFS) 協定的捲，而 Microsoft Hyper-V 可以使用 CIFS/SMB 協定存取相同的磁碟區。</block>
   <block id="928fe00758f1c39ffbdb44e3a26ea74d" category="list-text">FlexClone技術FlexClone允許快速克隆整個文件或卷，而無需複製資料。儲存系統上的公共區塊在多個檔案或磁碟區之間共用。因此，可以非常快速地複製大型 VM 磁碟。</block>
   <block id="b9ad3bd7739d623f3eb74f8191b44759" category="list-text">VM 磁碟轉換NetApp PowerShell 工具包和 Shift 工具包包含大量可用於對NetApp儲存控制器執行各種操作的工作流程。其中包括將虛擬磁碟轉換為不同格式的 PowerShell cmdlet。例如，VMware VMDK 可以轉換為 Microsoft VHDX，反之亦然。這些轉換由FlexClone執行，它能夠透過一個步驟非常快速地複製和轉換磁碟格式。</block>
@@ -8176,18 +8143,14 @@
   <block id="a73927c8751b2ee647fe31a8ed32f235" category="paragraph">由於 Shift Toolkit 不會以任何方式修改來源虛擬機，因此回滾非常簡單，只需啟動來源虛擬機即可。無需採取其他回滾操作。</block>
   <block id="a2bbba53223387a421234d9342ccc733" category="doc">配置NetApp Shift 工具包</block>
   <block id="ec708a42a9ff28123eaadaed0db59204" category="list-text">使用瀏覽器，透過輸入以下命令來存取 Shift 工具包 UI：<block ref="fa2a7ebf8fb904eb6f7c5d874576f5d4" prefix=" " category="inline-code"></block></block>
-  <block id="bf88709461043d4da8838007e1d75655" category="paragraph">附註：為獲得最佳體驗，請使用Google瀏覽器或Internet Explorer。</block>
   <block id="8cfa087cb4994e870de3db6612fc7d74" category="list-text">使用以下預設憑證存取使用者介面：使用者名稱：admin 密碼：admin</block>
   <block id="e0c6326cab09b0415bb3265571d7ea76" category="image-alt">NetApp Shift Toolkit 登入畫面示意圖</block>
-  <block id="b1cbe4f7d738373c18af705412d9932f" category="paragraph">注意：管理員需要在首次登入時變更其憑證。</block>
-  <block id="d54c8b222c5fcccaab0d5b0fe1c81b73" category="paragraph">注意：強制更改密碼後，管理員憑證也可以在登入 GUI 後使用「更改密​​碼」選項進行更改。</block>
   <block id="5e9ca049373bbf5988030ed386e7437e" category="image-alt">NetApp Shift Toolkit 變更密碼畫面示意圖</block>
   <block id="a51355c80fb19c33f35c7c179f8c4859" category="paragraph">完成後，點擊「接受並繼續」接受最終使用者許可協議。</block>
   <block id="2884ceffaf25b250c9354e098be5d19e" category="image-alt">NetApp最終用戶授權協議 (EULA) 截圖</block>
   <block id="2a26b62413a9e4c4be91fb7f6b394fe4" category="paragraph">在正確配置了來源虛擬機器和目標虛擬機器的儲存和連接後，即可開始配置 Shift 工具包，利用FlexClone功能自動將虛擬機器遷移或轉換為適當的格式。</block>
   <block id="972f20fcebf79202d265cc4f29958724" category="paragraph">第一步是發現並新增來源虛擬機器管理程式詳細資訊（包括虛擬機器管理程式和儲存），然後將來源虛擬機器管理程式詳細資訊新增至 Shift 工具包。在支援的瀏覽器中開啟 Shift 工具包，使用預設使用者名稱和密碼，然後按一下「新增網站」。</block>
   <block id="1f1c16f6b1640df2ea3645c8db1d347a" category="image-alt">Shift Toolkit 新增網站對話框</block>
-  <block id="91fd9090c3e4a55c5e35a7409fe51482" category="paragraph">注意：也可以使用「發現」選項新增網站。</block>
   <block id="5b1423e0889bd5cfb73324db7ae51737" category="list-text">虛擬機器管理程式 – 選擇 VMware 或 Hyper-V 作為來源</block>
   <block id="c4d23706529fa00f5f93137bd32185f3" category="image-alt">Shift Toolkit 新增網站對話框</block>
   <block id="65c98bc08a137025b38319eaea8bee1f" category="list-text">如果選擇 VMware，請輸入來源 vCenter 的詳細資料。</block>
@@ -8196,8 +8159,6 @@
   <block id="e176331f87fbc1be1aae2537ff661b85" category="list-text">Hyper-V 使用者名稱 - 用於存取 Hyper-V 的使用者名稱（採用下級登入名稱（網域\使用者名稱）或 UPN 格式）</block>
   <block id="78d2d0eb32308ae30092873f0b0250e0" category="list-text">Hyper-V 密碼 – 用於存取 Hyper-V 以執行資源清點的密碼。</block>
   <block id="b72787ab7b5b0367786710c20b96fcf6" category="paragraph">一旦新增，Shift 工具包將執行自動發現並顯示虛擬機器以及相關的元資料資訊。Shift 工具包將自動偵測虛擬機器使用的網路和 VLAN，並填滿它們。</block>
-  <block id="8ab8d096b39e8bc95dc520c2e4af1b50" category="paragraph">注意：如果對來源網站進行了任何修改，請務必執行發現程式以獲取最新資訊。您可以點擊網站名稱旁邊的三個點，然後點擊「發現網站」來完成此操作。</block>
-  <block id="a43c6f7b8e4f71b9cad7b004adfdeada" category="paragraph">注意：虛擬機器清單每 24 小時自動刷新一次。</block>
   <block id="b6f22cf039b9f68af3ff1eefe06be0cb" category="image-alt">使用 Shift Toolkit 的「新增站點」對話方塊來發現站點</block>
   <block id="bb84f51b5f803ce39d67a2e8e3ffa1c3" category="paragraph">若要查看特定來源虛擬機器管理程式的發現數據，請前往儀表板，按一下對應網站名稱旁的「查看虛擬機器清單」。該頁面將顯示虛擬機器清單以及虛擬機器屬性。</block>
   <block id="f7bb07bfcc2c0abfa4745aef3541eb28" category="image-alt">Shift Toolkit 發現網站的對話</block>
@@ -8215,25 +8176,16 @@
   <block id="cc6f6f0ee55ab7a7604dc20284de1e8a" category="list-text">使用者名稱 - 用於存取的使用者名稱（UPN 格式：username@domain.com 或 domain\administrator） 密碼 - 用於執行資源清點的存取密碼。</block>
   <block id="efe335e5b4298c43ef6dfc89924726b7" category="paragraph">選擇“接受自簽名憑證”。</block>
   <block id="e8d8be3a6b7678c0e66e18c75eb9b3c5" category="list-text">完成後，點擊「建立網站」。</block>
-  <block id="9f1f35bffc262c91c77f29b315fe54ae" category="paragraph">注意：來源儲存系統和目標儲存系統應該相同，因為磁碟格式轉換是在磁碟區層級且在同一磁碟區內進行的。</block>
-  <block id="6efc6df08a0ce190c362537e7eefbd5a" category="paragraph">注意：在建立資源組之前，請確保已配置 Qtree（如先決條件部分所述）。</block>
   <block id="e8ecd8bb6fceb72a871da3f301a5f756" category="paragraph">若要開始建立資源組，請點選「建立新資源組」選單項目。</block>
   <block id="67ecef0f6e2ca24138f8f486a68fb404" category="list-text">造訪資源組，點選「建立新資源組」。</block>
   <block id="f20a56ede8550c8ce29de20acdbb9141" category="image-alt">建立新資源群組使用者介面的對話框</block>
   <block id="cde5646828c35d0e5a97983cd133a8d1" category="list-text">在「新資源組」中，從下拉式功能表中選擇來源站點，然後按一下「建立」。</block>
   <block id="e0644dc4bde5b77f3f4f458429bc4336" category="list-text">點擊“繼續”</block>
   <block id="61bb60929fd4c9396d2a8431800d34a4" category="list-text">使用搜尋選項選擇合適的虛擬機器。預設篩選選項為「資料儲存」。</block>
-  <block id="3a3e61d2badf7d7016e681dea5480519" category="paragraph">注意：在轉換之前，請將虛擬機器移至新建立的ONTAP SVM 上的指定資料儲存進行轉換或遷移。這有助於隔離生產 NFS 資料存儲，並且指定的資料存儲可用於暫存虛擬機器。</block>
-  <block id="a670ce289a181d0b410025eec5cd08b8" category="paragraph">注意：對於 OpenShift 環境，應將 VMDK 遷移到其對應的捲，以便使用ONTAP NAS 儲存驅動程式複製 PVC（持久性卷聲明）結構。在未來的版本中，我們將加入更多增強功能，以充分利用ONTAP NAS 經濟型驅動程式。</block>
-  <block id="c1848bd79b15595617b2f9103c8a2456" category="paragraph">注意：在此上下文中，資料儲存下拉式選單只會顯示 NFSv3 資料儲存。NFSv4 資料儲存將不會顯示。</block>
   <block id="93241e3f4b91e553e0bb780fc10137fa" category="list-text">透過選擇「目標網站」、「目標虛擬機器管理程式項目」和資料儲存到 Qtree 或儲存類別對應來更新遷移詳細資訊。</block>
-  <block id="bdebe6642cc49dd34d9ec69535bf4d59" category="paragraph">注意：轉換虛擬機器時，請確保目標路徑（儲存轉換後的虛擬機器的位置）設定為 qtree。將目標路徑設定為對應的 qtree。</block>
-  <block id="4f17428d60ddbcbf6698947b7565c1ef" category="paragraph">注意：可以建立多個 qtree 並用於相應地儲存轉換後的 VM 磁碟。</block>
-  <block id="a665af903725c840d8255d1d9526de9a" category="paragraph">注意：虛擬機器可以在跨儲存區上運行，Shit 工具包會自動偵測到它們，但是每個磁碟區都應該對應一個 qtree。</block>
   <block id="f82c4417135bcf1ea9ac114ca6bc5627" category="paragraph">能夠將具有跨多個磁碟區的 VMDK 的虛擬機器遷移 Shift 工具包 UI 會自動選擇屬於特定 RG 的虛擬機器或虛擬機器的所有跨磁碟機。這將列出 RG 頁面中所有捲，我們在該頁面進行資料儲存 - qtree 映射。</block>
   <block id="7923419d5a4b20b90b38a39229e75d68" category="list-text">為所有選定的虛擬機器選擇啟動順序和啟動延遲（秒）。透過選擇每個虛擬機器並設定其優先順序來設定開機順序。3 是所有虛擬機器的預設值。選項如下：1 – 第一台啟動的虛擬機；3 – 預設值；5 – 最後啟動的虛擬機</block>
   <block id="9b2aa8da7dacbd4da4b8326b026b4d40" category="list-text">點選「建立資源組」。</block>
-  <block id="cebe40079363ad85c9e00e8e380da918" category="paragraph">注意：如果需要修改資源組以新增或刪除虛擬機，請使用此選項選取資源組名稱，然後選擇「編輯資源組」。</block>
   <block id="b8008a125d23cd3fe064457bfac88688" category="paragraph">要遷移或轉換虛擬機，必須制定計劃。從下拉式選單中選擇來源和目標虛擬機器管理程式平台，並選擇要包含在此藍圖中的資源群組，以及應用程式啟動方式的分組（即網域控制器，然後是第 1 層，然後是第 2 層，等等）。這些通常也被稱為遷移計劃。若要定義藍圖，請導覽至「藍圖」選項卡，然後按一下「建立新藍圖」。</block>
   <block id="ec5750e44d9a1c9271d3c75402b0583c" category="paragraph">若要開始建立藍圖，請點選「建立新藍圖」。</block>
   <block id="214c49fbbbcbf5078732bf17494b0bfa" category="list-text">造訪藍圖，點選「建立新藍圖」。</block>
@@ -8243,8 +8195,6 @@
   <block id="e7542fa0c1b66a6c656b019b76fba3ca" category="image-alt">建立新藍圖使用者介面對話框</block>
   <block id="b25d6492372ce6afc7b60c6d28829b7f" category="list-text">選擇資源組詳細信息，然後點擊“繼續”。</block>
   <block id="1aa59c506e4ddafe74406a5fba0b2589" category="list-text">完成前面的步驟後，選擇網路映射並將其指派給對應的網路映射。確保目標虛擬機器管理程式上已設定虛擬交換器、網路設定檔或電信業者。</block>
-  <block id="e76e59ef3ac79fa6845aff23abbc868a" category="paragraph">注意：對於測試遷移，「不配置網路」是預設選擇，Shift 工具包不會執行 IP 位址分配。磁碟轉換完成後，在相應的虛擬機管理程式端購買虛擬機，手動分配氣泡網路交換機，以避免與生產網路發生任何衝突。</block>
-  <block id="ed08affc931c014ed8fc1841a953b0e6" category="paragraph">注意：請確保事先已配置 qtree 並分配了必要的權限，以便可以建立虛擬機器並啟動它。注意：對於 OpenShift，PVC 是使用Trident CSI 建立的，無需預先建立 qtree。</block>
   <block id="7e9900298f29110f6aff4be593bf2d30" category="list-text">對於基於 Windows 的作業系統，建議使用具有本機管理員權限的使用者。也可以使用網域憑證，但是請確保在轉換之前虛擬機器上存在使用者設定文件，否則網域憑證將無法運作，因為它會在沒有網路連線時查找網域驗證。</block>
   <block id="459a5b60d16fe5574414a30d02f67ca1" category="list-text">對於基於 Linux 發行版的客戶虛擬機，提供一個無需密碼即可執行 sudo 命令的用戶，這意味著該用戶應該屬於 sudoers 列表，或者作為新的配置文件添加到 /etc/sudoers.d/ 資料夾中。</block>
   <block id="681b2ae21be7c2d31c78c3e4759bd4f8" category="paragraph">在最近發布的版本中，Shift Toolkit 在虛擬機器準備方面引入了更大的靈活性。預設情況下，工具包透過部署特定於作業系統的腳本來自動準備虛擬機，以：* 移除 VMware Tools * 備份 IP 設定以便根據所選藍圖重新分配</block>
@@ -8259,10 +8209,7 @@
   <block id="479102a123aa909325a356e45ed16505" category="image-alt">資源群組使用者介面對話框</block>
   <block id="308c34c22f59ad98cf6151e5a1153d64" category="list-text">點選“繼續”。</block>
   <block id="11dfbeb04ea5f6393403e0fbbf9dec26" category="list-text">在下一步中，透過選取核取方塊來設定日期和時間來安排遷移。確保所有虛擬機器 (VM) 在預定日期之前準備好並關閉。完成後，點選「建立藍圖」。</block>
-  <block id="5874f6880c924e1aff0dc4802958a185" category="paragraph">注意：排程行程時，請選擇比目前 Shift VM 時間至少提前 30 分鐘的日期。這是為了確保工作流程有足夠的時間來準備資源組內的虛擬機器。</block>
   <block id="3b6771871906cf26dcebde8f4caaab1f" category="list-text">對於基於 Windows 的作業系統，準備腳本的預設儲存位置是「C:\ NetApp」資料夾。</block>
-  <block id="c56f7467ffeebd26f8c1df1883c72f30" category="paragraph">注意：對於運行 CentOS 或 Red Hat 的 Linux 來源虛擬機，Shift 工具包能夠智慧地自動安裝必要的 Hyper-V 驅動程式。這些驅動程式必須在磁碟轉換之前存在於來源 VM 中，以確保 VM 在轉換後能夠成功啟動。</block>
-  <block id="b27f456e9a958e2c2303d8d093f25292" category="paragraph">註：詳細資訊請參閱<block ref="1c434828099aa70753997347cfb22762" category="inline-link-macro-rx"></block>。</block>
   <block id="1fb0d1b74e516b59121dd7a5a6455843" category="sidebar">Shift Toolkit 使用者指南</block>
   <block id="1642c5824792f34a9c9b218c8fbf6864" category="sidebar">將虛擬機器從 VMware ESXi 移轉到 Microsoft Hyper-V</block>
   <block id="d7f9de7cb5fe22a40ff549c178d80480" category="sidebar">將虛擬機器從 Microsoft Hyper-V 移轉到 VMware ESXi</block>
@@ -8275,4 +8222,63 @@
   <block id="b03b448779a771783f7b05ae88457a85" category="paragraph">虛擬機器駐留在 NFS 資料儲存上之後，Shift Toolkit 使用NetApp FlexClone技術將虛擬機器從 VMware ESXi 轉換為任何虛擬機器管理程式。轉換後的虛擬機器及其磁碟放置在對應的虛擬機器管理程式主機可存取的 qtree 中。</block>
   <block id="28bed22cb4d0030cf58eb18a11ba3f8e" category="paragraph-title">遷移回SAN</block>
   <block id="8fb14a772174f772115b35707d3c4a41" category="paragraph">轉換完成後，使用儲存遷移將轉換後的虛擬機器及其磁碟從 qtree 移至啟用 SAN 的磁碟區。這樣，您就可以在對應的虛擬機器管理程式環境中維護您的 SAN 基礎架構。</block>
+  <block id="13b6fa536eb1d6a6ac45cf21bd047eb5" category="admonition">KVM 不需要虛擬機器管理程式詳細資訊。</block>
+  <block id="9661bb934c0e256029f562980b5e3357" category="admonition">Shift 工具包僅支援 qcow2 格式的磁碟轉換。它不支援虛擬機器創建或註冊。若要使用轉換後的磁碟，請手動建立虛擬機器並附加磁碟。</block>
+  <block id="09421c49154abf7d91874fd7cf6f2085" category="admonition">若要在 VM 中使用轉換後的 VHDX 磁碟，必須透過 Hyper-V 管理員或 PowerShell 命令手動建立 VM，並且必須將磁碟連接到該 VM。除此之外，還應手動映射網路。</block>
+  <block id="e2d38bb0205a8ef9aba696cee5c3aa28" category="admonition">對於 OLVM，也可以使用 qcow2 檔案格式。此項目選擇可在建立藍圖時進行。</block>
+  <block id="63c1e7779d95e612b6d229b69472c6f2" category="admonition">若要在虛擬機器中使用轉換後的 RAW 磁碟映像，必須透過 OpenShift 控制台或 OC 命令手動建立虛擬機器（透過 YAML 為 OpenShift 建立），或使用 OLVM REST API/UI 為 OLVM 創建，並且必須將磁碟附加到虛擬機器。除此之外，還應手動映射網路。</block>
+  <block id="3bf99fda67690f8472ac3105914e8f75" category="admonition">手動建立虛擬機器時，請確保指定正確的啟動類型（EFI 或 BIOS）。</block>
+  <block id="7d76d555f2a35e2e68785f77730e4223" category="paragraph">Shift 工具包可在 Windows 2019、2022 和 2025 版本上運作。從此處下載 Shift 工具包<block ref="0e93fa2610e18308a429b8e37bff0fca" category="inline-link-macro-rx"></block>然後解壓縮軟體包，執行 exe 檔案進行安裝並啟動服務。Shift 工具包提供 2 個軟體包－線上版（大小約 130MB）和離線版（大小約 1.2GB）。顧名思義，線上安裝套件會從網路下載並安裝必要的先決條件。</block>
+  <block id="50bf380243c95c9173da44b1e6c6c318" category="admonition">使用適當的套件進行部署。使用離線模式時，無需修改代理設置，因為所有必需的先決條件和檔案都已捆綁。</block>
+  <block id="5676f7ccd02e9341b1f0dc22219d49c2" category="admonition">在專用虛擬機器上安裝 Shift 工具包。</block>
+  <block id="0a5f187a38c5b17faf05a92c3c55a264" category="admonition">必須有 900 MB 可用磁碟空間才能安裝。</block>
+  <block id="51408e5e3b25fc5a811d161d4ec11813" category="admonition">建立新的 SVM 是一種很好的做法，以確保 SVM 符合 Shift 工具包要求，而不必以可能造成破壞的方式修改生產 SVM。</block>
+  <block id="e38734739368fedf7716d8f6ef5616d2" category="admonition">對於 VMware 到 Hyper-V 之間的雙向遷移，新的 SVM 應該同時啟用 NFS 和 SMB 協定。所配置的磁碟區也應啟用 NFS 和 SMB。</block>
+  <block id="d77eaf1ead0dd10191f74771949651f6" category="admonition">目標路徑必須與來源虛擬機器位於同一磁碟區上。</block>
+  <block id="086928e9e6a367446b6ac38269430e43" category="admonition">依據目標虛擬機器管理程式類型和磁碟格式為 qtree 指派正確的安全樣式。</block>
+  <block id="103001c0162eb90ec3c33b6d9c5c0324" category="admonition">如果轉換後的 qcow2 檔案旨在用於 OpenShift 虛擬化，則有一個例外：這些檔案可以直接放在磁碟區上，而無需使用 qtree。為了實現這一點，可以使用 Shift 工具包 GUI 或使用 Shift 工具包 API 將 VMDK 檔案轉換為 qcow2 格式，並將它們直接放置在磁碟區中。</block>
+  <block id="0311ee0cf7fe887f90c9f918533a9096" category="admonition">必須啟用 SMB 3.0，預設啟用。</block>
+  <block id="d3525ee733a0a9400de3b9c51c569106" category="admonition">確保啟用持續可用屬性。</block>
+  <block id="de63bc7e3957393b95cabe1066c8d6e5" category="admonition">必須在儲存虛擬機器 (SVM) 上停用 SMB 的匯出策略</block>
+  <block id="4871af42b5e6993a6b64636300ff3583" category="admonition">CIFS 伺服器和 Hyper-V 伺服器所屬的網域必須同時允許 Kerberos 和 NTLMv2 驗證。</block>
+  <block id="875e7b2516d12003e4697ae14eb19d7e" category="admonition">ONTAP使用 Windows 預設共用權限「所有人/完全控制」建立共用。</block>
+  <block id="4de2d7564d5e43d51fa02f3b66a88e08" category="admonition">CentOS Linux/RedHat 不支援 Red Hat Enterprise Linux 5 和 6。</block>
+  <block id="e3b527bb151566ab2590c93db56acad7" category="admonition">Windows Server 2008 不受支持，但轉換過程應該可以正常運作。請自行承擔風險；但是，我們收到了成功使用 Shift 工具包轉換 Windows 2008 VM 的客戶報告。遷移後更新 IP 位址非常重要，因為用於自動指派 IP 的 PowerShell 版本與 Windows Server 2008 上執行的舊版本不相容。</block>
+  <block id="f872e6d836b90234d3cc68973622aded" category="admonition">目前版本僅支援 Hyper-V、VMware、OpenShift 和 Oracle Virtualization 的端對端虛擬機器遷移。</block>
+  <block id="13139e0a28c4eeaac6c0835c087cc79e" category="admonition">在目前版本中，對於 KVM 作為目標，VMDK 到 qcow2 或 RAW 的轉換是唯一支援的工作流程。因此，如果從下拉式選單中選擇了 KVM，則不需要虛擬機器管理程式詳細資訊。qcow2 磁碟可用於在 KVM 變體上設定虛擬機器。</block>
+  <block id="249ab02ca8a32d830ad496e0da5b54c2" category="list-text">下載<block ref="9aa914d37cf6457f3666d93aedcfa60f" category="inline-link-macro-rx"></block>打包並解壓縮。</block>
+  <block id="ffee295c0d98b6d41b18fd5077be0984" category="admonition">所有預檢查均已執行，如果不符合最低要求，則會顯示相應的錯誤或警告訊息。</block>
+  <block id="f9496371491d8eaef3321581f8037d2b" category="admonition">如果虛擬機器指派了多個 NIC，則設定程序允許使用下拉選項選擇正確的 IP 位址。</block>
+  <block id="2f9f3f418527bcc896531c079afd73bd" category="admonition">此憑證可以輕鬆地被第三方或憑證授權單位 (CA) 產生的憑證取代。只需替換 certs 資料夾中的憑證即可。certs 資料夾位於 &lt;安裝目錄&gt;Storage&gt;Certs 中。</block>
+  <block id="7dff5687c881c53f6351151dc7bce114" category="admonition">如果 Shift 工具包 VM 沒有互聯網，離線安裝程式將執行相同的步驟，但將使用執行檔中包含的套件安裝元件。</block>
+  <block id="272f6dc09b503783174135e096ac86d3" category="admonition">安裝過程大約需要 10-15 分鐘。</block>
+  <block id="2e7ecf46edd82001af03972ca0b514a7" category="admonition">對於沒有網路連線的部署，請從NetApp Toolchest 手動下載以「update」開頭的升級包，並將其放置在指定資料夾（C:\NetApp_Shift）中。此資料夾路徑應在更新過程中建立並指定。其他步驟與線上升級流程相同。</block>
+  <block id="39c656d738218c6eb00356f3d2348871" category="list-text"><block ref="4e0f141d6a23d78411e5d5d5543923fe" category="inline-link-macro-rx"></block>已安裝</block>
+  <block id="24a15b3ec265849869b510313ad80608" category="paragraph">Shift 工具包可以下載<block ref="01c0f6eea4563eff35284d1f57df8f3e" category="inline-link-macro-rx"></block>僅適用於 Windows 系統。</block>
+  <block id="663525d60f2ca3fc21271786f8feba4c" category="admonition">使用 Google Chrome 或 Internet Explorer 可獲得最佳體驗。</block>
+  <block id="1ec95d193661969a0c72564a8b42e176" category="admonition">管理員需要在首次登入時更改其憑證。</block>
+  <block id="d3103db3dbf3189e21d87a30a4123876" category="admonition">強制更改密碼後，管理員也可以登入 GUI，使用「更改密​​碼」選項更改其憑證。</block>
+  <block id="e960c2d1f3f95cc2c7b3d44523937731" category="admonition">也可以使用「發現」選項新增網站。</block>
+  <block id="12fd9161f9b8affc77ccfdd6e824ec98" category="admonition">如果對來源網站進行了任何修改，請確保執行發現以獲取最新資訊。您可以點擊網站名稱旁邊的三個點，然後點擊「發現網站」來完成此操作。</block>
+  <block id="9970dbc208d6e5391ad2e2f692912546" category="admonition">VM 庫存每 24 小時自動刷新一次。</block>
+  <block id="b9d88d63dcb6a8283e1a7ce07c771f03" category="admonition">在建立資源組之前，請確保已配置 Qtree（如先決條件部分所述）。</block>
+  <block id="c9a892196731a16f2944923ee0f2375f" category="admonition">在轉換之前，將虛擬機器移動以進行轉換或遷移到新建立的ONTAP SVM 上的指定資料儲存庫。這有助於隔離生產 NFS 資料存儲，並且指定的資料存儲可用於暫存虛擬機器。</block>
+  <block id="ddaac8fa4e4bb58c874edd93de9aa136" category="admonition">對於 OpenShift 環境，應將 VMDK 遷移到其對應的捲，以使用ONTAP NAS 儲存驅動程式複製 PVC（持久性磁碟區聲明）結構。在未來的版本中，我們將加入更多增強功能，以充分利用ONTAP NAS 經濟型驅動程式。</block>
+  <block id="ea4862a38abceacc93e6a8c0ac59b7a4" category="admonition">此上下文中的資料儲存下拉式選單將僅顯示 NFSv3 資料儲存。NFSv4 資料儲存將不會顯示。</block>
+  <block id="4d6125b7659509f808ca88b6053a1bc2" category="admonition">轉換虛擬機器時，請確保目標路徑（儲存轉換後的虛擬機器的位置）設定為 qtree。將目標路徑設定為對應的 qtree。</block>
+  <block id="0edd32787a1b42438f3d70bb7ffb20bb" category="admonition">可以建立多個 qtree 並用於相應地儲存轉換後的 VM 磁碟。</block>
+  <block id="a4a5028abf5480a3973e8d53acce33c2" category="admonition">虛擬機器可以在跨儲存區上運行，Shit 工具包會自動偵測到它們，但是每個磁碟區都應該映射一個 qtree。</block>
+  <block id="eebe94d5593846ae2669a7255449a63c" category="admonition">如果需要修改資源組以新增或刪除虛擬機，請使用此選項並選擇資源組名稱，然後選擇「編輯資源組」。</block>
+  <block id="6306be86bc6b7e3d88368376b48fa3d2" category="admonition">對於測試遷移，「不配置網路」是預設選擇，Shift 工具包不會執行 IP 位址分配。磁碟轉換完成後，在相應的虛擬機管理程式端購買虛擬機，手動分配氣泡網路交換機，以避免與生產網路發生任何衝突。</block>
+  <block id="a0dd3c30553893efdf8609396ada8869" category="admonition">請確保事先配置 qtree 並分配必要的權限，以便建立虛擬機器並啟動它。注意：對於 OpenShift，PVC 是使用Trident CSI 建立的，無需預先建立 qtree。</block>
+  <block id="76ae0a5fc2946f5657c1d3244c65ca41" category="admonition">排程時，請選擇比目前 Shift VM 時間至少早 30 分鐘的日期。這是為了確保工作流程有足夠的時間來準備資源組內的虛擬機器。</block>
+  <block id="4bb8c792f2a084a1a8a33fe6cb8d1e0c" category="admonition">對於執行 CentOS 或 Red Hat 的 Linux 來源 VM，Shift 工具包可以智慧地自動安裝必要的 Hyper-V 驅動程式。這些驅動程式必須在磁碟轉換之前存在於來源 VM 中，以確保 VM 在轉換後能夠成功啟動。</block>
+  <block id="9326eb3a5f54d5a3e5a0a53d000e5fc4" category="admonition">詳細資訊請參閱<block ref="1c434828099aa70753997347cfb22762" category="inline-link-macro-rx"></block>。</block>
+  <block id="ba6af9e4a46c6c9c5542891d417327e8" category="section-title">2025年11月12日</block>
+  <block id="fdb49635ac02e5a3421c1b77c8a71777" category="list-text">提供了NetApp Shift 工具包的正確下載鏈接</block>
+  <block id="1fc9523ad511c30a857d40caab013cf9" category="list-text">為NetApp Shift Toolkit 新增了遷移解決方案</block>
+  <block id="3b5814b83e68d7f86544c622a69233b8" category="list-text"><block ref="3b5814b83e68d7f86544c622a69233b8" category="inline-link-macro-rx"></block></block>
+  <block id="9626af62825ff7da30100c4281b6756f" category="list-text"><block ref="9626af62825ff7da30100c4281b6756f" category="inline-link-macro-rx"></block></block>
+  <block id="657c6ccf2c868e721dd192abfde01a8c" category="list-text"><block ref="657c6ccf2c868e721dd192abfde01a8c" category="inline-link-macro-rx"></block></block>
+  <block id="6c3fdb8607979cc3d040eab9498bfdbe" category="list-text"><block ref="6c3fdb8607979cc3d040eab9498bfdbe" category="inline-link-macro-rx"></block></block>
 </blocks>

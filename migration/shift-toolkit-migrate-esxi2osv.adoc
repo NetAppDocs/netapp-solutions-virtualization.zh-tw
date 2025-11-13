@@ -405,7 +405,7 @@ image::shift-toolkit-115.png[Red Hat OpenShift 虛擬機器遷移]
 
 * 已安裝 OpenShift Virtualization Operator 和NetApp Trident CSI 驅動程式的 OpenShift 集群
 * MTV 2.9.4（含轉換模式）
-* link:https://mysupport.netapp.com/site/tools/tool-eula/netapp-shift-toolkit/download["Shift 工具包"]已安裝
+* link:https://mysupport.netapp.com/site/tools/tool-eula/netapp-shift-toolkit["Shift 工具包"]已安裝
 +
 
 NOTE: 由於僅使用 Shift Toolkit API，因此無需配置 Shift Toolkit 資源群組或藍圖。
