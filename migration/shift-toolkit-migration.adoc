@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: migration/shift-toolkit-migration.html 
-keywords: netapp, vmware, esxi, vm, migration, openshift, virtualization, hyper-v, proxmox 
+keywords: netapp, vmware, esxi, vm, migration, openshift, virtualization, hyper-v, proxmox, shift, toolkit 
 summary: 使用 Shift Toolkit 在虛擬化平台之間遷移虛擬機器。該過程包括準備虛擬機器、轉換磁碟格式以及在目標環境中配置網路設定。 
 ---
 = 使用 Shift Toolkit 遷移虛擬機

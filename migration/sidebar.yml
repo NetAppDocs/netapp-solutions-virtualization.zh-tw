@@ -6,10 +6,18 @@ entries:
 - title: 使用 Shift Toolkit 遷移或轉換虛擬機
   pdf-filename: Shift Toolkit 使用者指南
   entries:
-  - title: 關於Shift Toolkit
+  - title: 關於NetApp Shift 工具包
     url: "/migration/shift-toolkit-overview.html"
+  - title: Shift Toolkit 支援的版本
+    url: "/migration/shift-toolkit-supported-versions.html"
   - title: 安裝 Shift Toolkit
-    url: "/migration/shift-toolkit-install.html"
+    entries:
+    - title: 準備安裝
+      url: "/migration/shift-toolkit-install-prepare.html"
+    - title: 查看安裝要求
+      url: "/migration/shift-toolkit-install-prereqs.html"
+    - title: 安裝或升級 Shift 工具包
+      url: "/migration/shift-toolkit-install.html"
   - title: 配置 Shift Toolkit
     url: "/migration/shift-toolkit-ui.html"
   - title: 使用 Shift Toolkit 遷移虛擬機
