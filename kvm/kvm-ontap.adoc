@@ -63,7 +63,7 @@ KVM 主機需要將 FC、乙太網路或其他支援的介面連接到交換機�
 
 *SAN*
 
-* 使用SnapMirror主動同步跨故障域擴展叢集。
+* 使用SnapMirror主動同步跨故障域擴展叢集。務必檢查 https://mysupport.netapp.com/matrix/#welcome["互通性矩陣工具"] 適用於支援的配置。
 * ASA模型提供主動/主動多路徑和快速路徑故障轉移。
 * 支援FC、iSCSI、NVMe-oF協定。
 * 支援 iSCSI CHAP 相互認證。

@@ -831,7 +831,6 @@
   <block id="a7e944e3b289a0cc40fa523d2f309b3d" category="list-text">自主勒索軟體保護。</block>
   <block id="e349d95af5f86ccf74a9346800e3f55d" category="list-text">文件系統分析。</block>
   <block id="54d1b3917151f3d89ddbd7aef9f811dd" category="paragraph">*SAN*</block>
-  <block id="3f1ebac34c257ad0e2052f6fe693b898" category="list-text">使用SnapMirror主動同步跨故障域擴展叢集。</block>
   <block id="b307eeff4972f33ddee68641c599e7fd" category="list-text">ASA模型提供主動/主動多路徑和快速路徑故障轉移。</block>
   <block id="717b83d4b077b1876a8833779607ac19" category="list-text">支援FC、iSCSI、NVMe-oF協定。</block>
   <block id="f7c9512e8b2751806d55c35032ad9c1b" category="list-text">支援 iSCSI CHAP 相互認證。</block>
@@ -2572,12 +2571,6 @@
   <block id="806aaadb95e3a8393823ebee62a2be27" category="list-text">填寫詳細信息，提供伺服器資訊後，NFS 匯出應填充並從清單中選擇。記得選擇內容選項。</block>
   <block id="b6713e4a099d16458859b6f724dd584f" category="inline-image-macro">NFS 儲存添加</block>
   <block id="9f359905197ffa4ab648a9185a236838" category="paragraph"><block ref="9f359905197ffa4ab648a9185a236838" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="089679585327c9a752c54982a68a19e1" category="list-text">對於會話中繼，在每個 Proxmox VE 主機上，更新 /etc/fstab 檔案以使用不同的 lif 位址以及 max_connect 和 NFS 版本選項掛載相同的 NFS 匯出。</block>
-  <block id="e0368c95980a497a397d1ba864ef07c6" category="inline-image-macro">會話主幹的 fstab 條目</block>
-  <block id="310cfc3952419b0bce4cefdb2dd56f4b" category="paragraph"><block ref="310cfc3952419b0bce4cefdb2dd56f4b" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="56210fc6ca5cd165a3679bdc3f9aed5b" category="list-text">這是 NFS 的 /etc/pve/storage.cfg 中的內容。</block>
-  <block id="b53457dfc571fe98017812a0f84ef394" category="inline-image-macro">NFS 的儲存設定檔</block>
-  <block id="82de9417812917d25da3862eb8206ebb" category="paragraph"><block ref="82de9417812917d25da3862eb8206ebb" category="inline-image-macro-rx" type="image"></block></block>
   <block id="21b3bf9403041f9d09b0e69368b9b151" category="section-title">帶有 iSCSI 的 LVM</block>
   <block id="37eed020511d831c82db16bf1a62cce6" category="video-title">使用ONTAP 的iSCSI LVM 共享池</block>
   <block id="ab39921a24a29c2606bf32bd0ebece00" category="paragraph">若要為 Proxmox 主機之間的共用儲存配置邏輯磁碟區管理器，請完成下列任務：</block>
@@ -8322,4 +8315,6 @@
   <block id="f76aaf3aaa7b30238e7a3e2b1a04493b" category="sidebar">準備安裝</block>
   <block id="beec6318942ca08bdda507299633ce3d" category="sidebar">查看安裝要求</block>
   <block id="b6eec573aa3c42f73db5c0d756b8af5a" category="sidebar">安裝或升級 Shift 工具包</block>
+  <block id="752e67a6b4916807acf40a3d0f4d607d" category="list-text">使用SnapMirror主動同步跨故障域擴展叢集。務必檢查<block ref="8d006c87830f7172fd7400f1c17c0928" category="inline-link-rx"></block> 適用於支援的配置。</block>
+  <block id="0fa5490665357157f44ef8e560981bff" category="list-text">若要啟用 nConnect 選項，請在叢集中的任一節點上進入 shell，然後輸入 pvesm set pvenfs01 --options nconnect=4，其中 pvenfs01 是上一個步驟建立的儲存 ID。請注意，如果您打算使用連結聚合功能，請確保使用至少 NFS v4.1 版本，並設定 trunkdiscovery 選項。 pvesm set pvenfs01 --options vers=4.1,trunkdiscovery</block>
 </blocks>
