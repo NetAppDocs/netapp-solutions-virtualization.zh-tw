@@ -1,10 +1,10 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmw-dr-gs.html 
-keywords: vmware, getting, started, overview, netapp, bluexp, disaster, recovery, draas 
+keywords: vmware, getting, started, overview, netapp, console, disaster, recovery 
 summary:  
 ---
-= 了解使用BlueXP disaster recovery
+= 了解如何使用NetApp Disaster Recovery進行虛擬機器災難復原
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary:
 
 
 [role="lead"]
-BlueXP disaster recovery使用ONTAP儲存自動複製和復原 VMware 虛擬機器。它支援使用Amazon FSx for NetApp ONTAP或其他本機 VMware 環境從本機設定還原到 AWS 上的 VMware Cloud。
+NetApp Disaster Recovery利用ONTAP儲存自動複製和復原 VMware 虛擬機器。它支援從本機設定還原到 VMware Cloud on AWS，並使用Amazon FSx for NetApp ONTAP或其他本機 VMware 環境。
 
 
 
@@ -22,9 +22,9 @@ BlueXP disaster recovery使用ONTAP儲存自動複製和復原 VMware 虛擬機�
 
 成功的計劃和技術組合可確保關鍵資料、應用程式和虛擬機器的保護。  DR 的挑戰在於確定適當的保護等級和相關成本。
 
-ONTAP陣列提供內建複製功能，用於將磁碟區資料（以及駐留在指定資料儲存 LUN 上的虛擬機器）從一個站點傳輸到另一個站點。BlueXP DRaaS 與 vSphere 整合並自動化整個工作流程，以便在災難發生時實現無縫故障轉移和故障復原。
+ONTAP陣列提供內建複製功能，可將磁碟區資料（以及駐留在指定資料儲存 LUN 上的虛擬機器）從一個站點傳輸到另一個站點。NetApp Disaster Recovery與 vSphere 集成，並可自動執行整個工作流程，以便在災難發生時實現無縫故障轉移和故障復原。
 
-有關BlueXP DRaaS 的更多信息，請參閱link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-overview.html["BlueXP DRaaS 概述"^]。
+有關NetApp Disaster Recovery的更多信息，請參閱link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-overview.html["NetApp Disaster Recovery概述"^]。
 
 
 
@@ -41,6 +41,6 @@ VMware vSphere 環境中 DR 故障轉移最耗時的部分是在 DR 站點執行
 
 有關可用解決方案的更多技術信息，請參閱：
 
-* link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-nfs.html["使用BlueXP DRaaS 對 NFS 資料儲存進行災難復原"^]
-* link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-vmfs.html["使用BlueXP DRaaS 對 VMFS 資料儲存進行災難復原"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-nfs.html["使用NetApp Disaster Recovery技術為 NFS 資料儲存提供災難復原服務"^]
+* link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-vmfs.html["使用NetApp Disaster Recovery技術為 VMFS 資料儲存提供災難復原服務"^]
 

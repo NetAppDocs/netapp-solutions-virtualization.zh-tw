@@ -199,9 +199,9 @@ SnapCenter插件可以協調虛擬機器的靜止狀態以及NetApp儲存陣列�
 
 更多資訊請參閱 https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere["SnapCenter Plug-in for VMware vSphere文檔"]。
 
-BlueXP整合支援 3-2-1 備份策略，將資料副本擴展到雲端中的物件儲存。
+NetApp Backup and Recovery支援將資料副本擴展到雲端物件儲存的備份策略。
 
-有關BlueXP的 3-2-1 備份策略的更多信息，請訪問link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-321-dp-scv.html["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"^]。
+有關NetApp Backup and Recovery備份策略的更多信息，請訪問link:https://docs.netapp.com/us-en/data-services-backup-recovery/index.html["NetApp Backup and Recovery文檔"^]。
 
 有關SnapCenter插件的逐步部署說明，請參閱解決方案link:vmw-vcf-scv-viwld.html["使用SnapCenter Plug-in for VMware vSphere保護 VCF 工作負載域上的虛擬機"]。
 
@@ -249,9 +249,9 @@ NetApp提供全球最安全的儲存。  NetApp可以幫助保護數據和應用
 
 請參閱 NetApps 解決方案文件中心的完整解決方案：link:vmw-nfs-vlsr.html["自主防禦 NFS 儲存勒索軟體"]
 
-* BlueXP DRaaS*（災難復原即服務）是一種經濟高效的災難復原解決方案，專為在具有 NFS 資料儲存的本地ONTAP系統上運行的 VMware 工作負載而設計。它利用NetApp SnapMirror複製來防止網站中斷和資料損壞事件（例如勒索軟體攻擊）。該服務與NetApp BlueXP控制台集成，可輕鬆管理和自動發現 VMware vCenters 和ONTAP儲存。組織可以建立和測試災難復原計劃，透過區塊級複製實現長達 5 分鐘的復原點目標 (RPO)。 BlueXP DRaaS 利用 ONTAP 的FlexClone技術進行節省空間的測試，而不會影響生產資源。該服務協調故障轉移和故障復原過程，允許以最少的努力將受保護的虛擬機器啟動到指定的災難復原站點。與其他知名替代方案相比， BlueXP DRaaS 以極低的成本提供了這些功能，使其成為組織使用ONTAP儲存系統為其 VMware 環境設定、測試和執行災難復原作業的有效解決方案。
+* NetApp Disaster Recovery是一款經濟高效的災難復原解決方案，專為在具有 NFS 資料儲存的本機ONTAP系統上運行的 VMware 工作負載而設計。 該服務與NetApp Console集成，可輕鬆管理和自動發現 VMware vCenter 和ONTAP儲存。  NetApp Disaster Recovery利用 ONTAP 的FlexClone技術進行空間高效的測試，而不會影響生產資源。 與其他知名替代方案相比， NetApp Disaster Recovery Recovery以極低的成本提供這些功能，使其成為組織使用ONTAP儲存系統為其 VMware 環境設定、測試和執行災難復原作業的有效解決方案。它利用NetApp SnapMirror複製來防止網站中斷和資料損壞事件，例如勒索軟體攻擊。此服務已整合至 NetApp Console，可輕鬆管理並自動偵測 VMware vCenter 和 ONTAP 儲存設備。組織可以建立和測試災難復原計劃，透過區塊級複製實現長達 5 分鐘的復原點目標 (RPO)。NetApp Disaster Recovery 利用 ONTAP 的 FlexClone 技術，實現空間高效的測試，同時不影響生產資源。該服務協調故障轉移和故障復原過程，使受保護的虛擬機器能夠以最少的努力在指定的災難復原站點上啟動。與其他知名替代方案相比，NetApp Disaster Recovery 以更低的成本提供這些功能，使組織能夠高效地利用 ONTAP 儲存系統，為其 VMware 環境建立、測試及執行災難復原作業。
 
-請參閱 NetApps 解決方案文件中心的完整解決方案：link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-nfs.html["使用BlueXP DRaaS 對 NFS 資料儲存進行災難復原"^]
+請造訪 NetApp 解決方案文件中心以查看完整解決方案： link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-dr-nfs.html["使用NetApp Disaster RecoveryNFS 資料儲存進行災難復原"^]
 
 
 

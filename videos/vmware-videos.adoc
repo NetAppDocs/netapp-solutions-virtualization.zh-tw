@@ -46,7 +46,7 @@ video::8df4ad1f-83ad-448b-9405-b01200fb2567[panopto,width=360]
 
 == 3-2-1 資料保護解決方案
 
-.使用SnapCenter Plug-in for VMware vSphere以及適用於虛擬機器的BlueXP backup and recovery為 VMFS 資料儲存提供 3-2-1 資料保護
+.使用適用於 VMware vSphere 和NetApp Backup and Recovery的SnapCenter Plug-in for VMware vSphere，為 VMFS 資料儲存提供 3-2-1 資料保護
 video::7c21f3fc-4025-4d8f-b54c-b0e001504c76[panopto,width=360]
 
 

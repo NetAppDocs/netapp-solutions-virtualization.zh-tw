@@ -387,7 +387,7 @@ $targetvm, $targetvmdisk | Get-SPBMEntityConfiguration
 * https://docs.vmware.com/en/Site-Recovery-Manager/index.html["站台恢復管理器 (SRM)"]通常用於災難復原目的，也經常用於利用基於儲存陣列的複製進行計劃遷移。
 * 持續資料保護 (CDP) 產品使用 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-storage-7-0/filtering-virtual-machine-i-o-in-vsphere/about-i-o-filters/classes-of-vaio-filters.html["vSphere IO API（VAIO）"]攔截資料並將副本傳送到遠端位置以實現接近零 RPO 解決方案。
 * 還可以使用備份和還原產品。但通常會導致更長的 RTO。
-* https://docs.netapp.com/us-en/bluexp-disaster-recovery/get-started/dr-intro.html["BlueXP災難復原即服務 (DRaaS)"]利用基於儲存陣列的複製並自動執行某些任務來還原目標站點的虛擬機器。
+* https://docs.netapp.com/us-en/data-services-disaster-recovery/get-started/dr-intro.html["NetApp災難復原"] 利用基於儲存陣列的複製技術，自動執行某些任務，以在目標站點還原虛擬機器。
 
 
 ====
@@ -402,7 +402,7 @@ $targetvm, $targetvmdisk | Get-SPBMEntityConfiguration
 ** link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-gcp-gcve-migrate-hcx.html["使用 VMware HCX 將工作負載遷移到Google Cloud NetApp Volumes資料儲存區 - 快速入門指南"^]
 
 
-* https://docs.netapp.com/us-en/bluexp-disaster-recovery/get-started/dr-intro.html["BlueXP災難復原即服務 (DRaaS)"]利用基於儲存陣列的複製並自動執行某些任務來還原目標站點的虛擬機器。
+* https://docs.netapp.com/us-en/data-services-disaster-recovery/get-started/dr-intro.html["NetApp Disaster Recovery"] 利用基於儲存陣列的複製技術，自動執行某些任務，以在目標站點還原虛擬機器。
 * 使用受支援的持續資料保護 (CDP) 產品 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-storage-7-0/filtering-virtual-machine-i-o-in-vsphere/about-i-o-filters/classes-of-vaio-filters.html["vSphere IO API（VAIO）"]攔截資料並將副本傳送到遠端位置以實現接近零 RPO 解決方案。
 
 
@@ -534,5 +534,5 @@ NOTE: 為了允許與來源 vCenter 上其他叢集上的現有虛擬機器進�
 * https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/managing-nsx-t-in-multiple-locations/nsx-t-federation/networking-topologies-in-nsx-federation/tier-0-in-federation.html["NSX Federation 中的 Tier-0 閘道配置"]
 * https://techdocs.broadcom.com/us/en/vmware-cis/hcx/vmware-hcx/4-11/vmware-hcx-user-guide-4-11.html["HCX 4.8 使用者指南"]
 * https://techdocs.broadcom.com/us/en/vmware-cis/live-recovery.html["VMware Live Recovery 文檔"]
-* https://docs.netapp.com/us-en/bluexp-disaster-recovery/get-started/dr-intro.html["適用於 VMware 的BlueXP disaster recovery"]
+* https://docs.netapp.com/us-en/data-services-disaster-recovery/get-started/dr-intro.html["NetApp Disaster Recovery"]
 

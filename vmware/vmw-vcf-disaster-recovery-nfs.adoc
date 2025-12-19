@@ -1,0 +1,279 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-disaster-recovery-nfs.html 
+keywords: netapp, vmware, cloud, foundation, vcf, nfs 
+summary: 使用NetApp Disaster Recovery為 VCF 提供災難復原解決方案。 
+---
+= 使用NetApp Disaster Recovery
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+適用於 NFS 資料儲存的 VCF 災難復原解決方案，支援NetApp SnapMirror和NetApp Disaster Recovery Recovery
+
+從生產站點到災難復原 (DR) 站點的區塊級複製提供了一種有彈性且經濟高效的策略，可保護工作負載免受站點中斷和資料損壞事件（包括勒索軟體攻擊）的影響。  NetApp SnapMirror複製功能支援將在本機ONTAP系統上執行的 VMware VCF 9 工作負載域（使用 NFS 或 VMFS 資料儲存區）複製到位於指定復原資料中心的輔助ONTAP系統（該資料中心也部署了 VMware）。
+
+更多資訊請參閱以下內容。link:https://docs.netapp.com/us-en/data-services-disaster-recovery/["NetApp Disaster Recovery文檔"] 。
+
+本節概述了NetApp Disaster Recovery的配置，以建立本地 VMware 虛擬機器的災難復原。
+
+設定包括：
+
+* 建立NetApp Console帳戶並部署代理程式。
+* 將ONTAP陣列新增至NetApp Console，以便在管理系統中的 VMware vCenter 和ONTAP儲存之間進行通訊。
+* 使用SnapMirror設定網站之間的複製。
+* 設定並測試復原計劃以驗證故障轉移準備。
+
+
+NetApp Disaster Recovery整合在NetApp Console中，使組織能夠無縫發現其本機 VMware vCenter 和ONTAP儲存系統。一旦發現，管理員就可以定義資源分組、建立災難復原計畫、將其與適當的資源關聯起來，並啟動或測試故障轉移和故障回應操作。NetApp SnapMirror提供高效率的區塊級複製，確保 DR 網站透過增量更新與生產環境保持同步。這使得恢復點目標 (RPO) 可以低至五分鐘。
+
+NetApp Disaster Recovery還支援無中斷災難復原測試。利用 ONTAP 的FlexClone技術，它可以從最新複製的快照中建立節省空間的 NFS 資料儲存暫存副本，而不會影響生產工作負載或產生額外的儲存成本。測試完成後，可以輕鬆拆除環境，同時保留複製資料的完整性。
+
+如果發生實際故障轉移， NetApp Console會協調復原過程，自動在指定的 DR 站點啟動受保護的虛擬機，只需極少的使用者介入。當主站點恢復時，該服務會逆轉SnapMirror關係並將任何變更複製回原始站點，從而實現平穩且可控的故障復原。
+
+與傳統的災難復原解決方案相比，所有這些功能的成本都低得多。
+
+image::vmw-vcf-dr-nfs-001.png[NetApp Disaster Recovery架構圖]
+
+
+
+== 入門
+
+若要開始使用NetApp Disaster Recovery，請使用NetApp Console，然後存取服務。
+
+. 登入NetApp Console。
+. 從NetApp Console左側導覽列選擇「保護」>「災難復原」。
+. NetApp Disaster Recovery儀表板隨即出現。
++
+image::vmw-vcf-dr-nfs-002.png[NetApp Disaster Recovery儀表板]
+
+
+
+在配置災難復原計畫之前，請確保以下事項：link:https://docs.netapp.com/us-en/data-services-disaster-recovery/get-started/dr-prerequisites.html["先決條件"]滿足以下條件：
+
+* 控制台代理程式已在NetApp Console中設定。
+* 代理執行個體與來源工作負載域 vCenter 和儲存系統具有連線性。
+* NetApp Data ONTAP叢集提供儲存 NFS 或 VMFS 資料儲存區。
+* 在NetApp Console中新增託管 VMware 的 NFS 或 VMFS 資料儲存的本機NetApp儲存系統。
+* 使用 DNS 名稱時應該進行 DNS 解析。否則，請使用 vCenter 的 IP 位址。
+* SnapMirror複製是為指定的基於 NFS 或 VMFS 的資料儲存庫磁碟區配置的。
+* 確保環境具有支援的 vCenter Server 和 ESXi 伺服器版本。
+
+
+一旦來源站點和目標站點之間建立了連接，請繼續執行設定步驟，這需要幾次點擊和大約 3 到 5 分鐘的時間。
+
+注意： NetApp建議將控制台代理程式部署在目標站點或第三方站點，以便代理程式可以透過網路與來源資源和目標資源進行通訊。
+
+在此示範中，工作負載域配置了ONTAP NFS 儲存。對於基於 VMFS 的資料存儲，工作流程方面的步驟保持不變。
+
+image::vmw-vcf-dr-nfs-003.png[NetApp Disaster Recovery詳細儀表板]
+
+
+
+== NetApp Disaster Recovery配置
+
+災難復原準備的第一步是發現來源 vCenter 和儲存資源並將其新增至NetApp Disaster Recovery Disaster Recovery。
+
+開啟NetApp Console，然後從左側導覽列選擇「保護」>「災難復原」。選擇站點，然後選擇新增。請輸入新來源站點的名稱及其位置。重複上述步驟，新增目的地網站和位置。
+
+image::vmw-vcf-dr-nfs-004.png[NetApp Disaster Recovery詳細儀表板]
+
+新增以下平台：
+
+* 來源工作負載域 vCenter
+* 目標工作負載域 vCenter。
+
+
+一旦新增了 vCenter，就會觸發自動發現。
+
+
+
+== 配置來源站點陣列和目標站點陣列之間的儲存複製
+
+SnapMirror提供NetApp環境中的資料複製功能。SnapMirror複製是基於NetApp Snapshot® 技術構建，非常高效，因為它僅複製自上次更新以來已更改或添加的區塊。可以使用NetApp OnCommand® System Manager 或ONTAP CLI 輕鬆設定SnapMirror 。如果事先配置了叢集和 SVM 對等連接， NetApp Disaster Recovery也會建立SnapMirror關係。
+
+對於主儲存未完全遺失的情況， SnapMirror提供了一種有效的方法來重新同步主網站和 DR 網站。SnapMirror可以重新同步兩個站點，只需反轉SnapMirror關係，即可將變更或新增的資料傳輸回主站點。這意味著在NetApp Disaster Recovery中，故障轉移後可以雙向重新同步複製計劃，而無需重新複製整個磁碟區。如果以相反的方向重新同步關係，則只有自上次成功同步快照副本以來寫入的新資料才會傳回目標位置。
+
+
+NOTE: 如果已透過 CLI 或系統管理員為磁碟區配置了SnapMirror關係，NetApp Disaster Recovery會取得該關係並繼續執行其餘的工作流程作業。
+
+
+
+== 如何為NetApp Disaster Recovery設定複製關係
+
+對於任何給定的應用程序，創建SnapMirror複製的底層過程都保持不變。 最簡單的方法是利用NetApp Disaster Recovery，只要滿足以下兩個條件，它就能自動執行複製工作流程：過程可以是手動的，也可以是自動的。最簡單的方法是利用 NetApp Disaster Recovery，只要符合以下兩項條件，即可自動化複寫工作流程：
+
+* 源集群和目標集群具有對等關係。
+* 源 SVM 和目標 SVM 具有對等關係。
+
+
+NetApp Console也提供了另一個設定SnapMirror複製的選項，只需將環境中的來源ONTAP系統簡單地拖曳到目標位置，即可觸發精靈，引導使用者完成剩餘的流程。
+
+
+
+== NetApp Disaster Recovery能為您做什麼？
+
+在新增來源站點和目標站點後， NetApp Disaster Recovery會自動執行深度發現，並顯示虛擬機器及其關聯的元資料。NetApp Disaster Recovery也會自動偵測虛擬機器使用的網路和連接埠群組，並填入它們。
+
+image::vmw-vcf-dr-nfs-005.png[NetApp Console站點]
+
+新增網站後，透過選擇來源 vCenter 平台和目標 vCenter 平台來配置複製計劃，並選擇要包含在計劃中的資源組，以及應用程式的復原和啟動方式分組，以及叢集和網路的對應。若要定義復原計劃，請導覽至「複製計劃」選項卡，然後按一下「新增」。
+
+在此步驟中，可以將虛擬機器分組到資源組。NetApp Disaster Recovery資源群組可讓您將一組依賴的虛擬機器分組到邏輯群組中，這些邏輯群組包含它們的啟動順序和啟動延遲，以便在復原時執行。資源組可以在建立複製計劃期間創建，也可以透過左側導覽列中的「資源組」標籤建立。
+
+首先，為複製計劃命名，並選擇來源 vCenter 和目標 vCenter。
+
+image::vmw-vcf-dr-nfs-006.png[NetApp Disaster Recovery目標 vCenter]
+
+下一步是選擇要使用資源組、虛擬機器或資料儲存來建立複製計劃。選擇現有的資源組；如果沒有建立資源組，精靈會根據復原目標協助將所需的虛擬機器進行分組（基本上是建立功能性資源組）。這也有助於定義應用程式虛擬機器復原的操作順序。
+
+image::vmw-vcf-dr-nfs-007.png[NetApp Disaster Recovery選擇要保護的虛擬機]
+
+
+NOTE: 資源組允許使用拖放功能設定啟動順序。它可用於輕鬆修改復原過程中虛擬機器的啟動順序。
+
+透過複製計劃建立資源組之後，下一步是建立映射，以便在災難發生時恢復虛擬機器和應用程式。在此步驟中，指定來源環境中的資源如何對應到目標環境。這包括運算資源、虛擬網路、IP 自訂、前腳本和後腳本、啟動延遲、應用程式一致性等。詳細資訊請參閱link:https://docs.netapp.com/us-en/data-services-disaster-recovery/use/drplan-create.html#map-source-resources-to-the-target["建立複製計劃"]。如前提條件中所述， SnapMirror複製可以預先配置，或者 DRaaS 可以使用在建立複製計劃期間指定的 RPO 和保留計數來配置它。
+
+注意：預設情況下，測試和故障轉移操作使用相同的映射參數。若要為測試環境設定不同的映射，請取消勾選「對故障轉移和測試映射使用相同的映射」複選框，然後選擇測試映射選項。資源映射完成後，按一下「下一步」。
+
+image::vmw-vcf-dr-nfs-008.png[NetApp災難資源映射]
+
+完成後，檢查建立的映射，然後按一下新增計劃。
+
+image::vmw-vcf-dr-nfs-009.png[NetApp Disaster Recovery資源映射審查]
+
+
+NOTE: 複製計劃中可以包含來自不同磁碟區和 SVM 的虛擬機器。根據虛擬機器放置位置（無論是在同一磁碟區或同一 SVM 內的不同磁碟區上，或在不同 SVM 的不同磁碟區上）， NetApp Disaster Recovery會建立一致性群組快照。
+
+image::vmw-vcf-dr-nfs-010.png[NetApp Disaster Recovery複製計劃]
+
+一旦建立計劃，就會觸發一系列驗證，並根據選擇配置SnapMirror複製和計劃。
+
+image::vmw-vcf-dr-nfs-011.png[NetApp Disaster Recovery作業監控]
+
+NetApp Disaster Recovery包含以下工作流程：
+
+* 測試故障轉移（包括定期自動模擬）
+* 清理故障轉移測試
+* 故障轉移：
++
+** 計劃遷移（擴展一次性故障轉移的用例）
+** 災難復原
+
+
+* 故障回覆
+
+
+image::vmw-vcf-dr-nfs-012.png[NetApp Disaster Recovery複製計畫作業]
+
+
+
+== 測試故障轉移
+
+NetApp Disaster Recovery中的故障轉移測試是一種操作流程，它允許 VMware 管理員在不中斷生產環境的情況下全面驗證其復原計劃。
+
+image::vmw-vcf-dr-nfs-013.png[NetApp Disaster Recovery複製計畫測試故障轉移]
+
+NetApp Disaster Recovery功能允許在故障轉移測試操作中選擇快照作為可選功能。此功能可讓 VMware 管理員驗證環境中最近所做的任何變更是否已複製到目標站點，從而在測試期間存在。這些變更包括對 VM 客戶作業系統的修補程式。
+
+image::vmw-vcf-dr-nfs-014.png[NetApp Disaster Recovery複製計畫測試故障轉移確認]
+
+當 VMware 管理員執行測試故障轉移作業時， NetApp Disaster Recovery會自動執行下列任務：
+
+* 觸發SnapMirror關係，使用生產網站上所做的任何最新變更來更新目標網站上的儲存空間。
+* 在 DR 儲存陣列上建立FlexVol磁碟區的NetApp FlexClone磁碟區。
+* 將FlexClone磁碟區中的資料儲存庫連接到 DR 站點的 ESXi 主機。
+* 將虛擬機器網路介面卡連接到映射期間指定的測試網路。
+* 依照 DR 站點的網路定義重新配置 VM 客戶作業系統網路設定。
+* 執行複製計劃中儲存的任何自訂命令。
+* 依照複製計畫中定義的順序啟動虛擬機器。
+
+
+image::vmw-vcf-dr-nfs-015.png[NetApp Disaster Recovery複製計畫測試故障轉移結果]
+
+
+
+== 清理故障轉移測試操作
+
+清理故障轉移測試操作在複製計劃測試完成並且 VMware 管理員回應清理提示後發生。
+
+image::vmw-vcf-dr-nfs-016.png[NetApp Disaster Recovery複製計畫測試故障轉移清理]
+
+此操作會將虛擬機器 (VM) 和複製計畫的狀態重設為就緒狀態。當 VMware 管理員執行復原作業時， NetApp Disaster Recovery會完成下列程序：
+
+. 它關閉用於測試的FlexClone副本中的每個恢復的虛擬機器。
+. 它會刪除在測試期間用於呈現復原的虛擬機器的 FlexClone磁碟區。
+
+
+
+
+== 計劃遷移和故障轉移
+
+NetApp Disaster Recovery有兩種執行真正故障轉移的方法：規劃遷移和故障轉移。第一種方法是計劃遷移，它將虛擬機器關閉和儲存複製同步納入恢復或有效將虛擬機器遷移到目標網站的過程中。計劃遷移需要存取來源站點。第二種方法，故障轉移，是計劃內/非計劃內故障轉移，其中虛擬機器從上次能夠完成的儲存複製間隔在目標站點恢復。根據解決方案中設計的 RPO，在災難復原場景中可能會出現一定程度的資料遺失。
+
+image::vmw-vcf-dr-nfs-017.png[NetApp Disaster Recovery複製計畫故障轉移操作]
+
+image::vmw-vcf-dr-nfs-018.png[NetApp Disaster Recovery複製計畫故障轉移作業確認]
+
+當 VMware 管理員執行故障轉移作業時， NetApp Disaster Recovery會自動執行下列任務：
+
+* 中斷並故障轉移NetApp SnapMirror關係。
+* 將複製的資料儲存連接到 DR 站點的 ESXi 主機。
+* 將 VM 網路介面卡連接到適當的目標站點網路。
+* 依照目標站點的網路定義重新配置 VM 客戶作業系統網路設定。
+* 執行複製計劃中儲存的任何自訂命令（如果有）。
+* 依照複製計畫中定義的順序啟動虛擬機器。
+
+
+image::vmw-vcf-dr-nfs-019.png[vSphere Client - 虛擬機器已啟動]
+
+
+
+== 故障回覆
+
+故障回復是一種選用過程，可在復原後還原來源站台和目標站台的原始設定。
+
+image::vmw-vcf-dr-nfs-020.png[NetApp Disaster Recovery複製計畫故障復原作業]
+
+當 VMware 管理員準備將服務還原到原始來源網站時，他們可以設定並執行故障回應程式。
+
+
+NOTE: NetApp Disaster Recovery在反轉複製方向之前，將所有變更複製（重新同步）回原始來源虛擬機器。
+
+此程序從已完成故障轉移到目標的關係開始，並涉及以下步驟：
+
+* 關閉並取消註冊虛擬機，並卸載目標網站上的磁碟區。
++
+image::vmw-vcf-dr-nfs-021.png[vSphere Client - 最近任務]
+
+* 打破原始來源上的SnapMirror關係，使其變成讀/寫。
+* 重新同步SnapMirror關係以逆轉複製。
+* 在來源上安裝卷，啟動並註冊來源虛擬機器。
++
+image::vmw-vcf-dr-nfs-022.png[vSphere Client - 虛擬機器已啟動]
+
+
+
+有關存取和配置NetApp Disaster Recovery的更多詳細信息，請參閱link:https://docs.netapp.com/us-en/data-services-disaster-recovery/get-started/dr-intro.html["了解NetApp Disaster Recovery"]。
+
+
+
+== 監控和儀表板
+
+透過NetApp Disaster Recovery或ONTAP CLI，您可以監控對應資料儲存磁碟區的複製運作狀況，並且可以透過作業監控追蹤故障轉移或測試故障轉移的狀態。
+
+image::vmw-vcf-dr-nfs-023.png[NetApp Disaster Recovery作業監控]
+
+
+NOTE: 如果某項工作目前正在進行或排隊，而您希望停止它，則可以選擇取消它。
+
+透過NetApp Disaster Recovery儀表板，您可以自信地評估災難復原網站和複製計畫的狀態。這使得管理員能夠迅速識別健康、斷開連接或降級的站點和計劃。
+
+image::vmw-vcf-dr-nfs-024.png[NetApp Disaster Recovery更新儀表板]
+
+這為處理量身定制的災難復原計劃提供了強大的解決方案。當發生災難並決定啟動 DR 站點時，可以按計劃進行故障轉移或單擊按鈕進行故障轉移。

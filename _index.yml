@@ -58,7 +58,7 @@ indexpage:
       url: "/vmware/vmw-getting-started-security.html"
     - title: SnapCenter Plug-in for VMware vSphere
       url: "/vmware/vmw-getting-started-snapcenter.html"
-    - title: BlueXP disaster recovery
+    - title: NetApp Disaster Recovery
       url: "/vmware/vmw-dr-gs.html"
   - title: 解決方案請求和回饋
     links:

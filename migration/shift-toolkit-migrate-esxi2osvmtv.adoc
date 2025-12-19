@@ -1,0 +1,336 @@
+---
+sidebar: sidebar 
+permalink: migration/shift-toolkit-migrate-esxi2osvmtv.html 
+keywords: netapp, vmware, esxi, vm, migration, openshift, virtualization, redhat, osv, mtv 
+summary: 使用 Shift Toolkit 和 Migration Toolkit for virtualization 將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization。 
+---
+= 使用 Shift 工具包和虛擬化遷移工具包將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift 虛擬化
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節介紹虛擬化遷移工具包 (MTV) 和NetApp Shift 工具包如何為 Red Hat OpenShift Virtualization 帶來無縫遷移體驗，並提供有關使用虛擬化遷移工具包和 Shift 工具包的轉換功能過渡到 OpenShift Virtualization 的分步指南。
+
+
+
+== 開始之前
+
+在開始遷移之前，請確認滿足以下先決條件。
+
+.紅帽 OpenShift 虛擬化需求
+* OpenShift 叢集可透過網路存取
+* 安裝了以下運算子的 OpenShift 叢集端點：
++
+** OpenShift虛擬化操作員
+** NetApp Trident操作員
+
+
+* NetApp Trident CSI 設定了適當的後端和儲存類
+* 已配置正確的 VLAN 的 NodeNetworkConfigurationPolicy 和 NetworkAttachmentDefinitions (NAD)
+* MTV 2.9.4 或更高版本（包含轉換模式）
+* 具有叢集管理員權限的服務帳戶令牌
+
+
+.VMware 要求
+* 權限最低的帳戶。請參閱本節link:https://docs.netapp.com/us-en/netapp-solutions-virtualization/migration/shift-toolkit-summary.html#minimum-permissions-role-required-on-vmware["所需的最低權限"]
+* 必須使用 svmotion 將 VMDK 放置在各個磁碟區上（模擬 VMDK 與 PVC/PV 結構的關係）。
+
+
+
+NOTE: 下一版本將取消此限制，屆時可以使用 NAS-economy 驅動程式進行 PVC 設定。
+
+
+NOTE: 使用腳本區塊（**設定 > 開發人員存取 > 腳本區塊**）中提供的腳本，可以在 qtree 上啟用 PVC 放置，或者允許按原樣導入卷，或者克隆並導入卷，從而無需手動執行 vMotion 操作。
+
+* VMware 工具正在客戶虛擬機器上執行。
+* 每個虛擬機器的作業系統都經過認證，並作為轉換所需的客戶作業系統提供支援。
+* 遷移之前或遷移期間，不得更改 IP 位址、VLAN 和其他網路配置設定。在遷移過程中，虛擬機器的 MAC 位址將會保留。
+
+
+
+
+== 步驟 1：使用虛擬化遷移工具包建立遷移計劃
+
+. 為了充分利用虛擬機器 (VM) 的快速轉換優勢，第一步是使用 MTV 為虛擬機器建立遷移計劃。link:https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.3/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vms-web-console["Web 控制台"]或者link:https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.0/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-virtual-machines-to-virt_mtv#migrating-virtual-machines-cli_mtv["命令列"]。
++
+
+NOTE: 應事先制定計劃，以確保 MTV 配置保留 IP 設定。
+
++
+.程式
+.. 登入MTV網路控制台。
+.. 新增來源提供者和目標提供者
+.. 在目標命名空間中建立遷移計劃
++
+*** 配置提供者後，建立遷移計劃，並在目標命名空間中選擇對應的來源提供者和目標提供者。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-400.png[制定遷移計劃]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-401.png[來源和目標提供者]
+
+====
+
+
+.. 選擇要遷移的虛擬機
++
+*** 確定並選擇要包含在遷移中的虛擬機器。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-402.png[選擇虛擬機]
+
+====
+
+
+.. 設定網路和儲存映射
++
+*** 可以選擇現有的映射或建立新的映射，以使來源網路和儲存與目標環境保持一致。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-403.png[網路圖]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-404.png[儲存映射]
+
+====
+
+
+.. 選擇遷移類型
++
+*** 初始階段保留預設遷移類型；在遷移過程中，該類型將更新以反映轉換類型。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-405.png[遷移類型]
+
+====
+
+
+.. 保留預設選項
++
+*** 保留預設設定。此外，選擇保留靜態 IP 的選項，並指定遷移後虛擬機器的期望狀態。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-406.png[附加設定]
+
+====
+
+
+.. 審核並最終定稿
++
+*** 仔細檢查所有設置，然後按一下「完成」以建立遷移計劃。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-407.png[審核和創建]
+
+====
+
+
+
+
+. 建立遷移計劃後，複製遷移計劃的名稱，然後前往 Shift 工具包 UI。
+. 新增來源虛擬機器管理程式和目標虛擬機器管理程式。點擊此連結link:https://docs.netapp.com/us-en/netapp-solutions-virtualization/migration/shift-toolkit-migrate-esxi2osv.html#step-1-add-the-destination-site-openshift["建立網站"]
++
+
+NOTE: Shift Toolkit 中配置的端點必須與透過 MTV 控制台新增端點時所使用的格式相符。例如，如果來源端點或目標端點是使用 FQDN 新增的，則在 Shift Toolkit 中也應使用相同的 FQDN。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-408.png[輪班工具包網站顯示]
+
+====
+. 導航至“藍圖”並建立新藍圖。
++
+** 完成前面的步驟後，請前往「藍圖」並選擇「使用 MTV 計畫建立新藍圖」。
++
+
+NOTE: 與 Shift Toolkit 中的標準工作流程不同，使用基於 MTV 計劃的遷移時，無需手動建立資源組。Shift Toolkit 會自動產生資源群組，並根據遷移計畫 YAML 套用必要的對應。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-409.png[使用MTV計劃建立藍圖]
+
+====
+
+
+. 選擇目的地和遷移計劃。
++
+** 選擇目標網站和對應的 OpenShift 端點。之後，選擇從指定叢集中檢索到的遷移計劃，該計劃包含要遷移的虛擬機器。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-410.png[藍圖詳情]
+
+====
+
+
+. 資源組和映射將根據遷移計劃 yaml 檔案自動配置。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-411.png[遷移詳情]
+
+====
+. 選擇PVC進口選項。預設為克隆並導入磁碟區。
++
+
+NOTE: 磁碟區也可以直接匯入，無需建立克隆。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-412.png[VM 詳細資訊]
+
+====
+. 完成後，建立藍圖。
+. 點選藍圖中的「遷移」按鈕即可觸發遷移。
++
+
+NOTE: 在觸發遷移之前，應先關閉虛擬機器電源。MTV 將根據虛擬機器目標電源狀態屬性啟動虛擬機器。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-413.png[觸發遷移]
+
+====
+. Shift 工具包執行工作流程步驟，以轉換磁碟格式、匯入 PVC 並使用 OpenShift API 建立虛擬機器。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-414.png[遷移步驟]
+
+====
+. 在所有 PVC 都依照規定就位且 Shift Toolkit 觸發 MTV 後，MTV 遷移工作流程即啟動。
++
+.. 遷移控制器為每個來源虛擬機器建立一個 VirtualMachineImport (VMI) 自訂資源 (CR)。
+.. 由於 PVC 已由 Shift Toolkit 匯入，虛擬機器導入控制器會啟動一個連接了 PVC 的轉換艙。
+.. 轉換 Pod 運行 virt-v2v，在 PVC 上為目標 VM 安裝和配置裝置驅動程式。
+.. 然後，虛擬機器導入控制器會建立一個虛擬機器實例 (VMI) CR。
+.. 當目標虛擬機器啟動時，KubeVirt 控制器會建立一個虛擬機器 Pod，該 Pod 運行 QEMU-KVM，並將 PVC 作為虛擬機器磁碟附加到該 Pod 中。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-415.png[MTV觸發]
+
+====
+
+
+. 當所有虛擬機器都遷移完畢後，遷移控制器會將遷移計劃狀態更新為「已完成」。遷移後，每個來源虛擬機器的原始電源狀態得以保留。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-416.png[MTV完成狀態]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-417.png[遷移後的 Windows VM]
+
+image::shift-toolkit-418.png[遷移後的 Linux 虛擬機]
+
+====
++
+
+NOTE: 這表明 Shift 工具包和 MTV 可以以閃電般的速度簡化遷移過程。在這個例子中，遷移了 2 台虛擬機，總共 12TB 的空間。整個過程大約耗時8-10分鐘。
+
++
+.幕後發生了什麼事：
+以下各節描述了 Shift Toolkit API 和 MTV 觸發的步驟，用於轉換 VMDK 檔案並在 OpenShift 平台上建立虛擬機器。無論透過 Shift Toolkit 使用者介面啟動，或是透過 Shift Toolkit 腳本區塊中提供的腳本啟動，此工作流程都保持一致。
+
+
+
+.轉換 VMDK
+Shift 工具包將自動尋找與每個虛擬機器關聯的 VMDK，包括主啟動磁碟。
+
+
+NOTE: 如果存在多個 VMDK 文件，則每個 VMDK 文件都會被轉換。
+
+.批次匯入和遷移計劃配置
+Shift Toolkit 使用Trident CSI 將磁碟區以 PVC 匯入叢集。每個PVC清單都包含特定的標籤和註釋，以確保MTV能夠識別它們：
+
+* 標籤
++
+** vmID
+** vmUUID
+
+
+* 註解：
++
+** vmdk 磁碟路徑
+
+
+
+
+此外，disk.img 檔案的權限也已更新。權限是透過動態部署的 POD 進行修改的，該 POD 用於掛載導入的 PVC 並按如下方式設定權限：
+
+* "owner": { "id": 107 },"group": { "id": 107 },"mode": "0655"
+
+
+重要提示：
+
+* 堆高機檢查PVC中的vmID和vmUUID。
+* Forklift 使用 forklift.konveyor.io/disk-source 的磁碟名稱（VMDK 路徑）。
+* 導入的 PVC 數量必須與來源 VM 關聯的磁碟數量相符。例如，如果一個虛擬機器有三個 VMDK，但導入了四個 ID 匹配的 PVC，則 MTV 不會將遷移計劃狀態更新為「準備開始」。
+
+
+這些步驟完成後，Shift Toolkit 會修補遷移計畫 YAML，以便 MTV 能夠理解應該直接使用 PVC，繞過資料填充程式 pod 進程（這通常很耗時）。修改後的 YAML 檔案包含：
+
+* 目標命名空間：預設
+* 類型：轉換
+* 貯存： {}
+
+
+.啟動遷移過程
+配置完成後，呼叫 MTV 開始遷移。UI 會將遷移類型顯示為“冷遷移”，但根據 YAML 轉換規範，MTV 會根據關聯的 vmID 和 vmUUID 驗證每個 PVC，並相應地映射它們，然後初始化遷移。顯示範例
+
+[%collapsible]
+====
+image::shift-toolkit-419.png[MTV 控制台完成時間]
+
+====
+
+NOTE: 虛擬機器是在「預設」虛擬機器專案下創建的，但可以在 MTV 遷移計劃 YAML 中進行修改。
+
+Shift Toolkit 透過簡化流程、最大限度地減少停機時間以及消除對 ESXi 主機存取或基於 VDDK 的方法的需求，加速了遷移。
+
+
+NOTE: 在開始進行此特定整合之前，請聯絡您的紅帽客戶團隊。

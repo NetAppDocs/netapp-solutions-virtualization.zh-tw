@@ -72,7 +72,7 @@ image:hyperv-deploy-011.png["顯示啟用 IntelliSnap 選項的影像"]
 
 
 
-有關配置陣列的詳細步驟，請參閱link:https://documentation.commvault.com/11.20/configuring_netapp_array_using_array_management.html["配置NetApp陣列"]和link:https://documentation.commvault.com/11.20/configure_storage_virtual_machine_on_netapp_storage_array.html["在NetApp陣列上配置儲存虛擬機"]
+有關配置數組的詳細步驟，請參閱 link:https://documentation.commvault.com/v11/commcell-console/configuring_netapp_array_using_array_management.html["配置NetApp陣列"] 和 link:https://documentation.commvault.com/v11/commcell-console/configure_storage_virtual_machine_on_netapp_storage_array.html["在NetApp陣列上配置儲存虛擬機"]
 
 *新增 Hyper-V 作為虛擬機器管理程式*
 

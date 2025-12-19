@@ -37,7 +37,7 @@ Proxmox VE 主機需要將 FC、乙太網路或其他支援的介面連接到交
 * 防篡改快照副本鎖定
 * 加密支援
 * FabricPool將冷資料分層到物件儲存。
-* BlueXP和 CloudInsights 整合。
+* NetApp Console和Data Infrastructure Insights整合。
 * Microsoft 卸載資料傳輸 (ODX)
 
 

@@ -100,7 +100,7 @@ video::e7cf90b9-2744-404b-9831-b33f00164626[panopto]
 
 對於 VMFS 資料儲存庫， SnapMirror主動同步提供了主動-主動儲存單元，可與 vSphere Metro Storage Cluster 一起使用。統一存取模式提供透明的儲存故障轉移，而非統一存取模式則要求在故障域發生故障時重新啟動虛擬機器。
 
-對於 NFS 資料存儲，具有 vSphere Metro Storage Cluster 的ONTAP MetroCluster可確保高可用性。調解員避免了腦裂的情況，現在可以託管在BlueXP上。
+對於 NFS 資料存儲，具有 vSphere Metro Storage Cluster 的ONTAP MetroCluster可確保高可用性。中介器可以避免腦裂情況，現在可以託管在NetApp Console上。
 
 VM 放置規則控制管理域元件的相同故障域內的 VM。
 
@@ -108,9 +108,9 @@ image::vmw-vcf-design-003.png[單一區域內有多個站點的 VCF 機隊]
 
 ONTAP工具提供了一個 UI 來設定SnapMirror主動同步關係。必須在ONTAP工具和SnapCenter Plug-in for VMware vSphere中註冊兩個故障域的儲存系統。
 
-您可以使用BlueXP Backup and Recovery 透過SnapMirror為虛擬機器以及SnapMirror到雲端實施 3-2-1 備份策略。您可以從三個位置中的任一個執行復原。
+您可以使用NetApp Backup and Recovery for VMs 透過SnapMirror和SnapMirror to Cloud 實現 3-2-1 備份策略。您可以從三個位置中的任一個執行復原。
 
-Trident Protect 或BlueXP Backup and Recovery for Kubernetes 保護 VKS 叢集應用程式。
+Trident Protect 或NetApp Backup and Recovery for Kubernetes 可保護 VKS 叢集應用程式。
 
 欲了解更多信息，請查看link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/design/blueprints/vsphere-only-to-vcf-fleet-upgrade-blueprint.html["Broadcom 有關單一區域內具有多個網站的 VCF 叢集的技術文檔"]。
 
@@ -120,7 +120,7 @@ Trident Protect 或BlueXP Backup and Recovery for Kubernetes 保護 VKS 叢集�
 
 此設計針對的是遍佈全球的客戶，提供就近的服務和災難復原解決方案。
 
-您可以使用 VMware Live Site Recovery 或BlueXP災難復原即服務來管理虛擬機器的災難復原。  ONTAP工具提供 SRA（儲存複製適配器）來協調ONTAP的儲存作業。
+您可以使用 VMware Live Site Recovery 或NetApp Disaster Recovery Disaster Recovery來管理虛擬機器的災難復原。ONTAP工具提供 SRA（儲存複製適配器）來協調ONTAP的儲存作業。
 
 [cols="4,2,2"]
 |===
@@ -137,7 +137,7 @@ Trident Protect 或BlueXP Backup and Recovery for Kubernetes 保護 VKS 叢集�
 |===
 image::vmw-vcf-design-004.png[擁有多個區域多個站點的 VCF 車隊]
 
-ONTAP工具為資料儲存區複製設定提供了 UI。 BlueXP也可以用於儲存陣列之間的複製。SnapCenter Plug-in for VMware vSphere利用現有的SnapMirror關係式來實作 SnapShot。
+ONTAP工具為資料儲存區複製設定提供了 UI。NetApp Console也可用於儲存陣列之間的複製。SnapCenter Plug-in for VMware vSphere利用現有的SnapMirror關係式來實作 SnapShot。
 
 欲了解更多信息，請查看link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/design/blueprints/blueprint-4.html["Broadcom 關於跨區域多站點 VCF Fleet 的技術文檔"]。
 
@@ -151,6 +151,6 @@ ASA、 AFF和FAS支援此設計選項。
 
 image::vmw-vcf-design-005.png[VCF 車隊在單一區域及其他區域設有多個站點]
 
-您可以使用ONTAP工具或BlueXP來設定複製關係。
+您可以使用ONTAP工具或NetApp Console來設定複製關係。
 
 有關更多信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/design/blueprints/blueprint-5.html["Broadcom 有關在單一區域和其他區域內具有多個網站的 VCF Fleet 的技術文檔"] 。

@@ -82,16 +82,16 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 *** link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_create_resource_groups.html["建立資源組"] 。
 
 
-.. 部署BlueXP連接器
+.. 部署NetApp Console代理
 +
-*** link:https://docs.netapp.com/us-en/bluexp-setup-admin/concept-connectors.html#what-you-can-do-without-a-connector["查看沒有連接器可以做什麼"] 。
-*** link:https://docs.netapp.com/us-en/bluexp-setup-admin/concept-modes.html#overview["部署連接器"] 。
+*** link:https://docs.netapp.com/us-en/console-setup-admin/concept-agents.html["查看無需控制台代理即可執行的操作。"]。
+*** link:https://docs.netapp.com/us-en/console-setup-admin/concept-modes.html#overview["代理部署模式"]。
 
 
-.. 使用BlueXP進行備份和恢復
+.. 使用NetApp Backup and Recovery
 +
-*** link:https://docs.netapp.com/us-en/bluexp-backup-recovery/prev-vmware-protect-overview.html["保護VM工作負載"] 。
-*** link:https://docs.netapp.com/us-en/bluexp-backup-recovery/br-use-kubernetes-protect-overview.html["保護VKS工作負載"] 。
+*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/prev-vmware-protect-overview.html["保護VM工作負載"]。
+*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/br-use-kubernetes-protect-overview.html["保護VKS工作負載"]。
 
 
 
@@ -113,10 +113,10 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 *** link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_create_resource_groups.html["建立資源組"] 。
 
 
-.. 使用BlueXP進行備份和恢復
+.. 使用NetApp Backup and Recovery
 +
-*** link:https://docs.netapp.com/us-en/bluexp-backup-recovery/prev-vmware-protect-overview.html["保護VM工作負載"] 。
-*** link:https://docs.netapp.com/us-en/bluexp-backup-recovery/br-use-kubernetes-protect-overview.html["保護VKS工作負載"] 。
+*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/prev-vmware-protect-overview.html["保護VM工作負載"]。
+*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/br-use-kubernetes-protect-overview.html["保護VKS工作負載"]。
 
 
 

@@ -88,7 +88,7 @@ NetApp全快閃 SAN 陣列允許透過兩個控制器實現主動-主動路徑�
 
 有關詳細信息，請參閱 https://www.netapp.com/pdf.html?item=/media/85671-tr-4968.pdf["TR-4968， NetApp全 SAS 陣列 – NetApp ASA的資料可用性和完整性"]。{nbsp}
 
-有關詳細信息，請參閱 https://www.netapp.com/data-storage/all-flash-san-storage-array["NetApp ASA登入頁面"]。{nbsp}
+詳細資訊請參見 https://www.netapp.com/asa/["NetApp ASA登入頁面"]。{nbsp}
 
 
 

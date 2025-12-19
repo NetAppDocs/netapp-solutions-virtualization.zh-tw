@@ -42,7 +42,7 @@ SCV 使用 OVA 檔案部署為 Linux 虛擬設備，為虛擬機器、資料儲�
 
 image:vmware-vcf-aff-050.png["具有 SCV 的 VCF 多重工作負載域"]
 
-3-2-1 備份規則是一種資料保護策略，包括製作三份資料副本，將它們儲存在兩種不同類型的媒體上，並將一份副本保存在異地。BlueXP backup and recovery是一種基於雲端的資料管理工具，它為跨本地和雲端環境的各種備份和復原作業提供單一控制平面。 NetApp BlueXP backup and recovery套件的一部分是與 SCV（內部）整合的功能，可將資料副本擴展到雲端中的物件儲存。這將建立來自主儲存或輔助儲存備份的異地資料的第三份副本。BlueXP backup and recovery可以輕鬆設定儲存策略，從這兩個內部位置中的任何一個傳輸資料副本。欲了解更多詳情，請查看link:https://docs.netapp.com/us-en/netapp-solutions-cloud/vmware/vmw-hybrid-321-dp-scv.html["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"^]。
+3-2-1 備份規則是一種資料保護策略，它涉及製作三份資料副本，將它們儲存在兩種不同類型的媒體上，並將一份副本異地保存。NetApp Backup and Recovery是一款基於雲端的資料管理工具，它為本機和雲端環境中的各種備份和復原作業提供單一的控制平面。更多詳情請查看link:https://docs.netapp.com/us-en/data-services-backup-recovery/index.html["NetApp Backup and Recovery文檔"^]。
 
 
 

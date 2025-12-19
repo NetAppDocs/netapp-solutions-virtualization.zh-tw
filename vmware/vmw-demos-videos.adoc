@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmw-demos-videos.html 
-keywords: vSphere, cloud, hybrid cloud, AWS, Azure, Google cloud, snapmirror cloud, cloud backup service, BlueXP Copy and Sync, FabricPool, ONTAP 
+keywords: vSphere, cloud, hybrid cloud, AWS, Azure, Google cloud, snapmirror cloud, cloud backup service, NetApp Copy and Sync, NetApp Backup and Recovery, FabricPool, ONTAP 
 summary: 本頁面提供影片和教學的介紹。 
 ---
 = 觀看有關使用NetApp進行虛擬化的影片和演示
@@ -49,9 +49,9 @@ video::8df4ad1f-83ad-448b-9405-b01200fb2567[panopto,width=360]
 .3-2-1 資料保護解決方案
 [%collapsible%open]
 ====
-3-2-1 資料保護解決方案使用SnapMirror技術將內部主備份和二級備份與使用BlueXP backup and recovery複製到物件儲存的副本結合。
+3-2-1 資料保護解決方案結合了本機主備份和輔助備份（使用SnapMirror技術）以及使用NetApp Backup and Recovery將副本複製到物件儲存。
 
-.使用SnapCenter Plug-in for VMware vSphere以及適用於虛擬機器的BlueXP備份和還原為 VMFS 資料儲存提供 3-2-1 資料保護
+.使用適用於 VMware vSphere 和NetApp Backup and Recovery的SnapCenter Plug-in for VMware vSphere，為 VMFS 資料儲存提供 3-2-1 資料保護
 video::7c21f3fc-4025-4d8f-b54c-b0e001504c76[panopto,width=360]
 ====
 .帶有 AWS FSx ONTAP 的VMware Cloud on AWS

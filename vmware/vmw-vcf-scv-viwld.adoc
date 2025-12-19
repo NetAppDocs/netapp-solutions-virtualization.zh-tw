@@ -49,7 +49,7 @@ summary:
 有關將 iSCSI VMFS 資料儲存配置為補充儲存的信息，請參閱link:vmw-vcf-mgmt-supplemental-iscsi.html["*使用ONTAP Tools for VMware 將 iSCSI 用作管理域的補充儲存*"]在此文件中。使用 OTV 部署資料儲存的過程對於管理和工作負載域是相同的。
 
 
-TIP: 除了將使用 SCV 進行的備份複製到二級儲存之外，還可以使用NetApp BlueXP backup and recovery，將資料的異地副本複製到三大 (3) 家領先雲端提供者之一的物件儲存中。更多資訊請參閱解決方案link:vmw-vcf-321-data-protection.html["使用SnapCenter插件和BlueXP backup and recovery為虛擬機器提供 3-2-1 資料保護"]。
+TIP: 除了將使用 SCV 進行的備份複製到輔助儲存之外，還可以使用NetApp Backup and Recovery for VMs 將資料異地副本複製到三大 (3) 領先雲端提供者之一的物件儲存中。更多資訊請參閱此產品/服務介紹。link:https://docs.netapp.com/us-en/data-services-backup-recovery/index.html["NetApp Backup and Recovery文檔"] 。
 
 image:vmware-vcf-asa-108.png["3-2-1備份策略"]
 
