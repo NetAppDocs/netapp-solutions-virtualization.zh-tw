@@ -32,7 +32,7 @@ NetApp ONTAP是一款全面的資料管理軟體，可在廣泛的產品線中�
 
 == VMware Cloud Foundation 簡介
 
-VCF 將運算、網路和儲存產品與 VMware 產品和第三方整合相集成，從而促進原生 Kubernetes 和基於虛擬機器的工作負載。該軟體平台包括 VMware vSphere、NSX、Aria Suite Enterprise、Tanzu Kubernetes Grid、HCX Enterprise、SDDC Manager 以及透過 vSAN 連結到主機 CPU 核心的儲存容量等關鍵元件。  NetApp ONTAP可與內部和公有雲中的各種 VCF 部署模型無縫整合。
+VCF 將運算、網路和儲存產品與 VMware 產品和第三方整合相結合，從而支援原生 Kubernetes 和基於虛擬機器的工作負載。軟體平台包含 VMware vSphere、NSX、Aria Suite Enterprise、VMware vSphere Kubernetes Service、HCX Enterprise、SDDC Manager 等關鍵元件，並透過 vSAN 與主機 CPU 核心連接儲存容量。NetApp ONTAP可與各種 VCF 部署模型無縫集成，無論是在本地還是在公有雲中。
 
 image:vmware-vcf-overview-components.png["VMware 雲端基礎元件"]
 

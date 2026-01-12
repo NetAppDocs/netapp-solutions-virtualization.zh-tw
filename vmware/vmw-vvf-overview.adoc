@@ -65,7 +65,7 @@ VVF 解決方案支援原生 Kubernetes 和基於虛擬機器的工作負載。�
 * VMware vSphere
 * VMware vSAN
 * Aria 標準
-* 適用於 vSphere 的 VMware Tanzu Kubernetes Grid 服務
+* VMware vSphere Kubernetes vSphere
 * vSphere 分散式交換機
 
 

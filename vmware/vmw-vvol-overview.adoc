@@ -20,7 +20,7 @@ summary:
 
 == 概況
 
-vSphere API for Storage Awareness (VASA) 讓 VM 管理員可以輕鬆使用配置 VM 所需的任何儲存功能，而無需與其儲存團隊進行互動。在 VASA 之前，VM 管理員可以定義 VM 儲存策略，但必須與儲存管理員合作來確定適當的資料存儲，通常是透過使用文件或命名約定。透過 VASA，具有適當權限的 vCenter 管理員可以定義一系列儲存功能，然後 vCenter 使用者可以使用這些功能來設定虛擬機器。 VM 儲存策略和資料儲存儲存功能設定檔之間的對應可讓 vCenter 顯示相容資料儲存清單以供選擇，並允許其他技術（如 Aria（以前稱為 vRealize）自動化或 Tanzu Kubernetes Grid）從指派的策略中自動選擇儲存。這種方法稱為基於儲存策略的管理。雖然儲存能力設定檔和策略也可以與傳統資料儲存一起使用，但我們這裡的重點是vVols資料儲存。  ONTAP的 VASA 提供者包含在ONTAP tools for VMware vSphere中。
+vSphere 儲存感知 API (VASA) 讓虛擬機器管理員能夠輕鬆使用配置虛擬機器所需的任何儲存功能，而無需與儲存團隊互動。在 VASA 出現之前，虛擬機器管理員可以定義虛擬機器存儲策略，但必須與存儲管理員合作來確定合適的資料存儲，通常是透過文件或命名約定來實現的。透過 VASA，具有相應權限的 vCenter 管理員可以定義一系列儲存功能，vCenter 使用者隨後可以使用這些功能來設定虛擬機器。VM 儲存策略與資料儲存儲存功能設定檔之間的對應關係，使得 vCenter 能夠顯示可供選擇的相容資料儲存列表，並支援其他技術（例如 VCF Automation（先前稱為 Aria 或 vRealize）Automation 或 VMware vSphere Kubernetes Service）從指派的原則中自動選擇儲存。這種方法稱為基於儲存策略的管理。雖然儲存功能設定檔和策略也可以用於傳統資料存儲，但我們這裡主要關注的是vVols資料儲存。VASA 提供者 for ONTAP包含在ONTAP tools for VMware vSphere中。
 
 在儲存陣列中使用 VASA Provider 的優點包括：
 

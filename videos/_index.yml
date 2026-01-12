@@ -28,8 +28,6 @@ indexpage:
       url: vmware-videos.html#azure-vmware-solutions
     - title: 採用NetApp ONTAP 的VMware Cloud Foundation
       url: vmware-videos.html#vmware-cloud-foundation-with-netapp-ontap
-    - title: NetApp與 VMware Tanzu
-      url: vmware-videos.html#netapp-with-vmware-tanzu
     - title: NetAppCloud Insights
       url: vmware-videos.html#netapp-cloud-insights
   - title: 混合多雲虛擬化

@@ -27,7 +27,7 @@ Broadcom 的 VMware vSphere 支援用於託管虛擬機器的 VMFS、NFS 和 vVo
 客戶可以使用ONTAP Tools vCenter 插件或其 API 輕鬆配置資料存儲，並且即使在開啟電源時也可以將虛擬機器遷移到ONTAP資料儲存。
 
 
-NOTE: 一些使用外部管理工具（如 Aria Automation、Tanzu（或其他 Kubernetes 版本））部署的虛擬機器通常依賴虛擬機器儲存策略。如果在相同虛擬機器儲存策略內的資料儲存之間進行遷移，則對應用程式的影響應該較小。請與應用程式擁有者確認，如何將這些虛擬機器正確遷移到新的資料儲存。 vSphere 8 引進了 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/how-to-prepare-an-application-for-vsphere-vmotion.html#:~:text=vSphere%208.0%20introduces%20a%20notification,the%20necessary%20steps%20to%20prepare.["針對延遲敏感型應用程式的 vSphere vMotion 通知"]為 vMotion 準備應用程式。
+NOTE: 使用 VCF Automation、vSphere Supervisor（或其他 Kubernetes 版本）等外部管理工具部署的一些虛擬機器通常依賴虛擬機器儲存策略。如果在相同虛擬機器儲存策略內的不同資料儲存之間進行遷移，對應用程式的影響應該較小。請與應用程式擁有者確認，以確保這些虛擬機器能夠正確遷移到新的資料儲存。 vSphere 8 引進了 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/how-to-prepare-an-application-for-vsphere-vmotion.html#:~:text=vSphere%208.0%20introduces%20a%20notification,the%20necessary%20steps%20to%20prepare.["針對延遲敏感型應用程式的 vSphere vMotion 通知"] 準備 vMotion 應用程式。
 
 
 

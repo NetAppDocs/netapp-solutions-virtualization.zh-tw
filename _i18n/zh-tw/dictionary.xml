@@ -17,7 +17,6 @@
   <block id="fcc257d7549568e3c425f55212efb787" category="paragraph">客戶可以靈活地選擇Cloud Insights或 Aria Operations 或兩者的組合，或使用ONTAP api 進行故障排除、效能監控、報告和警報通知功能的其他第三方工具。</block>
   <block id="b819a27fdd8e2f9eaa3407b548fe624b" category="paragraph">客戶可以使用ONTAP Tools vCenter 插件或其 API 輕鬆配置資料存儲，並且即使在開啟電源時也可以將虛擬機器遷移到ONTAP資料儲存。</block>
   <block id="d575fdff38ded5a1af1364bef9f2e801" category="inline-link">針對延遲敏感型應用程式的 vSphere vMotion 通知</block>
-  <block id="c7f20ef06353fbc5598bd4f28a82d2f8" category="admonition">一些使用外部管理工具（如 Aria Automation、Tanzu（或其他 Kubernetes 版本））部署的虛擬機器通常依賴虛擬機器儲存策略。如果在相同虛擬機器儲存策略內的資料儲存之間進行遷移，則對應用程式的影響應該較小。請與應用程式擁有者確認，如何將這些虛擬機器正確遷移到新的資料儲存。 vSphere 8 引進了<block ref="93b1662a0e02ee47ec3732d52d7b075f" category="inline-link-rx"></block>為 vMotion 準備應用程式。</block>
   <block id="a1003c791b34c3785b58d9768efcbf03" category="example-title">使用 vMotion 進行虛擬機器遷移</block>
   <block id="a7652fc6c491d79b3c3c4a99cb76962e" category="paragraph">假設ONTAP資料儲存已具備雙儲存網絡，以提供連接性、容錯能力和效能提升。</block>
   <block id="dde61dad088e88e4aabbeee9c78dfca1" category="paragraph">跨 vSphere 主機的虛擬機器遷移也由 vSphere 主機的 VMKernel 介面處理。對於熱遷移（啟動虛擬機），使用啟用 vMotion 服務的 VMKernel 接口，而對於冷遷移（關閉虛擬機），使用啟用 Provisioning 服務的 VMKernel 接口來移動資料。如果沒有找到有效的接口，它將使用管理接口來移動數據，這對於某些用例來說可能並不理想。</block>
@@ -2711,7 +2710,6 @@
   <block id="f572afcba8a95128ddd328e44a23a189" category="video-title">安裝 OpenShift 虛擬化 - Red Hat OpenShift 與NetApp</block>
   <block id="d25de3166ea89d9d8ede7d5c09ff8904" category="summary">展示 VMware 解決方案與NetApp儲存技術整合的影片和演示</block>
   <block id="445d3be063526d137d083e7afa2acb1c" category="doc">觀看有關使用NetApp進行 VMware 虛擬化的視頻</block>
-  <block id="d2344972bd0b0b0954b26bc5048545c5" category="paragraph">觀看有關 VMware 與NetApp儲存解決方案整合的影片和示範。了解如何使用適用於 VMware vSphere 的NetApp ONTAP工具、SnapCenter Plug-in for VMware vSphere、3-2-1 資料保護，以及NetApp如何與 VMware Cloud Foundation 和 Tanzu 協同工作。</block>
   <block id="57e13ece1fb5392ade809cfe158253e3" category="section-title">使用ONTAP配置 VMware 資料儲存庫</block>
   <block id="f83bc0ebbeff6798c7394f8638db2695" category="video-title">適用於 VMware 的ONTAP工具 - 概述</block>
   <block id="b315b87166434fac675545ce42a3c8c2" category="video-title">使用ONTAP配置 VMware iSCSI 資料存儲</block>
@@ -2740,10 +2738,6 @@
   <block id="634a39984b6bd9120081d40b9aa095c4" category="section-title">採用NetApp ONTAP 的VMware Cloud Foundation</block>
   <block id="fbd39e293492648eacb192098d2caa83" category="video-title">NFS 資料存儲作為 VCF 工作負載域的主要存儲</block>
   <block id="e314749e67192d0076cd0543baed5a56" category="video-title">iSCSI 資料儲存作為 VCF 管理域的補充存儲</block>
-  <block id="4267881eb271396086a3cc1387da9a3a" category="section-title">NetApp與 VMware Tanzu</block>
-  <block id="526cee55e2936716b5481f8a933bd217" category="video-title">如何將vVols與NetApp和 VMware Tanzu Basic 結合使用，第 1 部分</block>
-  <block id="2e933c421900ce4ed68883bfdf00a487" category="video-title">如何將vVols與NetApp和 VMware Tanzu Basic 結合使用，第 2 部分</block>
-  <block id="4c1c4ad5c7782eafb30ad4704dbf4419" category="video-title">如何將vVols與NetApp和 VMware Tanzu Basic 結合使用，第 3 部分</block>
   <block id="a1722ee1a41c4364dfc3dcf1cca5c81b" category="section-title">NetAppCloud Insights</block>
   <block id="93a31c2d8bd53682f99f570fbf24e946" category="video-title">NetApp Cloud Insights - 現代資料中心的可觀察性</block>
   <block id="dbe4818fa56e8086248bd47f2f806c8a" category="summary">本文檔概述了為什麼NetApp是虛擬化環境的最佳平台 - 無論採用何種虛擬化解決方案。</block>
@@ -3029,9 +3023,6 @@
   <block id="914c1d4cdf840b7b030978f1b07915d8" category="video-title">使用 VMware HCX 進行 AVS 和 ANF 批量遷移演示</block>
   <block id="b46d2e27ef712b8851dadcf6c46f239b" category="video-title">NFS 資料存儲作為 VCF 工作負載域的主要存儲</block>
   <block id="ac5bbca0aa062edc7bbdb24f026c5183" category="video-title">iSCSI 資料儲存作為 VCF 管理域的補充存儲</block>
-  <block id="2dd739333b022cfeccd93e19c8c39d83" category="paragraph">VMware Tanzu 讓客戶能夠透過 vSphere 或 VMware Cloud Foundation 部署、管理和管理他們的 Kubernetes 環境。  VMware 的這一系列產品讓客戶可以透過選擇最適合其需求的 VMware Tanzu 版本，從單一控制平面管理所有相關的 Kubernetes 叢集。</block>
-  <block id="f8d0723a562ed498a977795477b75cb0" category="inline-link">VMware Tanzu 概述</block>
-  <block id="2d3e9ef8ae693e8ff80c4d6e70f0a876" category="paragraph">有關 VMware Tanzu 的更多信息，請參閱<block ref="1951d4038519ab642a1c0f8898cecfe0" category="inline-link-rx"></block>。本評論涵蓋了用例、可用的附加功能以及有關 VMware Tanzu 的更多資訊。</block>
   <block id="9dca55ac55f13f701765725f8cf5c985" category="paragraph">NetApp Cloud Insights是一個全面的監控和分析平台，旨在提供對您的內部部署和雲端基礎架構的可見性和控制。</block>
   <block id="d71669f888f646987e9ca6bc9b77a47a" category="doc">使用Data Infrastructure Insights洞察監控本地存儲</block>
   <block id="420952c6584332656ca77fe5981cc597" category="paragraph">NetApp Data Infrastructure Insights （以前稱為Cloud Insights）是一個基於雲端的平台，旨在監控和分析本地和雲端 IT 基礎架構的效能、健康狀況和成本。了解如何部署資料收集器、分析效能指標以及使用儀表板來識別問題和最佳化資源。</block>
@@ -4044,7 +4035,6 @@
   <block id="f4a199c9facad6b3409a91cffc5e50a2" category="section-title">NetApp ONTAP簡介</block>
   <block id="56d99f22530d9bf2de17528eddb4e173" category="paragraph">NetApp ONTAP是一款全面的資料管理軟體，可在廣泛的產品線中提供先進的儲存功能。  ONTAP可作為軟體定義儲存使用，可作為透過主要雲端供應商提供的第一方服務，也可作為NetApp ASA （全快閃陣列）、 AFF （全快閃FAS）和FAS （光纖連接儲存）平台的儲存作業系統使用。  ONTAP為包括 VMware 虛擬化在內的各種用例提供高效能和低延遲，而不會產生孤島。</block>
   <block id="4a65907d71090ec738deaee0771079ad" category="section-title">VMware Cloud Foundation 簡介</block>
-  <block id="a58fd43866f698c25b1e869fc9719f38" category="paragraph">VCF 將運算、網路和儲存產品與 VMware 產品和第三方整合相集成，從而促進原生 Kubernetes 和基於虛擬機器的工作負載。該軟體平台包括 VMware vSphere、NSX、Aria Suite Enterprise、Tanzu Kubernetes Grid、HCX Enterprise、SDDC Manager 以及透過 vSAN 連結到主機 CPU 核心的儲存容量等關鍵元件。  NetApp ONTAP可與內部和公有雲中的各種 VCF 部署模型無縫整合。</block>
   <block id="bb2a9967e95544f2dcce1f3a26c9cab0" category="inline-image-macro">VMware 雲端基礎元件</block>
   <block id="2a791e5f8795c68265d87241a76be590" category="paragraph"><block ref="2a791e5f8795c68265d87241a76be590" category="inline-image-macro-rx" type="image"></block></block>
   <block id="3b467974d75aabe52aba735bb0c17f7d" category="section-title">VCF 域</block>
@@ -5423,7 +5413,6 @@
   <block id="6e9f50792478bd84a9f3fd0f76663ff1" category="paragraph">VVF 解決方案支援原生 Kubernetes 和基於虛擬機器的工作負載。關鍵組件包括：</block>
   <block id="b614c74d2cb757efa92f133270c9370e" category="list-text">VMware vSAN</block>
   <block id="26cf8a4b15a52a40980ea68133e64cb0" category="list-text">Aria 標準</block>
-  <block id="ad827a9f8bf173762e23c18232ba6f71" category="list-text">適用於 vSphere 的 VMware Tanzu Kubernetes Grid 服務</block>
   <block id="b39a91386427d500b8a265328806c3b7" category="list-text">vSphere 分散式交換機</block>
   <block id="bafd8cb0bba021b87dbd77b7f823399a" category="inline-link">VMware vSphere 產品即時比較</block>
   <block id="dacfd67a4365a057819d3e06ca3fcd0a" category="paragraph">有關 VVF 所含組件的更多信息，請參閱架構和規劃，請參閱<block ref="4d48a48ece1be15a949dedff89a71464" category="inline-link-rx"></block>。</block>
@@ -5518,7 +5507,6 @@
   <block id="f7c4be1ce8f09619caffa86ff60c6241" category="list-text">*NFS 儲存的自主勒索軟體保護*。點選<block ref="2874c56debcc384625b6100f5cb5f20e" category="inline-link-macro-rx"></block>了解部署步驟。</block>
   <block id="ac47369dc21c153e86da5b1bc9448f3d" category="doc">了解如何將 VMware 虛擬磁碟區 (vVols) 與ONTAP儲存結合使用</block>
   <block id="d7f118a7db52472accab75acfe07e2b8" category="paragraph">了解 VMware 虛擬磁碟區 (vVols) 的優勢、ONTAP tools for VMware vSphere、資料保護策略以及 VM 遷移指南。</block>
-  <block id="1b1e61df85ae1da91fe32ec97e7c13e7" category="paragraph">vSphere API for Storage Awareness (VASA) 讓 VM 管理員可以輕鬆使用配置 VM 所需的任何儲存功能，而無需與其儲存團隊進行互動。在 VASA 之前，VM 管理員可以定義 VM 儲存策略，但必須與儲存管理員合作來確定適當的資料存儲，通常是透過使用文件或命名約定。透過 VASA，具有適當權限的 vCenter 管理員可以定義一系列儲存功能，然後 vCenter 使用者可以使用這些功能來設定虛擬機器。 VM 儲存策略和資料儲存儲存功能設定檔之間的對應可讓 vCenter 顯示相容資料儲存清單以供選擇，並允許其他技術（如 Aria（以前稱為 vRealize）自動化或 Tanzu Kubernetes Grid）從指派的策略中自動選擇儲存。這種方法稱為基於儲存策略的管理。雖然儲存能力設定檔和策略也可以與傳統資料儲存一起使用，但我們這裡的重點是vVols資料儲存。  ONTAP的 VASA 提供者包含在ONTAP tools for VMware vSphere中。</block>
   <block id="9b1b912996f336d89924a9ec7d6edec5" category="paragraph">在儲存陣列中使用 VASA Provider 的優點包括：</block>
   <block id="dfe16ca745299ae3cfbae5a9be342a8c" category="list-text">單一實例可以管理多個儲存陣列。</block>
   <block id="d97fe9dbb8392bf7fe5c12e3b569064b" category="list-text">發布週期不必依賴儲存作業系統的發布。</block>
@@ -7949,4 +7937,9 @@
   <block id="72c2cb3a1c4fe511d4aa5e485a6894c5" category="sidebar">關於將現有 vSphere 叢集轉換為 VCF</block>
   <block id="29f9284e7442c54b5708da5878ed3103" category="sidebar">將現有 vSphere 叢集與 NFS 資料儲存進行轉換</block>
   <block id="4a8a09e26d16c2590e0cd3a06a7ecedf" category="sidebar">將現有 vSphere 叢集與 FC 資料儲存進行轉換</block>
+  <block id="692e72fae6c399adbb59208873ea33df" category="admonition">使用 VCF Automation、vSphere Supervisor（或其他 Kubernetes 版本）等外部管理工具部署的一些虛擬機器通常依賴虛擬機器儲存策略。如果在相同虛擬機器儲存策略內的不同資料儲存之間進行遷移，對應用程式的影響應該較小。請與應用程式擁有者確認，以確保這些虛擬機器能夠正確遷移到新的資料儲存。 vSphere 8 引進了<block ref="93b1662a0e02ee47ec3732d52d7b075f" category="inline-link-rx"></block> 準備 vMotion 應用程式。</block>
+  <block id="3b931785f36217e9f4d53e2ba2286fe1" category="paragraph">觀看影片和演示，了解 VMware 與NetApp儲存解決方案的整合。了解如何使用NetApp ONTAP Tools for VMware vSphere、SnapCenter Plug-in for VMware vSphere、3-2-1 資料保護，以及NetApp如何與 VMware Cloud Foundation 和 VMware vSphere Foundation 協同工作。</block>
+  <block id="fb1e3bc5ab58ae3d4480d4354223e858" category="paragraph">VCF 將運算、網路和儲存產品與 VMware 產品和第三方整合相結合，從而支援原生 Kubernetes 和基於虛擬機器的工作負載。軟體平台包含 VMware vSphere、NSX、Aria Suite Enterprise、VMware vSphere Kubernetes Service、HCX Enterprise、SDDC Manager 等關鍵元件，並透過 vSAN 與主機 CPU 核心連接儲存容量。NetApp ONTAP可與各種 VCF 部署模型無縫集成，無論是在本地還是在公有雲中。</block>
+  <block id="d9b568558c3f68007c62a09b36720af3" category="list-text">VMware vSphere Kubernetes vSphere</block>
+  <block id="dea7b388e6618290a6273870588a73d9" category="paragraph">vSphere 儲存感知 API (VASA) 讓虛擬機器管理員能夠輕鬆使用配置虛擬機器所需的任何儲存功能，而無需與儲存團隊互動。在 VASA 出現之前，虛擬機器管理員可以定義虛擬機器存儲策略，但必須與存儲管理員合作來確定合適的資料存儲，通常是透過文件或命名約定來實現的。透過 VASA，具有相應權限的 vCenter 管理員可以定義一系列儲存功能，vCenter 使用者隨後可以使用這些功能來設定虛擬機器。VM 儲存策略與資料儲存儲存功能設定檔之間的對應關係，使得 vCenter 能夠顯示可供選擇的相容資料儲存列表，並支援其他技術（例如 VCF Automation（先前稱為 Aria 或 vRealize）Automation 或 VMware vSphere Kubernetes Service）從指派的原則中自動選擇儲存。這種方法稱為基於儲存策略的管理。雖然儲存功能設定檔和策略也可以用於傳統資料存儲，但我們這裡主要關注的是vVols資料儲存。VASA 提供者 for ONTAP包含在ONTAP tools for VMware vSphere中。</block>
 </blocks>
