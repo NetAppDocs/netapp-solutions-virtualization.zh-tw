@@ -20,7 +20,7 @@ Proxmox 虛擬環境 (VE) 是一個基於 Debian Linux 的開源 Type-1 虛擬�
 
 == 概況
 
-Proxmox 虛擬環境 (VE) 支援同一主機上的完整 VM 和基於容器的虛擬化。基於核心的虛擬機器 (KVM) 和快速模擬器 (QEMU) 用於實現完整的虛擬機器虛擬化。  QEMU 是一個開源機器模擬器和虛擬化器，它使用 KVM 核心模組直接在主機 CPU 上執行客戶程式碼。  Linux 容器 (LXC) 允許像虛擬機器一樣管理容器，且資料在重新啟動後仍能保留。
+Proxmox虛擬環境(VE)支援在同一主機上進行完整的虛擬機器虛擬化和基於容器的虛擬化。採用基於核心的虛擬機器 (KVM) 和快速模擬器 (QEMU) 實現完全虛擬機器虛擬化。QEMU 是一個開源的機器模擬器和虛擬化器，它使用 KVM 核心模組直接在主機 CPU 上執行客戶機程式碼。Linux 容器 (LXC) 允許像管理虛擬機器一樣管理容器，並在重新啟動後保持資料持久性。Proxmox VE 9 及更高版本加入了 OCI 鏡像倉庫支持，可以從公共和私有鏡像倉庫拉取容器鏡像。Proxmox VE 9 中新增了應用程式容器支援技術預覽版。
 
 image:proxmox-overview-001.png["Proxmox 主機上的 VM 與 LXC"]
 
@@ -34,7 +34,7 @@ RESTful API 可用於自動化任務。有關 API 呼叫的信息，請查看lin
 
 image:proxmox-overview-002.png["管理介面"]
 
-如果託管節點發生故障，叢集可以監控虛擬機器和容器並在其他節點上重新啟動。需要配置虛擬機器和容器以實現高可用性 (HA)。可以透過建立群組將虛擬機器和容器託管在特定的主機子集上。 VM 或容器託管在優先順序最高的主機上。欲了解更多信息，請查看link:https://pve.proxmox.com/wiki/High_Availability["房委會經理"]
+叢集能夠監控虛擬機器和容器，並在宿主節點發生故障時在其他節點上重新啟動它們。虛擬機器和容器需要配置為高可用性（HA）。透過建立親緣性群組，可以將虛擬機器和容器託管在特定的主機子集上。虛擬機器或容器託管在優先順序最高的主機上。更多資訊請查看 link:https://pve.proxmox.com/wiki/High_Availability["房委會經理"]
 
 image:proxmox-overview-003.png["HA 組優先權"]
 
@@ -42,6 +42,10 @@ image:proxmox-overview-003.png["HA 組優先權"]
 
 
 TIP: LDAP/Microsoft AD 的連線憑證可能以明文形式儲存，並儲存在需要主機檔案系統保護的檔案中。
+
+對於管理多個 Proxmox VE 集群，Proxmox 資料中心管理器產品可以作為單獨的安裝程式提供。它提供了一個統一的管理介面，用於管理多個 Proxmox VE 叢集和 Proxmox 備份伺服器。它允許跨叢集遷移虛擬機器和容器。
+
+擁有有效基礎版、標準版或進階版訂閱的 Proxmox 遠端用戶端使用者可以存取 Proxmox 資料中心管理器企業儲存庫和技術支援。
 
 
 
@@ -69,16 +73,18 @@ image:proxmox-overview-004.png["虛擬機器磁碟格式"]
 
 可以選擇將 iSCSI LUN 作為原始設備呈現給 VM。
 
+Proxmox VE 9 及更高版本支援 iSCSI 和 FC 儲存類型的精簡配置和空間回收 (UNMAP)。更多詳情請參閱 link:https://pve.proxmox.com/pve-docs/chapter-pvesm.html#thin_provisioning_and_space_reclamation_support["Proxmox VE存儲"]
+
 LXC也有自己的設定文件， `/etc/pve/lxc/<container id>.conf`以及容器磁碟組件。可以從支援的儲存類型中掛載資料卷。
 
 image:proxmox-overview-005.png["貨櫃附加支架"]
 
 支援的儲存類型包括本機磁碟、NAS（SMB 和 NFS）和 SAN（FC、iSCSI、NVMe-oF 等）。有關詳細信息，請參閱link:https://pve.proxmox.com/pve-docs/chapter-pvesm.html["Proxmox VE存儲"]
 
-每個儲存磁碟區都配置了允許的內容類型。  NAS 磁碟區支援所有內容類型，而 SAN 支援僅限於 VM 和容器映像。
+每個儲存磁碟區都配置了允許的內容類型。NAS 磁碟區支援所有內容類型，而 SAN 僅支援 VM 和容器鏡像。目錄儲存類型也支援所有內容類型。
 
 
-NOTE: 目錄儲存類型也支援所有內容類型。  SMB 連線憑證以明文形式存儲，只有 root 可以存取。
+NOTE: SMB 連線憑證以明文形式存儲，只有 root 使用者才能存取。
 
 image:proxmox-overview-006.png["NAS 的內容類型"]
 
@@ -90,11 +96,11 @@ image:proxmox-overview-007.png["具有 SAN 的內容類型"]
 
 == 網路
 
-Proxmox VE 支援原生 Linux 網路功能（如 Linux 橋接器或 Open vSwitch），以實作軟體定義網路 (SDN)。主機上的乙太網路介面可以綁定在一起以提供冗餘和高可用性。其他選項，請參閱link:https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#_choosing_a_network_configuration["Proxmox VE 文檔"]
+Proxmox VE 支援基於主機的網路和叢集範圍的 VNet，它使用 Linux 橋接器和 Open vSwitch 等原生 Linux 網路功能來實現軟體定義網路 (SDN)。主機上的乙太網路介面可以綁定在一起，以提供容錯性和高可用性。其他選項請參考 link:https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#_choosing_a_network_configuration["Proxmox VE 文檔"]
 
 image:proxmox-overview-008.png["保稅網絡"]
 
-可以在叢集層級配置來賓網絡，並將變更推送到成員主機。透過區域、虛擬網路和子網路來管理分離。link:https://pve.proxmox.com/pve-docs/chapter-pvesdn.html["區"]定義Simple、VLAN、VLAN Stacking、VXLAN、EVPN等網路類型。
+可以在叢集層級設定訪客網絡，變更會推送至成員主機。隔離是透過區域、虛擬網路和子網路來實現的。link:https://pve.proxmox.com/pve-docs/chapter-pvesdn.html["區"] 定義了網路類型，例如簡單網路（隔離，帶有來源 NAT）、VLAN（802.1Q - 依賴外部交換器）、VLAN 堆疊網路（802.1ad - 私人 VLAN）、VXLAN（第 2 層覆蓋第 3 層）。對於 VPC 等網路），EVPN（使用 BGP 建立第 3 層多集群網路的 VXLAN），等等。
 
 根據區域類型的不同，網路的行為會有所不同，並提供特定的功能、優勢和限制。
 

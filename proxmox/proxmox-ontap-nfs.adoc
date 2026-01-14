@@ -1,0 +1,109 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-ontap-nfs.html 
+keywords: netapp, proxmox, proxmox ve, nfs, ontap, storage, nconnect, session trunking 
+summary: 使用ONTAP為 Proxmox 虛擬環境設定 NFS 儲存。此過程包括啟用 SVM、建立 LIF、配置匯出策略、建立磁碟區以及設定 nConnect 或會話中繼以實現容錯和效能。 
+---
+= 為 Proxmox VE 配置 NFS 存儲
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用NetApp ONTAP為 Proxmox 虛擬環境 (VE) 配置 NFS 儲存。使用 NFS v4.1 或更高版本進行會話中繼，可提高儲存系統的容錯能力和效能，並支援多個網路連線。
+
+ONTAP支援 Proxmox VE 支援的所有 NFS 版本。使用 link:https://docs.netapp.com/us-en/ontap/nfs-trunking/index.html["會話中繼"] 為了提高容錯能力和性能。會話中繼需要 NFS v4.1 或更高版本。
+
+如果您是ONTAP新手，請使用系統管理員介面完成這些任務。
+
+.ONTAP的 NFS nconnect 選項
+video::f6c9aba3-b070-45d6-8048-b22e001acfd4[panopto,width=360]
+
+
+== 儲存管理員任務
+
+完成以下任務，即可在ONTAP上配置 NFS 存儲，以便與 Proxmox VE 一起使用。
+
+. 為 NFS 啟用 SVM。請參閱 link:https://docs.netapp.com/us-en/ontap/nfs-config/verify-protocol-enabled-svm-task.html["ONTAP 9 文件"]。
+. 每個控制器至少創建兩個 LIF。請依照文件中的步驟操作。作為參考，這裡是實驗室中使用的 LIF 的螢幕截圖。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nfs-001.png["nas接口詳細信息"]
+
+====
+. 建立或更新 NFS 匯出策略，以提供對 Proxmox VE 主機 IP 位址或子網路的存取權限。請參閱 link:https://docs.netapp.com/us-en/ontap/nfs-config/create-export-policy-task.html["出口政策制定"] 和 link:https://docs.netapp.com/us-en/ontap/nfs-config/add-rule-export-policy-task.html["在匯出策略中新增規則"]。
+. link:https://docs.netapp.com/us-en/ontap/nfs-config/create-volume-task.html["創建卷"]。對於大容量需求（>100TB），請勾選將資料分散到叢集中的選項以使用FlexGroup。如果使用FlexGroup，請考慮在 SVM 上啟用 pNFS 以獲得更好的效能，具體操作如下： link:https://docs.netapp.com/us-en/ontap/pnfs/pnfs-commands.html#enable-nfsv4-1["在 SVM 上啟用 pNFS"]。使用 pNFS 時，請確保 Proxmox VE 主機能夠存取所有控制器（資料 LIF）。請確保該磁碟區已啟用反勒索軟體保護。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nfs-002.png["FlexGroup選項"]
+
+====
+. link:https://docs.netapp.com/us-en/ontap/nfs-config/associate-export-policy-flexvol-task.html["將導出策略指派給磁碟區"]。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nfs-003.png["NFS 磁碟區資訊"]
+
+====
+. 通知虛擬化管理員 NFS 磁碟區已準備就緒。
+
+
+
+
+== 虛擬化管理員任務
+
+完成以下任務，將 NFS 磁碟區新增為 Proxmox VE 中的存儲，並配置 nConnect 或會話中繼以提高效能。
+
+. 為了實現容錯，請確保至少有兩個介面配置在不同的 VLAN 中。使用網卡綁定​​。
+. 使用管理使用者介面 `https:<proxmox-node>:8006`按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“NFS”。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nfs-004.png["NFS儲存導航"]
+
+====
+. 請輸入詳細資訊。提供伺服器資訊後，NFS 匯出內容應該會填入。從清單中選擇並選擇內容選項。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nfs-005.png["NFS 儲存添加"]
+
+====
+. 若要啟用 nConnect 選項，請在任意叢集節點上開啟 shell 並執行下列命令，其中 `<storage id>` 這是上一步建立的儲存 ID：
++
+[source, shell]
+----
+pvesm set <storage id> --options nconnect=4
+----
++
+若要使用會話中繼，請確保使用 NFS v4.1 並設定 trunkdiscovery 和 max_connect 選項：
+
++
+[source, shell]
+----
+pvesm set <storage id> --options vers=4.1,trunkdiscovery,max_connect=16
+----
+. 下面顯示的是已配置儲存的 /etc/pve/storage.cfg 檔案的內容：
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nfs-006.png["NFS 儲存設定檔"]
+
+====
+. 若要驗證 nConnect 選項是否已設置，請執行 `ss -an | grep :2049` 在任何 Proxmox VE 主機上，檢查是否存在多個到 NFS 伺服器 IP 的連線。若要驗證 pNFS 是否已啟用，請執行 `nfsstat -c` 並檢查與佈局相關的指標。根據資料流量，應該可以看到與資料 LIF 的多個連接。
+
+
+
+NOTE: 在會話中繼中，nconnect 選項僅在一個中繼介面上設定。對於 pNFS，nconnect 選項設定在元資料和資料介面上。對於生產環境，請使用 nConnect 或會話中繼，不要同時使用兩者。

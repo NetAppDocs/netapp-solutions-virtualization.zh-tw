@@ -1,0 +1,358 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-wkld-dp-pbs.html 
+keywords: netapp, proxmox, proxmox ve, all-flash, nfs, iscsi, nvme, fc, ontap, storage, aff, asa, virtual machines, vm, containers, proxmox backup server 
+summary: 使用 Proxmox Backup Server 和NetApp ONTAP儲存保護 Proxmox VE 工作負載。本流程涵蓋資料儲存配置、備份作業、復原流程以及使用SnapMirror複製進行災難復原設定。 
+---
+= 使用 Proxmox Backup Server 和NetApp ONTAP保護 Proxmox VE 工作負載
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用與NetApp ONTAP儲存整合的 Proxmox Backup Server (PBS) 保護 Proxmox 虛擬環境 (VE) 工作負載。本流程涵蓋資料儲存配置、備份作業、復原流程以及使用ONTAP SnapMirror複製的災難復原設定。
+
+有關 Proxmox 備份伺服器架構和ONTAP整合的信息，請參閱 link:proxmox-pbs-architecture.html["了解 Proxmox Backup Server 與NetApp ONTAP的架構"]。
+
+
+
+== 開始之前
+
+* 確保 PBS 和ONTAP儲存之間有冗餘的網路路徑，以實現高可用性和高效能。
+* 考慮使用鏈路聚合（LACP）來提高頻寬和冗餘度。
+* 在所有網路設備上配置巨型幀（MTU 9000），以提高儲存流量效能。
+* 對於 NFS，請為 PBS 資料儲存建立一個具有適當權限的專用匯出。
+* 對於區塊協議，確保適當的區域劃分和 LUN 掩碼，以限制對授權 PBS 主機的存取。
+
+
+
+
+== 配置資料儲存
+
+使用NetApp ONTAP儲存配置 Proxmox 備份伺服器資料儲存。這包括在 PBS 主機上掛載ONTAP存儲、在 PBS Web 介面中建立本地資料存儲，以及（可選）配置ONTAP S3 存儲以進行異地備份和長期保留。
+
+準備ONTAP儲存後端並將其掛載到 PBS 主機上。根據您使用的是基於文件的協定 (NFS) 還是基於區塊的協定 (SAN/NVMe-oF)，準備步驟會有所不同。
+
+PBS 可以使用掛載在本機儲存上的任何資料夾作為資料儲存。PBS 將目錄檔案、索引檔案和資料區塊檔案儲存在資料儲存中。為了獲得最佳效能和可擴充性，請使用NetApp ONTAP SAN（iSCSI/FC/NVMe-oF）或 NFS 儲存（啟用 nConnect 或會話中繼，並啟用 pNFS）作為 PBS 資料儲存。
+
+.-> 將儲存設備掛載到 PBS 主機上
+. 對於 SAN 或 NVMe-oF 協議，在ONTAP上建立 LUN 或命名空間，並將其連接到 PBS 主機。
+. 使用適當的檔案系統（ext4 或 xfs）格式化 LUN 或命名空間，並將其掛載到 PBS 主機上。
+. 對於 NFS，將 NFS 匯出掛載到 PBS 主機上。
+. 使用 fstab 或 automount 確保資料儲存於系統重新啟動時自動掛載。
+
+
+.-> 在PBS中建立資料存儲
+掛載儲存設備後，在 PBS Web 介面中建立一個新的資料儲存。
+
+. 導覽至資料儲存 > 新增資料儲存。
+. 提供名稱，選擇資料儲存類型為本機，並將掛載資料夾指定為後備路徑。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-002.png[PBS中的本機資料儲存配置]
+
+====
+
+
+.-> 使用ONTAP S3 儲存配置資料存儲
+S3 儲存體通常用於異地備份和長期保留。Proxmox備份伺服器對S3儲存的支援目前處於技術預覽階段。
+
+. 確保ONTAP S3 服務已啟用並正確配置。
+. 在ONTAP上為 PBS 資料儲存建立一個 S3 儲存桶。
+. 取得 S3 儲存桶的存取金鑰和私鑰。
+. 收集 S3 端點 URL 和憑證指紋資訊。
+. 在 PBS Web 介面中，導覽至“配置”>“S3 端點”，然後使用收集到的資訊新增的 S3 端點。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-003.png[PBS中的S3端點配置]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-004.png[PBS 中的 S3 端點設定檔]
+
+====
+. 接下來，導航至資料儲存 → 新增資料儲存。請提供名稱，選擇資料儲存類型為 S3，並選擇已設定的 S3 端點。提供本機資料儲存體上要用作本機快取的資料夾名稱，並選擇儲存桶。顯示範例
+
+
+[]
+====
+image::proxmox-wkld-dp-pbs-005.png[PBS中的S3資料儲存配置]
+
+image::proxmox-wkld-dp-pbs-006.png[PBS 中的 S3 資料儲存設定檔]
+
+====
+
+
+== 建立本機同步作業到ONTAP S3 儲存。
+
++ 透過在 PBS 中建立本機同步作業，將資料從本機 PBS 資料儲存遷移到ONTAP S3 儲存。此作業將備份資料從本機資料儲存複製到 S3 資料存儲，以便進行異地儲存和長期保留。
+
+. 在 PBS Web 介面中，導覽至 S3 資料儲存 > 同步作業，然後按一下「新增」。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-007.png[在PBS中新增本機同步作業]
+
+====
+. 選擇位置為“本地”，選擇來源本機資料存儲，並指定所需的命名空間和深度。配置同步作業的排程任務和任何其他選項。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-008.png[PBS中的本機同步作業配置]
+
+====
+. 儲存同步作業配置。同步作業將按照定義的計劃運行，並將備份資料從本地 PBS 資料儲存複製到ONTAP S3 儲存。
+
+
+
+NOTE: 對於異地儲存和使用ONTAP儲存的更長時間保留，可以使用 Netapp Console 進行管理和資料服務。
+
+
+
+== 將 Proxmox 備份伺服器新增至 Proxmox VE 集群
+
+新增 Proxmox Backup Server 作為儲存目標，以啟用虛擬機器和容器的備份作業。
+
+. 在 Proxmox VE Web 介面中，導覽至資料中心 > 存儲，然後按一下「新增」 > Proxmox 備份伺服器。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-009.png[在 Proxmox VE 中加入 PBS 存儲]
+
+====
+. 提供PBS伺服器憑證指紋以實現安全通訊。您可以從PBS網頁介面取得指紋，也可以在PBS上執行以下指令取得： `proxmox-backup-manager cert info`。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-010.png[在 Proxmox Backup Server UI 中設定 PBS 憑證指紋]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-011.png[在 Proxmox Backup Server CLI 中設定 PBS 憑證指紋]
+
+====
+. 配置其他選項，例如備份保留策略和加密。
+. 按一下「新增」以儲存 PBS 儲存配置。
+
+
+Proxmox VE 叢集現在可以使用 PBS 資料儲存對虛擬機器和容器進行備份和復原作業。
+
+
+
+== 執行備份
+
+將 Proxmox VE 工作負載備份到 Proxmox 備份伺服器。這包括執行按需備份、配置計劃備份作業、備份主機設定檔以及使用備份前和備份後腳本執行自訂操作。
+
+.-> 執行按需備份
+使用 Proxmox Backup Server 立即建立虛擬機器或容器的備份。
+
+. 在 Proxmox VE Web 介面中，導覽至虛擬機器或容器。
+. 點擊“備份”選項卡，然後點擊“立即備份”。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-012.png[Proxmox VE 中的按需備份]
+
+====
+. 選擇 Proxmox 備份伺服器儲存作為備份目標。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-013.png[在 Proxmox VE 中選擇按需備份的 PBS 目標存儲]
+
+====
+. 配置其他備份選項，例如壓縮、通知和快照模式。
+. 點選「備份」按鈕啟動備份程序。
+
+
+.-> 設定計劃備份
+使用 Proxmox Backup Server 為虛擬機器和容器設定定期備份。
+
+. 在 Proxmox VE Web 介面中，導覽至資料中心 > 備份。
+. 點選「新增」以建立新的備份作業。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-014.png[在 Proxmox VE 中新增排程備份作業]
+
+====
+. 選擇 PBS 儲存作為目標，並選擇備份計畫（例如每日或每週）。將選擇模式設定為「全部」、「選定的虛擬機器/容器」或「基於池」。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-015.png[在 Proxmox VE 中設定排程備份作業]
+
+====
+. 配置其他選項，例如保留策略、壓縮和快照模式。
+. 按一下「建立」儲存排程備份作業配置。
++
+.結果
+Proxmox VE 叢集使用 Proxmox Backup Server 作為儲存目標，依照定義的計畫自動對指定的虛擬機器和容器執行備份。
+
++
+計劃任務配置儲存在 Proxmox VE 主機上的 /etc/pve/job.cfg 檔案中。
+
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-016.png[Proxmox VE 中的排程備份作業設定檔]
+
+====
+
+
+.將 Proxmox VE 主機檔案備份到 PBS
+將 Proxmox VE 主機設定檔、系統設定和其他關鍵資料備份到 Proxmox 備份伺服器。
+
+. 在 Proxmox VE shell 或 SSH 會話中，使用 `proxmox-backup-client` 建立主機備份的指令：
++
+[source]
+----
+proxmox-backup-client backup <backupspec> --repository <pbs-storage>:<datastore> --ns <namespace>
+----
++
+代替 `<backupspec>` 以及備份規格（例如） `backupname and backuptype/<directory or files to backup>`）， `<pbs-storage>` 使用PBS的FQDN， `<datastore>` 使用 PBS 資料儲存名稱，以及 `<namespace>` 帶有命名空間。這假設身份驗證和指紋環境變數已配置。
+
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-017.png[Proxmox VE 主機備份指令]
+
+====
+. 備份過程將建立 Proxmox VE 主機的備份並將其儲存在指定的 PBS 資料儲存中。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-018.png[從 Proxmox Backup Server 使用者介面查看文件]
+
+====
+. 若要從備份中還原 Proxmox VE 主機文件，請使用下列命令： `proxmox-backup-client restore` 使用適當的參數執行命令。
+
+
+Proxmox VE 支援備份前和備份後腳本，以便在備份過程之前和之後執行自訂操作。使用這些腳本可以準備虛擬機器或容器進行備份、執行其他任務或在備份完成後進行清理。
+
+. 在 Proxmox VE 主機上建立備份腳本。請確保腳本可執行且具有必要的權限。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-020.png[備份腳本的腳本參數詳情]
+
+====
+. 請確保備份作業存在。
+. 在 Proxmox VE shell 或 SSH 會話中，使用 `pvesh` 使用命令 `--script` 可選擇指定要執行的腳本。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-019.png[在 Proxmox VE 中設定備份腳本]
+
+====
+. （可選）使用 QEMU 客戶代理在建立快照進行備份之前，使工作負載內部的檔案系統靜止。請確保已安裝並執行 QEMU 用戶機代理程式。將腳本放置在虛擬機器或容器內的 /etc/qemu/fsfreeze-hook.d/ 或 /etc/qemu-ga/fsfreeze-hook.d/ 目錄中。
+
+
+
+NOTE: 也可以使用以下方法在虛擬機器或容器層級設定鉤子腳本： `qm set` 或者 `pct set` 使用命令 `--hookscript` 選項。有關範例 hookscript，請參閱 Proxmox VE 主機上的 /usr/share/pve-docs/examples/guest-example-hookscript.pl。
+
+
+
+== 恢復虛擬機器和容器
+
+直接從 Proxmox VE Web 介面或 PBS 儲存還原虛擬機器和容器。
+
+. 若要還原現有的虛擬機器或容器，請在 Proxmox VE Web 介面中導覽至該虛擬機器或容器，按一下「備份」標籤，從 PBS 儲存體中選擇備份，然後按一下「還原」。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-021.png[在 Proxmox VE 中從 PBS 還原虛擬機]
+
+====
++
+對於裸機復原或復原到不同的 Proxmox VE 主機，請使用下列方法： `proxmox-backup-client` 命令。
+
+. 若要還原目前在 Proxmox VE 中不可用的虛擬機器或容器，請導覽至 PBS 儲存備份部分，選擇備份，然後按一下「還原」。提供目標儲存位置和其他必要資訊以完成復原。
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-022.png[在 Proxmox VE UI 中從 PBS 儲存恢復遺失的虛擬機]
+
+====
+
+
+
+
+== 使用SnapMirror設定災難恢復
+
+使用SnapMirror將ONTAP儲存上的 PBS 資料儲存複製到另一個ONTAP系統，以實現災難復原。這樣可以保護備份數據，並在站點故障後實現數據恢復。
+
+. 為 PBS 資料儲存磁碟區配置SnapMirror複製。
+. 如果發生災難，請將複製的 PBS 資料儲存掛載到輔助 PBS 執行個體上。
++
+在 PBS 中新增資料儲存時，啟用「重複使用現有資料儲存」進階選項，以避免資料儲存重新初始化。
+
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-023.png[在PBS中重複使用現有資料儲存。]
+
+====
++
+對於ONTAP S3 存儲，在 PBS 中新增資料儲存時，請同時啟用「重複使用現有資料儲存」和「覆蓋使用中的標記」選項。
+
++
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-024.png[在PBS中重複使用現有的S3資料儲存。]
+
+====
++
+.結果
+新增資料儲存後，即可存取備份資料並執行復原作業。
+
+
+
+
+
+== 使用 Proxmox 資料中心管理器監控多個集群
+
+使用 Proxmox 資料中心管理器 (PDM) 監控和管理多個 Proxmox VE 和 Proxmox 備份伺服器實例。PDM 提供集中式管理介面，用於監控多個 Proxmox VE 叢集和 PBS 執行個體的運作狀況、效能和狀態。
+
+.顯示範例
+[%collapsible]
+====
+image::proxmox-wkld-dp-pbs-025.png[Proxmox 資料中心管理器概述]
+
+====
+
+
+== 總結
+
+Proxmox Backup Server 與NetApp ONTAP儲存集成，可為 Proxmox VE 工作負載提供強大且高效的資料保護。組織可以透過利用 ONTAP 的高階資料管理功能和 PBS 的備份功能來確保虛擬化工作負載的可用性和完整性。

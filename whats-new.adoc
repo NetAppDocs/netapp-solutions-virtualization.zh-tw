@@ -15,6 +15,29 @@ summary: NetApp虛擬化解決方案附件的最新變更日誌。
 
 
 
+== 2026年1月15日
+
+* 更新了 Proxmox VE 解決方案內容，以反映 Proxmox VE 9 版本。
+* 新增了在用於 Proxmox VE 儲存的磁碟區上啟用反勒索軟體保護的說明。
+* 新增了使用 FC 和 NVMe/FC 作為 Proxmox VE 儲存協定的說明。
++
+** link:proxmox/proxmox-ontap.html["為 Proxmox 虛擬環境配置ONTAP存儲"]
+
+
+* 為 Proxmox Backup Server 新增了ONTAP整合。
++
+** link:proxmox/proxmox-wkld-dp-pbs.html["使用 Proxmox Backup Server 和NetApp ONTAP保護在 Proxmox VE 上執行的工作負載"]
+
+
+* 增加了ONTAP與 Proxmox VE 整合的部署指南。
++
+** link:proxmox/proxmox-deploy-guidelines.html["NetApp ONTAP在 Proxmox 虛擬環境中的部署指南"]
+
+
+
+
+
+
 == 2025年11月12日
 
 * 提供了NetApp Shift 工具包的正確下載鏈接

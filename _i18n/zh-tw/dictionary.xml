@@ -2478,12 +2478,7 @@
   <block id="4460d8fd66206202680336abfed77dcd" category="paragraph">遷移計畫繼續完成 ImageConversion 階段，最後完成 VirtualMachineCreation 階段。  VM 在 OpenShift Virtualization 上進入運作狀態。</block>
   <block id="c9f0f895fb98ab9159f51fd0297e236d" category="inline-image-macro">8</block>
   <block id="0857af525a84b794970c3d5af0038668" category="paragraph"><block ref="0857af525a84b794970c3d5af0038668" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="09c3b8910f060186ee4cb74a3cbc7fc0" category="summary">Proxmox 虛擬環境 (VE) 中的共享儲存減少了 VM 即時遷移的時間，並為整個環境中的備份和一致模板提供了更好的目標。  ONTAP儲存可以滿足 Proxmox VE 主機環境以及客戶文件、區塊和物件儲存需求。</block>
   <block id="488c7ca3bc4568c13763a0005aec6c5d" category="doc">為 Proxmox 虛擬環境配置ONTAP存儲</block>
-  <block id="8ec54b39b7dd9ec6666c9bcb3419fe56" category="paragraph">使用 NAS、SAN 和 SMB/CIFS 協定透過 Proxmox 虛擬環境 (VE) 配置ONTAP儲存。  Proxmox VE 中的共享儲存減少了即時 VM 遷移的時間，並為整個環境中的備份和一致模板提供了更好的目標。</block>
-  <block id="1c89e1a1285f0138c1151e89bdaa40ed" category="paragraph">Proxmox VE 主機需要將 FC、乙太網路或其他支援的介面連接到交換機，並與ONTAP邏輯介面進行通訊。始終檢查<block ref="8d006c87830f7172fd7400f1c17c0928" category="inline-link-rx"></block>了解支援的配置。</block>
-  <block id="01a0f704243685bc0e3b2ffcad16b0f0" category="section-title">ONTAP支援的 Proxmox VE 儲存類型</block>
-  <block id="0b8bdb61396ecfae3befa3a7086dedc5" category="paragraph">NAS 協定（NFS/SMB）支援 Proxmox VE 的所有內容類型，並且通常在資料中心層級配置一次。客戶虛擬機器可以使用 NAS 儲存上的 raw、qcow2 或 VMDK 類型的磁碟。 ONTAP快照可見，以便從客戶端存取資料的時間點副本。採用 SAN 協定（FC/iSCSI/NVMe-oF）的區塊儲存通常按主機配置，並且僅限於 Proxmox VE 支援的 VM 磁碟和容器映像內容類型。客戶虛擬機器和容器將區塊儲存作為原始設備使用。</block>
   <block id="2effa58f13159d138a634233e246713d" category="cell">內容類型</block>
   <block id="1414cdc093d39dd56d0b0d20049e17fc" category="cell">備份</block>
   <block id="98ea182faf857dd13aec65453e431e95" category="cell">虛擬機器磁碟</block>
@@ -2492,126 +2487,44 @@
   <block id="fcd68080313e22bbe3353a573f46d36a" category="cell">ISO 映像</block>
   <block id="ed7995b30acfad6baf98a12416d639cc" category="cell">CT模板</block>
   <block id="b2accffe28bb4f4b596c9be64a28d281" category="cell">片段</block>
-  <block id="2744c55be62f785846b7734ab2f6dfdf" category="paragraph">*註：* 1 - 需要叢集檔案系統來建立共用資料夾並使用目錄儲存類型。  2——使用 LVM 儲存類型。</block>
-  <block id="199fcff7b54f68f25e63e387922143cc" category="section-title">SMB/CIFS存儲</block>
   <block id="5478c30e0b1be399effe00a073535eee" category="inline-link-macro">TR4740 - SMB 3.0 多通道</block>
-  <block id="480dde71aed40f659e7a749a5ff7ef90" category="paragraph">要利用 SMB/CIFS 檔案共享，儲存管理員需要執行某些任務，虛擬化管理員可以使用 Proxmox VE UI 或從 shell 掛載共享。 SMB 多通道提供容錯功能並提高效能。有關詳細信息，請參閱<block ref="6375b984c70daf4d4201c589c399ea61" category="inline-link-macro-rx"></block></block>
   <block id="0d5d6fc0ca3b32c48fb23afb7a95eedd" category="inline-link-macro">Proxmox VE 文檔</block>
-  <block id="a791f143e380c7c4b314e0eb8cfea350" category="admonition">密碼將保存在明文文件中，只有 root 使用者可以存取。請參閱<block ref="8bd73bdf88f27d5527b75b8952644346" category="inline-link-macro-rx"></block> 。</block>
   <block id="b2222967310ae411da791ff693f92bd2" category="video-title">採用ONTAP 的SMB 共享儲存池</block>
-  <block id="eec5de5114fb9e61444950953613ec2d" category="example-title">&lt;strong&gt;儲存管理任務&lt;/strong&gt;</block>
-  <block id="75e407841e30935e2d070812391de440" category="paragraph">如果是ONTAP新手，請使用系統管理員介面完成這些任務以獲得更好的體驗。</block>
   <block id="c09b5be4c2da04f4040eef1878f258aa" category="inline-link-macro">ONTAP 9 文件</block>
-  <block id="6bccccceefd05a2ea348cd43e7a26687" category="list-text">確保 SVM 已啟用 SMB。跟隨<block ref="229aa9d5f3d3b9a2dc53784d0a93d1c3" category="inline-link-macro-rx"></block>了解更多。</block>
-  <block id="29e83b58c17126c29eeb0c2fb3fc3876" category="list-text">每個控制器至少有兩個生命。請按照上述連結中的步驟操作。作為參考，這是此解決方案中使用的 lifs 的螢幕截圖。</block>
   <block id="2805592d5d8726e8ddb21f453e843127" category="inline-image-macro">nas接口詳細信息</block>
-  <block id="5970d5718b098516b8de4d33960bfb11" category="paragraph"><block ref="5970d5718b098516b8de4d33960bfb11" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="1078b3ae1ad3e4ef9560614a6fcfb2bd" category="list-text">使用基於 Active Directory 或工作組的身份驗證。請按照上述連結中的步驟操作。</block>
   <block id="aba5f0b1d178181653f546def0be1cc1" category="inline-image-macro">加入網域資訊</block>
-  <block id="d41f58c426e70f6b64bfa0dde331b47d" category="paragraph"><block ref="d41f58c426e70f6b64bfa0dde331b47d" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="59a06216fc60442790d6b9b4a1fca3b7" category="list-text">建立卷。請記得選取跨叢集分發資料的選項以使用FlexGroup。</block>
   <block id="95161394245a273db58ad63c75ace391" category="inline-image-macro">FlexGroup選項</block>
-  <block id="24721eee804a33abf6052e369b285dd6" category="paragraph"><block ref="24721eee804a33abf6052e369b285dd6" category="inline-image-macro-rx" type="image"></block></block>
   <block id="a669eb43248f654b05cb732c546c8fcc" category="list-text">建立 SMB 共享並調整權限。跟隨<block ref="952ceec20fd74017c5c486f233dccb1d" category="inline-link-macro-rx"></block>了解更多。</block>
   <block id="3877d408a5b3ce5b9413823f2d0e01d4" category="inline-image-macro">SMB 共享資訊</block>
-  <block id="657e046261b7db41158a7b3d72b42f56" category="paragraph"><block ref="657e046261b7db41158a7b3d72b42f56" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="8a2e680de8f3710e88f26983a32d6df5" category="list-text">向虛擬化管理員提供 SMB 伺服器、共享名稱和憑證，以便他們完成任務。</block>
-  <block id="08e4dcd9547e4be8b2a7d8ce2ac9926d" category="example-title">&lt;strong&gt;虛擬化管理任務&lt;/strong&gt;</block>
-  <block id="d9d43a61bd70781dabf3d0623c2a1a9c" category="list-text">收集用於共享身份驗證的 SMB 伺服器、共享名稱和憑證。</block>
-  <block id="32c60eb6b7be6e17f7ae16f83562f7cd" category="list-text">確保至少兩個介面配置在不同的 VLAN 中（以實現容錯）並且 NIC 支援 RSS。</block>
-  <block id="59567f2ced32c7416cd1174d375fb2cc" category="list-text">如果使用管理 UI<block ref="1d8a0c481f504f690c316fdd4a102c54" prefix=" " category="inline-code"></block> ，點選資料中心，選擇存儲，點選新增，選擇SMB/CIFS。</block>
   <block id="d9d6c144bf9621e27b709c786fd30c4e" category="inline-image-macro">SMB儲存導航</block>
-  <block id="1f9faf8e8c0e65b2249cdbf0c8d0e4dd" category="paragraph"><block ref="1f9faf8e8c0e65b2249cdbf0c8d0e4dd" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="d7b1ae05c383ae4b1f94f1ab57645fd4" category="list-text">填寫詳細信息，共享名稱將自動填入。確保選擇了所有內容。按一下“新增”。</block>
   <block id="f7e94408957dc45bae6b083ca1eec664" category="inline-image-macro">SMB 儲存新增</block>
-  <block id="3b60fcf4159b5d8ba234ddaf26596dfa" category="paragraph"><block ref="3b60fcf4159b5d8ba234ddaf26596dfa" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="10c9a3364ec85441d8112ade5e465ac2" category="list-text">若要啟用多通道選項，請前往叢集中任意一個節點上的 shell，然後鍵入 pvesm set pvesmb01 --options multichannel,max_channels=4</block>
   <block id="b827a78d8c6750faaeb488500a1fc386" category="inline-image-macro">多通道設定</block>
-  <block id="2a84accd5aecdf4b67f474fb4950e67c" category="paragraph"><block ref="2a84accd5aecdf4b67f474fb4950e67c" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="a826fb2a08f804bb4bb04be919d4de45" category="list-text">以下是 /etc/pve/storage.cfg 中針對上述任務的內容。</block>
   <block id="cdbb8af9461242237582dbc7edcceec6" category="inline-image-macro">SMB 的儲存設定檔</block>
-  <block id="2d7ad98f5776dcd49f8b438daeeeff12" category="paragraph"><block ref="2d7ad98f5776dcd49f8b438daeeeff12" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="0c8305775fc98678766952f62374f030" category="section-title">NFS 存儲</block>
   <block id="60049d5d3bce453821a7e407082b62f3" category="inline-link-macro">會話中繼</block>
-  <block id="2baeafd7333d1ce89cebca175f07f8c2" category="paragraph">ONTAP支援 Proxmox VE 支援的所有 NFS 版本。為了提供容錯和性能增強，確保<block ref="be091303111d9932d160becb02a7fe79" category="inline-link-macro-rx"></block>被利用。要使用會話中繼，至少需要 NFS v4.1。</block>
   <block id="6965578988829420665baee2effe46bf" category="video-title">ONTAP的 NFS nconnect 選項</block>
-  <block id="925cf7ca2c282677ac0e7e47b3447de4" category="list-text">確保 SVM 已啟用 NFS。請參閱<block ref="4558e9caf9018526f2d14e6401a7eb7a" category="inline-link-macro-rx"></block></block>
-  <block id="4d6aba897050360be62f31484947230a" category="list-text">每個控制器至少有兩個生命。請按照上述連結中的步驟操作。作為參考，這是我們在實驗室中使用的 lifs 的螢幕截圖。</block>
   <block id="4d00cda68175bffb6afcd7c9213896ad" category="inline-link-macro">出口政策制定</block>
   <block id="bd2fb236997a67a617c5f3b148dc4ac8" category="inline-link-macro">在匯出策略中新增規則</block>
-  <block id="872b20f891f1cb336015335dcaccfeec" category="list-text">建立或更新 NFS 匯出策略，提供對 Proxmox VE 主機 IP 位址或子網路的存取。參考<block ref="b6cdedc51193f9caaca77e2632283688" category="inline-link-macro-rx"></block>和<block ref="b5d322c6e909917ad1a552e8b76cf85d" category="inline-link-macro-rx"></block>。</block>
   <block id="dc88dce8ec264777b2f90ec0af744f43" category="inline-link-macro">創建卷</block>
-  <block id="68f4fc2e858b7ce2db3ad356dbbc1b14" category="list-text"><block ref="4f9b59515117e496741261619ceb2f90" category="inline-link-macro-rx"></block> 。請記得選取跨叢集分發資料的選項以使用FlexGroup。</block>
-  <block id="488649b6b8c5d7ae62afd080d50d7ef1" category="inline-link-macro">為磁碟區分配導出策略</block>
-  <block id="33c66cd613dfd7ee5a0ad0cd0a9bc242" category="list-text"><block ref="33c66cd613dfd7ee5a0ad0cd0a9bc242" category="inline-link-macro-rx"></block></block>
   <block id="9f61f75e319aeb9fc3c3020c75eb1c35" category="inline-image-macro">NFS 磁碟區資訊</block>
-  <block id="10c24b4f0d66de26ed4d143fd3efaa2e" category="paragraph"><block ref="10c24b4f0d66de26ed4d143fd3efaa2e" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="ad9241a8f17003697ff7d8d37aaa7b43" category="list-text">通知虛擬化管理員 NFS 磁碟區已準備就緒。</block>
-  <block id="f27cabdacc173d6e6f12792047f63323" category="list-text">確保至少兩個介面配置在不同的 VLAN 中（以實現容錯）。使用 NIC 綁定。</block>
-  <block id="ed7f806d074f327a25b400d2600ad266" category="list-text">如果使用管理 UI<block ref="1d8a0c481f504f690c316fdd4a102c54" prefix=" " category="inline-code"></block> ，點擊資料中心，選擇存儲，點擊添加，選擇NFS。</block>
   <block id="bcd55aeb3bddd6308d5a269dc5e6cbcd" category="inline-image-macro">NFS儲存導航</block>
-  <block id="96b80f0bad36edaa1994a30fee496999" category="paragraph"><block ref="96b80f0bad36edaa1994a30fee496999" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="806aaadb95e3a8393823ebee62a2be27" category="list-text">填寫詳細信息，提供伺服器資訊後，NFS 匯出應填充並從清單中選擇。記得選擇內容選項。</block>
   <block id="b6713e4a099d16458859b6f724dd584f" category="inline-image-macro">NFS 儲存添加</block>
-  <block id="9f359905197ffa4ab648a9185a236838" category="paragraph"><block ref="9f359905197ffa4ab648a9185a236838" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="21b3bf9403041f9d09b0e69368b9b151" category="section-title">帶有 iSCSI 的 LVM</block>
   <block id="37eed020511d831c82db16bf1a62cce6" category="video-title">使用ONTAP 的iSCSI LVM 共享池</block>
-  <block id="ab39921a24a29c2606bf32bd0ebece00" category="paragraph">若要為 Proxmox 主機之間的共用儲存配置邏輯磁碟區管理器，請完成下列任務：</block>
-  <block id="81eb4d4d83a747d9a025f5b0f35e61c0" category="list-text">確保有兩個 Linux Vlan 介面可用。</block>
-  <block id="996d0675258e791cee6917037579a0e3" category="list-text">確保所有 Proxmox VE 主機上都安裝了多路徑工具。確保它在啟動時啟動。</block>
-  <block id="3e3e93f976fc3a5e29413b143287a117" category="list-text">收集所有 Proxmox VE 主機的 iscsi 主機 iqn 並將其提供給儲存管理員。</block>
-  <block id="ac455887789e62ec6d4a11a46959d7a0" category="paragraph">如果是ONTAP新手，請使用系統管理員以獲得更好的體驗。</block>
-  <block id="230de7aea17b893e0905f7b99a6368e7" category="list-text">確保 SVM 可用且啟用了 iSCSI 協定。跟隨<block ref="7c79a8d96ccab5e00ffe5a51372cb5c5" category="inline-link-macro-rx"></block></block>
-  <block id="b9894c1add720b6d6c072739c052ee09" category="list-text">每個控制器有兩個專用於 iSCSI 的 lif。</block>
   <block id="8c8c689c539647d8a3f8cca88845e30c" category="inline-image-macro">iSCSI介面詳細信息</block>
-  <block id="e638495b4828296076f52aa9cf4ee96b" category="paragraph"><block ref="e638495b4828296076f52aa9cf4ee96b" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="bf7717dd9e9ff9e0af6b1a69787651c2" category="list-text">建立 igroup 並填入主機 iscsi 啟動器。</block>
-  <block id="aa0b8a3132a8a54ea79e50fb9b6fc424" category="list-text">在 SVM 上建立具有所需大小的 LUN，並將其呈現給上述步驟中建立的 igroup。</block>
   <block id="80b87edc0b6e4a23bf5a49fe65d51f34" category="inline-image-macro">iscsi lun 詳細信息</block>
-  <block id="775a0c3616e8732e2737eb6ad3a592cc" category="paragraph"><block ref="775a0c3616e8732e2737eb6ad3a592cc" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="44833e1e08f11f4b4b93cb92bb4b7a80" category="list-text">通知虛擬化管理員 lun 已建立。</block>
-  <block id="68d2788870141d9efe13a09ef7de7c47" category="list-text">進入管理介面<block ref="386c071bd7898138d6219d21f97e168d" prefix=" " category="inline-code"></block>，點擊資料中心，選擇存儲，點擊添加，選擇iSCSI。</block>
   <block id="804e3791e84012ca103c4896558a7de9" category="inline-image-macro">iscsi儲存導航</block>
-  <block id="9569c59c62b09b9bc670fa158aeefc78" category="paragraph"><block ref="9569c59c62b09b9bc670fa158aeefc78" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="bcc2cb2aeb97fa565e3a584193fa5661" category="list-text">提供儲存 ID 名稱。當沒有通訊問題時， ONTAP的 iSCSI lif 位址應該能夠選擇目標。由於我們的目的不是直接向來賓虛擬機器提供 LUN 訪問，因此請取消選取該選項。</block>
   <block id="e5926bc2b5a8a8894df40ff0fe90139f" category="inline-image-macro">iscsi儲存類型創建</block>
-  <block id="509d093d483dccdcec816266b53f93b0" category="paragraph"><block ref="509d093d483dccdcec816266b53f93b0" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="9f2edb6e6d194b9308b694dd274650b4" category="list-text">現在，按一下新增並選擇 LVM。</block>
   <block id="7de6de94f137081d021d2f0d993b4c7a" category="inline-image-macro">lvm儲存導航</block>
-  <block id="161e029310025490bc81304e87622b0f" category="paragraph"><block ref="161e029310025490bc81304e87622b0f" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="6d28af532bf0580b8b06fe658520dcf6" category="list-text">提供儲存 ID 名稱，選擇與我們在上一個步驟中建立的 iSCSI 儲存相符的基本儲存。選擇基本卷的 LUN。提供卷宗組名稱。確保已選擇共享。</block>
   <block id="33a508107b11996d51d20406a9ba970d" category="inline-image-macro">lvm儲存創建</block>
-  <block id="6b3ed5486505019f5289994a364344d7" category="paragraph"><block ref="6b3ed5486505019f5289994a364344d7" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="7701474f52abb8b892d468bc916b0aad" category="list-text">這是使用 iSCSI 磁碟區的 LVM 的範例儲存設定檔。</block>
   <block id="f3dc38a48fcb5b32e5a03d1da80a5dcd" category="inline-image-macro">lvm iscsi配置</block>
-  <block id="1a5ce8202218d0249a5713ad6120e1ab" category="paragraph"><block ref="1a5ce8202218d0249a5713ad6120e1ab" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="41b8e1d5479d7d0709f5a7ad3e44e0f3" category="section-title">帶有 NVMe/TCP 的 LVM</block>
   <block id="31f424bffc934af42af36d33224cee2b" category="video-title">使用ONTAP 的具有 NVMe/TCP 的 LVM 共用池</block>
-  <block id="65feee12c48ea8adc7ae4edc9826d23d" category="paragraph">若要為 Proxmox 主機之間的共用儲存配置邏輯磁碟區管理器，請完成下列任務：</block>
-  <block id="38397788f2a0ed3c2547c324c91ee4d0" category="list-text">在叢集上的每個 Proxmox 主機上，執行下列命令來收集主機啟動器資訊。</block>
-  <block id="bed78e3a182d136e262293d32094f9fe" category="list-text">向儲存管理員提供收集到的主機 nqn 資訊並請求所需大小的 nvme 命名空間。</block>
-  <block id="b68590ab9bc3ad9b45b2331a1069f841" category="paragraph">如果是ONTAP新手，請使用系統管理員以獲得更好的體驗。</block>
   <block id="45955403dbb9f0c424c9c778ec32ce80" category="inline-link-macro">ONTAP 9 上的 NVMe 任務文檔</block>
-  <block id="3acd30abca10eeb58b82d7ebfcfc785a" category="list-text">確保 SVM 可用且啟用了 NVMe 協定。參考<block ref="dff9a6cc2313f520177d7aee32699621" category="inline-link-macro-rx"></block>。</block>
   <block id="bb2c4be563ca93b621dd546e70a271ea" category="list-text">建立 NVMe 命名空間。</block>
   <block id="6b5871cb09526dfaac84bdbf3468cbab" category="inline-image-macro">nvme 命名空間創建</block>
-  <block id="c89ec241ae8aff0730da9d603af27993" category="paragraph"><block ref="c89ec241ae8aff0730da9d603af27993" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="4dd154454ea8260d4cb26fb2c1466ee3" category="list-text">建立子系統並指派主機 nqns（如果使用 CLI）。按照上面的參考連結。</block>
-  <block id="d2391c609eb64b903ce34bf279f505d2" category="list-text">通知虛擬化管理員 nvme 命名空間已建立。</block>
-  <block id="b8b3b31b6b94a80134679feeb5dc310b" category="list-text">導航到叢集中每個 Proxmox VE 主機上的 shell 並建立 /etc/nvme/discovery.conf 檔案並更新特定於您的環境的內容。</block>
-  <block id="39fc13becc6cfafbe3418fddcd0d7517" category="list-text">登入 nvme 子系統</block>
   <block id="60606d5a9f557fac59b8befc3d9bc826" category="list-text">檢查並收集設備詳細資料。</block>
-  <block id="ecd5b19e377ea09681cc3033516727ef" category="list-text">建立卷宗組</block>
-  <block id="03b70f5b5011cfd0a9b7d642ca7785be" category="list-text">進入管理介面<block ref="386c071bd7898138d6219d21f97e168d" prefix=" " category="inline-code"></block>，點選資料中心，選擇存儲，點選新增，選擇LVM。</block>
-  <block id="55d8f3aabcf7da0337ac0f95df47beb7" category="list-text">提供儲存 ID 名稱，選擇現有磁碟區組並選擇剛剛使用 cli 建立的磁碟區組。記得檢查共享選項。</block>
   <block id="be369a927f5d017b9bca3a87547bae34" category="inline-image-macro">現有 vg 上的 lvm</block>
-  <block id="0f3198105635af871a83a8027d3a371b" category="paragraph"><block ref="0f3198105635af871a83a8027d3a371b" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="4d0ec738c37e8ea383c7be4c283d376d" category="list-text">這是使用 NVMe/TCP 的 LVM 的範例儲存設定檔</block>
   <block id="098868f555e1fdbd16bd8f9dd44e6371" category="inline-image-macro">NVM 上的 LVM TCP 配置</block>
-  <block id="aedda99226107e458c8059c9730b641c" category="paragraph"><block ref="aedda99226107e458c8059c9730b641c" category="inline-image-macro-rx" type="image"></block></block>
   <block id="e4bc777fcd5873eb9a265fbc87aafcc1" category="doc">了解 Proxmox 虛擬環境</block>
   <block id="f90672fbf637aaa3d84163346bc73504" category="paragraph">Proxmox 虛擬環境 (VE) 是一個基於 Debian Linux 的開源 Type-1 虛擬機器管理程序，能夠託管虛擬機器和 Linux 容器 (LXC)。了解 Proxmox VE，包括其對完整 VM 和基於容器的虛擬化、叢集管理、運算和儲存選項、網路功能、監控工具和資料保護策略的支援。</block>
-  <block id="b6c6c0e5fa08f9228a133c962559f137" category="paragraph">Proxmox 虛擬環境 (VE) 支援同一主機上的完整 VM 和基於容器的虛擬化。基於核心的虛擬機器 (KVM) 和快速模擬器 (QEMU) 用於實現完整的虛擬機器虛擬化。  QEMU 是一個開源機器模擬器和虛擬化器，它使用 KVM 核心模組直接在主機 CPU 上執行客戶程式碼。  Linux 容器 (LXC) 允許像虛擬機器一樣管理容器，且資料在重新啟動後仍能保留。</block>
   <block id="b03c42f4f431aac5851917fb06aaa78e" category="inline-image-macro">Proxmox 主機上的 VM 與 LXC</block>
   <block id="035272690f13748a7a1b7b244f680c7e" category="paragraph"><block ref="035272690f13748a7a1b7b244f680c7e" category="inline-image-macro-rx" type="image"></block></block>
   <block id="8dca78f8473e3dcb0a0681b591745a79" category="inline-link-macro">Proxmox VE API 檢視器</block>
@@ -2621,7 +2534,6 @@
   <block id="8a907a15e3d3be0c513a99fb281239dd" category="inline-image-macro">管理介面</block>
   <block id="3df786d125c733994149fde0df7066f5" category="paragraph"><block ref="3df786d125c733994149fde0df7066f5" category="inline-image-macro-rx" type="image"></block></block>
   <block id="43d7592f38915466c65d991ca4894479" category="inline-link-macro">房委會經理</block>
-  <block id="8a2eb02d7b1076dddea7261b8d9e23ca" category="paragraph">如果託管節點發生故障，叢集可以監控虛擬機器和容器並在其他節點上重新啟動。需要配置虛擬機器和容器以實現高可用性 (HA)。可以透過建立群組將虛擬機器和容器託管在特定的主機子集上。 VM 或容器託管在優先順序最高的主機上。欲了解更多信息，請查看<block ref="fdacaf81a34c2d0312d03f6cdb2b9d17" category="inline-link-macro-rx"></block></block>
   <block id="744277faea6898a14635dcc0dab33c63" category="inline-image-macro">HA 組優先權</block>
   <block id="c586cac811cad3cbda5731bad80db138" category="paragraph"><block ref="c586cac811cad3cbda5731bad80db138" category="inline-image-macro-rx" type="image"></block></block>
   <block id="388a404a44d9c65940e21db460774445" category="inline-link-macro">Proxmox使用者管理</block>
@@ -2645,18 +2557,14 @@
   <block id="db0cb721d9e20427020f9c9c4ef19552" category="paragraph"><block ref="db0cb721d9e20427020f9c9c4ef19552" category="inline-image-macro-rx" type="image"></block></block>
   <block id="52f7c59184e0bb0605b4bc55d878f137" category="inline-link-macro">Proxmox VE存儲</block>
   <block id="4619b1ab80ec27f35725cb6df6da1153" category="paragraph">支援的儲存類型包括本機磁碟、NAS（SMB 和 NFS）和 SAN（FC、iSCSI、NVMe-oF 等）。有關詳細信息，請參閱<block ref="afde0246d397d819a2d97e6b3b63c2b7" category="inline-link-macro-rx"></block></block>
-  <block id="2e10fb2c50336dd90043f2be1421f94c" category="paragraph">每個儲存磁碟區都配置了允許的內容類型。  NAS 磁碟區支援所有內容類型，而 SAN 支援僅限於 VM 和容器映像。</block>
-  <block id="bb16b72a0b75b97c87e8054ad7039dbf" category="admonition">目錄儲存類型也支援所有內容類型。  SMB 連線憑證以明文形式存儲，只有 root 可以存取。</block>
   <block id="7bad07871b54f1f498683b2e233cb45f" category="inline-image-macro">NAS 的內容類型</block>
   <block id="8d6bb273e9f8b17ba2da0befcb359f1d" category="paragraph"><block ref="8d6bb273e9f8b17ba2da0befcb359f1d" category="inline-image-macro-rx" type="image"></block></block>
   <block id="a051848acad588b8060b9d9945f602a0" category="inline-image-macro">具有 SAN 的內容類型</block>
   <block id="f3cb6f07c63c24bdde9edad248f0018e" category="paragraph"><block ref="f3cb6f07c63c24bdde9edad248f0018e" category="inline-image-macro-rx" type="image"></block></block>
   <block id="75f6e72657354eed7168aea0e5894ef6" category="paragraph">若要從 Broadcom vSphere 環境匯入虛擬機，vSphere 主機也可以作為儲存設備包含在內。</block>
-  <block id="eefc3ea59c2b75b587676944283c321a" category="paragraph">Proxmox VE 支援原生 Linux 網路功能（如 Linux 橋接器或 Open vSwitch），以實作軟體定義網路 (SDN)。主機上的乙太網路介面可以綁定在一起以提供冗餘和高可用性。其他選項，請參閱<block ref="9763a7d4d26e9dea41679cb36cae802c" category="inline-link-macro-rx"></block></block>
   <block id="f413bcc154ce42952c836318ebb89df2" category="inline-image-macro">保稅網絡</block>
   <block id="6f7df3e6fe98c7bfbc45731d6cd5e2a4" category="paragraph"><block ref="6f7df3e6fe98c7bfbc45731d6cd5e2a4" category="inline-image-macro-rx" type="image"></block></block>
   <block id="b3ff996fe5c77610359114835baf9b38" category="inline-link-macro">區</block>
-  <block id="7e948d7e444e6350031acbd6045d8b78" category="paragraph">可以在叢集層級配置來賓網絡，並將變更推送到成員主機。透過區域、虛擬網路和子網路來管理分離。<block ref="24658c95512d4a42c47249a958bb1795" category="inline-link-macro-rx"></block>定義Simple、VLAN、VLAN Stacking、VXLAN、EVPN等網路類型。</block>
   <block id="12c36d047171a81e88db9805f5d685e4" category="paragraph">根據區域類型的不同，網路的行為會有所不同，並提供特定的功能、優勢和限制。</block>
   <block id="5e440154babfbc138bb100d381a9d8fe" category="paragraph">SDN 的用例範圍從每個單獨節點上的獨立專用網路到跨不同位置的多個 PVE 叢集的複雜覆蓋網路。</block>
   <block id="ed1291649ec868149f105c9194277d74" category="paragraph">在叢集範圍的資料中心 SDN 管理介面中設定 VNet 後，它可作為每個節點本地的通用 Linux 橋接器指派給虛擬機器和容器。</block>
@@ -5778,7 +5686,6 @@
   <block id="14048a9c6906a16a80b3850c6d9c0bbd" category="sidebar">NetApp Proxmox 虛擬化解決方案</block>
   <block id="87246572800d6be8b79795d62479f633" category="sidebar">關於 Proxmox VE</block>
   <block id="87e1155beb88272d1505fcb5e4c74fdf" category="sidebar">為 Proxmox VE 配置ONTAP存儲</block>
-  <block id="5dcf348ef2288572257cea3632184be0" category="sidebar">NetApp儲存與 NVMe-oF 在 Proxmox 虛擬化環境中實現突破性效能</block>
   <block id="115419981e2d6ecb42de59e03e41d1e4" category="sidebar">備份和恢復 Proxmox VE</block>
   <block id="d062595c73dd717e2a57ae177e9737f6" category="sidebar">Proxmox VE 的存儲</block>
   <block id="0828ed497dac0ff026d2636b40867344" category="sidebar">探索 NetApp 的綜合影片庫，展示跨 OpenShift、VMware 和混合多雲平台的虛擬化解決方案。每個集合都專注於特定的用例和整合場景。</block>
@@ -7679,7 +7586,6 @@
   <block id="beec6318942ca08bdda507299633ce3d" category="sidebar">查看安裝要求</block>
   <block id="b6eec573aa3c42f73db5c0d756b8af5a" category="sidebar">安裝或升級 Shift 工具包</block>
   <block id="752e67a6b4916807acf40a3d0f4d607d" category="list-text">使用SnapMirror主動同步跨故障域擴展叢集。務必檢查<block ref="8d006c87830f7172fd7400f1c17c0928" category="inline-link-rx"></block> 適用於支援的配置。</block>
-  <block id="0fa5490665357157f44ef8e560981bff" category="list-text">若要啟用 nConnect 選項，請在叢集中的任一節點上進入 shell，然後輸入 pvesm set pvenfs01 --options nconnect=4，其中 pvenfs01 是上一個步驟建立的儲存 ID。請注意，如果您打算使用連結聚合功能，請確保使用至少 NFS v4.1 版本，並設定 trunkdiscovery 選項。 pvesm set pvenfs01 --options vers=4.1,trunkdiscovery</block>
   <block id="1111f5f0bc889ddbe7d1108746f500f7" category="inline-link">NetApp災難復原</block>
   <block id="d53bea8cf04ac89e5a75253200a11c37" category="list-text"><block ref="642cb144ab5a89803899933b2b356ba6" category="inline-link-rx"></block> 利用基於儲存陣列的複製技術，自動執行某些任務，以在目標站點還原虛擬機器。</block>
   <block id="19cbafc0246850c97323cac4fb786794" category="inline-link">NetApp Disaster Recovery</block>
@@ -7942,4 +7848,441 @@
   <block id="fb1e3bc5ab58ae3d4480d4354223e858" category="paragraph">VCF 將運算、網路和儲存產品與 VMware 產品和第三方整合相結合，從而支援原生 Kubernetes 和基於虛擬機器的工作負載。軟體平台包含 VMware vSphere、NSX、Aria Suite Enterprise、VMware vSphere Kubernetes Service、HCX Enterprise、SDDC Manager 等關鍵元件，並透過 vSAN 與主機 CPU 核心連接儲存容量。NetApp ONTAP可與各種 VCF 部署模型無縫集成，無論是在本地還是在公有雲中。</block>
   <block id="d9b568558c3f68007c62a09b36720af3" category="list-text">VMware vSphere Kubernetes vSphere</block>
   <block id="dea7b388e6618290a6273870588a73d9" category="paragraph">vSphere 儲存感知 API (VASA) 讓虛擬機器管理員能夠輕鬆使用配置虛擬機器所需的任何儲存功能，而無需與儲存團隊互動。在 VASA 出現之前，虛擬機器管理員可以定義虛擬機器存儲策略，但必須與存儲管理員合作來確定合適的資料存儲，通常是透過文件或命名約定來實現的。透過 VASA，具有相應權限的 vCenter 管理員可以定義一系列儲存功能，vCenter 使用者隨後可以使用這些功能來設定虛擬機器。VM 儲存策略與資料儲存儲存功能設定檔之間的對應關係，使得 vCenter 能夠顯示可供選擇的相容資料儲存列表，並支援其他技術（例如 VCF Automation（先前稱為 Aria 或 vRealize）Automation 或 VMware vSphere Kubernetes Service）從指派的原則中自動選擇儲存。這種方法稱為基於儲存策略的管理。雖然儲存功能設定檔和策略也可以用於傳統資料存儲，但我們這裡主要關注的是vVols資料儲存。VASA 提供者 for ONTAP包含在ONTAP tools for VMware vSphere中。</block>
+  <block id="717153cec4e1f985a5646d5665c3e466" category="summary">Proxmox 虛擬環境 (VE) 與NetApp ONTAP儲存集成，為虛擬機器和容器提供共享存儲，從而實現更快的即時遷移、一致的模板和集中式備份。了解採用ONTAP儲存系統的 Proxmox VE 叢集的架構、網路和儲存配置以及部署和最佳化最佳實務。</block>
+  <block id="71912d54173e63868ff39f3d57ddd4a7" category="doc">使用NetApp ONTAP儲存的 Proxmox 虛擬環境部署指南</block>
+  <block id="6b955e5e3277238a0599bb83afe494dd" category="paragraph">Proxmox 虛擬環境 (VE) 與NetApp ONTAP儲存集成，為虛擬機器和容器提供共享存儲，從而實現更快的即時遷移、一致的模板和集中式備份。了解網路和儲存配置指南以及部署和最佳化具有ONTAP儲存系統的 Proxmox VE 叢集的最佳實務。</block>
+  <block id="06b27aefecbca100399e6c4150a592d9" category="inline-link-macro">了解 Proxmox VE 支援的儲存類型</block>
+  <block id="cf77b842b04752d66a6b43280ba1fab4" category="paragraph">有關支援的儲存類型和內容相容性的信息，請參閱 <block ref="94316c76e20549e18f485c31f8b23fef" category="inline-link-macro-rx"></block>。</block>
+  <block id="3659aa3793375dcfec74fe4ee74cce30" category="section-title">網路設定指南</block>
+  <block id="ae533bcca67ba454b2ac6df18f487713" category="paragraph">遵循以下準則可最佳化網路效能和可靠性：</block>
+  <block id="6092b24dc338729c325ebf4a00c933cf" category="list-text">確保 Proxmox VE 節點和ONTAP儲存之間有兩個冗餘的網路路徑。</block>
+  <block id="54856ff6a966d9a61533f659b2d094cc" category="list-text">使用鏈路聚合（LACP）來提高頻寬和容錯能力。</block>
+  <block id="b9f9a0ee6b66b62e83e99b172d949ea9" category="list-text">設計網路拓撲結構以避免生成樹問題。必要時可使用 RSTP 或 MSTP 等功能。</block>
+  <block id="b797da49e56a5d8db82cd1d668a6c23d" category="list-text">實施 VLAN 以隔離不同類型的流量並增強安全性。</block>
+  <block id="8a65be5328957d4c1bc7b59d97f396b5" category="list-text">在所有網路設備上配置巨型幀（MTU 9000），以提高儲存流量的效能。</block>
+  <block id="a9a3eaff04f2d36f6ab2184a3193917f" category="list-text">設定 VLAN 區域時，可考慮使用基於 Linux 橋接的 Open vSwitch (OVS)。</block>
+  <block id="5c9a0f826c633a161d6473cdc96d473b" category="section-title">儲存配置最佳實踐</block>
+  <block id="9da43746dcc74ef137825748aaa1292f" category="paragraph">遵循以下最佳實踐，優化儲存效能和可擴充性：</block>
+  <block id="f4c34ce580bddc6544b49f1d695b97d1" category="list-text">使用 ONTAP 的高階資料管理功能（例如快照和複製）來增強資料保護和復原能力。</block>
+  <block id="7bd72a8326beb3d456018eb00743a236" category="list-text">使用FlexGroup磁碟區來滿足大容量需求，以充分發揮ONTAP可擴充性的潛力。</block>
+  <block id="5677a6af37791dddd09565df95dda70d" category="list-text">在地理分佈的環境中，使用FlexCache將映像和範本分發到更靠近 Proxmox VE 節點的位置，以加快部署並實現集中管理。</block>
+  <block id="f66a10e50ab5dc4b0f43af126936bae4" category="list-text">將FlexGroup與 NFS 結合使用時，請結合使用 nConnect 或會話中繼以及 pNFS 來最佳化效能和可用性。</block>
+  <block id="7bf8685f906efbcdf52298b083787772" category="list-text">對於區塊協議，確保進行適當的分區和 LUN 掩碼，以限制只有授權的 Proxmox VE 節點才能存取。</block>
+  <block id="1469f1a87592ad516e124f2164e2bc80" category="list-text">分配足夠的儲存容量以滿足虛擬機器成長和資料需求。</block>
+  <block id="47a9c41745de1dd1bca322a8ef1e689a" category="list-text">實施儲存分層以優化效能和成本效益。</block>
+  <block id="2eaa330c50346948da259e343d717c9d" category="list-text">使用NetApp管理工具定期監控儲存效能和運作狀況。</block>
+  <block id="866f1429bf4e284b31ef2af45a224e78" category="list-text">使用NetApp Console集中管理多個ONTAP系統。</block>
+  <block id="3cccaedc95a55142f79b090e5b087d4b" category="list-text">啟用ONTAP上的勒索軟體防護功能，以防範勒索軟體攻擊。</block>
+  <block id="f6201ba3660f7df6ee6a3f90775efd7d" category="section-title">Proxmox VE 設定指南</block>
+  <block id="fa50c2f833bccda76876d28e372e1933" category="paragraph">請遵循以下準則，以最佳化 Proxmox VE 與NetApp ONTAP儲存的整合：</block>
+  <block id="529fa1810835d02be86a27f248a776c7" category="list-text">將 Proxmox VE 更新至最新穩定版本，即可享受最新功能和錯誤修復。</block>
+  <block id="7e0eb63682f72d07857dbee11da52eae" category="list-text">配置 Proxmox VE 使用NetApp ONTAP的共用儲存作為虛擬機器儲存。</block>
+  <block id="b55887e925b56d891c1e735fa9abd4fb" category="list-text">設定 Proxmox VE 叢集以實現高可用性和虛擬機器的即時遷移。</block>
+  <block id="6d0346ad41bb7695e70e89376da0b0a3" category="list-text">使用冗餘網路進行叢集通信，並專門用一個網路進行即時遷移。</block>
+  <block id="63ee5b8ddb11e74060009404cae4b0b0" category="list-text">避免在叢集中重複使用相同的虛擬機器或容器 ID，以防止衝突。</block>
+  <block id="da5b2ddeacf0fb60edc87d0400e7a829" category="list-text">在虛擬機器中使用 VirtIO SCSI 單控制器可獲得更好的效能和功能。</block>
+  <block id="35286030fb1509b87556c0edc74aefe1" category="list-text">對於 IO 需求高的虛擬機，啟用 IO 執行緒選項。</block>
+  <block id="4364135a205bdaa38a681c60ab1e243a" category="list-text">啟用虛擬機器磁碟上的丟棄/TRIM 支持，以最佳化儲存使用情況。</block>
+  <block id="19fc99af3132015e5522e795fa2d1c79" category="summary">NetApp ONTAP與 Proxmox 虛擬環境集成，透過 NAS 和 SAN 協定提供企業級儲存功能。ONTAP為虛擬化工作負載提供進階資料管理功能，包括快照、複製、複製和勒索軟體防護。</block>
+  <block id="10ab558054403b68ef73602719750791" category="doc">了解適用於 Proxmox 虛擬環境的ONTAP儲存架構</block>
+  <block id="a36349faff697489f6d389c6fe7d1435" category="paragraph">NetApp ONTAP與 Proxmox 虛擬環境 (VE) 集成，透過 NAS 和 SAN 協定提供企業級儲存功能。ONTAP為 Proxmox VE 叢集上執行的虛擬化工作負載提供進階資料管理功能，包括快照、複製、複製和勒索軟體保護。</block>
+  <block id="a40893fa754ed62d5268702b023fea91" category="section-title">解決方案架構</block>
+  <block id="b50baaaf765eecd864e92ce4b7298794" category="paragraph">此解決方案架構包含以下關鍵元件：</block>
+  <block id="ca5e9645f3d6e7af9b20afdc8c951b38" category="list-text">*Proxmox VE 叢集：* Proxmox VE 節點集群，提供虛擬化功能並管理虛擬機器 (VM) 和容器。</block>
+  <block id="3acd13592f3c3e083374c84bdf15f3a7" category="list-text">* NetApp ONTAP儲存：* 一種高效能、可擴充的儲存系統，可為 Proxmox VE 叢集提供共用儲存。</block>
+  <block id="79bd4db95c4915423668908f40c84eb9" category="list-text">*網路基礎架構：* 強大的網路設置，確保 Proxmox VE 節點和ONTAP儲存之間低延遲、高吞吐量的連接。</block>
+  <block id="9320226a9d5150be0bcd6a28a5cb01ae" category="list-text">* NetApp Console：* 用於管理多個NetApp儲存系統和資料服務的集中式管理介面。</block>
+  <block id="9154378cfd63edc965e54bbe43f5d382" category="list-text">*Proxmox備份伺服器：* 專為Proxmox VE設計的備份解決方案，可與ONTAP儲存集成，實現高效的資料保護。</block>
+  <block id="907a5037f1d2a2fae4387fb193e5cf40" category="paragraph">下圖展示了實驗室設置的高階架構：</block>
+  <block id="f4f21cad59d81408db204d5933b732e0" category="image-alt">Proxmox VE 與NetApp ONTAP架構</block>
+  <block id="441bf2417abbf6edcfdbcefc3df7cfa1" category="section-title">適用於 Proxmox VE 的ONTAP功能</block>
+  <block id="ae980ce8885fbf7acf1d88c8bc33564b" category="paragraph">ONTAP提供了一套全面的企業儲存功能，可增強 Proxmox VE 部署。這些特性涵蓋了 NAS 和 SAN 儲存架構的資料管理、保護、效率和協定支援。</block>
+  <block id="8190660e09ea1e45b457dba506960e2a" category="section-title">核心資料管理功能</block>
+  <block id="2a01a755e6ce4e1d1c71737a9aa3f94a" category="list-text">橫向擴展叢集架構</block>
+  <block id="3504287d744343fbab57bf3c9eb837e3" category="list-text">安全性身份驗證和基於角色的存取控制 (RBAC) 支持</block>
+  <block id="e357dcd608d0999f4fd0d22d628c1e42" category="list-text">零信任多管理員支持</block>
+  <block id="4edf6e698ad5654f9f977c350d7b388d" category="list-text">安全的多租戶</block>
+  <block id="d462ee5e556e8a6f52aadccd6a44408f" category="list-text">使用SnapMirror進行資料複製</block>
+  <block id="52b217f3b30701b07e050588e0dcf436" category="list-text">具有快照的時間點副本</block>
+  <block id="c0569198fd4d07f3ee0db660c2a449a6" category="list-text">節省空間的克隆</block>
+  <block id="cd19ac5dd40fc04e395a1194f4c67358" category="list-text">儲存效率特性包括重複資料刪除和壓縮</block>
+  <block id="26522dabb1c20a80012843c18a450179" category="list-text">SnapLock合規性</block>
+  <block id="bf2c4d1b6f250e1025706c8b26745256" category="list-text">防篡改快照副本鎖定</block>
+  <block id="2f29242c67162059c47a636445acfe45" category="list-text">具備自主威脅偵測功能的勒索軟體防護</block>
+  <block id="3a60320908bec6cf04cc5af1a40becc7" category="list-text">靜態資料和傳輸中資料加密</block>
+  <block id="19fb140ec3a4697f691495c1d229cc08" category="list-text">FabricPool將冷資料分層儲存到物件儲存中</block>
+  <block id="ca8b7361121b2aa4beff244ffa637ed7" category="list-text">NetApp Console和Data Infrastructure Insights集成</block>
+  <block id="13fca977f4741f68ca28bea421b6a874" category="list-text">Microsoft 卸載資料傳輸 (ODX)</block>
+  <block id="96c2595f2b929ca121990caf732e88aa" category="section-title">NAS協定特性</block>
+  <block id="ac56804d5b8dbc71166d1248bc8aa836" category="list-text">FlexGroup磁碟區為橫向擴充的 NAS 容器提供高效能、負載平衡和可擴充性。</block>
+  <block id="f677130b07607e93623cce1c909b60e7" category="list-text">FlexCache將資料在全球分發，同時提供本地讀寫存取。</block>
+  <block id="bdca0eff3367a6a92f85131ea7f09dad" category="list-text">多重協定支援使得相同資料可以透過 SMB 和 NFS 存取。</block>
+  <block id="8f90ad773ee7f9456f94d6d0cc78c438" category="list-text">NFS nConnect 允許每個連線建立多個 TCP 會話，從而提高網路吞吐量並利用高速網路卡。</block>
+  <block id="463f8d4e4d4926dac7e9794b9936f945" category="list-text">NFS會話中繼可提供更高的資料傳輸速度、高可用性和容錯能力。</block>
+  <block id="02055e91e6b212bcaedf6e806564e680" category="list-text">SMB多通道可提供更高的資料傳輸速度、更高的可用性和容錯能力。</block>
+  <block id="d20af3c93373c8356839838c7d6403db" category="list-text">與 Active Directory 和 LDAP 整合以實現檔案權限</block>
+  <block id="d3d74309e3547e60cd6d74d5e1987b84" category="list-text">透過 TLS 使用 NFS 建立安全連線。</block>
+  <block id="a37651b30416370f0a4195b088ea354d" category="list-text">NFS Kerberos 驗證支持</block>
+  <block id="0b83b86e4ee5649805436ac8c8f6d6e8" category="list-text">透過 RDMA 使用 NFS 實現低延遲訪問</block>
+  <block id="a25d25417244e82a38135471b34856ad" category="list-text">Windows 與 Unix 身分之間的名稱映射</block>
+  <block id="0d0bfa6500fbeb5f41beb15d74b8ce91" category="list-text">具備內建威脅偵測功能的自主勒索軟體防護</block>
+  <block id="5733b70b60062bc7e61a0045b0cfab23" category="list-text">文件系統分析，取得容量和使用情況洞察</block>
+  <block id="a98bace54e6eacffd1fc34c924459cd6" category="section-title">SAN協定特性</block>
+  <block id="142a345fb07b965fdd28758df1aa724e" category="list-text">使用SnapMirror主動同步功能將叢集擴展到故障域（始終檢查<block ref="8d006c87830f7172fd7400f1c17c0928" category="inline-link-rx"></block> （適用於支援的配置）</block>
+  <block id="56eb96d0112fcf96ec2eec1d4c445216" category="list-text">ASA型號提供主動-主動多路徑和快速路徑故障轉移。</block>
+  <block id="993fe9f506f39001b2c74d6796d15ff6" category="list-text">支援 FC、iSCSI 和 NVMe-oF 協議</block>
+  <block id="2a359e047ac0c25d74012f97948daa66" category="list-text">iSCSI CHAP 相互認證</block>
+  <block id="1a3e87714845807b8327b4dbc2172726" category="list-text">選擇性 LUN 對映和連接埠集以增強安全性</block>
+  <block id="be0590d55642ec144128418d213d5fa8" category="summary">使用ONTAP為 Proxmox 虛擬環境設定邏輯磁碟區管理器 (LVM) 和光纖通道。此程序包括多路徑配置、LUN 配置、igroup 設定和共用儲存的磁碟區組建立。</block>
+  <block id="1eb9e6e4b2414e229ba2dbcd39fe4796" category="doc">為 Proxmox VE 配置 LVM 和 FC</block>
+  <block id="76f37e0996dab69145742e2a75986056" category="paragraph">使用光纖通道協定和NetApp ONTAP配置 Proxmox 虛擬環境 (VE) 主機之間的共用儲存的邏輯磁碟區管理器 (LVM)。這種配置能夠實現高效能、低延遲的區塊級儲存存取。</block>
+  <block id="aa80161d712190fd4adf442955343f47" category="section-title">初始虛擬化管理員任務</block>
+  <block id="1e6a8381a9047107cf613d278aba2095" category="paragraph">完成這些初始任務，為 Proxmox VE 主機準備 FC 連接，並收集儲存管理員所需的必要資訊。</block>
+  <block id="04adb6570d294bffbf6bd9d64d241568" category="list-text">確認是否有兩個HBA介面可用。</block>
+  <block id="5e8ffc8a37bffc4319f9502608ff0d09" category="list-text">確保所有 Proxmox VE 主機上都安裝了 multipath-tools，並且開機啟動。</block>
+  <block id="f7c12ea1f0cb3e57d137b2e5cce711e1" category="list-text">收集所有 Proxmox VE 主機的 WWPN 並將其提供給儲存管理員。</block>
+  <block id="23eebb1148810d58d22f0f1dde752583" category="section-title">儲存管理員任務</block>
+  <block id="ae042a5618679644a819ac58a28114ef" category="paragraph">如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。</block>
+  <block id="763fc3dfd4ea8300672ae7948a1a9fca" category="list-text">確保SVM可用且已啟用FC協定。跟隨 <block ref="7c79a8d96ccab5e00ffe5a51372cb5c5" category="inline-link-macro-rx"></block>。</block>
+  <block id="0a6a83d62edac699a685a5110adc5b5a" category="list-text">每個控制器會建立兩個專用於 FC 的 LIF。</block>
+  <block id="4a5e89db07ee92045ddc5ac57264b75b" category="inline-image-macro">FC介面詳情</block>
+  <block id="9ca441070522dd2f1d54b6ab432b7332" category="paragraph"><block ref="9ca441070522dd2f1d54b6ab432b7332" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d55490705ccca6cce7810fa807fc74cd" category="list-text">建立 igroup 並填入主機 FC 發起程序。</block>
+  <block id="1247a43611c0d600007445125567c7d8" category="list-text">在 SVM 上建立所需大小的 LUN，並將其呈現給上一個步驟所建立的 igroup。確保在ASA系統的「安全性」標籤上啟用反勒索軟體保護，並在AFF/ FAS系統的「磁碟區安全」標籤上啟用反勒索軟體保護。</block>
+  <block id="4d96faf61f4af2b33014302c604ee549" category="inline-image-macro">lun詳情</block>
+  <block id="c9546f4d399f52fa0fbc3b1d384bbe38" category="paragraph"><block ref="c9546f4d399f52fa0fbc3b1d384bbe38" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="52a9fe54f6f0987d57244a9e9a584326" category="list-text">通知虛擬化管理員 LUN 已建立。</block>
+  <block id="fff3b3f890629573291036c47675fb51" category="section-title">最終虛擬化管理員任務</block>
+  <block id="0b9966cc61b48fefb89683e03665283b" category="paragraph">完成以下任務，將 LUN 設定為 Proxmox VE 中的共用 LVM 儲存體。</block>
+  <block id="bef481c56d44669542f9592dbc93a220" category="list-text">在叢集中的每個 Proxmox VE 主機上導航至 shell，並驗證磁碟是否可見。</block>
+  <block id="bd00383a7201e36456d1f590d62e0044" category="list-text">確認設備是否出現在多路徑清單中。</block>
+  <block id="6d510c6922b25c5f62ecc6283da0444c" category="list-text">建立卷宗組。</block>
+  <block id="36fae2df11fedcbc9c916a9bb5557217" category="list-text">使用管理使用者介面<block ref="386c071bd7898138d6219d21f97e168d" prefix=" " category="inline-code"></block>按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“LVM”。</block>
+  <block id="d7d5844de5806307ad0b548bbef798ae" category="paragraph"><block ref="d7d5844de5806307ad0b548bbef798ae" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="95d11b5b041fc941e8e2f0ea2d594698" category="list-text">提供儲存 ID 名稱，選擇現有磁碟區組，然後選擇剛剛使用 CLI 建立的磁碟區組。勾選共享選項。使用 Proxmox VE 9 及更高版本，啟用下列功能：<block ref="e4ea2fd9716d27c38026f7d0f3d6e930" prefix=" " category="inline-code"></block> 啟用「進階」複選框後，此選項才會顯示。</block>
+  <block id="061e765cafe99eabc6be2f0478c129a9" category="paragraph"><block ref="061e765cafe99eabc6be2f0478c129a9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="19950f6e3bc3de2aaad56c5e8fa5220e" category="list-text">下面展示了使用 FC 的 LVM 的範例儲存設定檔：</block>
+  <block id="697a69a5e75f0202c145f389c7535a05" category="inline-image-macro">lvm fc 配置</block>
+  <block id="ea932a09c9e28c737efda1ae0504754c" category="paragraph"><block ref="ea932a09c9e28c737efda1ae0504754c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="9d9c1fddf3c9e4922686e88fa2258289" category="paragraph">在 Proxmox VE 9 及更高版本中，儲存設定檔包含以下附加選項<block ref="98929f151ad41bfc2a1e84411987a9ee" prefix=" " category="inline-code"></block> 什麼時候<block ref="e4ea2fd9716d27c38026f7d0f3d6e930" prefix=" " category="inline-code"></block> 已啟用。</block>
+  <block id="4a8999b9648324b45ad2e400627fc656" category="summary">使用ONTAP為 Proxmox 虛擬環境設定 iSCSI 邏輯磁碟區管理器 (LVM)。此程序包括多路徑配置、LUN 配置、igroup 設定和共用儲存的磁碟區組建立。</block>
+  <block id="146f3c6e0be468f57c4faed2d4ecc77d" category="doc">為 Proxmox VE 配置 iSCSI 的 LVM</block>
+  <block id="c89e85c39782dcb55033785f58cf956d" category="paragraph">使用 iSCSI 協定和NetApp ONTAP配置 Proxmox 虛擬環境 (VE) 主機之間的共用儲存的邏輯磁碟區管理器 (LVM)。此配置支援透過標準乙太網路進行區塊級儲存訪問，並支援多路徑。</block>
+  <block id="5981d4de8543a8791c6bceeefb2165ac" category="paragraph">完成這些初始任務，為 Proxmox VE 主機準備 iSCSI 連接，並收集儲存管理員所需的必要資訊。</block>
+  <block id="7cdb9b45234d285318cb986d4d2a593f" category="list-text">確認兩個 Linux VLAN 介面可用。</block>
+  <block id="86e07f0d4894901e801e1ec993f71964" category="list-text">收集所有 Proxmox VE 主機的 iSCSI 主機 IQN，並將其提供給儲存管理員。</block>
+  <block id="2122c33556de1dbae33223ccafc71df3" category="list-text">確保SVM可用且已啟用iSCSI協定。跟隨 <block ref="7c79a8d96ccab5e00ffe5a51372cb5c5" category="inline-link-macro-rx"></block>。</block>
+  <block id="48590fe3408a0ed194b7d763a5f58b44" category="list-text">每個控制器會建立兩個專用於 iSCSI 的 LIF。</block>
+  <block id="851413bf6fa6ef971ec8791be965f7e9" category="paragraph"><block ref="851413bf6fa6ef971ec8791be965f7e9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e2975f34bb0c193ad8c157c8c19f7a1a" category="list-text">建立 igroup 並填入主機 iSCSI 發起程序。</block>
+  <block id="022ff6b8a2a7f0f8a870dcecfe149e64" category="list-text">在 SVM 上建立所需大小的 LUN，並將其呈現給上一個步驟所建立的 igroup。確保在ASA系統的安全性標籤中啟用反勒索軟體保護。對於AFF/ FAS系統，請確保在磁碟區的安全性標籤上啟用反勒索軟體保護。</block>
+  <block id="508651d2a8dc6c48c0b3acac0462c605" category="paragraph"><block ref="508651d2a8dc6c48c0b3acac0462c605" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="cd76c01fc90f38590f1723a0e3b6c5e3" category="paragraph">完成下列任務，將 iSCSI LUN 設定為 Proxmox VE 中的共用 LVM 儲存。</block>
+  <block id="30f170d7ac8b903032f54b8a8a70fb1a" category="list-text">使用管理使用者介面<block ref="386c071bd7898138d6219d21f97e168d" prefix=" " category="inline-code"></block>按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“iSCSI”。</block>
+  <block id="0012d2cd0a2a8a1dbb0aef51dc4f23ad" category="paragraph"><block ref="0012d2cd0a2a8a1dbb0aef51dc4f23ad" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="f0a22f2f132728d81db5437dee23bfa8" category="list-text">請提供儲存ID名稱。當沒有通訊問題時， ONTAP的 iSCSI LIF 位址應該能夠選擇目標。如果不想直接向來賓虛擬機器提供 LUN 存取權限，請取消選取該選項。</block>
+  <block id="5ba91924ef364d38fecaf216c8dab9e4" category="paragraph"><block ref="5ba91924ef364d38fecaf216c8dab9e4" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1577a3615ca616fed53572720ac6bd50" category="list-text">點擊“新增”，然後選擇 LVM。</block>
+  <block id="bc036189fb80155d7f4f1f2c46fc63f3" category="paragraph"><block ref="bc036189fb80155d7f4f1f2c46fc63f3" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="c98a8eed0f0100099abc956f91b7a778" category="list-text">提供儲存 ID 名稱，並選擇與上一個步驟建立的 iSCSI 儲存相符的基本儲存。選擇基礎磁碟區的 LUN，並提供磁碟區組名稱。請確保已選擇共享選項。使用 Proxmox VE 9 及更高版本，啟用下列功能：<block ref="e4ea2fd9716d27c38026f7d0f3d6e930" prefix=" " category="inline-code"></block> 啟用「進階」複選框後，此選項才會顯示。</block>
+  <block id="832db4bde43bc86202aac28903f6ad92" category="paragraph"><block ref="832db4bde43bc86202aac28903f6ad92" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="b1444c57e983d7ad5d6a4e77d854a17d" category="list-text">下面展示了使用 iSCSI 的 LVM 的範例儲存設定檔：</block>
+  <block id="a528f7490023ea29b4669401b45ee9ac" category="paragraph"><block ref="a528f7490023ea29b4669401b45ee9ac" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="64ccc22e2bdf3bbf557cb20759f28938" category="summary">使用ONTAP為 Proxmox 虛擬環境設定 NFS 儲存。此過程包括啟用 SVM、建立 LIF、配置匯出策略、建立磁碟區以及設定 nConnect 或會話中繼以實現容錯和效能。</block>
+  <block id="5408a39bf56f122d960a359ee9d6e87c" category="doc">為 Proxmox VE 配置 NFS 存儲</block>
+  <block id="a12cea73407c9f25953e7a79a87c4cee" category="paragraph">使用NetApp ONTAP為 Proxmox 虛擬環境 (VE) 配置 NFS 儲存。使用 NFS v4.1 或更高版本進行會話中繼，可提高儲存系統的容錯能力和效能，並支援多個網路連線。</block>
+  <block id="ffe16d29c4eb0209e7b18407a1993121" category="paragraph">ONTAP支援 Proxmox VE 支援的所有 NFS 版本。使用 <block ref="be091303111d9932d160becb02a7fe79" category="inline-link-macro-rx"></block> 為了提高容錯能力和性能。會話中繼需要 NFS v4.1 或更高版本。</block>
+  <block id="3955ef04aa51c2e0e6fde4194ac0504d" category="paragraph">如果您是ONTAP新手，請使用系統管理員介面完成這些任務。</block>
+  <block id="7f12cfc27b26c0f4b3c2c2e43847345e" category="paragraph">完成以下任務，即可在ONTAP上配置 NFS 存儲，以便與 Proxmox VE 一起使用。</block>
+  <block id="4ad05868a0348bf5d9786bb674ba267a" category="list-text">為 NFS 啟用 SVM。請參閱 <block ref="4558e9caf9018526f2d14e6401a7eb7a" category="inline-link-macro-rx"></block>。</block>
+  <block id="dc4e54f2917ad1cc41f5b674f0e1d0e6" category="list-text">每個控制器至少創建兩個 LIF。請依照文件中的步驟操作。作為參考，這裡是實驗室中使用的 LIF 的螢幕截圖。</block>
+  <block id="f7ec57376cf78753cb0c6d09e09ce076" category="paragraph"><block ref="f7ec57376cf78753cb0c6d09e09ce076" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="03c112a6a6f1c95bc7e361b519044f43" category="list-text">建立或更新 NFS 匯出策略，以提供對 Proxmox VE 主機 IP 位址或子網路的存取權限。請參閱 <block ref="b6cdedc51193f9caaca77e2632283688" category="inline-link-macro-rx"></block> 和 <block ref="b5d322c6e909917ad1a552e8b76cf85d" category="inline-link-macro-rx"></block>。</block>
+  <block id="f07336c866bbd0097ec629a2de9e9bc9" category="inline-link-macro">在 SVM 上啟用 pNFS</block>
+  <block id="f2053e4f5886865cad53ad58fdb07c9a" category="list-text"><block ref="4f9b59515117e496741261619ceb2f90" category="inline-link-macro-rx"></block>。對於大容量需求（&gt;100TB），請勾選將資料分散到叢集中的選項以使用FlexGroup。如果使用FlexGroup，請考慮在 SVM 上啟用 pNFS 以獲得更好的效能，具體操作如下： <block ref="854bcee8457651505ac814a9db484771" category="inline-link-macro-rx"></block>。使用 pNFS 時，請確保 Proxmox VE 主機能夠存取所有控制器（資料 LIF）。請確保該磁碟區已啟用反勒索軟體保護。</block>
+  <block id="5b85bd34b87b21479d3b54bb923ed667" category="paragraph"><block ref="5b85bd34b87b21479d3b54bb923ed667" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="390ac9fcfe700a0c3e942b08f13017b0" category="inline-link-macro">將導出策略指派給磁碟區</block>
+  <block id="130b4f41b86a78faa9dc8db12c0acfec" category="list-text"><block ref="0c3e7cf7e6336e2084bd23c8ab5c2567" category="inline-link-macro-rx"></block>。</block>
+  <block id="d9451a178b819db5d63461f8c116f894" category="paragraph"><block ref="d9451a178b819db5d63461f8c116f894" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="0819326a32eac239cb2051b416669759" category="list-text">通知虛擬化管理員 NFS 磁碟區已準備就緒。</block>
+  <block id="9042dead9e6401289295bcf9bcd6f3f3" category="section-title">虛擬化管理員任務</block>
+  <block id="f914c440ed52b7ac6ff15edb4c4ba1c0" category="paragraph">完成以下任務，將 NFS 磁碟區新增為 Proxmox VE 中的存儲，並配置 nConnect 或會話中繼以提高效能。</block>
+  <block id="af26d6b3b68b8b576668f1c08c7907dc" category="list-text">為了實現容錯，請確保至少有兩個介面配置在不同的 VLAN 中。使用網卡綁定​​。</block>
+  <block id="ac30168229098c3bc48cfb800034c5ff" category="list-text">使用管理使用者介面<block ref="1d8a0c481f504f690c316fdd4a102c54" prefix=" " category="inline-code"></block>按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“NFS”。</block>
+  <block id="13758d2a861c6420de8503e54adad2b1" category="paragraph"><block ref="13758d2a861c6420de8503e54adad2b1" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="881e6d44602be20f82da4f9e1bf023b9" category="list-text">請輸入詳細資訊。提供伺服器資訊後，NFS 匯出內容應該會填入。從清單中選擇並選擇內容選項。</block>
+  <block id="c9fb66acfa38ff4a2372f359eea5862a" category="paragraph"><block ref="c9fb66acfa38ff4a2372f359eea5862a" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d15a5eb195dc35c517b605a1293a0fe2" category="list-text">若要啟用 nConnect 選項，請在任意叢集節點上開啟 shell 並執行下列命令，其中<block ref="37f01c384681246b3a9bb8b414e7a8e8" prefix=" " category="inline-code"></block> 這是上一步建立的儲存 ID：</block>
+  <block id="f33b0855e0c38d4b2bc243e1d4a29e85" category="paragraph">若要使用會話中繼，請確保使用 NFS v4.1 並設定 trunkdiscovery 和 max_connect 選項：</block>
+  <block id="c597679b63f5b76246b0333c64834e00" category="list-text">下面顯示的是已配置儲存的 /etc/pve/storage.cfg 檔案的內容：</block>
+  <block id="b53457dfc571fe98017812a0f84ef394" category="inline-image-macro">NFS 儲存設定檔</block>
+  <block id="f37cf4f6d6dbb753b768f3143991098e" category="paragraph"><block ref="f37cf4f6d6dbb753b768f3143991098e" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="f36d39485c1b62b6f80b179132f1dd7e" category="list-text">若要驗證 nConnect 選項是否已設置，請執行<block ref="e2ceece4f96cddcbbae5e7b846bbd74f" prefix=" " category="inline-code"></block> 在任何 Proxmox VE 主機上，檢查是否存在多個到 NFS 伺服器 IP 的連線。若要驗證 pNFS 是否已啟用，請執行<block ref="8a92f0e754bc887dcd9163230c1af4a1" prefix=" " category="inline-code"></block> 並檢查與佈局相關的指標。根據資料流量，應該可以看到與資料 LIF 的多個連接。</block>
+  <block id="92e11e6a0e0514cf2736d21e47660a16" category="admonition">在會話中繼中，nconnect 選項僅在一個中繼介面上設定。對於 pNFS，nconnect 選項設定在元資料和資料介面上。對於生產環境，請使用 nConnect 或會話中繼，不要同時使用兩者。</block>
+  <block id="5ac66d74b38ed8fdb2f45edd84da1992" category="summary">使用ONTAP為 Proxmox 虛擬環境設定基於光纖通道的 NVMe 邏輯磁碟區管理器 (LVM)。此過程包括 nvme-cli 安裝、命名空間配置、子系統設定以及為共用儲存建立磁碟區組。</block>
+  <block id="41f55f0296c7b4511fffdd08b47da70f" category="doc">為 Proxmox VE 配置 NVMe/FC 的 LVM</block>
+  <block id="f42395709dfd878fc481d11a9053d6b0" category="paragraph">使用NetApp ONTAP透過光纖通道協定配置 Proxmox 虛擬環境 (VE) 主機之間的共用儲存的邏輯磁碟區管理器 (LVM)。此配置採用現代 NVMe 協議，提供低延遲的高效能區塊級儲存存取。</block>
+  <block id="8b21c3e0a14b44eb7ff3c31a24459b93" category="paragraph">完成這些初始任務，為 Proxmox VE 主機準備 NVMe/FC 連接，並收集儲存管理員所需的必要資訊。</block>
+  <block id="ca705d2f0368c95e5079da04e62bde83" category="list-text">在叢集中的每個 Proxmox 主機上，執行以下命令來收集 WWPN 資訊並驗證 nvme-cli 軟體包是否已安裝。</block>
+  <block id="d985a6fbcfbe393df03f57368e7f04fd" category="list-text">將收集到的主機 NQN 和 WWPN 資訊提供給儲存管理員，並請求所需大小的 NVMe 命名空間。</block>
+  <block id="2ec446f10b7b466ea6a7401bc4407402" category="list-text">確保SVM可用且已啟用NVMe協定。請參閱 <block ref="dff9a6cc2313f520177d7aee32699621" category="inline-link-macro-rx"></block>。</block>
+  <block id="c8bbdfd862a2945db0df1f19e39be37f" category="paragraph"><block ref="c8bbdfd862a2945db0df1f19e39be37f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="3e81c631da00b7287028256b42d7f3c0" category="list-text">建立子系統並指派主機 NQN（如果使用 CLI）。請點擊上方連結查看詳情。</block>
+  <block id="b20376398e0425f815da0c982b56b96b" category="list-text">請確保在安全性標籤中啟用反勒索軟體保護。</block>
+  <block id="8d9e6709bc2c4a996ae2505a1837dd74" category="inline-image-macro">反勒索軟體狀態</block>
+  <block id="7e3d11ff5a9754f504115873fa5b8542" category="paragraph"><block ref="7e3d11ff5a9754f504115873fa5b8542" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="8e1915f160c665abb406f1d69d7ae8b8" category="list-text">通知虛擬化管理員 NVMe 命名空間已建立。</block>
+  <block id="0aa2cfdeb5bc4ab56d6ea2029cc23ab2" category="paragraph">完成以下任務，將 NVMe 命名空間配置為 Proxmox VE 中的共用 LVM 儲存體。</block>
+  <block id="0f93bacf666d562f31b0f48d7dd89b6c" category="list-text">在叢集中的每個 Proxmox VE 主機上導航至 shell，並驗證新命名空間是否可見。</block>
+  <block id="9d114ffdfecca566cc7ee4fc4888f2ec" category="list-text">檢查命名空間詳細資訊。</block>
+  <block id="10c6aa066caa502e8483f90016865ed9" category="paragraph"><block ref="10c6aa066caa502e8483f90016865ed9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="9087e47a74029bf1bb0870c502fd2833" category="paragraph"><block ref="9087e47a74029bf1bb0870c502fd2833" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a5581c5b277b9844438e59ab8e05e126" category="list-text">下面展示了一個使用 NVMe/FC 的 LVM 儲存設定檔範例：</block>
+  <block id="bed86c62d796031a76280544b8c976e3" category="inline-image-macro">lvm on nvme fc 配置</block>
+  <block id="a417c8e7306c5ccc1d8104c78d525704" category="paragraph"><block ref="a417c8e7306c5ccc1d8104c78d525704" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="102ce65e93c70b9a094e38698500b8de" category="summary">使用ONTAP為 Proxmox 虛擬環境設定基於 TCP 的 NVMe 邏輯磁碟區管理器 (LVM)。此過程包括 nvme-cli 安裝、發現配置、命名空間配置、子系統設定以及為共用儲存建立磁碟區組。</block>
+  <block id="609fae5f682bba5d87688cb321bc692a" category="doc">為 Proxmox VE 配置 LVM 與 NVMe/TCP</block>
+  <block id="83e7752199eb40500b84061e33eb0459" category="paragraph">使用NetApp ONTAP透過 TCP 協定的 NVMe，為 Proxmox 虛擬環境 (VE) 主機之間的共用儲存配置邏輯磁碟區管理器 (LVM)。此配置使用現代 NVMe 協議，透過標準乙太網路提供高效能區塊級儲存存取。</block>
+  <block id="d4fdf4bace26ec8756d1b6844d31e249" category="paragraph">完成這些初始任務，為 Proxmox VE 主機準備 NVMe/TCP 連接，並收集儲存管理員所需的必要資訊。</block>
+  <block id="0a7426811b0537a09a1fe8eb8377c003" category="list-text">在叢集中的每個 Proxmox 主機上，執行以下命令來收集主機啟動器資訊。</block>
+  <block id="5c9b16d8bdb8eb978d870e6c1c29d3fd" category="list-text">將收集到的主機 NQN 資訊提供給儲存管理員，並要求所需大小的 NVMe 命名空間。</block>
+  <block id="03e56e78a2d47700eb736d3487f96a5b" category="paragraph"><block ref="03e56e78a2d47700eb736d3487f96a5b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="52a8a3811616e625ec996637915ed52b" category="list-text">在叢集中的每個 Proxmox VE 主機上導航至 shell，並建立 /etc/nvme/discovery.conf 檔案。請根據您的環境更新內容。</block>
+  <block id="5751e95397fd76bbebd02b4eba337fb9" category="list-text">登入NVMe子系統。</block>
+  <block id="11c3e030856062ed170af892dbd948c6" category="paragraph"><block ref="11c3e030856062ed170af892dbd948c6" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="eb553b46b5eb4740fa8261f0dcff8c70" category="paragraph"><block ref="eb553b46b5eb4740fa8261f0dcff8c70" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="24c0cde095ae8d69f868dc697633a3a9" category="list-text">下面展示了一個使用 NVMe/TCP 的 LVM 儲存設定檔範例：</block>
+  <block id="87a33b6a34faa6e50997fb4f8530cf39" category="paragraph"><block ref="87a33b6a34faa6e50997fb4f8530cf39" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="dd7628eba8dd2194cea5d0bbb3e629e8" category="admonition">nvme-cli 軟體包包含 nvmef-autoconnect.service，啟用該服務可在啟動時自動連線至目標。更多詳情請參閱 nvme-cli 文件。</block>
+  <block id="9e46355f7564cd0b0f3affb995f0ce4a" category="summary">使用ONTAP為 Proxmox 虛擬環境設定 SMB/CIFS 儲存。此過程包括啟用 SVM、建立 LIF、設定 Active Directory、建立磁碟區以及設定多通道以實現容錯和增強效能。</block>
+  <block id="7a0b9f92cd7a96bd6c3c95d8412b4805" category="doc">為 Proxmox VE 配置 SMB/CIFS 存儲</block>
+  <block id="8ea80c4b77d6561da3558bb1920f868f" category="paragraph">使用NetApp ONTAP為 Proxmox 虛擬環境 (VE) 配置 SMB/CIFS 儲存。SMB 多通道透過多個網路連接儲存系統，提供容錯能力並提升效能。</block>
+  <block id="295134aacf9704826b68cae1848eee05" category="paragraph">SMB/CIFS 檔案共用需要儲存管理員和虛擬化管理員進行設定。更多詳情請參閱 <block ref="6375b984c70daf4d4201c589c399ea61" category="inline-link-macro-rx"></block>。</block>
+  <block id="23f88a7ef22e5c68b69cccf050a42465" category="admonition">密碼以明文文件形式保存，只有root用戶才能存取。請參閱 <block ref="8bd73bdf88f27d5527b75b8952644346" category="inline-link-macro-rx"></block>。</block>
+  <block id="906309de03e2cb6b0664a262f0b03dff" category="list-text">為 SMB 啟用 SVM。跟隨 <block ref="229aa9d5f3d3b9a2dc53784d0a93d1c3" category="inline-link-macro-rx"></block> 了解更多。</block>
+  <block id="8cf66da667fb908f78b8325ec63baaf9" category="list-text">每個控制器至少創建兩個 LIF。請依照文件中的步驟操作。作為參考，這裡附上此解決方案中使用的 LIF 的螢幕截圖。</block>
+  <block id="0982370bb3e60e4a98723ad18b1d76f5" category="paragraph"><block ref="0982370bb3e60e4a98723ad18b1d76f5" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="41a98967ddbba66dcd568a2a2c3023d0" category="list-text">配置基於 Active Directory 或工作組的身份驗證。請依照文件中的步驟操作。</block>
+  <block id="0bb345beecefa1bce0e364cc561dc678" category="paragraph"><block ref="0bb345beecefa1bce0e364cc561dc678" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="30676277aaaf48cb88b3bcc24cc61649" category="list-text">建立卷。勾選「將資料分佈到叢集中」選項以使用FlexGroup。請確保該磁碟區已啟用反勒索軟體保護。</block>
+  <block id="8225e8890d9d8a29f5f5adfa0e430256" category="paragraph"><block ref="8225e8890d9d8a29f5f5adfa0e430256" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="c94bd5b87bec7281cc01a592e3020e86" category="paragraph"><block ref="c94bd5b87bec7281cc01a592e3020e86" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="9a9010634e8be1de754152d4c2a81d4e" category="list-text">向虛擬化管理員提供 SMB 伺服器、共用名稱和憑證。</block>
+  <block id="f3b67c19ea9ebb252007974637c01fd4" category="paragraph">完成以下任務，將 SMB 共用新增為 Proxmox VE 中的存儲，並啟用多通道以提高效能和容錯能力。</block>
+  <block id="821aa8d98591db1acab8f4de0df00cbb" category="list-text">收集用於共享身份驗證的 SMB 伺服器、共享名稱和憑證。</block>
+  <block id="7e43ab28e5e37f90aee8e86494f21642" category="list-text">為了實現容錯，請確保至少有兩個介面配置在不同的 VLAN 中。確認網卡支援 RSS。</block>
+  <block id="764574652f3695b0c5e875db312571f3" category="list-text">使用管理使用者介面<block ref="1d8a0c481f504f690c316fdd4a102c54" prefix=" " category="inline-code"></block>按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“SMB/CIFS”。</block>
+  <block id="cd7285bdaa838b39b0443d35379ed7eb" category="paragraph"><block ref="cd7285bdaa838b39b0443d35379ed7eb" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="4881f8566cbda1b0fb6432af7e77ef59" category="list-text">請輸入詳細資訊。共享名稱應自動填入。選擇所有內容類型，然後按一下「新增」。</block>
+  <block id="0184159f1acf42f13b08c65212a0b91d" category="paragraph"><block ref="0184159f1acf42f13b08c65212a0b91d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="29defc5047e8c90b7e204df6d35aa0c8" category="list-text">若要啟用多通道選項，請在任意叢集節點上開啟 shell 並執行以下命令，其中<block ref="37f01c384681246b3a9bb8b414e7a8e8" prefix=" " category="inline-code"></block> 這是上一步建立的儲存 ID：</block>
+  <block id="c2bbcde21c2adacecf05d362ead16942" category="paragraph"><block ref="c2bbcde21c2adacecf05d362ead16942" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="8b73be484cf4e706b6e10bb76171874f" category="paragraph"><block ref="8b73be484cf4e706b6e10bb76171874f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="6e658ed941818cba5d886abb6019e719" category="summary">使用 NAS 協定（NFS、SMB）和 SAN 協定（FC、iSCSI、NVMe）為 Proxmox 虛擬環境 (VE) 提供ONTAP儲存。選擇合適的協定特定步驟來設定 Proxmox VE 叢集的共用儲存。</block>
+  <block id="96137f90fac3cbde9d00d592152fc76a" category="doc">了解 Proxmox VE 與NetApp ONTAP的儲存協議</block>
+  <block id="6527280d422ef04479aa43ab1ea5da9d" category="paragraph">確保 Proxmox VE 主機具有 FC、乙太網路或其他受支援的接口，並透過電纜連接到交換機，從而與ONTAP邏輯介面通訊。務必檢查<block ref="8d006c87830f7172fd7400f1c17c0928" category="inline-link-rx"></block> 適用於支援的配置。範例場景的建立基於以下假設：每個 Proxmox VE 主機上都有兩張高速網路介面卡，這兩張卡連接在一起以建立綁定接口，從而實現容錯和效能。所有網路流量（包括主機管理、虛擬機器/容器流量和儲存存取）均使用相同的上行鏈路連接。當有更多網路介面可用時，請考慮將儲存流量與其他類型的流量分開。</block>
+  <block id="e2a66906f9d3994bc3fa9ae36d784d75" category="inline-link-macro">了解 Proxmox VE 的ONTAP儲存架構</block>
+  <block id="f084e36d4e9fdb12a7b4309ffc29d65d" category="paragraph">有關ONTAP儲存架構和支援的儲存類型的信息，請參閱 <block ref="a66068d7a1b0fc2e652cfb1c1f1e4fca" category="inline-link-macro-rx"></block> 和 <block ref="94316c76e20549e18f485c31f8b23fef" category="inline-link-macro-rx"></block>。</block>
+  <block id="0d1477d236cf89083fdcdf2e1a60f232" category="admonition">當使用 LVM 和 SAN 協定（FC、iSCSI、NVMe-oF）時，磁碟區組可以包含多個 LUN 或 NVMe 命名空間。在這種情況下，所有 LUN 或命名空間都必須屬於同一個一致性群組，以確保資料完整性。我們不支援跨越多個ONTAP SVM 的磁碟區組。每個磁碟區組必須由同一 SVM 中的 LUN 或命名空間建立。</block>
+  <block id="068aca4640078e2903e02fdc90d7726a" category="section-title">選擇儲存協議</block>
+  <block id="993142e325ed95ef932a5b9d757ced69" category="paragraph">選擇符合您環境和要求的協議：</block>
+  <block id="54e91900403eb6d5cc046c8656d49430" category="inline-link-macro">配置 SMB/CIFS 存儲</block>
+  <block id="773ed844e90ce71e7c8aa21f21b3096e" category="list-text"><block ref="748ef2ce96ed8da490134273e5d8e9fa" category="inline-link-macro-rx"></block> - 為 Proxmox VE 設定 SMB/CIFS 檔案共享，支援多通道，以實現容錯和增強多網路連線的效能。</block>
+  <block id="3ff424d6ce7d07ee9f23927c42cd92b9" category="inline-link-macro">配置 NFS 存儲</block>
+  <block id="c1a7fa2aa7627dc6544927b9555590f1" category="list-text"><block ref="19ca8381639157d3177200ba484ffd1b" category="inline-link-macro-rx"></block> - 使用 nConnect 或會話中繼為 Proxmox VE 配置 NFS 存儲，以實現容錯和使用多個網路連接提升效能。</block>
+  <block id="d24fee406d719041a754cbba3a349622" category="inline-link-macro">使用 FC 配置 LVM</block>
+  <block id="ff5c1296e91682811fd45eaba669a659" category="list-text"><block ref="3001da71843e53419908d3b4fd5edf24" category="inline-link-macro-rx"></block> - 設定邏輯磁碟區管理器 (LVM) 與光纖通道，以實現跨 Proxmox VE 主機的高效能、低延遲區塊儲存存取。</block>
+  <block id="5b3d5e30c3fd17b6acecdd43c8938eac" category="inline-link-macro">配置 LVM 與 iSCSI</block>
+  <block id="8267aad26d5b554113f64ab36aeb4eca" category="list-text"><block ref="a7f852037e2bcc5b56cb88f1593957db" category="inline-link-macro-rx"></block> - 設定邏輯磁碟區管理器 (LVM) 與 iSCSI，以便透過支援多路徑的標準乙太網路存取區塊儲存。</block>
+  <block id="ada8efcdb8daa0e1bbd73b34f824f825" category="inline-link-macro">配置 LVM 與 NVMe/FC</block>
+  <block id="3bd553a33ea32ad688436c920f343724" category="list-text"><block ref="e6121cb03b68c7386103c60741bdbdb0" category="inline-link-macro-rx"></block> - 使用現代 NVMe 協議，透過光纖通道配置邏輯磁碟區管理器 (LVM) 和 NVMe，以實現高效能區塊儲存。</block>
+  <block id="d76bd03db0de8b62a05aafb01bde9e6f" category="inline-link-macro">配置 LVM 與 NVMe/TCP</block>
+  <block id="65fbfd219a769731df238652e56c5168" category="list-text"><block ref="94222b6499f43ab03e4114168d46611c" category="inline-link-macro-rx"></block> - 使用現代 NVMe 協議，透過 TCP 設定邏輯磁碟區管理器 (LVM) 和 NVMe，以便在標準乙太網路上實現高效能區塊儲存。</block>
+  <block id="e19b3699e93b5a371e8b1e945db6385a" category="paragraph">Proxmox虛擬環境(VE)支援在同一主機上進行完整的虛擬機器虛擬化和基於容器的虛擬化。採用基於核心的虛擬機器 (KVM) 和快速模擬器 (QEMU) 實現完全虛擬機器虛擬化。QEMU 是一個開源的機器模擬器和虛擬化器，它使用 KVM 核心模組直接在主機 CPU 上執行客戶機程式碼。Linux 容器 (LXC) 允許像管理虛擬機器一樣管理容器，並在重新啟動後保持資料持久性。Proxmox VE 9 及更高版本加入了 OCI 鏡像倉庫支持，可以從公共和私有鏡像倉庫拉取容器鏡像。Proxmox VE 9 中新增了應用程式容器支援技術預覽版。</block>
+  <block id="d95672cd38ab0eb0ff76a7ca26d2ad85" category="paragraph">叢集能夠監控虛擬機器和容器，並在宿主節點發生故障時在其他節點上重新啟動它們。虛擬機器和容器需要配置為高可用性（HA）。透過建立親緣性群組，可以將虛擬機器和容器託管在特定的主機子集上。虛擬機器或容器託管在優先順序最高的主機上。更多資訊請查看 <block ref="fdacaf81a34c2d0312d03f6cdb2b9d17" category="inline-link-macro-rx"></block></block>
+  <block id="71e4042aff68fcb490d0250e3f67b48f" category="paragraph">對於管理多個 Proxmox VE 集群，Proxmox 資料中心管理器產品可以作為單獨的安裝程式提供。它提供了一個統一的管理介面，用於管理多個 Proxmox VE 叢集和 Proxmox 備份伺服器。它允許跨叢集遷移虛擬機器和容器。</block>
+  <block id="e657f96f21ef5a8469fef396a8a0c15d" category="paragraph">擁有有效基礎版、標準版或進階版訂閱的 Proxmox 遠端用戶端使用者可以存取 Proxmox 資料中心管理器企業儲存庫和技術支援。</block>
+  <block id="a445d9bee5af85391acdf5ebac0691ca" category="paragraph">Proxmox VE 9 及更高版本支援 iSCSI 和 FC 儲存類型的精簡配置和空間回收 (UNMAP)。更多詳情請參閱 <block ref="0cf3dbfbb21cde5074b4aa71855337f8" category="inline-link-macro-rx"></block></block>
+  <block id="9a5f59dab1c43f2f4606ce142607334f" category="paragraph">每個儲存磁碟區都配置了允許的內容類型。NAS 磁碟區支援所有內容類型，而 SAN 僅支援 VM 和容器鏡像。目錄儲存類型也支援所有內容類型。</block>
+  <block id="8fdbf27f81697b40d0fade44baf0b60a" category="admonition">SMB 連線憑證以明文形式存儲，只有 root 使用者才能存取。</block>
+  <block id="569a2ea9364935242acaf0981c6349e8" category="paragraph">Proxmox VE 支援基於主機的網路和叢集範圍的 VNet，它使用 Linux 橋接器和 Open vSwitch 等原生 Linux 網路功能來實現軟體定義網路 (SDN)。主機上的乙太網路介面可以綁定在一起，以提供容錯性和高可用性。其他選項請參考 <block ref="9763a7d4d26e9dea41679cb36cae802c" category="inline-link-macro-rx"></block></block>
+  <block id="ec7afd59203906b5a03c94726f7a4fc5" category="paragraph">可以在叢集層級設定訪客網絡，變更會推送至成員主機。隔離是透過區域、虛擬網路和子網路來實現的。<block ref="24658c95512d4a42c47249a958bb1795" category="inline-link-macro-rx"></block> 定義了網路類型，例如簡單網路（隔離，帶有來源 NAT）、VLAN（802.1Q - 依賴外部交換器）、VLAN 堆疊網路（802.1ad - 私人 VLAN）、VXLAN（第 2 層覆蓋第 3 層）。對於 VPC 等網路），EVPN（使用 BGP 建立第 3 層多集群網路的 VXLAN），等等。</block>
+  <block id="d69edfdce879bded624b698d2beef261" category="summary">Proxmox備份伺服器與NetApp ONTAP儲存集成，為Proxmox虛擬環境工作負載提供企業級備份功能。此架構利用ONTAP SnapMirror複製提供增量備份、重複資料刪除、壓縮和災難復原。</block>
+  <block id="a3c4f69e5bc313ca25ef4f6d4c8621d8" category="doc">了解 Proxmox Backup Server 與NetApp ONTAP的架構</block>
+  <block id="0d8daca92e40cef06eddaf69b30374c3" category="paragraph">Proxmox Backup Server (PBS) 與NetApp ONTAP儲存集成，為 Proxmox Virtual Environment (VE) 工作負載提供企業級備份功能。該架構利用ONTAP SnapMirror複製提供增量備份、重複資料刪除、壓縮、加密和災難復原。</block>
+  <block id="e900628e85826a7d624021f7a4fa7eb9" category="paragraph">Proxmox備份伺服器提供專為Proxmox虛擬環境設計的企業級備份功能。PBS 為虛擬機器和容器提供高效可靠的備份和復原作業，其功能包括增量備份、重複資料刪除、壓縮和加密。</block>
+  <block id="c105c01b38a5c5561ad1e494c17b93ae" category="paragraph">PBS 支援多種儲存後端，包括本機儲存、NFS、iSCSI 和 S3 相容的物件儲存。當與NetApp ONTAP儲存整合時，PBS 可以利用高效能、可擴充的儲存作為備份資料儲存和異地​​備份目標。</block>
+  <block id="bc048b025e524fbf99d1b3a1125056ff" category="paragraph">此解決方案包含以下組件：</block>
+  <block id="861b0401b812a630a4ad62d8f7919c22" category="list-text">*Proxmox VE 叢集* - 提供虛擬化功能，並管理跨多個節點的虛擬機器 (VM) 和容器。</block>
+  <block id="d7738a6133bd8c38fc4ec38ef9ff48ad" category="list-text">*Proxmox備份伺服器* - 為Proxmox VE工作負載提供專用備份和復原功能，並與ONTAP儲存整合。</block>
+  <block id="30890aab531ddb7fa1a28e5f1d0b230f" category="list-text">* NetApp ONTAP儲存* - 為 Proxmox VE 叢集和 PBS 備份資料儲存提供高效能、可擴充的儲存。</block>
+  <block id="21a363b492d3cb677d09df52c00ef635" category="list-text">*網路基礎架構* - 確保 Proxmox VE 節點、PBS 和ONTAP儲存之間低延遲、高吞吐量的連線。</block>
+  <block id="8dec5e06da2ccfad31d557ac8f6158d8" category="list-text">* NetApp Console* - 提供多個NetApp儲存系統和資料服務的集中管理。</block>
+  <block id="b459c8640c6242a93242c4dcdbbcd0c4" category="paragraph">下圖展示了採用ONTAP儲存的 Proxmox 備份伺服器的高階架構：</block>
+  <block id="98ed7c69aa296b108671ec63b6962fab" category="image-alt">Proxmox VE 工作負載資料保護與 PBS 和NetApp ONTAP架構</block>
+  <block id="36679488cecd53dec41b0e4ceb443561" category="summary">審查 Proxmox Backup Server 與NetApp ONTAP儲存的需求和部署注意事項。這包括部署選項、儲存後端支援、多叢集管理和網路配置最佳實踐。</block>
+  <block id="3131d44f2470e88f57a0ee08812d0e25" category="doc">Proxmox備份伺服器與NetApp ONTAP儲存的部署需求與注意事項</block>
+  <block id="bc51a4948bffb3c81ba45da72808f3fb" category="paragraph">在實施之前，請檢視 Proxmox Backup Server (PBS) 與NetApp ONTAP儲存的部署需求和注意事項。這樣可以確保對備份伺服器部署、儲存配置和網路連線進行妥善規劃。</block>
+  <block id="bbe19407c7eae60b683129c569b8bf2a" category="section-title">部署注意事項</block>
+  <block id="395fdeb6d593bfd46c20ec850a846275" category="paragraph">將 PBS 部署在裸機上，或作為 Proxmox VE 上的虛擬機器部署。當將 PBS 部署為虛擬機器時，如果 Proxmox VE 主機發生停機，請考慮備份伺服器的可用性。在裸機上或單獨的 Proxmox VE 主機或叢集上部署 PBS，以確保在主主機發生故障時備份伺服器的可用性。</block>
+  <block id="53b5055fa348505ce324c202812cc780" category="paragraph">備份內容獨立儲存在資料儲存中，因此如果需要，可以將資料儲存遷移到另一個 PBS 實例。這樣即使原始 PBS 實例不可用，也能確保備份資料仍然可以存取。</block>
+  <block id="6ecc829e642115cb682c68104f8b24e1" category="section-title">存儲後端支持</block>
+  <block id="1fce04f9eab0e634f856ea235739f2be" category="paragraph">PBS 支援各種儲存後端，包括本機儲存、NFS、iSCSI、FC、NVMe-oF 和 S3（技術預覽版）。與NetApp ONTAP儲存集成，使組織能夠利用高級資料管理功能來增強資料保護和復原能力。</block>
+  <block id="3dc5ceaf33c2b43363d4b3030e678340" category="paragraph">使用ONTAP SnapMirror將 PBS 資料儲存複製到另一個ONTAP系統以進行災難復原。這樣可以保護備份數據，並在站點故障後實現數據恢復。</block>
+  <block id="2bef5bd76f7a0978cce6c5f4942b613b" category="section-title">多集群管理</block>
+  <block id="68c06664ee921a6835d80ac5e1cfcc51" category="paragraph">單一 PBS 實例可以管理多個 Proxmox VE 集群，為大規模部署提供集中式備份。使用命名空間在邏輯上分離不同叢集或租戶的備份數據，確保資料隔離和安全性。</block>
+  <block id="13604482c9c403576a23cf2eab423a9c" category="paragraph">配置資料保留策略，以自動管理備份資料生命週期，並確保符合組織要求。設定清理策略，自動將舊的或不必要的備份資料標記為要刪除的資料。垃圾回收過程透過從資料儲存中刪除未使用或過時的資料來回收儲存空間。</block>
+  <block id="53047d10bbad849d84482025dff7cd0e" category="section-title">管理介面</block>
+  <block id="ab460c6d29e78f275b58c95212ccaa79" category="paragraph">透過基於 Web 的介面、命令列工具或 REST API 管理 PBS。使用以下 URL 存取連接埠 8007 上的 Web 介面<block ref="076531771dc78facaf9818c80fc8e196" prefix=" " category="inline-code"></block>。</block>
+  <block id="908a6644c79f2bc9e82d8777e36f7cd0" category="section-title">網路配置最佳實踐</block>
+  <block id="678099ee260c7dfdaad689e0db50843c" category="paragraph">確保 PBS 和ONTAP儲存之間有冗餘的網路路徑，以實現高可用性和高效能。考慮使用鏈路聚合（LACP）來提高頻寬和冗餘度。在所有網路設備上配置巨型幀（MTU 9000），以提高儲存流量效能。</block>
+  <block id="7fddf6fc9e3844d093fc6670293eabea" category="paragraph">對於 NFS，請為 PBS 資料儲存建立一個具有適當權限的專用匯出。對於區塊協議，確保適當的區域劃分和 LUN 掩碼，以限制只有授權的 PBS 主機才能存取。</block>
+  <block id="c59f1da152ef4526b5c73edc3ace8f0a" category="summary">Proxmox VE 支援多種ONTAP儲存類型，包括 NAS 協定的 NFS 和 SMB，以及 SAN 協定的 FC、iSCSI 和 NVMe-oF。每種協定都支援不同的內容類型，包括虛擬機器磁碟、備份、容器磁碟區、ISO 映像和範本。</block>
+  <block id="1d3489632a52cbd4ac802cd2b00f3a0e" category="doc">Proxmox 虛擬環境支援的儲存類型</block>
+  <block id="3982801181fd93df8690e90664ecd9c1" category="paragraph">Proxmox 虛擬環境 (VE) 支援多種與NetApp ONTAP相容的儲存協議，包括用於 NAS 的 NFS 和 SMB 以及用於 SAN 的 FC、iSCSI 和 NVMe-oF。每種協定都支援不同的 Proxmox VE 內容類型，包括 VM 磁碟、備份、容器磁碟區、ISO 映像和範本。</block>
+  <block id="64bf9913f4bb6c030a60e86d852b251e" category="section-title">NAS協議支持</block>
+  <block id="4d01db9b194f8083194923c46b43baf4" category="paragraph">NAS 協定（NFS 和 SMB）支援所有 Proxmox VE 內容類型，通常在資料中心層級配置一次。客戶虛擬機器可以在 NAS 儲存上使用 raw、qcow2 或 VMDK 磁碟格式。ONTAP快照可以對用戶端可見，以便存取特定時間點的資料副本。</block>
+  <block id="53836f8b0ea09c0fd4ecf5b93b74425a" category="section-title">SAN協定支援</block>
+  <block id="e6a065af17958c9671b3880719b51f1f" category="paragraph">SAN 協定（FC、iSCSI 和 NVMe-oF）通常會依照主機進行配置，並支援 Proxmox VE 中的 VM 磁碟和容器映像內容類型。客戶虛擬機器可以在區塊儲存上使用原始磁碟格式、VMDK 磁碟格式或 qcow2 磁碟格式。</block>
+  <block id="ddf89f3f3124b502f2b4dc5ff7408314" category="section-title">儲存類型相容性矩陣</block>
+  <block id="fcbd19b726fdd6160dfe2ab43f285a55" category="paragraph">*筆記：*</block>
+  <block id="7f163fbdd024b99c2e2190a3646347a1" category="list-text">需要叢集檔案系統建立共用資料夾並使用目錄儲存類型。</block>
+  <block id="d950d94f161733b026e62d076cbdd538" category="list-text">使用LVM儲存類型。</block>
+  <block id="99ad49e21444cc4f158a30703801fd30" category="summary">使用 Proxmox Backup Server 和NetApp ONTAP儲存保護 Proxmox VE 工作負載。本流程涵蓋資料儲存配置、備份作業、復原流程以及使用SnapMirror複製進行災難復原設定。</block>
+  <block id="d2b464e16f23793007e335addb57cda7" category="doc">使用 Proxmox Backup Server 和NetApp ONTAP保護 Proxmox VE 工作負載</block>
+  <block id="a8749652472004068f5eed92fc6c85f1" category="paragraph">使用與NetApp ONTAP儲存整合的 Proxmox Backup Server (PBS) 保護 Proxmox 虛擬環境 (VE) 工作負載。本流程涵蓋資料儲存配置、備份作業、復原流程以及使用ONTAP SnapMirror複製的災難復原設定。</block>
+  <block id="c3c46efef43d1d6a08e1a9490170cfe4" category="paragraph">有關 Proxmox 備份伺服器架構和ONTAP整合的信息，請參閱 <block ref="fe4157e7c986688e377631fe74941c30" category="inline-link-macro-rx"></block>。</block>
+  <block id="5a457c7500e4bf3055a0945b61578cc4" category="list-text">確保 PBS 和ONTAP儲存之間有冗餘的網路路徑，以實現高可用性和高效能。</block>
+  <block id="2fafff36612b079f651ed477549b0c5d" category="list-text">考慮使用鏈路聚合（LACP）來提高頻寬和冗餘度。</block>
+  <block id="6723a91abfe23c633de13725b2b3fa8d" category="list-text">在所有網路設備上配置巨型幀（MTU 9000），以提高儲存流量效能。</block>
+  <block id="985ecd56d42b04215aebffa551adff83" category="list-text">對於 NFS，請為 PBS 資料儲存建立一個具有適當權限的專用匯出。</block>
+  <block id="c9e54f7d5a349d213d6560a57f7cd6e9" category="list-text">對於區塊協議，確保適當的區域劃分和 LUN 掩碼，以限制對授權 PBS 主機的存取。</block>
+  <block id="f98484fc38c578aca640fd781e7196ae" category="section-title">配置資料儲存</block>
+  <block id="2dc26109d922e60c46d9df6140fa92d8" category="paragraph">使用NetApp ONTAP儲存配置 Proxmox 備份伺服器資料儲存。這包括在 PBS 主機上掛載ONTAP存儲、在 PBS Web 介面中建立本地資料存儲，以及（可選）配置ONTAP S3 存儲以進行異地備份和長期保留。</block>
+  <block id="c2d548d1ab4f9c8ae7a8bb24fa1de154" category="paragraph">準備ONTAP儲存後端並將其掛載到 PBS 主機上。根據您使用的是基於文件的協定 (NFS) 還是基於區塊的協定 (SAN/NVMe-oF)，準備步驟會有所不同。</block>
+  <block id="5fd0791e745674b32ee5b5d4e22171ee" category="paragraph">PBS 可以使用掛載在本機儲存上的任何資料夾作為資料儲存。PBS 將目錄檔案、索引檔案和資料區塊檔案儲存在資料儲存中。為了獲得最佳效能和可擴充性，請使用NetApp ONTAP SAN（iSCSI/FC/NVMe-oF）或 NFS 儲存（啟用 nConnect 或會話中繼，並啟用 pNFS）作為 PBS 資料儲存。</block>
+  <block id="ab942149f162d0fd26c0c35f3b422dac" category="list-title">-&gt; 將儲存設備掛載到 PBS 主機上</block>
+  <block id="5ba28aa1e92de191d89ef6ef367547c5" category="list-text">對於 SAN 或 NVMe-oF 協議，在ONTAP上建立 LUN 或命名空間，並將其連接到 PBS 主機。</block>
+  <block id="44b197b3b77786140186cf7fd7654aa5" category="list-text">使用適當的檔案系統（ext4 或 xfs）格式化 LUN 或命名空間，並將其掛載到 PBS 主機上。</block>
+  <block id="5ade3114be89251c2f1d51ba742fba23" category="list-text">對於 NFS，將 NFS 匯出掛載到 PBS 主機上。</block>
+  <block id="3bb347501ee560ca0cc74164accdb3c7" category="list-text">使用 fstab 或 automount 確保資料儲存於系統重新啟動時自動掛載。</block>
+  <block id="b98c753603fa64eab10489bf6615d997" category="paragraph-title">-&gt; 在PBS中建立資料存儲</block>
+  <block id="85e2d3eba3998ecf4f97ce43f0133348" category="paragraph">掛載儲存設備後，在 PBS Web 介面中建立一個新的資料儲存。</block>
+  <block id="f2d3e6263b2ec658f4a9d7b06cbc3be1" category="list-text">導覽至資料儲存 &gt; 新增資料儲存。</block>
+  <block id="a9f4ef6ba2500df3ff139c4fa9e45273" category="list-text">提供名稱，選擇資料儲存類型為本機，並將掛載資料夾指定為後備路徑。</block>
+  <block id="8ee90cebcd6e42ff99b5eabd2229abc4" category="image-alt">PBS中的本機資料儲存配置</block>
+  <block id="3cac0ef615ac9fec2b55913d3198dc52" category="paragraph-title">-&gt; 使用ONTAP S3 儲存配置資料存儲</block>
+  <block id="bcec1d9fb7ac4eb863479e0c913fa327" category="paragraph">S3 儲存體通常用於異地備份和長期保留。Proxmox備份伺服器對S3儲存的支援目前處於技術預覽階段。</block>
+  <block id="e19f399ce827d2a130b3dc32dab16e0a" category="list-text">確保ONTAP S3 服務已啟用並正確配置。</block>
+  <block id="472364bf3349970260a75b330b5c7f42" category="list-text">在ONTAP上為 PBS 資料儲存建立一個 S3 儲存桶。</block>
+  <block id="d953991782836c9e584ead96e502a20f" category="list-text">取得 S3 儲存桶的存取金鑰和私鑰。</block>
+  <block id="3ec2617fad102466b18c33d8f54e4432" category="list-text">收集 S3 端點 URL 和憑證指紋資訊。</block>
+  <block id="67f0af8dbf7c3e3e08c731dd8557134a" category="list-text">在 PBS Web 介面中，導覽至“配置”&gt;“S3 端點”，然後使用收集到的資訊新增的 S3 端點。</block>
+  <block id="b8841f5dee397269f7b7e38ac64c60b7" category="image-alt">PBS中的S3端點配置</block>
+  <block id="fb75dc5b43dbc5820295eceb4b13346a" category="image-alt">PBS 中的 S3 端點設定檔</block>
+  <block id="10cf7cd4559364562f07fd838364b838" category="list-text">接下來，導航至資料儲存 → 新增資料儲存。請提供名稱，選擇資料儲存類型為 S3，並選擇已設定的 S3 端點。提供本機資料儲存體上要用作本機快取的資料夾名稱，並選擇儲存桶。顯示範例</block>
+  <block id="3bb3f110060a601f18aa5ab0ad1f213a" category="image-alt">PBS中的S3資料儲存配置</block>
+  <block id="4aa328dcbc6bc7de00c8f61e2397a861" category="image-alt">PBS 中的 S3 資料儲存設定檔</block>
+  <block id="125a8538ceef3774b5933343386476a8" category="section-title">建立本機同步作業到ONTAP S3 儲存。</block>
+  <block id="63c698cd1fce859e077645ae08ddc948" category="paragraph">+ 透過在 PBS 中建立本機同步作業，將資料從本機 PBS 資料儲存遷移到ONTAP S3 儲存。此作業將備份資料從本機資料儲存複製到 S3 資料存儲，以便進行異地儲存和長期保留。</block>
+  <block id="58eaba00e5b10b4b3a42238fc3b56e50" category="list-text">在 PBS Web 介面中，導覽至 S3 資料儲存 &gt; 同步作業，然後按一下「新增」。</block>
+  <block id="28ca1f09f60c1576c7eb07731c9cb2ad" category="image-alt">在PBS中新增本機同步作業</block>
+  <block id="1b376d83765ddd16c159cd733e43b3dd" category="list-text">選擇位置為“本地”，選擇來源本機資料存儲，並指定所需的命名空間和深度。配置同步作業的排程任務和任何其他選項。</block>
+  <block id="614a0a4bfbd428484c95d1b4194dd5e5" category="image-alt">PBS中的本機同步作業配置</block>
+  <block id="9abe15b75027060ad5936d3d3822af56" category="list-text">儲存同步作業配置。同步作業將按照定義的計劃運行，並將備份資料從本地 PBS 資料儲存複製到ONTAP S3 儲存。</block>
+  <block id="7f14889330109d5821968b11b79a5173" category="admonition">對於異地儲存和使用ONTAP儲存的更長時間保留，可以使用 Netapp Console 進行管理和資料服務。</block>
+  <block id="8fe1767a8b55ee5f0273a944d17eace6" category="section-title">將 Proxmox 備份伺服器新增至 Proxmox VE 集群</block>
+  <block id="5d5fcd5f85274a16041a1c0894237505" category="paragraph">新增 Proxmox Backup Server 作為儲存目標，以啟用虛擬機器和容器的備份作業。</block>
+  <block id="16cd0cf83b6544af84b2b8c7687fbf1c" category="list-text">在 Proxmox VE Web 介面中，導覽至資料中心 &gt; 存儲，然後按一下「新增」 &gt; Proxmox 備份伺服器。</block>
+  <block id="6122d9034d5273e39f40c7a9478c06b7" category="image-alt">在 Proxmox VE 中加入 PBS 存儲</block>
+  <block id="45cf88adc3effe5fbc66e933052b4517" category="list-text">提供PBS伺服器憑證指紋以實現安全通訊。您可以從PBS網頁介面取得指紋，也可以在PBS上執行以下指令取得：<block ref="55d7863a6f221652e1ce70facd3cdfec" prefix=" " category="inline-code"></block>。</block>
+  <block id="76e37e2819c6cb52a333149ed85323d4" category="image-alt">在 Proxmox Backup Server UI 中設定 PBS 憑證指紋</block>
+  <block id="9156943f82b3b112607a215326fdba10" category="image-alt">在 Proxmox Backup Server CLI 中設定 PBS 憑證指紋</block>
+  <block id="c8a397ada969519575324c894fb6505d" category="list-text">配置其他選項，例如備份保留策略和加密。</block>
+  <block id="ebdc722e3229641d6925bb33c8e147fc" category="list-text">按一下「新增」以儲存 PBS 儲存配置。</block>
+  <block id="6b6a9343bc6a135d26d7c549974ab0ee" category="paragraph">Proxmox VE 叢集現在可以使用 PBS 資料儲存對虛擬機器和容器進行備份和復原作業。</block>
+  <block id="80ddf8e94d3c3cb3463aa3890e1448dd" category="section-title">執行備份</block>
+  <block id="e9797316a483fef0e47237db657a34af" category="paragraph">將 Proxmox VE 工作負載備份到 Proxmox 備份伺服器。這包括執行按需備份、配置計劃備份作業、備份主機設定檔以及使用備份前和備份後腳本執行自訂操作。</block>
+  <block id="63293d32960dd66dd5fca5291e488b71" category="paragraph-title">-&gt; 執行按需備份</block>
+  <block id="acc68c53f3f6bed0d05f15d1aa6cb41a" category="paragraph">使用 Proxmox Backup Server 立即建立虛擬機器或容器的備份。</block>
+  <block id="5ce78af4d3ad4d0eb02e05981aaf3f26" category="list-text">在 Proxmox VE Web 介面中，導覽至虛擬機器或容器。</block>
+  <block id="8f99a70fcf0bedd62af3ca828e97ad1d" category="list-text">點擊“備份”選項卡，然後點擊“立即備份”。</block>
+  <block id="0abacf0a038212e8785df456f661104f" category="image-alt">Proxmox VE 中的按需備份</block>
+  <block id="8b0650b7cf84fcc64c9631eabddde363" category="list-text">選擇 Proxmox 備份伺服器儲存作為備份目標。</block>
+  <block id="9112900ecf585c6a04f2f991bb5449fb" category="image-alt">在 Proxmox VE 中選擇按需備份的 PBS 目標存儲</block>
+  <block id="a3e1e45ec35c3a5f594ee184e29d6bd9" category="list-text">配置其他備份選項，例如壓縮、通知和快照模式。</block>
+  <block id="3a88c22db3207dd47d4c0307053d168d" category="list-text">點選「備份」按鈕啟動備份程序。</block>
+  <block id="cf4f5305a4d037daaf610d9134bb9139" category="paragraph-title">-&gt; 設定計劃備份</block>
+  <block id="7747b6d0c3f2c123915b421f6bc0fb0e" category="paragraph">使用 Proxmox Backup Server 為虛擬機器和容器設定定期備份。</block>
+  <block id="82fde8d7c0d6a82d099abc267274a8d7" category="list-text">在 Proxmox VE Web 介面中，導覽至資料中心 &gt; 備份。</block>
+  <block id="bd31598b7023fe3eb381bef65b8573f7" category="list-text">點選「新增」以建立新的備份作業。</block>
+  <block id="11cb908648a3fe2f24886c8b8ad786f3" category="image-alt">在 Proxmox VE 中新增排程備份作業</block>
+  <block id="06f45aec62cbd38ce6ff556914287747" category="list-text">選擇 PBS 儲存作為目標，並選擇備份計畫（例如每日或每週）。將選擇模式設定為「全部」、「選定的虛擬機器/容器」或「基於池」。</block>
+  <block id="e2a95ecbdc4928418575973a070ac784" category="image-alt">在 Proxmox VE 中設定排程備份作業</block>
+  <block id="799f143281bde1a804acb3e9a1a4d120" category="list-text">配置其他選項，例如保留策略、壓縮和快照模式。</block>
+  <block id="d71707e5351d8690ec4d2c99741d6b60" category="list-text">按一下「建立」儲存排程備份作業配置。</block>
+  <block id="cc5d1a9cc1facbf445e94d1fba9d8578" category="paragraph">Proxmox VE 叢集使用 Proxmox Backup Server 作為儲存目標，依照定義的計畫自動對指定的虛擬機器和容器執行備份。</block>
+  <block id="7e44e8330b5e87a919d915376ed32e53" category="paragraph">計劃任務配置儲存在 Proxmox VE 主機上的 /etc/pve/job.cfg 檔案中。</block>
+  <block id="ebc99ff45830e2ecf9e617518f09d7ef" category="image-alt">Proxmox VE 中的排程備份作業設定檔</block>
+  <block id="8f58249c423f4f59dd55da9dc38883a6" category="paragraph-title">將 Proxmox VE 主機檔案備份到 PBS</block>
+  <block id="75aaa17cad0b71d46971f7d7e91fbcad" category="paragraph">將 Proxmox VE 主機設定檔、系統設定和其他關鍵資料備份到 Proxmox 備份伺服器。</block>
+  <block id="1eaa6bec267e7553d764d66e09d7b262" category="list-text">在 Proxmox VE shell 或 SSH 會話中，使用<block ref="db40c0efe7023b4b0dd0101b821f6b6c" prefix=" " category="inline-code"></block> 建立主機備份的指令：</block>
+  <block id="d5701d85fabf93cbabb20637ad2998c3" category="paragraph">代替<block ref="cc9549591211c31474128122ebe1518c" prefix=" " category="inline-code"></block> 以及備份規格（例如）<block ref="bad171a4479180b3e1951aa2eceb13b7" prefix=" " category="inline-code"></block>），<block ref="5fae363afdc366ec768ede8ca3120ee4" prefix=" " category="inline-code"></block> 使用PBS的FQDN，<block ref="ad61e43dd36eb3d69e9dd87af610dcd1" prefix=" " category="inline-code"></block> 使用 PBS 資料儲存名稱，以及<block ref="02886250fede5e11b96f10e832d0cd33" prefix=" " category="inline-code"></block> 帶有命名空間。這假設身份驗證和指紋環境變數已配置。</block>
+  <block id="acf3548929f64cbd5840f0b88dcf4c5c" category="image-alt">Proxmox VE 主機備份指令</block>
+  <block id="bdf38e5144da01036d21d0a772856209" category="list-text">備份過程將建立 Proxmox VE 主機的備份並將其儲存在指定的 PBS 資料儲存中。</block>
+  <block id="c36cefabab21fdacad0ec7191664775f" category="image-alt">從 Proxmox Backup Server 使用者介面查看文件</block>
+  <block id="3393e7cb466c95f9726db27a3bca8957" category="list-text">若要從備份中還原 Proxmox VE 主機文件，請使用下列命令：<block ref="f6a3ab727cb2e979a0d05ad08bc81954" prefix=" " category="inline-code"></block> 使用適當的參數執行命令。</block>
+  <block id="04008fe333c6dc4574370db8a285fafc" category="paragraph">Proxmox VE 支援備份前和備份後腳本，以便在備份過程之前和之後執行自訂操作。使用這些腳本可以準備虛擬機器或容器進行備份、執行其他任務或在備份完成後進行清理。</block>
+  <block id="a720b43476cfe14d2cf6fea3a950e671" category="list-text">在 Proxmox VE 主機上建立備份腳本。請確保腳本可執行且具有必要的權限。</block>
+  <block id="3384030595a0a0ad3287ac9f9c25e831" category="image-alt">備份腳本的腳本參數詳情</block>
+  <block id="4f150056b99a7bb0c49b60a2e54d4f1e" category="list-text">請確保備份作業存在。</block>
+  <block id="caa9f04df057e046a09b29f22b905ba6" category="list-text">在 Proxmox VE shell 或 SSH 會話中，使用<block ref="99e219f653aa582df4baaeeccb55261c" prefix=" " category="inline-code"></block> 使用命令<block ref="662b51a9c120bc17a427c611fbc30aac" prefix=" " category="inline-code"></block> 可選擇指定要執行的腳本。</block>
+  <block id="1bbe52ac199570836dffe007f9535865" category="image-alt">在 Proxmox VE 中設定備份腳本</block>
+  <block id="a49f46cee3d5127495adb39d93cb8a01" category="list-text">（可選）使用 QEMU 客戶代理在建立快照進行備份之前，使工作負載內部的檔案系統靜止。請確保已安裝並執行 QEMU 用戶機代理程式。將腳本放置在虛擬機器或容器內的 /etc/qemu/fsfreeze-hook.d/ 或 /etc/qemu-ga/fsfreeze-hook.d/ 目錄中。</block>
+  <block id="8e58083c178f015f803ab196b1d618e3" category="admonition">也可以使用以下方法在虛擬機器或容器層級設定鉤子腳本：<block ref="789f695c451c4e79a90edab4c736f47c" prefix=" " category="inline-code"></block> 或者<block ref="b2a45119943f59a35f554068ace0c27d" prefix=" " category="inline-code"></block> 使用命令<block ref="32b3a20354c53eeb85ef22e9d06baf1d" prefix=" " category="inline-code"></block> 選項。有關範例 hookscript，請參閱 Proxmox VE 主機上的 /usr/share/pve-docs/examples/guest-example-hookscript.pl。</block>
+  <block id="5be228565440d3a8d2d642daf8f6785b" category="section-title">恢復虛擬機器和容器</block>
+  <block id="4ce120bf6e78dc9becd06b5cf7076f07" category="paragraph">直接從 Proxmox VE Web 介面或 PBS 儲存還原虛擬機器和容器。</block>
+  <block id="a4bcadf948707b515a20c46b0ad01a0f" category="list-text">若要還原現有的虛擬機器或容器，請在 Proxmox VE Web 介面中導覽至該虛擬機器或容器，按一下「備份」標籤，從 PBS 儲存體中選擇備份，然後按一下「還原」。</block>
+  <block id="30cf04e58e15e16d547933ac9ac1ec50" category="image-alt">在 Proxmox VE 中從 PBS 還原虛擬機</block>
+  <block id="637e7c88adddfc3008f358f9d6d1083a" category="paragraph">對於裸機復原或復原到不同的 Proxmox VE 主機，請使用下列方法：<block ref="db40c0efe7023b4b0dd0101b821f6b6c" prefix=" " category="inline-code"></block> 命令。</block>
+  <block id="3527508548bc21eadefa2ad0dd308ccb" category="list-text">若要還原目前在 Proxmox VE 中不可用的虛擬機器或容器，請導覽至 PBS 儲存備份部分，選擇備份，然後按一下「還原」。提供目標儲存位置和其他必要資訊以完成復原。</block>
+  <block id="7a56f575d85d5850da9c413ba57ae51d" category="image-alt">在 Proxmox VE UI 中從 PBS 儲存恢復遺失的虛擬機</block>
+  <block id="068d7e5d839dd02d67cc6529b1f284f7" category="section-title">使用SnapMirror設定災難恢復</block>
+  <block id="02f8bb2307b6959bd028d2850f84b206" category="paragraph">使用SnapMirror將ONTAP儲存上的 PBS 資料儲存複製到另一個ONTAP系統，以實現災難復原。這樣可以保護備份數據，並在站點故障後實現數據恢復。</block>
+  <block id="55f4682b84e221e3fbf587ed12c62979" category="list-text">為 PBS 資料儲存磁碟區配置SnapMirror複製。</block>
+  <block id="81a2af6178a0eeee74fdb08c2ae7412b" category="list-text">如果發生災難，請將複製的 PBS 資料儲存掛載到輔助 PBS 執行個體上。</block>
+  <block id="3592e0b52fc427fd2e212dd0269018bf" category="paragraph">在 PBS 中新增資料儲存時，啟用「重複使用現有資料儲存」進階選項，以避免資料儲存重新初始化。</block>
+  <block id="b0884bbace245d96abc1137d279a08fd" category="image-alt">在PBS中重複使用現有資料儲存。</block>
+  <block id="679d2970e3995e5fc14b544884a37a89" category="paragraph">對於ONTAP S3 存儲，在 PBS 中新增資料儲存時，請同時啟用「重複使用現有資料儲存」和「覆蓋使用中的標記」選項。</block>
+  <block id="7cbf5ead37f08f25990bad4a80ff8d84" category="image-alt">在PBS中重複使用現有的S3資料儲存。</block>
+  <block id="fe7cf3e96c6b20c409f70dde124a7b0f" category="paragraph">新增資料儲存後，即可存取備份資料並執行復原作業。</block>
+  <block id="2be48fddd66eba1f6ce497921cd32d4b" category="section-title">使用 Proxmox 資料中心管理器監控多個集群</block>
+  <block id="21b0ecd42755754572fe752f70ee671e" category="paragraph">使用 Proxmox 資料中心管理器 (PDM) 監控和管理多個 Proxmox VE 和 Proxmox 備份伺服器實例。PDM 提供集中式管理介面，用於監控多個 Proxmox VE 叢集和 PBS 執行個體的運作狀況、效能和狀態。</block>
+  <block id="ad1127782ecd92b63f319b449ffc45d2" category="image-alt">Proxmox 資料中心管理器概述</block>
+  <block id="e86308afbc26afaa5229dfafd3ee8ab0" category="paragraph">Proxmox Backup Server 與NetApp ONTAP儲存集成，可為 Proxmox VE 工作負載提供強大且高效的資料保護。組織可以透過利用 ONTAP 的高階資料管理功能和 PBS 的備份功能來確保虛擬化工作負載的可用性和完整性。</block>
+  <block id="61fc0196e9c1813453cdbdb4aed0034e" category="section-title">2026年1月15日</block>
+  <block id="3d3dbaddb8eeecb1fd8caab736a1acb7" category="list-text">更新了 Proxmox VE 解決方案內容，以反映 Proxmox VE 9 版本。</block>
+  <block id="15851e52ff91b17325d02bcb06147fbb" category="list-text">新增了在用於 Proxmox VE 儲存的磁碟區上啟用反勒索軟體保護的說明。</block>
+  <block id="dca923bde586c56ff9e80a035b569f50" category="list-text">新增了使用 FC 和 NVMe/FC 作為 Proxmox VE 儲存協定的說明。</block>
+  <block id="2e94ca9f81de016c02e76e148fee1eaf" category="list-text"><block ref="2e94ca9f81de016c02e76e148fee1eaf" category="inline-link-macro-rx"></block></block>
+  <block id="b957e7f390a33f68599b8075a82fdae6" category="list-text">為 Proxmox Backup Server 新增了ONTAP整合。</block>
+  <block id="3f649f93b537f09a93cf7a8e8ee77ebd" category="inline-link-macro">使用 Proxmox Backup Server 和NetApp ONTAP保護在 Proxmox VE 上執行的工作負載</block>
+  <block id="ba218e947e49e3546a325b9b7e6e3c58" category="list-text"><block ref="ba218e947e49e3546a325b9b7e6e3c58" category="inline-link-macro-rx"></block></block>
+  <block id="b39dd55093d23c94cdc2e8bb85ce2acb" category="list-text">增加了ONTAP與 Proxmox VE 整合的部署指南。</block>
+  <block id="80703c7b6c08c51533caaeabf49abcf8" category="inline-link-macro">NetApp ONTAP在 Proxmox 虛擬環境中的部署指南</block>
+  <block id="9f7bd72916b6e7b46cb4ef9421aa654f" category="list-text"><block ref="9f7bd72916b6e7b46cb4ef9421aa654f" category="inline-link-macro-rx"></block></block>
+  <block id="6b232c5f91c6b866f64751df748d8b05" category="sidebar">了解 Proxmox VE</block>
+  <block id="54594bccd58ed1cbd8fc3cfd68b1d1ed" category="sidebar">Proxmox VE 和ONTAP架構</block>
+  <block id="745f3917a074ad2d3a63f913855d07bd" category="sidebar">支援的儲存類型</block>
+  <block id="e8d05e64f5c32cc74f3698ac82de9cee" category="sidebar">配置儲存協議</block>
+  <block id="a9a0ce306b8f93a439f3aa02f6c4d548" category="sidebar">保護 Proxmox VE 工作負載</block>
+  <block id="4b7b0c862179b1d444bf810298aa6cde" category="sidebar">Proxmox備份伺服器架構</block>
+  <block id="ce2d085f4e50cade96fa91ccdedf8fa7" category="sidebar">部署要求和注意事項</block>
+  <block id="40f27e7405ba45375cf663f8361fe671" category="sidebar">使用 Proxmox Backup Server 設定資料保護</block>
+  <block id="0d3a6e48ddb5157d99693acb073595b2" category="sidebar">NetApp儲存與 NVMe-oF 為 Proxmox 虛擬化環境帶來突破性效能</block>
+  <block id="5f92b643fcaa578f80900a61e9ce5337" category="sidebar">Linux Bridge 與 Open vSwitch 在 Proxmox VE 的對比</block>
+  <block id="a056429d9a944190929fc1ff011d59fd" category="sidebar">Proxmox VE 搭配SolidFire存儲</block>
+  <block id="33944cf48dae6085e379419638e7f045" category="sidebar">使用ONTAP為 Proxmox VE 配置儲存協議</block>
+  <block id="00e4880b550e40d823bf3e2f64737181" category="sidebar">儲存協定概述</block>
+  <block id="df98233fcbd5f7d34a38d94575306755" category="sidebar">使用 Proxmox Backup Server 和NetApp ONTAP實作 Proxmox VE 工作負載資料保護</block>
 </blocks>

@@ -1,0 +1,113 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-ontap-smb.html 
+keywords: netapp, proxmox, proxmox ve, smb, cifs, ontap, storage 
+summary: 使用ONTAP為 Proxmox 虛擬環境設定 SMB/CIFS 儲存。此過程包括啟用 SVM、建立 LIF、設定 Active Directory、建立磁碟區以及設定多通道以實現容錯和增強效能。 
+---
+= 為 Proxmox VE 配置 SMB/CIFS 存儲
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用NetApp ONTAP為 Proxmox 虛擬環境 (VE) 配置 SMB/CIFS 儲存。SMB 多通道透過多個網路連接儲存系統，提供容錯能力並提升效能。
+
+SMB/CIFS 檔案共用需要儲存管理員和虛擬化管理員進行設定。更多詳情請參閱 link:https://www.netapp.com/pdf.html?item=/media/17136-tr4740.pdf["TR4740 - SMB 3.0 多通道"]。
+
+
+NOTE: 密碼以明文文件形式保存，只有root用戶才能存取。請參閱 link:https://pve.proxmox.com/pve-docs/chapter-pvesm.html#storage_cifs["Proxmox VE 文檔"]。
+
+.採用ONTAP 的SMB 共享儲存池
+video::5b4ae54a-08d2-4f7d-95ec-b22d015f6035[panopto,width=360]
+
+
+== 儲存管理員任務
+
+如果您是ONTAP新手，請使用系統管理員介面完成這些任務。
+
+. 為 SMB 啟用 SVM。跟隨 link:https://docs.netapp.com/us-en/ontap/smb-config/configure-access-svm-task.html["ONTAP 9 文件"] 了解更多。
+. 每個控制器至少創建兩個 LIF。請依照文件中的步驟操作。作為參考，這裡附上此解決方案中使用的 LIF 的螢幕截圖。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-001.png["nas接口詳細信息"]
+
+====
+. 配置基於 Active Directory 或工作組的身份驗證。請依照文件中的步驟操作。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-002.png["加入網域資訊"]
+
+====
+. 建立卷。勾選「將資料分佈到叢集中」選項以使用FlexGroup。請確保該磁碟區已啟用反勒索軟體保護。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-003.png["FlexGroup選項"]
+
+====
+. 建立 SMB 共享並調整權限。跟隨link:https://docs.netapp.com/us-en/ontap/smb-config/configure-client-access-shared-storage-concept.html["ONTAP 9 文件"]了解更多。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-004.png["SMB 共享資訊"]
+
+====
+. 向虛擬化管理員提供 SMB 伺服器、共用名稱和憑證。
+
+
+
+
+== 虛擬化管理員任務
+
+完成以下任務，將 SMB 共用新增為 Proxmox VE 中的存儲，並啟用多通道以提高效能和容錯能力。
+
+. 收集用於共享身份驗證的 SMB 伺服器、共享名稱和憑證。
+. 為了實現容錯，請確保至少有兩個介面配置在不同的 VLAN 中。確認網卡支援 RSS。
+. 使用管理使用者介面 `https:<proxmox-node>:8006`按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“SMB/CIFS”。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-005.png["SMB儲存導航"]
+
+====
+. 請輸入詳細資訊。共享名稱應自動填入。選擇所有內容類型，然後按一下「新增」。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-006.png["SMB 儲存新增"]
+
+====
+. 若要啟用多通道選項，請在任意叢集節點上開啟 shell 並執行以下命令，其中 `<storage id>` 這是上一步建立的儲存 ID：
++
+[source, shell]
+----
+pvesm set <storage id> --options multichannel,max_channels=16
+----
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-007.png["多通道設定"]
+
+====
+. 下面顯示的是已配置儲存的 /etc/pve/storage.cfg 檔案的內容：
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-smb-008.png["SMB 的儲存設定檔"]
+
+====
+

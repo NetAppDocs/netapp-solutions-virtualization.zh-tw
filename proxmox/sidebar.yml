@@ -8,4 +8,35 @@ entries:
   url: "/proxmox/proxmox-overview.html"
 - title: 為 Proxmox VE 配置ONTAP存儲
   pdf-filename: 適用於 Proxmox VE 的NetApp存儲
-  url: "/proxmox/proxmox-ontap.html"
+  entries:
+  - title: 解決方案架構
+    url: "/proxmox/proxmox-ontap-architecture.html"
+  - title: 支援的儲存類型
+    url: "/proxmox/proxmox-storage-types.html"
+  - title: 部署指南
+    url: "/proxmox/proxmox-deploy-guidelines.html"
+  - title: 使用ONTAP為 Proxmox VE 配置儲存協議
+    entries:
+    - title: 儲存協定概述
+      url: "/proxmox/proxmox-ontap.html"
+    - title: 配置 SMB/CIFS 存儲
+      url: "/proxmox/proxmox-ontap-smb.html"
+    - title: 配置 NFS 存儲
+      url: "/proxmox/proxmox-ontap-nfs.html"
+    - title: 使用 FC 配置 LVM
+      url: "/proxmox/proxmox-ontap-fc.html"
+    - title: 配置 LVM 與 iSCSI
+      url: "/proxmox/proxmox-ontap-iscsi.html"
+    - title: 配置 LVM 與 NVMe/FC
+      url: "/proxmox/proxmox-ontap-nvme-fc.html"
+    - title: 配置 LVM 與 NVMe/TCP
+      url: "/proxmox/proxmox-ontap-nvme-tcp.html"
+- title: 保護 Proxmox VE 工作負載
+  pdf-filename: 使用 Proxmox Backup Server 和NetApp ONTAP實作 Proxmox VE 工作負載資料保護
+  entries:
+  - title: 解決方案架構
+    url: "/proxmox/proxmox-pbs-architecture.html"
+  - title: 部署要求
+    url: "/proxmox/proxmox-pbs-requirements.html"
+  - title: 使用 Proxmox Backup Server 設定資料保護
+    url: "/proxmox/proxmox-wkld-dp-pbs.html"

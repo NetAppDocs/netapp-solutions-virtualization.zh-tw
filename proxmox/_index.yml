@@ -6,17 +6,37 @@ indexpage:
   tiles:
   - title: 開始
     links:
-    - title: 關於 Proxmox VE
+    - title: 了解 Proxmox VE
       url: proxmox-overview.html
-    - title: 為 Proxmox VE 配置ONTAP存儲
+  - title: 為 Proxmox VE 配置ONTAP存儲
+    links:
+    - title: Proxmox VE 和ONTAP架構
+      url: proxmox-ontap-architecture.html
+    - title: 支援的儲存類型
+      url: proxmox-storage-types.html
+    - title: 部署指南
+      url: proxmox-deploy-guidelines.html
+    - title: 配置儲存協議
       url: proxmox-ontap.html
+  - title: 保護 Proxmox VE 工作負載
+    links:
+    - title: Proxmox備份伺服器架構
+      url: proxmox-pbs-architecture.html
+    - title: 部署要求和注意事項
+      url: proxmox-pbs-requirements.html
+    - title: 使用 Proxmox Backup Server 設定資料保護
+      url: proxmox-wkld-dp-pbs.html
   - title: 其他資源
     links:
-    - title: NetApp儲存與 NVMe-oF 在 Proxmox 虛擬化環境中實現突破性效能
+    - title: NetApp儲存與 NVMe-oF 為 Proxmox 虛擬化環境帶來突破性效能
       url: https://www.credativ.de/en/blog/credativ-inside/netapp-storage-and-nvme-of-for-breakthrough-performance-in-proxmox-virtualization-environments/
+    - title: Linux Bridge 與 Open vSwitch 在 Proxmox VE 的對比
+      url: https://community.netapp.com/t5/Tech-ONTAP-Blogs/Networking-with-Proxmox-VE/ba-p/465060
     - title: Proxmox VE 文檔
       url: https://pve.proxmox.com/pve-docs/chapter-sysadmin.html#external_metric_server
     - title: 備份和恢復 Proxmox VE
       url: https://pve.proxmox.com/pve-docs/chapter-vzdump.html
     - title: Proxmox VE 的存儲
       url: https://pve.proxmox.com/pve-docs/chapter-pvesm.html
+    - title: Proxmox VE 搭配SolidFire存儲
+      url: https://community.netapp.com/t5/SolidFire-and-HCI/Proxmox-VE-with-SolidFire-NetApp-HCI/td-p/461937

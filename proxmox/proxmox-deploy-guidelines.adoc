@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-deploy-guidelines.html 
+keywords: netapp, proxmox, proxmox ve, all-flash, nfs, iscsi, nvme, fc, ontap, storage, aff, asa, virtual machines, vm, containers, proxmox backup server 
+summary: 'Proxmox 虛擬環境 (VE) 與NetApp ONTAP儲存集成，為虛擬機器和容器提供共享存儲，從而實現更快的即時遷移、一致的模板和集中式備份。了解採用ONTAP儲存系統的 Proxmox VE 叢集的架構、網路和儲存配置以及部署和最佳化最佳實務。' 
+---
+= 使用NetApp ONTAP儲存的 Proxmox 虛擬環境部署指南
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Proxmox 虛擬環境 (VE) 與NetApp ONTAP儲存集成，為虛擬機器和容器提供共享存儲，從而實現更快的即時遷移、一致的模板和集中式備份。了解網路和儲存配置指南以及部署和最佳化具有ONTAP儲存系統的 Proxmox VE 叢集的最佳實務。
+
+有關支援的儲存類型和內容相容性的信息，請參閱 link:proxmox-storage-types.html["了解 Proxmox VE 支援的儲存類型"]。
+
+
+
+== 網路設定指南
+
+遵循以下準則可最佳化網路效能和可靠性：
+
+* 確保 Proxmox VE 節點和ONTAP儲存之間有兩個冗餘的網路路徑。
+* 使用鏈路聚合（LACP）來提高頻寬和容錯能力。
+* 設計網路拓撲結構以避免生成樹問題。必要時可使用 RSTP 或 MSTP 等功能。
+* 實施 VLAN 以隔離不同類型的流量並增強安全性。
+* 在所有網路設備上配置巨型幀（MTU 9000），以提高儲存流量的效能。
+* 設定 VLAN 區域時，可考慮使用基於 Linux 橋接的 Open vSwitch (OVS)。
+
+
+
+
+== 儲存配置最佳實踐
+
+遵循以下最佳實踐，優化儲存效能和可擴充性：
+
+* 使用 ONTAP 的高階資料管理功能（例如快照和複製）來增強資料保護和復原能力。
+* 使用FlexGroup磁碟區來滿足大容量需求，以充分發揮ONTAP可擴充性的潛力。
+* 在地理分佈的環境中，使用FlexCache將映像和範本分發到更靠近 Proxmox VE 節點的位置，以加快部署並實現集中管理。
+* 將FlexGroup與 NFS 結合使用時，請結合使用 nConnect 或會話中繼以及 pNFS 來最佳化效能和可用性。
+* 對於區塊協議，確保進行適當的分區和 LUN 掩碼，以限制只有授權的 Proxmox VE 節點才能存取。
+* 分配足夠的儲存容量以滿足虛擬機器成長和資料需求。
+* 實施儲存分層以優化效能和成本效益。
+* 使用NetApp管理工具定期監控儲存效能和運作狀況。
+* 使用NetApp Console集中管理多個ONTAP系統。
+* 啟用ONTAP上的勒索軟體防護功能，以防範勒索軟體攻擊。
+
+
+
+
+== Proxmox VE 設定指南
+
+請遵循以下準則，以最佳化 Proxmox VE 與NetApp ONTAP儲存的整合：
+
+* 將 Proxmox VE 更新至最新穩定版本，即可享受最新功能和錯誤修復。
+* 配置 Proxmox VE 使用NetApp ONTAP的共用儲存作為虛擬機器儲存。
+* 設定 Proxmox VE 叢集以實現高可用性和虛擬機器的即時遷移。
+* 使用冗餘網路進行叢集通信，並專門用一個網路進行即時遷移。
+* 避免在叢集中重複使用相同的虛擬機器或容器 ID，以防止衝突。
+* 在虛擬機器中使用 VirtIO SCSI 單控制器可獲得更好的效能和功能。
+* 對於 IO 需求高的虛擬機，啟用 IO 執行緒選項。
+* 啟用虛擬機器磁碟上的丟棄/TRIM 支持，以最佳化儲存使用情況。
+

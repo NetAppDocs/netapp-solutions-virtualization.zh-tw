@@ -1,0 +1,122 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-ontap-nvme-fc.html 
+keywords: netapp, proxmox, proxmox ve, nvme, nvme-fc, lvm, ontap, storage 
+summary: '使用ONTAP為 Proxmox 虛擬環境設定基於光纖通道的 NVMe 邏輯磁碟區管理器 (LVM)。此過程包括 nvme-cli 安裝、命名空間配置、子系統設定以及為共用儲存建立磁碟區組。' 
+---
+= 為 Proxmox VE 配置 NVMe/FC 的 LVM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用NetApp ONTAP透過光纖通道協定配置 Proxmox 虛擬環境 (VE) 主機之間的共用儲存的邏輯磁碟區管理器 (LVM)。此配置採用現代 NVMe 協議，提供低延遲的高效能區塊級儲存存取。
+
+
+
+== 初始虛擬化管理員任務
+
+完成這些初始任務，為 Proxmox VE 主機準備 NVMe/FC 連接，並收集儲存管理員所需的必要資訊。
+
+. 確認是否有兩個HBA介面可用。
+. 在叢集中的每個 Proxmox 主機上，執行以下命令來收集 WWPN 資訊並驗證 nvme-cli 軟體包是否已安裝。
++
+[source, shell]
+----
+apt update
+apt install nvme-cli
+cat /sys/class/fc_host/host*/port_name
+nvme show-hostnqn
+----
+. 將收集到的主機 NQN 和 WWPN 資訊提供給儲存管理員，並請求所需大小的 NVMe 命名空間。
+
+
+
+
+== 儲存管理員任務
+
+如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
+
+. 確保SVM可用且已啟用NVMe協定。請參閱 link:https://docs.netapp.com/us-en/ontap/san-admin/create-nvme-namespace-subsystem-task.html["ONTAP 9 上的 NVMe 任務文檔"]。
+. 建立 NVMe 命名空間。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nvme-fc-001.png["nvme 命名空間創建"]
+
+====
+. 建立子系統並指派主機 NQN（如果使用 CLI）。請點擊上方連結查看詳情。
+. 請確保在安全性標籤中啟用反勒索軟體保護。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nvme-fc-002.png["反勒索軟體狀態"]
+
+====
+. 通知虛擬化管理員 NVMe 命名空間已建立。
+
+
+
+
+== 最終虛擬化管理員任務
+
+完成以下任務，將 NVMe 命名空間配置為 Proxmox VE 中的共用 LVM 儲存體。
+
+. 在叢集中的每個 Proxmox VE 主機上導航至 shell，並驗證新命名空間是否可見。
+. 檢查命名空間詳細資訊。
++
+[source, shell]
+----
+nvme list
+----
+. 檢查並收集設備詳細資料。
++
+[source, shell]
+----
+nvme list
+nvme netapp ontapdevices
+nvme list-subsys
+lsblk -N
+----
+. 建立卷宗組。
++
+[source, shell]
+----
+vgcreate <volume group name> /dev/mapper/<device id>
+# Where <volume group name> is the desired name for the volume group and <device id> is the nvme device id.
+pvs
+# Verify the physical volume is part of the volume group.
+vgs
+# Verify the volume group is created.
+----
+. 使用管理使用者介面 `https:<proxmox node>:8006`按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“LVM”。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nvme-fc-003.png["lvm儲存導航"]
+
+====
+. 提供儲存 ID 名稱，選擇現有磁碟區組，然後選擇剛剛使用 CLI 建立的磁碟區組。勾選共享選項。使用 Proxmox VE 9 及更高版本，啟用下列功能： `Allow Snapshots as Volume-Chain` 啟用「進階」複選框後，此選項才會顯示。
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nvme-fc-004.png["現有 vg 上的 lvm"]
+
+====
+. 下面展示了一個使用 NVMe/FC 的 LVM 儲存設定檔範例：
++
+.顯示範例
+[%collapsible]
+====
+image:proxmox-ontap-nvme-fc-005.png["lvm on nvme fc 配置"]
+
+====
+

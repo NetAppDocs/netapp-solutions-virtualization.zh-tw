@@ -1,0 +1,52 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-pbs-requirements.html 
+keywords: netapp, proxmox, proxmox ve, proxmox backup server, ontap, storage, requirements, deployment, prerequisites 
+summary: 審查 Proxmox Backup Server 與NetApp ONTAP儲存的需求和部署注意事項。這包括部署選項、儲存後端支援、多叢集管理和網路配置最佳實踐。 
+---
+= Proxmox備份伺服器與NetApp ONTAP儲存的部署需求與注意事項
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+在實施之前，請檢視 Proxmox Backup Server (PBS) 與NetApp ONTAP儲存的部署需求和注意事項。這樣可以確保對備份伺服器部署、儲存配置和網路連線進行妥善規劃。
+
+
+
+== 部署注意事項
+
+將 PBS 部署在裸機上，或作為 Proxmox VE 上的虛擬機器部署。當將 PBS 部署為虛擬機器時，如果 Proxmox VE 主機發生停機，請考慮備份伺服器的可用性。在裸機上或單獨的 Proxmox VE 主機或叢集上部署 PBS，以確保在主主機發生故障時備份伺服器的可用性。
+
+備份內容獨立儲存在資料儲存中，因此如果需要，可以將資料儲存遷移到另一個 PBS 實例。這樣即使原始 PBS 實例不可用，也能確保備份資料仍然可以存取。
+
+
+
+== 存儲後端支持
+
+PBS 支援各種儲存後端，包括本機儲存、NFS、iSCSI、FC、NVMe-oF 和 S3（技術預覽版）。與NetApp ONTAP儲存集成，使組織能夠利用高級資料管理功能來增強資料保護和復原能力。
+
+使用ONTAP SnapMirror將 PBS 資料儲存複製到另一個ONTAP系統以進行災難復原。這樣可以保護備份數據，並在站點故障後實現數據恢復。
+
+
+
+== 多集群管理
+
+單一 PBS 實例可以管理多個 Proxmox VE 集群，為大規模部署提供集中式備份。使用命名空間在邏輯上分離不同叢集或租戶的備份數據，確保資料隔離和安全性。
+
+配置資料保留策略，以自動管理備份資料生命週期，並確保符合組織要求。設定清理策略，自動將舊的或不必要的備份資料標記為要刪除的資料。垃圾回收過程透過從資料儲存中刪除未使用或過時的資料來回收儲存空間。
+
+
+
+== 管理介面
+
+透過基於 Web 的介面、命令列工具或 REST API 管理 PBS。使用以下 URL 存取連接埠 8007 上的 Web 介面 `https://<pbs-ip-address>:8007`。
+
+
+
+== 網路配置最佳實踐
+
+確保 PBS 和ONTAP儲存之間有冗餘的網路路徑，以實現高可用性和高效能。考慮使用鏈路聚合（LACP）來提高頻寬和冗餘度。在所有網路設備上配置巨型幀（MTU 9000），以提高儲存流量效能。
+
+對於 NFS，請為 PBS 資料儲存建立一個具有適當權限的專用匯出。對於區塊協議，確保適當的區域劃分和 LUN 掩碼，以限制只有授權的 PBS 主機才能存取。
