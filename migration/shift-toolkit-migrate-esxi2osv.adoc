@@ -541,5 +541,5 @@ NOTE: 在開始進行此特定整合之前，請聯絡您的紅帽客戶團隊�
 
 以下影片示範了本解決方案中概述的流程。
 
-.從 ESX 到 Oracle Linux Virtualization Manager (OLVM) 的零接觸遷移
+.從 ESX 到 Red Hat OpenShift Virtualization (OSV) 的零接觸遷移
 video::7e2abc5e-2919-43d6-a5c2-b3760100adaf[panopto]
