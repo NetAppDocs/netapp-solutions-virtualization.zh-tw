@@ -1,0 +1,34 @@
+---
+indexpage:
+  title: NetApp OpenNebula 解決方案
+  summary: NetApp OpenNebula 解決方案是一系列技術能力，用於展示 NetApp 儲存設備使用 OpenNebula 進行虛擬化的能力。
+  lead: NetApp OpenNebula 解決方案是一系列技術能力，用於展示 NetApp 儲存設備使用 OpenNebula 進行虛擬化的能力。
+  tiles:
+  - title: 開始
+    links:
+    - title: 了解 OpenNebula
+      url: opennebula-overview.html
+    - title: 安裝 OpenNebula
+      url: https://docs.opennebula.io/7.0/software/installation_process/
+  - title: 為 OpenNebula 配置 NetApp 儲存空間
+    links:
+    - title: OpenNebula 與 NetApp 架構
+      url: opennebula-netapp-architecture.html
+    - title: 支援的儲存類型
+      url: opennebula-storage-types.html
+    - title: 配置儲存協議
+      url: opennebula-netapp-protocols.html
+  - title: 其他資源
+    links:
+    - title: OpenNebula 7.0 文件
+      url: https://docs.opennebula.io/7.0/getting_started/
+    - title: 為 OpenNebula Enterprise Edition 設定 NetApp SAN 資料存放區
+      url: https://docs.opennebula.io/7.0/integrations/storage_extensions/netapp/
+    - title: OpenNebula 文件（先前版本 - 4.x 至 6.x）
+      url: https://docs.opennebula.io/6.10/
+    - title: OpenNebula YouTube 頻道
+      url: https://www.youtube.com/@OpenNebula/playlists
+    - title: OpenNebula 論壇
+      url: https://forum.opennebula.io/
+    - title: OpenNebula GitHub 儲存庫
+      url: https://github.com/OpenNebula/

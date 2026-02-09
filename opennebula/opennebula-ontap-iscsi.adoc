@@ -1,0 +1,195 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-ontap-iscsi.html 
+keywords: netapp, opennebula, volume group, iscsi, lvm, lvm thin pool, ontap, storage 
+summary: 使用 ONTAP 為 OpenNebula 設定邏輯磁碟區管理器（LVM）資料儲存區與 iSCSI。此程序包括 iSCSI 和多路徑組態以及 Volume Group 建立。 
+---
+= 使用 ONTAP iSCSI 為 OpenNebula 配置 LVM Thin
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 iSCSI 協議和 NetApp ONTAP，為 OpenNebula 主機配置 Logical Volume Manager（LVM）資料存放區以實現共用儲存。此配置可在標準乙太網路上啟用具備多路徑支援的區塊層級儲存存取。
+
+
+
+== 初始虛擬化管理員任務
+
+完成這些初始任務，為 OpenNebula 主機做好 iSCSI 連線的準備，並收集儲存管理員所需的必要資訊。
+
+. 確認兩個 Linux VLAN 介面可用。
+. 確保所有 OpenNebula 主機上都安裝了 multipath-tools 和 iSCSI 發起程序實用程序，並在啟動時運行。
++
+[role="tabbed-block"]
+====
+.Debian/Ubuntu
+--
+[source, shell]
+----
+apt list | grep multipath-tools
+# If need to install, execute the following line.
+apt-get install multipath-tools open-iscsi
+# If /etc/multipath.conf is not present, first make sure the multipathd service is started.
+systemctl enable --now multipathd
+systemctl enable --now open-iscsi
+----
+--
+.RHEL/AlmaLinux
+--
+[source, shell]
+----
+dnf list installed | grep device-mapper-multipath
+# If need to install, execute the following line.
+dnf install device-mapper-multipath iscsi-initiator-utils
+# If /etc/multipath.conf is not present, first make sure the multipathd service is started.
+systemctl enable --now multipathd
+systemctl enable --now iscsid
+----
+--
+====
+. 收集所有 OpenNebula 主機的 iSCSI 主機 IQN 並將其提供給儲存管理員。
++
+[source, shell]
+----
+cat /etc/iscsi/initiator.name
+----
+
+
+如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
+
+. 確保SVM可用且已啟用iSCSI協定。跟隨 link:https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["ONTAP 9 文件"]。
+. 每個控制器應建立兩個專用於 iSCSI 的 LIF。建議每個控制器使用兩個 LIF 以實現冗餘和多路徑效能。確保在 OpenNebula 主機上設定的 VLAN 介面上建立 LIF。建議使用巨型幀（MTU 9000）以獲得更好的效能。
++
+image:opennebula-ontap-iscsi-001.png["iSCSI介面詳細信息"]
+
+. 建立 LUN 並將其呈現給主機 iSCSI 發起程序。通常，一個 OpenNebula 叢集會建立一個 igroup。將前端伺服器和虛擬機器管理程式主機包含在同一個 igroup 中，以同時支援 Image 和 System 資料儲存區。
+. 通知虛擬化管理員 LUN 已建立。
+
+
+
+
+== 最終虛擬化管理員任務
+
+完成以下任務，將 iSCSI LUN 設定為 OpenNebula 中的共用 LVM 資料儲存區。
+
+. 透過 SSH 連接到其中一個前端伺服器，並提供其中一個 iSCSI 資料 lif 位址，以探索所有 iSCSI Lif 入口網站。
++
+[source, shell]
+----
+iscsiadm -m discovery -t sendtargets -p <iscsi data lif address>
+iscsiadm -m node
+iscsiadm -m node -l
+iscsiadm -m session
+----
+. 執行 `rescan-scsi-bus.sh` 或 `echo "- - -" > /sys/class/scsi_host/host*/scan` 重新掃描 SCSI 匯流排並偵測新的 LUN 。
+. 使用  `lsblk -S` 或 fdisk -l 指令驗證 LUN 是否在所有 OpenNebula 主機上可見。
+. 執行 `iscsiadm -m session -P 3`以擷取 LUN 到裝置名稱的對應關係。
+. 透過執行  `multipath -a /dev/<device_name>` 將裝置新增至多重路徑組態。然後、執行  `multipath -r` 以重新載入多重路徑組態。透過執行  `multipath -ll` 命令來驗證多重路徑組態。
+. 根據所需的資料儲存類型建立設定檔。如需完整的屬性清單，請參閱 https://docs.opennebula.io/7.0/product/cluster_configuration/san_storage/lvm_drivers/["OpenNebula LVM 說明文件"]。範例檔案如下所示：
++
+[role="tabbed-block"]
+====
+.備份
+--
+.. 對於 Restic、
+
+
+[listing]
+----
+$cat iscsi-restic.conf
+NAME = "Backup-Restic-iSCSI01"
+TYPE = "BACKUP_DS"
+
+DS_MAD = "restic"
+TM_MAD = "-"
+
+RESTIC_PASSWORD = "<restic_password>"
+RESTIC_SFTP_SERVER = "<backup server>"
+----
+.. 對於 Rsync，
+
+
+[listing]
+----
+$cat iscsi-rsync.conf
+NAME = "Backup-Rsync-iSCSI02"
+TYPE = "BACKUP_DS"
+
+DS_MAD = "rsync"
+TM_MAD = "-"
+
+RSYNC_USER = "<rsync_user>"
+RSYNC_HOST = "<backup server>"
+----
+--
+.檔案
+[source, shell]
+----
+$cat iscsi-kernel.conf
+NAME = "File-Kernel-iSCSI03"
+TYPE = "FILE_DS"
+DS_MAD = "fs"
+TM_MAD = "local"
+SAFE_DIRS = "/var/tmp/files"
+----
+.影像
+[source, shell]
+----
+$cat iscsi-image.conf
+NAME = "Image-iSCSI04"
+TYPE = "IMAGE_DS"
+DS_MAD = "fs"
+TM_MAD = "fs_lvm_ssh"
+DISK_TYPE = "block"
+LVM_THIN_ENABLE = "yes"
+----
+.系統
+[source, shell]
+----
+$cat iscsi-system.conf
+NAME = "System-iSCSI05"
+TYPE = "SYSTEM_DS"
+TM_MAD = "fs_lvm_ssh"
+DISK_TYPE = "block"
+BRIDGE_LIST = "<space-separated list of OpenNebula hosts>" # If LUN not presented to frontend hosts
+LVM_THIN_ENABLE = "yes"
+----
+====
+. 執行 `onedatastore create <configuration file>`。記下建立後傳回的資料存放區 ID。
++
+[]
+====
+onedatastore create iscsi-system.conf ID ： 106
+
+====
+. 使用 `vgcreate <vg_name> <multipath_device>`指令在 iSCSI LUN 上建立磁碟區群組。對於映像資料存放區，磁碟區群組名稱可以隨意命名。對於系統資料存放區，磁碟區群組名稱必須採用 `vg-one-<datastore id>`格式。這是 OpenNebula 識別系統資料存放區正確磁碟區群組所需的。如果您要建立備份 / 檔案 / 映像資料存放區，請繼續執行下列步驟。對於系統資料存放區，請到此為止。
+. 使用  `lvcreate -l 100%FREE -n <logical volume name> <volume group name>` 指令建立邏輯卷精簡池。對於系統資料存儲，OpenNebula 會在需要時自動建立 LVM 精簡池。
+. 使用  `mkfs.ext4 /dev/<volume group>/<logical volume>` 指令在邏輯磁碟區上建立檔案系統。系統資料儲存不需要建立檔案系統。
+. 更新 /etc/fstab 或自動掛載配置，以使用所需的掛載選項掛載資料儲存。假設預設資料儲存位置為 /var/lib/one/datastores。可以使用 `onedatastore show <datastore_id>`進行驗證。如果不是，請檢查 /etc/one/oned.conf 中的 DATASTORE_LOCATION 參數。確保資料儲存位置下存在<datastore_id>資料夾。範例條目如下所示：
++
+[role="tabbed-block"]
+====
+.使用 /etc/fstab
+--
+[source, shell]
+----
+/dev/<vg name>/<logical volume> /var/lib/one/datastores/<datastore_id> ext4 _netdev,noauto,x-systemd.automount,nofail 0 2
+----
+--
+.使用自動掛載
+--
+[source, shell]
+----
+/var/lib/one/datastores/<datastore_id> -fstype=ext4,_netdev,noauto,x-systemd.automount,nofail,rw :/dev/<vg name>/<logical volume>
+----
+--
+====
+. 使用  `mount -a` 或  `systemctl reload autofs` 命令掛載資料存放區。
+. 使用 mount 指令驗證資料存放區是否已掛載，並使用 `onedatastore show <datastore_id>` 指令驗證資料存放區容量。
+. 確保 oneadmin 使用者和群組擁有資料儲存資料夾的所有權。使用  `chown -R oneadmin:oneadmin /var/lib/one/datastores/<datastore_id>` 命令調整權限。
+

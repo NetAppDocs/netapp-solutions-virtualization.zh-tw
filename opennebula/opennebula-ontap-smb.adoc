@@ -1,0 +1,182 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-ontap-smb.html 
+keywords: netapp, opennebula, opennebula ve, smb, cifs, ontap, storage 
+summary: 使用 ONTAP 為 OpenNebula 虛擬環境設定 SMB/CIFS 儲存設備。此過程包括啟用 SVM、建立 LIF、設定 Active Directory、建立磁碟區以及設定多通道以實現容錯和增強效能。 
+---
+= 為 OpenNebula 配置 SMB/CIFS 資料存儲儲存
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 NetApp ONTAP 為 OpenNebula 配置 SMB/CIFS Datastore 儲存。SMB 多通道可透過多個網路連線至儲存系統，提供容錯能力並提升效能。
+
+SMB/CIFS 檔案共用需要儲存管理員和虛擬化管理員進行設定。更多詳情請參閱 link:https://www.netapp.com/pdf.html?item=/media/17136-tr4740.pdf["TR4740 - SMB 3.0 多通道"]。
+
+
+NOTE: 密碼以明文文件形式保存，只有 root 用戶才能存取。請確保採取適當的安全措施來保護敏感資訊。
+
+
+
+== 儲存管理員任務
+
+如果您是ONTAP新手，請使用系統管理員介面完成這些任務。
+
+. 為 SMB 啟用 SVM。跟隨 link:https://docs.netapp.com/us-en/ontap/smb-config/configure-access-svm-task.html["ONTAP 9 文件"] 了解更多。
+. 每個控制器至少創建兩個 LIF。請依照文件中的步驟操作。作為參考，這裡附上此解決方案中使用的 LIF 的螢幕截圖。
++
+.顯示範例
+[%collapsible]
+====
+image:opennebula-ontap-smb-001.png["nas接口詳細信息"]
+
+====
+. 配置基於 Active Directory 或工作組的身份驗證。請依照文件中的步驟操作。
++
+.顯示範例
+[%collapsible]
+====
+image:opennebula-ontap-smb-002.png["加入網域資訊"]
+
+====
+. 建立卷。勾選「將資料分佈到叢集中」選項以使用FlexGroup。請確保該磁碟區已啟用反勒索軟體保護。
++
+.顯示範例
+[%collapsible]
+====
+image:opennebula-ontap-smb-003.png["FlexGroup選項"]
+
+====
+. 建立 SMB 共享並調整權限。跟隨link:https://docs.netapp.com/us-en/ontap/smb-config/configure-client-access-shared-storage-concept.html["ONTAP 9 文件"]了解更多。
++
+.顯示範例
+[%collapsible]
+====
+image:opennebula-ontap-smb-004.png["SMB 共享資訊"]
+
+====
+. 向虛擬化管理員提供 SMB 伺服器、共用名稱和憑證。
+
+
+
+
+== 虛擬化管理員任務
+
+完成以下任務，將 SMB 共用新增為 OpenNebula 中的資料存儲，並啟用多通道以提高效能和容錯能力。
+
+. 收集用於共享身份驗證的 SMB 伺服器、共享名稱和憑證。
+. 請確保在 Fedora 上安裝以下軟體包：sssd、realmd、adcli、oddjob、oddjob-mkhomedir、samba-common-tools、krb5-workstation 和 cifs-utils，以支援 Active Directory 整合和 SMB 掛載。Debian 軟體包包括：realmd、sssd、sssd-tools、libnss-sss、libpam-sss、adcli、samba-common-bin、packagekit、krb5-user 和 cifs-utils。
+. 為了實現容錯，請確保至少有兩個介面配置在不同的 VLAN 中。確認網卡支援 RSS。
+. 透過 SSH 連接到前端伺服器之一，並根據所需的 Datastore 類型建立設定檔。範例檔案如下所示：
++
+[role="tabbed-block"]
+====
+.備份
+--
+.. 對於 Restic、
+
+
+[listing]
+----
+$cat smb-restic.conf
+NAME = "Backup-Restic-SMB"
+TYPE = "BACKUP_DS"
+
+DS_MAD = "restic"
+TM_MAD = "-"
+
+RESTIC_PASSWORD = "<restic_password>"
+RESTIC_SFTP_SERVER = "<backup server>"
+----
+.. 對於 Rsync，
+
+
+[listing]
+----
+$cat smb-rsync.conf
+NAME = "Backup-Rsync-SMB"
+TYPE = "BACKUP_DS"
+
+DS_MAD = "rsync"
+TM_MAD = "-"
+
+RSYNC_USER = "<rsync_user>"
+RSYNC_HOST = "<backup server>"
+----
+--
+.檔案
+[source, shell]
+----
+$cat smb-kernel.conf
+NAME = "File-Kernel-SMB"
+TYPE = "FILE_DS"
+DS_MAD = "fs"
+TM_MAD = "local"
+SAFE_DIRS = "/var/tmp/files"
+----
+.影像
+[source, shell]
+----
+$cat smb-image.conf
+NAME = "Image-SMB"
+TYPE = "IMAGE_DS"
+DS_MAD = "fs"
+TM_MAD = "shared"
+----
+.系統
+[source, shell]
+----
+$cat smb-system.conf
+NAME = "System-SMB"
+TYPE = "SYSTEM_DS"
+TM_MAD = "shared"
+----
+====
+. 執行 `onedatastore create <configuration file>`。記下建立後傳回的資料存放區 ID。
++
+[]
+====
+onedatastore create smb-system.conf ID：100
+
+====
+. 在 /etc/ 中建立 smb 憑證檔案。如果使用 kerberos 驗證（KVM 主機已加入 <domain>），則不需要此步驟。
++
+[source, shell]
+----
+$cat /etc/smb-credentials-<datastore_id>.cfg
+username=<smb_username>
+password=<smb_password>
+domain=<smb_domain>
+----
+. 對憑證檔案設定正確的權限 (640)。如有必要，將所有權變更為 oneadmin 使用者和群組。
+. 使用  `id oneadmin` 指令取得 oneadmin 使用者的 uid 和 gid。
+. 更新 /etc/fstab 或自動掛載配置以啟用多通道。假設預設資料儲存位置為 /var/lib/one/datastores。如果不是，請檢查 /etc/one/oned.conf 中的 DATASTORE_LOCATION 參數。確保 <datastore_id> 資料夾存在於資料儲存位置下。範例條目如下：
++
+[role="tabbed-block"]
+====
+.使用 /etc/fstab
+--
+[source, shell]
+----
+# credentials mapping to file option is not required when using kerberos authentication
+//<smb_server>/<smb_share> /var/lib/one/datastores/<datastore_id> cifs credentials=/etc/smb-credentials-<datastore_id>.cfg,_netdev,noauto,x-systemd.automount,vers=3.0,multichannel,max_channels=16,nofail,uid=<oneadmin uid>,gid=<oneadmin gid> 0 0
+----
+--
+.使用自動掛載
+--
+[source, shell]
+----
+# credentials mapping to file option is not required when using kerberos authentication
+/var/lib/one/datastores/<datastore_id> -fstype=cifs,credentials=/etc/smb-credentials-<datastore_id>.cfg,vers=3.0,multichannel,max_channels=16,uid=<oneadmin uid>,gid=<oneadmin gid> ://<smb_server>/<smb_share>
+----
+--
+====
+. 使用  `mount -a` 或  `systemctl reload autofs` 命令掛載資料存放區。
+. 使用 mount 指令驗證資料存放區是否已掛載，並使用 `onedatastore show <datastore_id>` 指令驗證資料存放區容量。
+. 確保 oneadmin 使用者和群組擁有資料儲存資料夾的所有權。使用  `chown -R oneadmin:oneadmin /var/lib/one/datastores/<datastore_id>` 命令調整權限。
+

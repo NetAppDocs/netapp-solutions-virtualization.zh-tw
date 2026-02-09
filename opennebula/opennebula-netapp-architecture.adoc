@@ -1,0 +1,92 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-netapp-architecture.html 
+keywords: netapp, opennebula, ontap, storage, architecture, nas, san, nfs, smb, iscsi, fc, nvme, flexgroup, flexcache, snapmirror 
+summary: NetApp 與 OpenNebula 整合，透過 NAS 和 SAN 協定提供企業級儲存功能。ONTAP 提供進階資料管理功能，包括快照、複製、複寫和勒索軟體防護，適用於虛擬化工作負載。 
+---
+= 了解適用於 OpenNebula 的 ONTAP 儲存架構
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp 產品與 OpenNebula 整合，透過 NAS 和 SAN 協定提供企業級儲存功能。ONTAP 提供進階資料管理功能，包括快照、複製、複本、以及勒索軟體防護，適用於在 OpenNebula 叢集上執行的虛擬化工作負載。
+
+
+
+== 解決方案架構
+
+此解決方案架構包含以下關鍵元件：
+
+* *OpenNebula Frontend 伺服器：* 一組 OpenNebula Frontend 伺服器，提供雲端管理功能來管理虛擬機器（VM）和 Kubernetes 叢集。
+* *OpenNebula 運算節點：* 一組用於託管由 OpenNebula 管理的虛擬機器和 Kubernetes 叢集的運算節點。
+* *NetApp ONTAP 儲存：*一種高效能、可擴充的儲存系統，可為 OpenNebula 叢集提供共用儲存。
+* *網路基礎設施：* 強大的網路設置，確保 OpenNebula 節點與 ONTAP 儲存之間低延遲、高吞吐量的連接。
+* * NetApp Console：* 用於管理多個NetApp儲存系統和資料服務的集中式管理介面。
+
+
+下圖展示了 OpenNebula 與 NetApp ONTAP 儲存整合的高階架構：
+
+image::opennebula-netapp-architecture-001.png[OpenNebula 採用 NetApp ONTAP 架構]
+
+
+
+== 適用於 OpenNebula 的 ONTAP 功能
+
+ONTAP 提供一套全面的企業級儲存功能，可增強 OpenNebula 部署效果。這些功能涵蓋資料管理、保護、效率和協定支援，並支援 NAS 和 SAN 儲存架構。
+
+
+
+=== 核心資料管理功能
+
+* 橫向擴展叢集架構
+* 安全性身份驗證和基於角色的存取控制 (RBAC) 支持
+* 零信任多管理員支持
+* 安全的多租戶
+* 使用SnapMirror進行資料複製
+* 具有快照的時間點副本
+* 節省空間的克隆
+* 儲存效率特性包括重複資料刪除和壓縮
+* Trident CSI 對 Kubernetes 的支持
+* SnapLock合規性
+* 防篡改快照副本鎖定
+* 具備自主威脅偵測功能的勒索軟體防護
+* 靜態資料和傳輸中資料加密
+* FabricPool將冷資料分層儲存到物件儲存中
+* NetApp Console和Data Infrastructure Insights集成
+* Microsoft 卸載資料傳輸 (ODX)
+
+
+
+
+=== NAS協定特性
+
+* FlexGroup磁碟區為橫向擴充的 NAS 容器提供高效能、負載平衡和可擴充性。
+* FlexCache將資料在全球分發，同時提供本地讀寫存取。
+* 多重協定支援使得相同資料可以透過 SMB 和 NFS 存取。
+* NFS nConnect 允許每個連線建立多個 TCP 會話，從而提高網路吞吐量並利用高速網路卡。
+* NFS會話中繼可提供更高的資料傳輸速度、高可用性和容錯能力。
+* SMB多通道可提供更高的資料傳輸速度、更高的可用性和容錯能力。
+* 與 Active Directory 和 LDAP 整合以實現檔案權限
+* 透過 TLS 使用 NFS 建立安全連線。
+* NFS Kerberos 驗證支持
+* 透過 RDMA 使用 NFS 實現低延遲訪問
+* Windows 與 Unix 身分之間的名稱映射
+* 具備內建威脅偵測功能的自主勒索軟體防護
+* 文件系統分析，取得容量和使用情況洞察
+
+
+
+
+=== SAN協定特性
+
+* 使用SnapMirror主動同步功能將叢集擴展到故障域（始終檢查 https://mysupport.netapp.com/matrix/#welcome["互通性矩陣工具"] （適用於支援的配置）
+* ASA型號提供主動-主動多路徑和快速路徑故障轉移。
+* 支援 FC、iSCSI 和 NVMe-oF 協議
+* iSCSI CHAP 相互認證
+* 選擇性 LUN 對映和連接埠集以增強安全性
+

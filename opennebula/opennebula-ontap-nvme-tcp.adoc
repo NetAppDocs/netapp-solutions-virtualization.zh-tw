@@ -1,0 +1,192 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-ontap-nvme-tcp.html 
+keywords: netapp, opennebula, volume group, nvme, nvme-tcp, lvm, ontap, storage 
+summary: 配置基於 TCP 的 NVMe 邏輯磁碟區管理器（LVM）資料存儲，以便 OpenNebula 使用 ONTAP。此過程包括 nvme-cli 安裝、發現配置、命名空間配置、子系統設定以及建立共用儲存的磁碟區組。 
+---
+= 使用 ONTAP NVMe/TCP 為 OpenNebula 配置 LVM Thin
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 NVMe over TCP 協議，透過 NetApp ONTAP，為多個 OpenNebula 主機配置 Logical Volume Manager（LVM）資料存放區以實現共享儲存。此配置可透過現代 NVMe 協議，在標準乙太網路上提供高效能區塊級儲存存取。
+
+
+
+== 初始虛擬化管理員任務
+
+完成這些初始任務，為 OpenNebula 主機做好 NVMe/TCP 連線的準備，並收集儲存管理員所需的必要資訊。
+
+. 確認兩個 Linux VLAN 介面可用。
+. 在每台 OpenNebula 主機上執行以下命令以收集主機啟動器資訊。
++
+[source, shell]
+----
+nvme show-hostnqn
+----
+. 將收集到的主機 NQN 資訊以及主機名稱提供給儲存管理員，並要求所需大小的 NVMe 命名空間。
+
+
+
+
+== 儲存管理員任務
+
+如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
+
+. 確保SVM可用且已啟用NVMe協定。請參閱 link:https://docs.netapp.com/us-en/ontap/san-admin/create-nvme-namespace-subsystem-task.html["ONTAP 9 上的 NVMe 任務文檔"]。
+. 建立 NVMe 命名空間。
+. 建立子系統並將其指派給主機 NQN。為叢集中的所有 OpenNebula 主機以及前端伺服器建立一個子系統。前端伺服器在子系統分配中是可選的，但對於 Image 資料儲存而言是必需的。
+. 請確保在安全性標籤中啟用反勒索軟體保護。
+. 通知虛擬化管理員 NVMe 命名空間已建立。
+
+
+
+
+== 最終虛擬化管理員任務
+
+完成以下任務，將 NVMe 命名空間配置為 OpenNebula 中的共用 LVM 資料儲存。
+
+. 在叢集中的每台 OpenNebula 主機上開啟 shell，並建立 /etc/nvme/discovery.conf 檔案。根據您的環境更新內容。
++
+[source, shell]
+----
+root@onehost01:~# cat /etc/nvme/discovery.conf
+# Used for extracting default parameters for discovery
+#
+# Example:
+# --transport=<trtype> --traddr=<traddr> --trsvcid=<trsvcid> --host-traddr=<host-traddr> --host-iface=<host-iface>
+
+-t tcp -l 1800 -a 172.21.118.153
+-t tcp -l 1800 -a 172.21.118.154
+-t tcp -l 1800 -a 172.21.119.153
+-t tcp -l 1800 -a 172.21.119.154
+----
+. 登入NVMe子系統。
++
+[source, shell]
+----
+nvme connect-all
+----
+. 若要使 NVMe 命名空間在重新開機後仍保留、請啟用 nvmf-autoconnect 服務。
++
+[source, shell]
+----
+systemctl enable nvmf-autoconnect
+----
+. 檢查並收集設備詳細資料。
++
+[source, shell]
+----
+nvme list
+nvme netapp ontapdevices
+nvme list-subsys
+lsblk -N
+----
+. 透過 SSH 連接到前端伺服器之一，並根據所需的 Datastore 類型建立設定檔。如需完整的屬性清單，請參閱 https://docs.opennebula.io/7.0/product/cluster_configuration/san_storage/lvm_drivers/["OpenNebula LVM 說明文件"]。範例檔案如下所示：
++
+[role="tabbed-block"]
+====
+.備份
+--
+.. 對於 Restic、
+
+
+[listing]
+----
+$cat nvmetcp-restic.conf
+NAME = "Backup-Restic-NVMETCP"
+TYPE = "BACKUP_DS"
+
+DS_MAD = "restic"
+TM_MAD = "-"
+
+RESTIC_PASSWORD = "<restic_password>"
+RESTIC_SFTP_SERVER = "<backup server>"
+----
+.. 對於 Rsync，
+
+
+[listing]
+----
+$cat nvmetcp-rsync.conf
+NAME = "Backup-Rsync-NVMETCP"
+TYPE = "BACKUP_DS"
+
+DS_MAD = "rsync"
+TM_MAD = "-"
+
+RSYNC_USER = "<rsync_user>"
+RSYNC_HOST = "<backup server>"
+----
+--
+.檔案
+[source, shell]
+----
+$cat nvmetcp-kernel.conf
+NAME = "File-Kernel-NVMETCP"
+TYPE = "FILE_DS"
+DS_MAD = "fs"
+TM_MAD = "local"
+SAFE_DIRS = "/var/tmp/files"
+----
+.影像
+[source, shell]
+----
+$cat nvmetcp-image.conf
+NAME = "Image-NVMETCP01"
+TYPE = "IMAGE_DS"
+DS_MAD = "fs"
+TM_MAD = "fs_lvm_ssh"
+DISK_TYPE = "block"
+LVM_THIN_ENABLE = "yes"
+----
+.系統
+[source, shell]
+----
+$cat nvmetcp-system.conf
+NAME = "System-NVMETCP02"
+TYPE = "SYSTEM_DS"
+TM_MAD = "fs_lvm_ssh"
+DISK_TYPE = "block"
+BRIDGE_LIST = "<space-separated list of OpenNebula hosts>" # If NVMe namespace not presented to frontend hosts
+LVM_THIN_ENABLE = "yes"
+----
+====
+. 執行 `onedatastore create <configuration file>`。記下建立後傳回的資料存放區 ID。
++
+[]
+====
+onedatastore create nvmetcp-system.conf ID：109
+
+====
+. 使用 `vgcreate <vg_name> <nvme_device>`指令在 NVMe 命名空間上建立磁碟區群組。對於映像資料存放區，磁碟區群組名稱可以隨意命名。對於系統資料存放區，磁碟區群組名稱必須採用 `vg-one-<datastore id>`格式。這是 OpenNebula 識別系統資料存放區正確磁碟區群組所需的。如果您要建立備份 / 檔案 / 映像資料存放區，請繼續執行下列步驟。對於系統資料存放區，請到此為止。
+. 使用  `lvcreate -l 100%FREE -n <logical volume name> <volume group name>` 指令建立邏輯卷精簡池。對於系統資料存儲，OpenNebula 會在需要時自動建立 LVM 精簡池。
+. 使用  `mkfs.ext4 /dev/<volume group>/<logical volume>` 指令在邏輯磁碟區上建立檔案系統。系統資料儲存不需要建立檔案系統。
+. 更新 /etc/fstab 或自動掛載配置，以使用所需的掛載選項掛載資料儲存。假設預設資料儲存位置為 /var/lib/one/datastores。可以使用 `onedatastore show <datastore_id>`進行驗證。如果不是，請檢查 /etc/one/oned.conf 中的 DATASTORE_LOCATION 參數。確保資料儲存位置下存在<datastore_id>資料夾。範例條目如下所示：
++
+[role="tabbed-block"]
+====
+.使用 /etc/fstab
+--
+[source, shell]
+----
+/dev/<vg name>/<logical volume> /var/lib/one/datastores/<datastore_id> ext4 _netdev,noauto,x-systemd.automount,nofail 0 2
+----
+--
+.使用自動掛載
+--
+[source, shell]
+----
+/var/lib/one/datastores/<datastore_id> -fstype=ext4,_netdev,noauto,x-systemd.automount,nofail,rw :/dev/<vg name>/<logical volume>
+----
+--
+====
+. 使用  `mount -a` 或  `systemctl reload autofs` 命令掛載資料存放區。
+. 使用 mount 指令驗證資料存放區是否已掛載，並使用 `onedatastore show <datastore_id>` 指令驗證資料存放區容量。
+. 確保 oneadmin 使用者和群組擁有資料儲存資料夾的所有權。使用  `chown -R oneadmin:oneadmin /var/lib/one/datastores/<datastore_id>` 命令調整權限。
+

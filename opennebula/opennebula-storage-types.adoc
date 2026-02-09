@@ -1,0 +1,112 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-storage-types.html 
+keywords: netapp, opennebula, ontap, storage, nfs, smb, cifs, iscsi, fc, nvme, content types, vm disks, backups, templates 
+summary: OpenNebula 支援 ONTAP 的多種儲存類型，包括 NAS 協定的 NFS 和 SMB，以及 SAN 協定的 FC、iSCSI 和 NVMe-oF。 
+---
+= OpenNebula 支援的儲存類型
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+OpenNebula 支援 NetApp ONTAP 的多種儲存傳輸協定，包括用於 NAS 的 NFS 和 SMB，以及用於 SAN 的 FC、iSCSI 和 NVMe-oF。使用者可以根據現有技能和需求選擇合適的儲存傳輸協定。如果不打算使用 ONTAP 提供的任何資料服務，請考慮使用 SANtricity 系統，該系統能夠透過 FC、iSCSI、Infiniband 和 NVMe-oF 傳輸協定提供區塊儲存。
+
+OpenNebula 使用的資料儲存通常掛載在 /var/lib/one/datastores 資料夾下，或由 /etc/one/oned.conf 檔案中的 DATASTORE_LOCATION 屬性定義。儲存可以透過 /etc/fstab 檔案掛載，也可以使用 Automounter 或其他環境支援的方法動態掛載。大多數資料夾的權限都設定為由 oneadmin 使用者和群組擁有。請確保 Hypervisor 主機可以使用所需的協定存取儲存系統。
+
+使用自動掛載工具時，請使用直接掛載，以避免自動掛載工具接管父資料夾控制權的問題。若要建立直接掛載，請在 /etc/auto.master.d/ 目錄下建立檔案。例如，可以使用下列命令建立一個名為 one.autofs 的檔案：
+
+[source, bash]
+----
+echo "/-    /etc/auto.one --timeout=60 --ghost" > /etc/auto.master.d/one.autofs
+----
+前端伺服器需要存取鏡像資料儲存。將鏡像資料儲存掛載到虛擬機器管理程式主機上是可選的，但為了獲得更好的效能，建議這樣做。系統資料儲存必須掛載到虛擬機器管理程式主機上，因為它們託管虛擬機器磁碟。核心資料儲存和檔案資料儲存用於儲存虛擬機器核心、記憶體磁碟以及虛擬機器在上下文關聯過程中所需的其他檔案。它們可以掛載到前端伺服器和虛擬機器管理程式主機上。備份資料儲存用於虛擬機器備份，可以掛載到 OpenNebula 叢集中的所有主機上。如果 KVM 主機可以透過 SSH（用於 rsync）或 SFTP（用於 restic）存取備份資料儲存主機，則其他叢集上的虛擬機器也可以使用同一個備份資料儲存。如果使用 Veeam，則應啟用 oVirtAPI。
+
+
+
+== NAS協議支持
+
+NAS 協定（ NFS 和 SMB ）支援前端和 Hypervisor 主機之間的共用檔案系統。ONTAP 快照可以對用戶端可見、以便存取資料的時間點複本。ONTAP FlexCache 可用於地理分散區域內的映像資料存放區。ONTAP NFS 支援 nConnect 、透過每個工作階段使用多個連線來提升效能。使用 FlexGroup 處理大型資料存放區（ > 100TB ）時、建議使用 pNFS 將負載分散到多個節點。請記住在 ONTAP 叢集中為每個控制器至少設定一個資料 LIF 、且 Hypervisor 主機需要具備連線能力。
+
+所有資料儲存類型（映像、系統、核心和檔案以及備份）均支援 NAS 協定。
+
+
+
+== SAN協定支援
+
+企業版包含 NetApp 驅動程式，可在 AFF 和 FAS 系統上使用 iSCSI 協定。其他 SAN 協定（FC、InfiniBand 和 NVMe-oF）通常配置為使用 LVM 驅動程式。LVM 精簡池是為每個虛擬機器建立的，用於精簡配置和快照支援。Hypervisor 主機需要連接到儲存系統。使用 LVM 儲存類型不需要叢集 LVM 支援。
+
+若要使用 NetApp 驅動程式、需要在 Hypervisor 主機上設定 iSCSI 工作階段和多重路徑。對於 LVM 驅動程式、除了系統資料存放區之外、邏輯磁碟區需要建立檔案系統並掛載。對於系統資料存放區、磁碟區群組需要命名為「vg-one-<datastore_id>」、其中 <datastore_id> 是 OpenNebula 中資料存放區的數字識別碼。所有資料存放區類型（映像、系統、核心和檔案、以及備份）都支援 SAN 傳輸協定。
+
+
+
+== NetApp ONTAP API 驅動程式
+
+OpenNebula 的原生 NetApp 整合利用 ONTAP 的 API 自動建立和管理磁碟區、LUN、快照和對應。這種方法提供了最高等級的自動化，避免了手動設定 iSCSI 和 LVM。如需更多資訊，請參閱 link:https://docs.opennebula.io/7.0/integrations/storage_extensions/netapp/["OpenNebula 文件"]。
+
+
+
+== 儲存類型相容性矩陣
+
+[cols="25% 15% 15% 15% 15% 15%"]
+|===
+| 資料存放區類型 | NFS | 中小企業/CIFS | FC | iSCSI | NVMe-oF 
+
+
+| 影像 | 是的 | 是的 | 是的  a| 
+是的^1^
+| 是的 
+
+
+| 系統 | 是的 | 是的 | 是的  a| 
+是的^1^
+| 是的 
+
+
+| 核心和檔案 | 是的 | 是的 | 是的 | 是的 | 是的 
+
+
+| 備份 | 是的 | 是的 | 是的 | 是的 | 是的 
+|===
+*筆記：*
+
+. NetApp 驅動程式可在企業版中用於 iSCSI 協定，以利用原生 ONTAP 功能。
+
+
+
+
+== OpenNebula 叢集儲存類型支援 ONTAP
+
+以下是在以 NetApp ONTAP 作為後端時，OpenNebula 不同儲存類型所支援功能的比較。
+
+[cols="30% 20% 20% 20%"]
+|===
+| 功能 | NetApp ONTAP API | LVM-thin | NFS/SMB 
+
+
+| VM 磁碟 | 是的 | 是的 | 是的 
+
+
+| 影像儲存 ^1^ | 是的 | 是的 | 是的 
+
+
+| 即時快照 | 是的 | 是的 | 是的 
+
+
+| 複製虛擬機器或映像 | 是的 | 是的 | 是的 
+
+
+| 增量備份^2^ | 是的 | 是的 | 是的 
+|===
+*筆記：*
+
+. 映像儲存是指使用後端作為 OpenNebula 映像資料存放區。LVM-thin 和 ONTAP API 方法涉及從映像來源複製或建立區塊裝置。
+. 增量備份適用於 `qcow2`磁碟（透過 NFS/SMB）或支援追蹤變更的區塊裝置。OpenNebula NetApp ONTAP 驅動程式使用捲動快照來建立增量備份。
+
+
+
+NOTE: 增量備份需要載入 `nbd` 核心模組。

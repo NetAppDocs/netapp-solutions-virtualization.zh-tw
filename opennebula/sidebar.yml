@@ -1,0 +1,33 @@
+---
+section: opennebula
+title: OpenNebula
+url: "/opennebula/index.html"
+entries:
+- title: 關於 OpenNebula
+  pdf-filename: NetApp 上的 OpenNebula 概述
+  url: "/opennebula/opennebula-overview.html"
+- title: 為 OpenNebula 配置 NetApp 儲存空間
+  pdf-filename: NetApp 儲存設備用於 OpenNebula
+  entries:
+  - title: 解決方案架構
+    url: "/opennebula/opennebula-netapp-architecture.html"
+  - title: 支援的儲存類型
+    url: "/opennebula/opennebula-storage-types.html"
+  - title: 使用 NetApp 為 OpenNebula 配置儲存協議
+    entries:
+    - title: 儲存協定概述
+      url: "/opennebula/opennebula-netapp-protocols.html"
+    - title: 配置 SMB/CIFS 存儲
+      url: "/opennebula/opennebula-ontap-smb.html"
+    - title: 配置 NFS 存儲
+      url: "/opennebula/opennebula-ontap-nfs.html"
+    - title: 配置 NetApp ONTAP iSCSI 儲存設備
+      url: "/opennebula/opennebula-netapp-iscsi.html"
+    - title: 使用 FC 配置 LVM
+      url: "/opennebula/opennebula-ontap-fc.html"
+    - title: 配置 LVM 與 iSCSI
+      url: "/opennebula/opennebula-ontap-iscsi.html"
+    - title: 配置 LVM 與 NVMe/FC
+      url: "/opennebula/opennebula-ontap-nvme-fc.html"
+    - title: 配置 LVM 與 NVMe/TCP
+      url: "/opennebula/opennebula-ontap-nvme-tcp.html"

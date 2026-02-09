@@ -1,0 +1,151 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-overview.html 
+keywords: opennebula, kvm, qemu, lxc, suse rancher, kubernetes, private cloud, public cloud, hybrid cloud, virtualization, containers, hypervisor, vm, virtual machine, container orchestration, cloud management platform, cmp, cloud infrastructure, cloud computing 
+summary:  
+---
+= 瞭解 OpenNebula
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+OpenNebula 是一個開源的雲端管理平台，用於管理異質分散式資料中心基礎架構。它提供了一個簡單、模組化且功能豐富的解決方案，用於建立雲端運算和邊緣運算平台。OpenNebula 支援使用 KVM 的虛擬機器、使用 LXC 的 Linux 容器，以及基於 SUSE Rancher 的 CNCF 認證 Kubernetes 叢集。
+
+
+
+== 概況
+
+OpenNebula 提供了一套全面的功能，用於管理虛擬機器和容器的完整生命週期，包括部署、監控、擴展和退役。它支援多種儲存和網路選項，使其能夠靈活地適應各種使用場景。
+
+image:opennebula-overview-001.png["OpenNebula 概述"]
+
+OpenNebula 提供使用者友善的 Web 介面和功能強大的命令列介面（CLI），方便管理員和使用者與平台互動。它還提供 RESTful API，用於自動化和與其他工具整合。該平台支援多租戶，允許多個使用者和群組安全地共享相同的基礎架構。
+
+image:opennebula-overview-002.png["OpenNebula 模組化架構"]
+
+OpenNebula 採用模組化架構，可輕鬆整合第三方工具和服務。它可以透過插件和驅動程式進行擴展，輕鬆適應特定需求。
+
+
+
+== 前端使用者介面
+
+OpenNebula 提供名為 Sunstone 的基於 Web 的使用者介面，使用戶能夠輕鬆管理虛擬機器和容器。此介面直觀易用，管理員和最終用戶都能輕鬆導航並執行任務。預設情況下，它運行在 2616 連接埠。持久性資料儲存在後端資料庫中，可以是 SQLite（小型工作負載的預設選擇）或 MySQL/MariaDB（用於生產環境）。可以部署多個前端伺服器實例，以確保高可用性和負載平衡。
+
+image:opennebula-overview-003.png["OpenNebula Sunstone 介面"]
+
+OpenNebula Sunstone 提供可自訂的視圖和儀表板，讓使用者可以根據自身需求自訂介面。它還支援基於角色的存取控制（RBAC），使管理員能夠為使用者和使用者群組定義不同的存取等級。
+
+控制台存取功能可讓使用者直接從 Web 介面連接到虛擬機，從而為管理和互動虛擬機執行個體提供無縫體驗。它還包含一個市場，使用者可以在其中瀏覽和部署預先配置的虛擬機器範本和應用程式。使用者也可以透過 Web 介面使用 SSH 或其他遠端存取方式存取虛擬機器。
+
+聯盟功能允許連接多個 OpenNebula 實例（Zones），從而實現跨不同資料中心或地理位置的資源共享和工作負載分配。存取策略在整個聯盟範圍內定義，使用者可以被限制在特定 Zones，或特定 Zone 內的特定 Clusters。
+
+
+
+== 運算
+
+OpenNebula 支援 KVM 虛擬機器和 LXC Linux 容器。支援的作業系統包括 Ubuntu、Debian、RHEL 和 AlmaLinux。虛擬機器可以從預先配置的範本或自訂映像進行部署。也可以使用服務範本部署一組虛擬機器（服務）。OneFlow 允許定義和管理由多個互連虛擬機器組成的多層應用程式。OneGate 支援從虛擬機器內部與 OpenNebula 後端通訊，從而實現進階監控和管理功能。
+
+虛擬機器自訂功能允許在部署期間自訂虛擬機器設定，包括網路組態、主機名稱、密碼和 SSH 金鑰。情境化功能允許在開機時將組態資料注入虛擬機器，從而根據部署環境實現動態組態。有關虛擬機器情境化的更多詳細資訊，請參閱 https://docs.opennebula.io/7.0/product/operation_references/configuration_references/template/#context-section["OpenNebula 操作參考"]。
+
+為了進行資源管理和調度，一組虛擬機器管理程式被分組到叢集中。OneDRS （Distributed Resource Scheduler）能夠根據資源利用率和預先定義的策略，自動在可用的虛擬機器管理程式之間放置虛擬機器並進行負載平衡。策略可以是打包或均衡。
+
+image:opennebula-overview-004.png["OpenNebula 運算管理"]
+
+OpenNebula 也支援虛擬機器的即時遷移，從而實現無縫的工作負載平衡和維護，無需停機。
+
+一台實體主機一次只能屬於一個叢集。但可以跨叢集共享儲存和網路資源。叢集資源的子集可以分配給特定的虛擬資料中心（VDC），從而為不同的使用者群組提供資源隔離。
+
+image:opennebula-overview-005.png["OpenNebula 叢集和 VDC"]
+
+延伸叢集允許跨多個實體站台部署具有高可用性的虛擬機器。如果站台發生故障，虛擬機器可以從其他站台繼續運作而不會中斷。
+
+
+NOTE: 延伸叢集需要所有站點均可存取的共用儲存。通常使用同步複寫來確保跨站點的資料一致性。
+
+可以定義 VM 對 VM 親和性 / 反親和性規則，以控制虛擬機器在實體主機上的放置位置。這樣可以確保某些虛擬機器始終部署在一起，或根據應用程式需求彼此分開。同樣地，也可以定義主機親和性 / 反親和性規則，以控制虛擬機器在特定實體主機上的放置位置。角色的定義是將具有類似親和性 / 反親和性規則的虛擬機器分組。
+
+Kubernetes 叢集可以使用 OneKE 服務進行部署。OneKE 允許基於 SUSE Rancher 建立和管理 CNCF 認證的 Kubernetes 叢集。Kubernetes 叢集可以部署在 OpenNebula 虛擬機器之上，從而實現雲端基礎架構和容器編排之間的無縫整合。
+
+OpenNebula 支援 NVIDIA vGPU 和 MIG（Multi Instance GPU），使虛擬機器能夠利用 GPU 的強大功能進行高效能運算、機器學習和其他 GPU 密集型工作負載。
+
+
+
+== 儲存
+
+OpenNebula 提供四種類型的資料儲存來管理儲存資源：System、Image、File 和 Backup 資料儲存。System 資料儲存用於儲存虛擬機器磁碟和設定檔。Image 資料儲存用於儲存虛擬機器鏡像、ISO 和資料磁碟。File 資料儲存用於儲存可供虛擬機器存取的檔案。Backup 資料儲存用於儲存虛擬機器及其資料的備份。
+
+
+NOTE: 映像資料存放區可以在叢集和前端伺服器之間共用，而系統、檔案和備份資料存放區則分配給特定的叢集。
+
+每個 System 資料儲存區都會指定一個模組，以處理從 Front-end 伺服器到 Hypervisor 的傳輸管理。支援的傳輸管理程式包括 SSH、共享檔案系統（例如 NFS、GlusterFS）等。資料儲存區通常掛載在 /var/lib/one/datastores 資料夾，或依 /etc/one/oned.conf 檔案中的 DATASTORE_LOCATION 屬性所定義。每個系統資料儲存區都會定義對應的映像資料儲存區。部署虛擬機器時，通常會使用定義的傳輸管理程式，將其磁碟從映像資料儲存區複製到系統資料儲存區。
+
+image:opennebula-overview-006.png["OpenNebula Storage 樣本目錄結構"]
+
+ONTAP FlexCache 可用於同一 OpenNebula Zone 內遠端位置的 Image 資料儲存。這允許將頻繁存取的 Image 快取到本地，從而降低延遲並提高虛擬機器部署的效能。
+
+企業版 OpenNebula 包含 NetApp 驅動程式，可使用 ONTAP API 在 NetApp 儲存系統上建立和管理虛擬機器磁碟。這使得可以利用進階儲存功能，例如虛擬機器磁碟的精簡配置、重複資料刪除和快照。
+
+使用者可以從公有或私有鏡像倉庫下載鏡像，例如 OpenNebula Marketplace、Linux Container 或託管在 http 或 S3 儲存上的私有 Marketplace。私有 Marketplace 允許組織為其聯盟內的使用者維護一套精心挑選的鏡像。
+
+Cloud Images 需要配合 OpenNebula 使用上下文層。鏡像可以是持久的，也可以是非持久的。持久鏡像會保留虛擬機器運作時所做的更改，而非持久鏡像在虛擬機器終止後不會保留任何更改。但是，當虛擬機器關閉時，系統資料儲存中的變更會保留。
+
+持久化映像通常用於建立自訂的虛擬機器映像。一次只能從一個持久化映像部署一個 VM。
+
+VM 磁碟快照可用於從正在執行的虛擬機器資料建立映像。VM 磁碟大小可以在部署期間或執行階段（線上調整大小）進行調整。
+
+Trident CSI 驅動程式用於在部署了 OneKE 的 Kubernetes 叢集上建立持久性磁碟區。這使得 Kubernetes 工作負載能夠利用 ONTAP 儲存功能。Trident Protect 允許為 Kubernetes 工作負載定義應用級災難復原策略。
+
+
+
+== 網路
+
+OpenNebula 可連接現有網路基礎設施，為虛擬機器和容器提供網路連接功能。它支援多種網路模型，包括 Linux 橋接器、802.1Q VLAN、VXLAN 和 Open vSwitch 網路。對於類似 VPC 的網路，可以使用 VXLAN 和 EVPN 來隔離租戶網路。
+
+image:opennebula-overview-007.png["OpenNebula 網路模型"]
+
+每個虛擬網路都需要定義一個位址範圍。它可以是 IPv4、IPv6、兩者兼有，甚至是 MAC 位址範圍（如果使用外部 DHCP 伺服器）。IPAM（IP 位址管理）功能可管理和指派已定義位址範圍內的 IP 位址。它支援自動和手動 IP 位址分配，以及為虛擬機器預留特定的 IP 位址。
+
+image:opennebula-overview-008.png["OpenNebula 具有 IPAM 的虛擬網路"]
+
+在虛擬機器部署過程中，網路介面會根據已定義的虛擬網路和 IP 位址指派自動設定。網路配置可以使用虛擬機器上下文功能自訂。
+
+也可以使用 Sunstone 介面中的「更新虛擬機器配置」按鈕更新上下文資訊。其他網路介面可以熱插拔到正在運作的虛擬機器上。
+
+虛擬路由器可部署以為虛擬網路提供路由和 NAT 服務。虛擬網路可跨多個叢集，實現靈活的網路拓撲。
+
+
+
+== 監控與營運
+
+OpenNebula 包含一個全面的監控系統，可即時提供有關雲端基礎架構效能和運作狀況的洞察。該系統從虛擬機器管理程式、虛擬機器、儲存和網路元件收集指標，使管理員能夠監控資源利用率並識別潛在問題。
+
+OpenNebula 包含 Prometheus 導出器，用於收集基於 Prometheus 的監控系統的指標。它還與 Grafana 集成，提供可自訂的儀表板，用於視覺化收集到的指標。
+
+image:opennebula-overview-009.png["使用 Grafana 監控 OpenNebula"]
+
+NetApp Data Infrastructure Insights 可用於監控與 OpenNebula 一起使用的 ONTAP 儲存系統。它提供有關儲存效能、容量和健全狀況的詳細深入分析，讓管理員能夠最佳化虛擬機器的儲存資源。
+
+OpenNebula CLI 用於對雲端基礎架構執行各種操作，包括虛擬機器管理、儲存管理和網路管理。它提供了一種強大而靈活的方式來自動化任務並與其他工具整合。有關 OpenNebula CLI 的更多資訊，請參閱 https://docs.opennebula.io/7.0/product/operation_references/command_line_interface/cli/["OpenNebula CLI 參考"]。有關自訂 CLI 輸出，請參閱 https://docs.opennebula.io/7.0/product/operation_references/command_line_interface/cli_configuration/["CLI 組態參考"]。
+
+自訂腳本也可以作為 VM 生命週期的一部分執行。Hooks 允許根據 OpenNebula 平台中的特定事件（例如 VM 部署、終止或遷移）觸發自訂操作。這使管理員能夠自動化工作流程並與外部系統整合。
+
+image:opennebula-overview-010.png["OpenNebula 鉤子和虛擬機器生命週期"]
+
+有關 OpenNebula Hooks 的更多資訊，請參閱 https://docs.opennebula.io/7.0/product/integration_references/system_interfaces/hook_driver/["OpenNebula 使用鉤子"]。
+
+https://github.com/OpenNebula/one-swap["OneSwap 工具"]允許將虛擬機器從 vSphere 遷移到 OpenNebula KVM 環境。它從 vSphere VMDK 檔案建立映像並產生相應的 OpenNebula VM 範本。NetApp Shift toolkit 可以將 vSphere VMDK 檔案轉換為 QCOW2 格式以供 OpenNebula 使用。使用 NetApp Shift toolkit API 與 OneSwap 可以快速且有效率地自動化 ONTAP 檔案共用上的遷移過程。有關 NetApp Shift toolkit 的更多資訊，請參閱 link:../migration/shift-toolkit-conversion.html["Shift Toolkit 轉換"]。
+
+
+
+== 資料保護
+
+OpenNebula 支援使用 rsync、restic 和 Veeam 進行備份。Veeam 整合僅適用於 Enterprise 版本。備份資料儲存區用於儲存虛擬機器及其資料的備份。備份工作可排程在特定時間間隔執行，確保虛擬機器定期備份。
+
+根據備份策略的不同，備份可以是增量快照或完整備份。增量快照僅擷取自上次備份以來所做的更改，從而減少儲存需求和備份時間。完整備份會建立虛擬機器及其資料的完整副本。qcow2 格式允許在增量備份中使用變更區塊追蹤（CBT）。
+
+OpenNebula 提供 oVirt 相容的 REST API 伺服器，可與 Veeam Backup & Replication 軟體整合。如需詳細資訊、請參閱 https://docs.opennebula.io/7.0/product/cluster_configuration/backup_system/veeam/["OpenNebula Veeam 整合"]。

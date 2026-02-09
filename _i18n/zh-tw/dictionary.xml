@@ -8286,4 +8286,282 @@
   <block id="00e4880b550e40d823bf3e2f64737181" category="sidebar">儲存協定概述</block>
   <block id="df98233fcbd5f7d34a38d94575306755" category="sidebar">使用 Proxmox Backup Server 和NetApp ONTAP實作 Proxmox VE 工作負載資料保護</block>
   <block id="7b5595669a13f02ed040dc13960eabba" category="video-title">從 ESX 到 Red Hat OpenShift Virtualization (OSV) 的零接觸遷移</block>
+  <block id="2c7abf64cf5bc53047e0f575042cc8bc" category="summary">NetApp 與 OpenNebula 整合，透過 NAS 和 SAN 協定提供企業級儲存功能。ONTAP 提供進階資料管理功能，包括快照、複製、複寫和勒索軟體防護，適用於虛擬化工作負載。</block>
+  <block id="b6729c1b5864beb18a31872f7474df28" category="doc">了解適用於 OpenNebula 的 ONTAP 儲存架構</block>
+  <block id="4b8d44718779beeffbff75e5c061268e" category="paragraph">NetApp 產品與 OpenNebula 整合，透過 NAS 和 SAN 協定提供企業級儲存功能。ONTAP 提供進階資料管理功能，包括快照、複製、複本、以及勒索軟體防護，適用於在 OpenNebula 叢集上執行的虛擬化工作負載。</block>
+  <block id="b531ef3f249b6d82313c971d1a89bb81" category="list-text">*OpenNebula Frontend 伺服器：* 一組 OpenNebula Frontend 伺服器，提供雲端管理功能來管理虛擬機器（VM）和 Kubernetes 叢集。</block>
+  <block id="5af6aa75f9c7af007c1ed8ac3dec506e" category="list-text">*OpenNebula 運算節點：* 一組用於託管由 OpenNebula 管理的虛擬機器和 Kubernetes 叢集的運算節點。</block>
+  <block id="5af6207972f43d822f26f742318b718c" category="list-text">*NetApp ONTAP 儲存：*一種高效能、可擴充的儲存系統，可為 OpenNebula 叢集提供共用儲存。</block>
+  <block id="c518ea1773e5bab7d661a37bfe7e9eb3" category="list-text">*網路基礎設施：* 強大的網路設置，確保 OpenNebula 節點與 ONTAP 儲存之間低延遲、高吞吐量的連接。</block>
+  <block id="200414c044de46f0990c59a4dc9df400" category="paragraph">下圖展示了 OpenNebula 與 NetApp ONTAP 儲存整合的高階架構：</block>
+  <block id="cff46d0d8da865da116dc2c71f8d4cfa" category="image-alt">OpenNebula 採用 NetApp ONTAP 架構</block>
+  <block id="988db06d34a5dfc111f8b60e786566d9" category="section-title">適用於 OpenNebula 的 ONTAP 功能</block>
+  <block id="c41fc4bc569c004f45275755b4256006" category="paragraph">ONTAP 提供一套全面的企業級儲存功能，可增強 OpenNebula 部署效果。這些功能涵蓋資料管理、保護、效率和協定支援，並支援 NAS 和 SAN 儲存架構。</block>
+  <block id="51c34d78961c12ecfb8efbe9d821d164" category="summary">使用 ONTAP 透過 iSCSI 設定 OpenNebula 資料儲存區。此程序包括 iSCSI 連線能力和資料儲存區資源配置所需的初始設定。</block>
+  <block id="8742f2442d0185cb2016b8d2793c4556" category="doc">使用 iSCSI 為 OpenNebula 配置 NetApp 資料存放區</block>
+  <block id="f918f3d3b42f603446ab707f36e3a729" category="paragraph">使用 iSCSI 協定配置 OpenNebula 資料儲存，搭配在 AFF 或 FAS 系統上運行的 NetApp ONTAP。此配置支援透過標準乙太網路進行區塊級儲存存取，並支援多路徑。此資料儲存設定利用了原生 ONTAP 功能，包括快照和複製，以提高儲存效率和資料保護。</block>
+  <block id="9505804803f81ee12f96109877fb0d63" category="paragraph">完成這些初始任務，為 OpenNebula 主機做好 iSCSI 連線的準備，並收集儲存管理員所需的必要資訊。</block>
+  <block id="fd60d09bafcb9e536c65f41827650019" category="list-text">確保所有 OpenNebula 主機上都安裝了 multipath-tools 和 iSCSI 發起程序實用程序，並在啟動時運行。</block>
+  <block id="c19a5136e6e64a709af249d718cc1ee5" category="open-title">Debian/Ubuntu</block>
+  <block id="bceba73db6465411debc3d0724362e99" category="open-title">RHEL/AlmaLinux</block>
+  <block id="58fff862bda20ccb797aff94a9b3d8f4" category="list-text">收集所有 OpenNebula 主機的 iSCSI 主機 IQN 並將其提供給儲存管理員。</block>
+  <block id="3aabc971bf72243a27868c68c67e39d5" category="list-text">每個控制器應建立兩個專用於 iSCSI 的 LIF。建議每個控制器使用兩個 LIF 以實現冗餘和多路徑效能。確保在 OpenNebula 主機上設定的 VLAN 介面上建立 LIF。建議使用巨型幀（MTU 9000）以獲得更好的效能。</block>
+  <block id="4ea49b77ede882c5ccf164045dbaf8c1" category="paragraph"><block ref="4ea49b77ede882c5ccf164045dbaf8c1" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="4f44abd78c089260c8d2e50444bf8173" category="list-text">建立 igroup 並填入主機 iSCSI 啟動器。通常會為一個 OpenNebula 叢集建立一個 igroup。將前端伺服器和 Hypervisor 主機包含在同一個 igroup 中，以同時支援 Image 和 System 資料存放區。</block>
+  <block id="195bc0f7ca20c9266f1ccb140e708a72" category="inline-link-macro">與使用者和角色協作</block>
+  <block id="17318ec39be3037ef779a02b124d682a" category="list-text">建立一個具有 ONTAP REST API 存取權限且範圍限定於目標 SVM 的 ONTAP 角色與使用者帳戶。此使用者將由 NetApp 驅動程式在 OpenNebula 中使用。請參閱<block ref="51876464e6b9e25e089d976dc8332fac" category="inline-link-macro-rx"></block> ONTAP 文件以取得更多資訊。請記下使用者名稱與密碼，將於虛擬化設定作業中使用。</block>
+  <block id="b30a14e32a1b461c2fb438819f20a255" category="list-text">收集下列資源的 SVM iSCSI Target IQN 和 UUID，以便在虛擬化組態作業中使用：</block>
+  <block id="69e1645b8055ac8ea719f16a6f3091dc" category="list-text">SVM</block>
+  <block id="21a1df59c45d028d43e90afe76f2c308" category="list-text">要使用的 Aggregate / Tier</block>
+  <block id="8b632ff18a9c7e75e0539c7efa8a3a75" category="list-text">具有 OpenNebula 主機的 igroup</block>
+  <block id="e073788453b4894dc8bb53edb25ac932" category="list-text">iSCSI 目標 IQN （通常與 SVM IQN 相同）。虛擬化管理員可以在登入其中一台 OpenNebula 主機並發現 iSCSI 目標後，使用 <block ref="0d3f69bc64054f4afeca7380b613ea30" prefix=" " category="inline-code"></block> 命令擷取此資訊。+</block>
+  <block id="dd6ae39515913d359c1d14f7ef36851a" category="paragraph">完成以下任務以設定 OpenNebula 上的 iSCSI Datastore。</block>
+  <block id="0cc3ef97c36f5143f1550335a7c95546" category="list-text">透過 SSH 連接到其中一個前端伺服器，並提供其中一個 iSCSI 資料 lif 位址，以探索所有 iSCSI Lif 入口網站。</block>
+  <block id="032ddcc8fc890517b1cc865978b418a8" category="inline-link">OpenNebula NetApp SAN 文件</block>
+  <block id="537919b63aad89089d51a09707232239" category="list-text">根據所需的資料儲存類型建立設定檔。如需完整的屬性清單，請參閱<block ref="21f0c34a7b5be89fac6d7e483d1eba97" category="inline-link-rx"></block>。範例檔案如下所示：</block>
+  <block id="be53a0541a6d36f6ecb879fa2c584b08" category="listing-title">影像</block>
+  <block id="a45da96d0bf6575970f2d27af22be28a" category="listing-title">系統</block>
+  <block id="7f5cd5e125beea30cdf233567a5534f2" category="list-text">執行<block ref="b89ad7d542028bf71b40f3dde9f806c9" prefix=" " category="inline-code"></block>。記下建立後傳回的資料存放區 ID。</block>
+  <block id="fe42fef0c71b51617458e1d4baaa855c" category="paragraph">onedatastore create netapp-system.conf ID：105</block>
+  <block id="e2a1d51250603371fadb070ed0f75b5e" category="list-text">透過執行<block ref="e69b33baa959cb98b8e5317d45137a84" prefix=" " category="inline-code"></block>驗證資料儲存是否已成功建立。</block>
+  <block id="53058c0a7856c4c1db78a70284a3d3a1" category="list-text">在 Image 資料儲存區上下載應用程式、並使用範本建立 VM 以在 System 資料儲存區上進行資源配置。</block>
+  <block id="a0d9e03643df30b216f64d246887bb1d" category="list-text">檢查 ONTAP 為映像和虛擬機器磁碟所建立的 LUN。使用的命名慣例如下：</block>
+  <block id="13bd75f83ddbfc9aa307ffb01b4a90e5" category="list-text">影像資料儲存區：one_&lt;datastore_id&gt;_&lt;image_id&gt;_&lt;suffix&gt;（Volume）、one_&lt;datastore_id&gt;_&lt;image_id&gt;_&lt;suffix&gt;_lun（LUN）</block>
+  <block id="4a0179736de3508524957c80e8bc4336" category="list-text">系統資料儲存區:one_&lt;vm_id&gt;_disk_&lt;disk_id&gt;_&lt;suffix&gt;（Volume）、one_&lt;datastore_id&gt;_&lt;vm_id&gt;_disk_&lt;disk_id&gt;_&lt;suffix&gt;_lun（LUN）</block>
+  <block id="5b869a429e69915cefaceefde2c33e69" category="inline-image-macro">ONTAP LUN 用於 OpenNebula 映像和虛擬機器</block>
+  <block id="fdd96bc655cc4dcad1803d044ad460f3" category="paragraph"><block ref="fdd96bc655cc4dcad1803d044ad460f3" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="259fe9e397592fd7d7821b8ff3235c4b" category="summary">使用 NAS 協定（NFS、SMB）和 SAN 協定（FC、iSCSI、NVMe）為 OpenNebula 配置 ONTAP 儲存設備。選擇適當的協定特定程序，為您的 OpenNebula 環境配置共用儲存設備。</block>
+  <block id="cf85b11875ed1f5ba8de50e24e931dc9" category="doc">了解 OpenNebula 與 NetApp ONTAP 的儲存傳輸協定</block>
+  <block id="97a184557eedf5f6dcd9d405a811e04c" category="paragraph">確保 OpenNebula 前端主機和虛擬機管理程式主機具有光纖通道（FC）、乙太網路或其他受支援的介面，並透過網路線連接到交換器，從而與 ONTAP 邏輯介面通訊。務必檢查<block ref="8d006c87830f7172fd7400f1c17c0928" category="inline-link-rx"></block>以瞭解支援的組態。範例案例假設每台 OpenNebula 主機上都有兩張高速網路介面卡，這兩張網路介面卡連接在一起以建立綁定介面，從而提高容錯能力和效能。所有網路流量（包括主機管理、VM/容器流量和儲存存取）都使用相同的上行鏈路連線。當有更多網路介面可用時，請考慮將儲存流量與其他類型的流量分開。</block>
+  <block id="882d82680f8075fbd12d8fedbba37209" category="inline-link-macro">了解 NetApp 儲存架構於 OpenNebula</block>
+  <block id="01734c2ddffa9d7dcae05af087a9d97b" category="inline-link-macro">了解 OpenNebula 支援的儲存類型</block>
+  <block id="e6bb4b4e116ceafbc7da6adf44c83b27" category="paragraph">有關 ONTAP 儲存架構和支援的儲存類型的資訊，請參閱 <block ref="0e164bc3b4da0aeb445801606345b935" category="inline-link-macro-rx"></block> 和 <block ref="16d64e76d0edd6cd754c3bb92f85e154" category="inline-link-macro-rx"></block>。</block>
+  <block id="641b870ef296fa51ceaac1b326e343d2" category="inline-link-macro">使用 iSCSI 配置 NetApp 驅動程式</block>
+  <block id="d3952f998b5fae5e7b81c07b5eeeecc8" category="list-text"><block ref="4265bc00f1b6224a20b20d017f65545b" category="inline-link-macro-rx"></block> - 配置 OpenNebula NetApp 驅動程式，透過支援多路徑的標準乙太網路，使用 iSCSI 存取區塊儲存。此功能僅限企業版使用。它利用 ONTAP 原生複製實現高效率的虛擬機器配置。</block>
+  <block id="92a0d78c47513b2a05a59d2c0fb50d8c" category="list-text"><block ref="f2aa138b807cf428be3b4487dad63e9e" category="inline-link-macro-rx"></block> - 為 OpenNebula 設定 SMB/CIFS 檔案共享，支援多通道，以實現容錯和增強多網路連線的效能。</block>
+  <block id="62fdf68378913865989c6847d72ed1e4" category="list-text"><block ref="8eefb8b2711131c9a51c6087a5b1aaca" category="inline-link-macro-rx"></block> - 使用多個網路連線，為 OpenNebula 配置 NFS 儲存，並搭配 nConnect 或 session trunking，以提升容錯能力和效能。</block>
+  <block id="785ddb8ac7e53074e4411feb51875206" category="inline-link-macro">使用 FC 設定 LVM Thin</block>
+  <block id="d2016f25849851987e6f2166b92f584b" category="list-text"><block ref="b32503c2dcad8ea66979196ff9409660" category="inline-link-macro-rx"></block> - 設定邏輯磁碟區管理器（LVM）與光纖通道，以實現跨 OpenNebula 主機的高效能、低延遲區塊儲存存取。</block>
+  <block id="261e16ec0e49bef3ab0d5b0884512e90" category="inline-link-macro">使用 iSCSI 設定 LVM Thin</block>
+  <block id="5e2ca5b5eec893bde806dd820238e6ff" category="list-text"><block ref="583097b225e99b2d8e21fd6fb0458693" category="inline-link-macro-rx"></block> - 設定邏輯磁碟區管理器（LVM）與 iSCSI，以便透過支援多路徑的標準乙太網路存取區塊儲存。</block>
+  <block id="d2b25705aef863eee3f970f627530a50" category="inline-link-macro">使用 NVMe/FC 設定 LVM Thin</block>
+  <block id="dd901d456dad3f17d1fb24c4c8833e32" category="list-text"><block ref="29e3f22b995639046aaa666212d8d596" category="inline-link-macro-rx"></block> - 使用現代 NVMe 協議，透過光纖通道配置邏輯磁碟區管理器（LVM）和 NVMe，以實現高效能區塊儲存。</block>
+  <block id="7b400f7569f544588bf429b88f4747c0" category="inline-link-macro">使用 NVMe/TCP 設定 LVM Thin</block>
+  <block id="c9bf59d2a24893ce679e23adf049780c" category="list-text"><block ref="072c45785e68a8f7ad2c2aae1ff6b58e" category="inline-link-macro-rx"></block> - 使用現代 NVMe 協議，透過 TCP 設定邏輯磁碟區管理器（LVM）和 NVMe，以便在標準乙太網路上實現高效能區塊儲存。</block>
+  <block id="ad6fbaabb93d5ac12ab114b26d25ebbd" category="inline-link">NetApp E 系列和 EF 系列文件介紹如何在 Linux 環境中設定 LVM</block>
+  <block id="4a27e96b7b530cd4ba1bc766e3ed5d9f" category="admonition">如果需要 E-Series 或 EF-Series 儲存協定的協助，請查看連結<block ref="0b8e2907fb2926f419cb398b355e70c0" category="inline-link-rx"></block>以及 LVM Thin 文件之一以供參考。</block>
+  <block id="ca6dab67286366b2c72180532807b226" category="summary">設定邏輯磁碟區管理器 (LVM) 資料儲存與光纖通道，以便 OpenNebula 使用 ONTAP。此過程包括多路徑配置、LUN 配置、igroup 設定以及為共用資料儲存建立磁碟區組。</block>
+  <block id="3012ad72c100309f5ff0a07f89adbc5e" category="doc">使用 ONTAP FC 為 OpenNebula 配置 LVM Thin</block>
+  <block id="667ef9be3fd1cedfcd7f5f9e21445948" category="paragraph">使用 Fibre Channel 協議，為 OpenNebula 主機配置 Logical Volume Manager（LVM）資料存放區，以實現 NetApp ONTAP 的共享儲存。此配置可實現高效能、低延遲的區塊層級儲存存取。</block>
+  <block id="742aea93402054fe9d05ab462d974010" category="paragraph">完成這些初始任務，為 OpenNebula 主機建立 FC 連線做好準備，並收集儲存管理員所需的必要資訊。</block>
+  <block id="fb0ff59f8798ae41a2f44f858b36629c" category="list-text">確保所有 OpenNebula 主機上都安裝了 multipath-tools，並且開機啟動。</block>
+  <block id="7056d586f7113ca4f46213cd7716a012" category="list-text">收集所有 OpenNebula 主機的 WWPN，並將其提供給儲存管理員和負責 Fabric 分區的管理員。</block>
+  <block id="bc449b982cc9658ff502a5e9e20edc6a" category="list-text">為每個控制器建立兩個專用於 FC 的 LIF。收集已建立的 FC LIF 的 WWPN 位址，並將其提供給負責光纖網路分區的管理員。</block>
+  <block id="83841d0bcb53643d2f66e0d8870e69a2" category="list-text">建立 igroup 並填入主機 FC 發起程序。通常一個 OpenNebula 叢集會建立一個 igroup。將前端伺服器和虛擬機器管理程式主機包含在同一個 igroup 中，以同時支援 Image 和 System 資料儲存區。</block>
+  <block id="085e608eb6e1ac3153ebf95b97b7f638" category="paragraph">完成以下任務，將 FC LUN 設定為 OpenNebula 中的共用 LVM 資料儲存區。</block>
+  <block id="7573d4a5f0598ae9607aa7cd832bcbae" category="list-text">使用 SSH 連接到所有 OpenNebula 伺服器，並在每台主機上完成以下步驟。</block>
+  <block id="3a4ba201e29c968ede56e45c1d87882c" category="list-text">執行<block ref="b6f75508bf2af141e9de6f862662661e" prefix=" " category="inline-code"></block> 或<block ref="a20cac89e64616c4c3026958a60b08fe" prefix=" " category="inline-code"></block> 重新掃描 SCSI 匯流排並偵測新的 LUN 。</block>
+  <block id="058b1bbe8e6cc750360618435c4853e1" category="list-text">使用<block ref="63875f71627d9fa9b6daaafabf333924" prefix=" " category="inline-code"></block>或 fdisk -l 指令驗證 LUN 是否在所有 OpenNebula 主機上可見。記下已建立 LUN 的設備名稱（例如 sde、sdf）。</block>
+  <block id="080512fabd714defe890ba9aa75d5602" category="list-text">透過執行 <block ref="2947ef651781d76ad25558ac75d30ec8" prefix=" " category="inline-code"></block> 將裝置新增至多重路徑組態。然後、執行 <block ref="800be20e72a4397d094e0267a68f6475" prefix=" " category="inline-code"></block> 以重新載入多重路徑組態。透過執行 <block ref="3d80983fc82ff72fd51e5d1f7e90c56d" prefix=" " category="inline-code"></block> 命令來驗證多重路徑組態。</block>
+  <block id="31fd37db47a7c904f1f75ab9b179c730" category="inline-link">OpenNebula LVM 說明文件</block>
+  <block id="2e37bf451f0fc32a4097af300f504a58" category="list-text">透過 SSH 連接到前端伺服器之一，並根據所需的 Datastore 類型建立設定檔。如需完整的屬性清單，請參閱<block ref="087f027b7fba6e51c173ca6f4bd39fe1" category="inline-link-rx"></block>。範例檔案如下所示：</block>
+  <block id="3500ba09d0538297440ca620c9dd46bf" category="open-title">備份</block>
+  <block id="5ec0ee8d66ef5f73a9e220943a61baa6" category="list-text">對於 Restic、</block>
+  <block id="d2f285bd0936b2d23fb25ee519a1b0ff" category="list-text">對於 Rsync，</block>
+  <block id="0b27918290ff5323bea1e3b78a9cf04e" category="listing-title">檔案</block>
+  <block id="4322fdfea99bf85054d08fbc0a206341" category="paragraph">onedatastore create fc-system.conf ID：107</block>
+  <block id="80e13143387b598923ae9b740bf5086f" category="list-text">使用<block ref="daa34eb369bfb2a80dfd312749312999" prefix=" " category="inline-code"></block>指令在 FC LUN 上建立磁碟區群組。對於映像資料存放區，磁碟區群組名稱可以隨意命名。對於系統資料存放區，磁碟區群組名稱必須採用<block ref="995c5831059c2f1713db1c1093459789" prefix=" " category="inline-code"></block>格式。這是 OpenNebula 識別系統資料存放區正確磁碟區群組所需的。如果您要建立備份/檔案/映像資料存放區，請繼續執行下列步驟。對於系統資料存放區，請到此為止。</block>
+  <block id="335ef8c2d0676db660b6fa840586e11a" category="list-text">使用 <block ref="5f0786bfa20f32d146f87b10181bcc04" prefix=" " category="inline-code"></block> 指令建立邏輯卷精簡池。對於系統資料存儲，OpenNebula 會在需要時自動建立 LVM 精簡池。</block>
+  <block id="d28dcc7232ead501031c036caafb2eda" category="list-text">使用 <block ref="8a43b6cd03c1c0783207d4a8fd04d036" prefix=" " category="inline-code"></block> 指令在邏輯磁碟區上建立檔案系統。系統資料儲存不需要建立檔案系統。</block>
+  <block id="c6cf45fc9ea1f147abf77c34c13be307" category="list-text">更新 /etc/fstab 或自動掛載配置，以使用所需的掛載選項掛載資料儲存。假設預設資料儲存位置為 /var/lib/one/datastores。可以使用<block ref="e69b33baa959cb98b8e5317d45137a84" prefix=" " category="inline-code"></block>進行驗證。如果不是，請檢查 /etc/one/oned.conf 中的 DATASTORE_LOCATION 參數。確保資料儲存位置下存在&lt;datastore_id&gt;資料夾。範例條目如下所示：</block>
+  <block id="49e8b6faa2cec31ed56643bfca9f4a15" category="open-title">使用 /etc/fstab</block>
+  <block id="1ba75fd5b8a70a4cb6b3c2afc36b634c" category="open-title">使用自動掛載</block>
+  <block id="e43da615b923cf4aca25782c59cc7bdf" category="list-text">使用 <block ref="9f7a2b0acd2325ca01c92df6a9e32ef7" prefix=" " category="inline-code"></block> 或 <block ref="73f79b2f7670ec56d69347d47c78820c" prefix=" " category="inline-code"></block> 命令掛載資料存放區。</block>
+  <block id="2c7a5d1eb553391b8d93d35dab2e86f8" category="list-text">使用 mount 指令驗證資料存放區是否已掛載，並使用<block ref="e69b33baa959cb98b8e5317d45137a84" prefix=" " category="inline-code"></block> 指令驗證資料存放區容量。</block>
+  <block id="f570ff0e8b568f612fb9ff9657ca0816" category="list-text">確保 oneadmin 使用者和群組擁有資料儲存資料夾的所有權。使用 <block ref="381cd9bcb940d8da2c8d7d574acd18d0" prefix=" " category="inline-code"></block> 命令調整權限。</block>
+  <block id="23b6ef5c94f01cbafca2d7d9272af1c0" category="summary">使用 ONTAP 為 OpenNebula 設定邏輯磁碟區管理器（LVM）資料儲存區與 iSCSI。此程序包括 iSCSI 和多路徑組態以及 Volume Group 建立。</block>
+  <block id="bde2b0fd258b4819d1f7d2cfb6c65107" category="doc">使用 ONTAP iSCSI 為 OpenNebula 配置 LVM Thin</block>
+  <block id="1e89da1651c859ffd448e644da48f926" category="paragraph">使用 iSCSI 協議和 NetApp ONTAP，為 OpenNebula 主機配置 Logical Volume Manager（LVM）資料存放區以實現共用儲存。此配置可在標準乙太網路上啟用具備多路徑支援的區塊層級儲存存取。</block>
+  <block id="f0a02f9acfad2c63936dfbf8a7d8cb42" category="paragraph"><block ref="f0a02f9acfad2c63936dfbf8a7d8cb42" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="0b20478ce5e4c12b9d972d0aeba50423" category="list-text">建立 LUN 並將其呈現給主機 iSCSI 發起程序。通常，一個 OpenNebula 叢集會建立一個 igroup。將前端伺服器和虛擬機器管理程式主機包含在同一個 igroup 中，以同時支援 Image 和 System 資料儲存區。</block>
+  <block id="5e474f07be3407ba06a8a52aae901a79" category="paragraph">完成以下任務，將 iSCSI LUN 設定為 OpenNebula 中的共用 LVM 資料儲存區。</block>
+  <block id="59fc5fb377dd88505b75de1c4fc5f3d1" category="list-text">使用 <block ref="63875f71627d9fa9b6daaafabf333924" prefix=" " category="inline-code"></block> 或 fdisk -l 指令驗證 LUN 是否在所有 OpenNebula 主機上可見。</block>
+  <block id="0358520a4abb71f9dff86022f80134b2" category="list-text">執行<block ref="a7d7ddaddfa0d0d7fbdc5667c3a89d1f" prefix=" " category="inline-code"></block>以擷取 LUN 到裝置名稱的對應關係。</block>
+  <block id="219c1b7969e84426151496587e7ad51b" category="list-text">根據所需的資料儲存類型建立設定檔。如需完整的屬性清單，請參閱<block ref="087f027b7fba6e51c173ca6f4bd39fe1" category="inline-link-rx"></block>。範例檔案如下所示：</block>
+  <block id="53752c06e4d10d49960ba0789cf78feb" category="paragraph">onedatastore create iscsi-system.conf ID ： 106</block>
+  <block id="8781d200fee7c68532fe247746e432c3" category="list-text">使用<block ref="daa34eb369bfb2a80dfd312749312999" prefix=" " category="inline-code"></block>指令在 iSCSI LUN 上建立磁碟區群組。對於映像資料存放區，磁碟區群組名稱可以隨意命名。對於系統資料存放區，磁碟區群組名稱必須採用<block ref="995c5831059c2f1713db1c1093459789" prefix=" " category="inline-code"></block>格式。這是 OpenNebula 識別系統資料存放區正確磁碟區群組所需的。如果您要建立備份 / 檔案 / 映像資料存放區，請繼續執行下列步驟。對於系統資料存放區，請到此為止。</block>
+  <block id="d34a7a73cc395afbef4d8f7d036f7b6f" category="summary">使用 ONTAP 為 OpenNebula 設定 NFS 資料存放區儲存設備。此程序包括 SVM 啟用、LIF 建立、匯出原則組態、磁碟區建立，以及 nConnect 或工作階段主幹設定，以提供容錯和效能。</block>
+  <block id="d29059b6ebc17e13edc7ff575947d419" category="doc">使用 ONTAP 為 OpenNebula 配置 NFS 儲存</block>
+  <block id="4394335426016b74de254e7c1ff84e22" category="paragraph">使用 NetApp ONTAP 為 OpenNebula 配置 NFS 儲存。在使用 FlexGroup 磁碟區時，請搭配 nConnect 或 pNFS（v4.1 或更新版本）的 session trunking，以實現高效的資源管理、容錯能力和效能提升。單一 NFS 匯出可同時用於 OpenNebula 叢集的 Image 和 System 資料存放區。若計劃使用 FlexCache，請專門將 nfs 匯出用於 Image 資料存放區。</block>
+  <block id="d924286d739497862e4b3a91351bbd3c" category="paragraph">考慮使用 MetroCluster 配置來實現高可用性和災難復原場景。</block>
+  <block id="f7f844d59e9b0e8df77d83ee9b9f3abf" category="paragraph">完成以下任務，以便在 ONTAP 上佈建 NFS 儲存設備以供 OpenNebula 使用。</block>
+  <block id="75620478464fa125e50a6f318c95923a" category="paragraph"><block ref="75620478464fa125e50a6f318c95923a" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="cb865b75d4914d67e9da9ba4dbe3c6f5" category="list-text">建立或更新 NFS 匯出原則、以提供 OpenNebula 主機 IP 位址或子網路的存取權。請參閱 <block ref="b6cdedc51193f9caaca77e2632283688" category="inline-link-macro-rx"></block> 和 <block ref="b5d322c6e909917ad1a552e8b76cf85d" category="inline-link-macro-rx"></block>。</block>
+  <block id="b49a90fe7c5935b08c7620105703fa73" category="list-text"><block ref="4f9b59515117e496741261619ceb2f90" category="inline-link-macro-rx"></block>。對於大容量需求（&gt;100TB），請勾選將資料分散到叢集中的選項以使用 FlexGroup。如果使用 FlexGroup，請考慮在 SVM 上啟用 pNFS 以獲得更佳效能，具體操作步驟如下 <block ref="854bcee8457651505ac814a9db484771" category="inline-link-macro-rx"></block>。使用 pNFS 時，請確保 OpenNebula 主機可以存取所有控制器（資料 LIF）。請確保磁碟區已啟用反勒索軟體保護。</block>
+  <block id="d75002d12ad22f16df912587caefe324" category="paragraph"><block ref="d75002d12ad22f16df912587caefe324" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="3340a09586d9d080af856e36cabd6867" category="list-text">通知虛擬化管理員 NFS 磁碟區已準備就緒，並提供 NFS 匯出路徑詳細資訊。</block>
+  <block id="7be061e818679f562c32c68a4d6ce9d0" category="paragraph">完成以下任務，將 NFS 磁碟區新增為 OpenNebula 中的資料存儲，並配置 nConnect 或會話中繼以提高效能。</block>
+  <block id="627d684f8ea3a59394ce5357e4ee28ac" category="list-text">透過 SSH 連接到前端伺服器之一，並根據所需的 Datastore 類型建立設定檔。範例檔案如下所示：</block>
+  <block id="cf7b4a909752ef9cd30d0af173a6fdb0" category="paragraph">onedatastore create nfs-system.conf ID：101</block>
+  <block id="6f3b0cd05b7a72cbced8e18920cc7c46" category="list-text">使用 <block ref="3945ab45180ffdc14f310b31c478e98d" prefix=" " category="inline-code"></block> 指令取得 oneadmin 使用者的 uid 和 gid。</block>
+  <block id="c3bb623e69808d336c99d8ca2c2e9a1f" category="list-text">若要驗證 nConnect 選項是否已設置，請在任意 OpenNebula 主機上執行<block ref="e2ceece4f96cddcbbae5e7b846bbd74f" prefix=" " category="inline-code"></block>並檢查是否存在多個到 NFS 伺服器 IP 的連線。若要驗證 pNFS 是否已啟用，請執行<block ref="8a92f0e754bc887dcd9163230c1af4a1" prefix=" " category="inline-code"></block>並檢查與佈局相關的指標。根據資料流量，應該可以看到多個到資料 LIF 的連線。</block>
+  <block id="ee53a491b66e61730ddf8906996cab80" category="summary">配置基於光纖通道的 NVMe 邏輯磁碟區管理器（LVM）資料存儲，以便 OpenNebula 使用 ONTAP。此過程包括 nvme-cli 安裝、命名空間配置、子系統設定以及為共用資料儲存建立磁碟區組。</block>
+  <block id="18582014ad1a9ac5eadda9f87f1bf8c2" category="doc">使用 ONTAP NVMe/FC 為 OpenNebula 設定 LVM Thin</block>
+  <block id="866c7d4333fe71459cc4047796d545c5" category="paragraph">使用 NVMe over Fibre Channel 協議，搭配 NetApp ONTAP，為多個 OpenNebula 主機設定邏輯卷管理器（LVM）以共用資料存放區。此設定可透過現代 NVMe 協議，提供高效能、低延遲的區塊層級儲存存取。</block>
+  <block id="ae2d7def7dd6ed4afe2e525d5675ec0d" category="paragraph">完成這些初始任務，為 OpenNebula 主機做好 NVMe/FC 連線的準備，並收集儲存管理員所需的必要資訊。</block>
+  <block id="b50eca45af7cfac7d7cd17a60760b504" category="list-text">在叢集中的每台 OpenNebula 主機上，執行以下命令來收集 WWPN 資訊並驗證 nvme-cli 套件是否已安裝。</block>
+  <block id="733ee11ce9d7ccffe56c4f57c63a55b6" category="list-text">將收集到的主機 NQN 和 WWPN 資訊提供給儲存管理員，並申請所需大小的 NVMe 命名空間。WWPN 用於光纖通道分區。請將這些資訊提供給負責光纖通道分區的管理員。</block>
+  <block id="3864fbafa775b151fa00fd7c3415d04f" category="list-text">確保每個控制器建立兩個專用於 NVMe/FC 的 LIF。收集已建立的 NVMe/FC LIF 的 WWPN 位址，並將其提供給負責光纖分區的管理員。</block>
+  <block id="8b4a367a358cdf8a829925109e6f615a" category="list-text">建立子系統並指派主機 NQN。</block>
+  <block id="e3dad76b2e4af7a256a8efb103134ecc" category="paragraph">完成以下任務，將 NVMe 命名空間配置為 OpenNebula 中的共用 LVM 儲存體。</block>
+  <block id="d16160bc1e13d9c5e1583598d8c4f004" category="list-text">在叢集中的每台 OpenNebula 主機上導航至 shell，並驗證新命名空間是否可見。</block>
+  <block id="a80a12d2b5aecbf10a64f584a58cc238" category="paragraph">onedatastore create nvmefc-system.conf ID：108</block>
+  <block id="d5cbc8667ebf93d9536915b969e6172f" category="list-text">使用<block ref="0473e0ba86272c80a0e0451c5a4b3b07" prefix=" " category="inline-code"></block>指令在 NVMe 命名空間上建立磁碟區群組。對於映像資料存放區，磁碟區群組名稱可以隨意命名。對於系統資料存放區，磁碟區群組名稱必須採用<block ref="995c5831059c2f1713db1c1093459789" prefix=" " category="inline-code"></block>格式。這是 OpenNebula 識別系統資料存放區正確磁碟區群組所需的。如果您要建立備份 / 檔案 / 映像資料存放區，請繼續執行下列步驟。對於系統資料存放區，請到此為止。</block>
+  <block id="2f3ce28c3108f2bda351bce9a002a22d" category="summary">配置基於 TCP 的 NVMe 邏輯磁碟區管理器（LVM）資料存儲，以便 OpenNebula 使用 ONTAP。此過程包括 nvme-cli 安裝、發現配置、命名空間配置、子系統設定以及建立共用儲存的磁碟區組。</block>
+  <block id="6734a0612e49cdceebc6a086ae4761dd" category="doc">使用 ONTAP NVMe/TCP 為 OpenNebula 配置 LVM Thin</block>
+  <block id="26f5e8c9f712c7a4a304eb37b3ba4646" category="paragraph">使用 NVMe over TCP 協議，透過 NetApp ONTAP，為多個 OpenNebula 主機配置 Logical Volume Manager（LVM）資料存放區以實現共享儲存。此配置可透過現代 NVMe 協議，在標準乙太網路上提供高效能區塊級儲存存取。</block>
+  <block id="a9f2c1c53aa79501aec3d22f3e5d1816" category="paragraph">完成這些初始任務，為 OpenNebula 主機做好 NVMe/TCP 連線的準備，並收集儲存管理員所需的必要資訊。</block>
+  <block id="8d1591eb30d5db52427395589b407f8e" category="list-text">在每台 OpenNebula 主機上執行以下命令以收集主機啟動器資訊。</block>
+  <block id="e792cd3f2806775ef7f1caed5c760da3" category="list-text">將收集到的主機 NQN 資訊以及主機名稱提供給儲存管理員，並要求所需大小的 NVMe 命名空間。</block>
+  <block id="be9c8441acc980992a39945646b44c16" category="list-text">建立子系統並將其指派給主機 NQN。為叢集中的所有 OpenNebula 主機以及前端伺服器建立一個子系統。前端伺服器在子系統分配中是可選的，但對於 Image 資料儲存而言是必需的。</block>
+  <block id="21c37092b4618c8f37f322efa7cf5692" category="paragraph">完成以下任務，將 NVMe 命名空間配置為 OpenNebula 中的共用 LVM 資料儲存。</block>
+  <block id="e6db8e2fbe4fd54cb2c792f5bd6bc419" category="list-text">在叢集中的每台 OpenNebula 主機上開啟 shell，並建立 /etc/nvme/discovery.conf 檔案。根據您的環境更新內容。</block>
+  <block id="128dbeae0d6bec72e1fad3b774b91cd4" category="list-text">若要使 NVMe 命名空間在重新開機後仍保留、請啟用 nvmf-autoconnect 服務。</block>
+  <block id="e343423a8c02cd76a8e3b41c46b09cdd" category="paragraph">onedatastore create nvmetcp-system.conf ID：109</block>
+  <block id="ed9c488c949ec854a6ba8ec7ef0b3d1f" category="summary">使用 ONTAP 為 OpenNebula 虛擬環境設定 SMB/CIFS 儲存設備。此過程包括啟用 SVM、建立 LIF、設定 Active Directory、建立磁碟區以及設定多通道以實現容錯和增強效能。</block>
+  <block id="b056cef78a8c5ed6894127c231640bab" category="doc">為 OpenNebula 配置 SMB/CIFS 資料存儲儲存</block>
+  <block id="3d4d99e1003ea322fe027a04250c1d27" category="paragraph">使用 NetApp ONTAP 為 OpenNebula 配置 SMB/CIFS Datastore 儲存。SMB 多通道可透過多個網路連線至儲存系統，提供容錯能力並提升效能。</block>
+  <block id="f08d71790c9e2c6ebac2874a7991d597" category="admonition">密碼以明文文件形式保存，只有 root 用戶才能存取。請確保採取適當的安全措施來保護敏感資訊。</block>
+  <block id="1488a472abafdf198fc3a20607115286" category="paragraph"><block ref="1488a472abafdf198fc3a20607115286" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="87ba514902a47250aa537a985690365d" category="paragraph"><block ref="87ba514902a47250aa537a985690365d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="0ce3794cb6a49d60c835c9da72b46ac5" category="paragraph"><block ref="0ce3794cb6a49d60c835c9da72b46ac5" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="dd254ae5b61bed32f0b6bd29b0e67f2c" category="paragraph"><block ref="dd254ae5b61bed32f0b6bd29b0e67f2c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1a28ac7e0df5c719148089ce615b8353" category="paragraph">完成以下任務，將 SMB 共用新增為 OpenNebula 中的資料存儲，並啟用多通道以提高效能和容錯能力。</block>
+  <block id="85f3a628eb755df404e4e3abb5a6d511" category="list-text">請確保在 Fedora 上安裝以下軟體包：sssd、realmd、adcli、oddjob、oddjob-mkhomedir、samba-common-tools、krb5-workstation 和 cifs-utils，以支援 Active Directory 整合和 SMB 掛載。Debian 軟體包包括：realmd、sssd、sssd-tools、libnss-sss、libpam-sss、adcli、samba-common-bin、packagekit、krb5-user 和 cifs-utils。</block>
+  <block id="592e7d0ee27351e92605051817b75f1c" category="paragraph">onedatastore create smb-system.conf ID：100</block>
+  <block id="3123bee0a468f2993557ca9a63272d65" category="list-text">在 /etc/ 中建立 smb 憑證檔案。如果使用 kerberos 驗證（KVM 主機已加入 &lt;domain&gt;），則不需要此步驟。</block>
+  <block id="d2876df10496670fa38988da5287ed5b" category="list-text">對憑證檔案設定正確的權限 (640)。如有必要，將所有權變更為 oneadmin 使用者和群組。</block>
+  <block id="c10835fea72755790978aacf179eefdb" category="list-text">更新 /etc/fstab 或自動掛載配置以啟用多通道。假設預設資料儲存位置為 /var/lib/one/datastores。如果不是，請檢查 /etc/one/oned.conf 中的 DATASTORE_LOCATION 參數。確保 &lt;datastore_id&gt; 資料夾存在於資料儲存位置下。範例條目如下：</block>
+  <block id="157ffc39377f93e942e71195a6ab724d" category="doc">瞭解 OpenNebula</block>
+  <block id="947ef2c54b411ed8c8dcd109afc89935" category="paragraph">OpenNebula 是一個開源的雲端管理平台，用於管理異質分散式資料中心基礎架構。它提供了一個簡單、模組化且功能豐富的解決方案，用於建立雲端運算和邊緣運算平台。OpenNebula 支援使用 KVM 的虛擬機器、使用 LXC 的 Linux 容器，以及基於 SUSE Rancher 的 CNCF 認證 Kubernetes 叢集。</block>
+  <block id="7aeb058e963d7aa079e612f31c5068d3" category="paragraph">OpenNebula 提供了一套全面的功能，用於管理虛擬機器和容器的完整生命週期，包括部署、監控、擴展和退役。它支援多種儲存和網路選項，使其能夠靈活地適應各種使用場景。</block>
+  <block id="3400f68284455f2b06be358ce8104a39" category="inline-image-macro">OpenNebula 概述</block>
+  <block id="4f43700cf1f52b8de143a66162204e60" category="paragraph"><block ref="4f43700cf1f52b8de143a66162204e60" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="00308efadd5c1f707319eed49a12042d" category="paragraph">OpenNebula 提供使用者友善的 Web 介面和功能強大的命令列介面（CLI），方便管理員和使用者與平台互動。它還提供 RESTful API，用於自動化和與其他工具整合。該平台支援多租戶，允許多個使用者和群組安全地共享相同的基礎架構。</block>
+  <block id="78be3b46c4c6be1d3c94c2e768f10d76" category="inline-image-macro">OpenNebula 模組化架構</block>
+  <block id="63ccdc3b48dfec62cf07b5fe78632441" category="paragraph"><block ref="63ccdc3b48dfec62cf07b5fe78632441" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="74a74665c681a0cc35b3f4520695fc9c" category="paragraph">OpenNebula 採用模組化架構，可輕鬆整合第三方工具和服務。它可以透過插件和驅動程式進行擴展，輕鬆適應特定需求。</block>
+  <block id="dbafbf15b1acdde60bc7fb2f09f051ab" category="section-title">前端使用者介面</block>
+  <block id="4244c3d60f37d1cbc096d0d23b9f8d02" category="paragraph">OpenNebula 提供名為 Sunstone 的基於 Web 的使用者介面，使用戶能夠輕鬆管理虛擬機器和容器。此介面直觀易用，管理員和最終用戶都能輕鬆導航並執行任務。預設情況下，它運行在 2616 連接埠。持久性資料儲存在後端資料庫中，可以是 SQLite（小型工作負載的預設選擇）或 MySQL/MariaDB（用於生產環境）。可以部署多個前端伺服器實例，以確保高可用性和負載平衡。</block>
+  <block id="76b68fff3686d83a32e511304f4d0d8f" category="inline-image-macro">OpenNebula Sunstone 介面</block>
+  <block id="76db73e51d306c5a158d6a759c95448c" category="paragraph"><block ref="76db73e51d306c5a158d6a759c95448c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="54288d10a2f9363caa869018baf5b2da" category="paragraph">OpenNebula Sunstone 提供可自訂的視圖和儀表板，讓使用者可以根據自身需求自訂介面。它還支援基於角色的存取控制（RBAC），使管理員能夠為使用者和使用者群組定義不同的存取等級。</block>
+  <block id="3e9c0b177b0cc92686faaf6e196f2bf5" category="paragraph">控制台存取功能可讓使用者直接從 Web 介面連接到虛擬機，從而為管理和互動虛擬機執行個體提供無縫體驗。它還包含一個市場，使用者可以在其中瀏覽和部署預先配置的虛擬機器範本和應用程式。使用者也可以透過 Web 介面使用 SSH 或其他遠端存取方式存取虛擬機器。</block>
+  <block id="352519322d164f6984822b8fcdc5ee1c" category="paragraph">聯盟功能允許連接多個 OpenNebula 實例（Zones），從而實現跨不同資料中心或地理位置的資源共享和工作負載分配。存取策略在整個聯盟範圍內定義，使用者可以被限制在特定 Zones，或特定 Zone 內的特定 Clusters。</block>
+  <block id="61495a1698657f73ac2ab166c7ff9e02" category="paragraph">OpenNebula 支援 KVM 虛擬機器和 LXC Linux 容器。支援的作業系統包括 Ubuntu、Debian、RHEL 和 AlmaLinux。虛擬機器可以從預先配置的範本或自訂映像進行部署。也可以使用服務範本部署一組虛擬機器（服務）。OneFlow 允許定義和管理由多個互連虛擬機器組成的多層應用程式。OneGate 支援從虛擬機器內部與 OpenNebula 後端通訊，從而實現進階監控和管理功能。</block>
+  <block id="02cfdd1f329cc337612bc7cbe06e2d2b" category="inline-link">OpenNebula 操作參考</block>
+  <block id="4cf9a49e78a874c239b9684b19abb15d" category="paragraph">虛擬機器自訂功能允許在部署期間自訂虛擬機器設定，包括網路組態、主機名稱、密碼和 SSH 金鑰。情境化功能允許在開機時將組態資料注入虛擬機器，從而根據部署環境實現動態組態。有關虛擬機器情境化的更多詳細資訊，請參閱<block ref="11f3284523afcf711ba11149797db863" category="inline-link-rx"></block>。</block>
+  <block id="52b0849be89345d5ce63d4e4b5a4b2f9" category="paragraph">為了進行資源管理和調度，一組虛擬機器管理程式被分組到叢集中。OneDRS （Distributed Resource Scheduler）能夠根據資源利用率和預先定義的策略，自動在可用的虛擬機器管理程式之間放置虛擬機器並進行負載平衡。策略可以是打包或均衡。</block>
+  <block id="a8f628aea6d8627b91ed982e801f92d1" category="inline-image-macro">OpenNebula 運算管理</block>
+  <block id="ace84b89d4c2ad284fe9db9dbad74fd0" category="paragraph"><block ref="ace84b89d4c2ad284fe9db9dbad74fd0" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="ba244fe904fab888a7743c5645041e31" category="paragraph">OpenNebula 也支援虛擬機器的即時遷移，從而實現無縫的工作負載平衡和維護，無需停機。</block>
+  <block id="0d78c96304963ef032453c069463f0b7" category="paragraph">一台實體主機一次只能屬於一個叢集。但可以跨叢集共享儲存和網路資源。叢集資源的子集可以分配給特定的虛擬資料中心（VDC），從而為不同的使用者群組提供資源隔離。</block>
+  <block id="74e30b26f2f73e197d09d62895818931" category="inline-image-macro">OpenNebula 叢集和 VDC</block>
+  <block id="035a219e3846c709bec73648981689f1" category="paragraph"><block ref="035a219e3846c709bec73648981689f1" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1f5f99059e817c6b306047256fede34b" category="paragraph">延伸叢集允許跨多個實體站台部署具有高可用性的虛擬機器。如果站台發生故障，虛擬機器可以從其他站台繼續運作而不會中斷。</block>
+  <block id="613133eeabdc21d32626e38449b467f4" category="admonition">延伸叢集需要所有站點均可存取的共用儲存。通常使用同步複寫來確保跨站點的資料一致性。</block>
+  <block id="e2ba41d0a35bad98069317035f822cd5" category="paragraph">可以定義 VM 對 VM 親和性 / 反親和性規則，以控制虛擬機器在實體主機上的放置位置。這樣可以確保某些虛擬機器始終部署在一起，或根據應用程式需求彼此分開。同樣地，也可以定義主機親和性 / 反親和性規則，以控制虛擬機器在特定實體主機上的放置位置。角色的定義是將具有類似親和性 / 反親和性規則的虛擬機器分組。</block>
+  <block id="9fb3bb6b8db6d6cf7fc03cb6120d7f28" category="paragraph">Kubernetes 叢集可以使用 OneKE 服務進行部署。OneKE 允許基於 SUSE Rancher 建立和管理 CNCF 認證的 Kubernetes 叢集。Kubernetes 叢集可以部署在 OpenNebula 虛擬機器之上，從而實現雲端基礎架構和容器編排之間的無縫整合。</block>
+  <block id="834d55c8284b6eab70b3b2993c8d6bfc" category="paragraph">OpenNebula 支援 NVIDIA vGPU 和 MIG（Multi Instance GPU），使虛擬機器能夠利用 GPU 的強大功能進行高效能運算、機器學習和其他 GPU 密集型工作負載。</block>
+  <block id="bbd1086c6b9ab5e6b581713a641b65db" category="paragraph">OpenNebula 提供四種類型的資料儲存來管理儲存資源：System、Image、File 和 Backup 資料儲存。System 資料儲存用於儲存虛擬機器磁碟和設定檔。Image 資料儲存用於儲存虛擬機器鏡像、ISO 和資料磁碟。File 資料儲存用於儲存可供虛擬機器存取的檔案。Backup 資料儲存用於儲存虛擬機器及其資料的備份。</block>
+  <block id="9768be91bf570d0cb6ec78c24696d1f4" category="admonition">映像資料存放區可以在叢集和前端伺服器之間共用，而系統、檔案和備份資料存放區則分配給特定的叢集。</block>
+  <block id="28017a33d215609e9fd42a664b88996e" category="paragraph">每個 System 資料儲存區都會指定一個模組，以處理從 Front-end 伺服器到 Hypervisor 的傳輸管理。支援的傳輸管理程式包括 SSH、共享檔案系統（例如 NFS、GlusterFS）等。資料儲存區通常掛載在 /var/lib/one/datastores 資料夾，或依 /etc/one/oned.conf 檔案中的 DATASTORE_LOCATION 屬性所定義。每個系統資料儲存區都會定義對應的映像資料儲存區。部署虛擬機器時，通常會使用定義的傳輸管理程式，將其磁碟從映像資料儲存區複製到系統資料儲存區。</block>
+  <block id="3aeb86d3631dc93c9bcd3f82be88e8ac" category="inline-image-macro">OpenNebula Storage 樣本目錄結構</block>
+  <block id="e8259869d896a5840d9be1ed91fc912d" category="paragraph"><block ref="e8259869d896a5840d9be1ed91fc912d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="9d62e9903da061cfd3da5edb978bbcee" category="paragraph">ONTAP FlexCache 可用於同一 OpenNebula Zone 內遠端位置的 Image 資料儲存。這允許將頻繁存取的 Image 快取到本地，從而降低延遲並提高虛擬機器部署的效能。</block>
+  <block id="68dbfdb0308b175684bbcb957462a1a4" category="paragraph">企業版 OpenNebula 包含 NetApp 驅動程式，可使用 ONTAP API 在 NetApp 儲存系統上建立和管理虛擬機器磁碟。這使得可以利用進階儲存功能，例如虛擬機器磁碟的精簡配置、重複資料刪除和快照。</block>
+  <block id="509c33f64532d3b7b7b8dfe8d71ce19d" category="paragraph">使用者可以從公有或私有鏡像倉庫下載鏡像，例如 OpenNebula Marketplace、Linux Container 或託管在 http 或 S3 儲存上的私有 Marketplace。私有 Marketplace 允許組織為其聯盟內的使用者維護一套精心挑選的鏡像。</block>
+  <block id="4cecc3e4a380df2ef3680308270f61d2" category="paragraph">Cloud Images 需要配合 OpenNebula 使用上下文層。鏡像可以是持久的，也可以是非持久的。持久鏡像會保留虛擬機器運作時所做的更改，而非持久鏡像在虛擬機器終止後不會保留任何更改。但是，當虛擬機器關閉時，系統資料儲存中的變更會保留。</block>
+  <block id="e57976deec4ced5a02257746552260ff" category="paragraph">持久化映像通常用於建立自訂的虛擬機器映像。一次只能從一個持久化映像部署一個 VM。</block>
+  <block id="292f909a45c3ab8d2897274f621cfc5b" category="paragraph">VM 磁碟快照可用於從正在執行的虛擬機器資料建立映像。VM 磁碟大小可以在部署期間或執行階段（線上調整大小）進行調整。</block>
+  <block id="16571ceca4ce19655d3698f95ca6353c" category="paragraph">Trident CSI 驅動程式用於在部署了 OneKE 的 Kubernetes 叢集上建立持久性磁碟區。這使得 Kubernetes 工作負載能夠利用 ONTAP 儲存功能。Trident Protect 允許為 Kubernetes 工作負載定義應用級災難復原策略。</block>
+  <block id="cb8b227ce32650f0eb699b34764fd884" category="paragraph">OpenNebula 可連接現有網路基礎設施，為虛擬機器和容器提供網路連接功能。它支援多種網路模型，包括 Linux 橋接器、802.1Q VLAN、VXLAN 和 Open vSwitch 網路。對於類似 VPC 的網路，可以使用 VXLAN 和 EVPN 來隔離租戶網路。</block>
+  <block id="13fc7b48e8f8c270da558ad9b1e0ac2f" category="inline-image-macro">OpenNebula 網路模型</block>
+  <block id="3fd1a3f1b424544497301d8d21ef5435" category="paragraph"><block ref="3fd1a3f1b424544497301d8d21ef5435" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="161f0d929aafae3cf858c44859418e1c" category="paragraph">每個虛擬網路都需要定義一個位址範圍。它可以是 IPv4、IPv6、兩者兼有，甚至是 MAC 位址範圍（如果使用外部 DHCP 伺服器）。IPAM（IP 位址管理）功能可管理和指派已定義位址範圍內的 IP 位址。它支援自動和手動 IP 位址分配，以及為虛擬機器預留特定的 IP 位址。</block>
+  <block id="d0d8f3edbcd8f2acbb56a4ab7a461835" category="inline-image-macro">OpenNebula 具有 IPAM 的虛擬網路</block>
+  <block id="40b27e495d91f460699a18caa395fec4" category="paragraph"><block ref="40b27e495d91f460699a18caa395fec4" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d9e4e30cd4f89b887ae1b6532c56e503" category="paragraph">在虛擬機器部署過程中，網路介面會根據已定義的虛擬網路和 IP 位址指派自動設定。網路配置可以使用虛擬機器上下文功能自訂。</block>
+  <block id="c0876e4e4d439a2c804d553829aa0d3d" category="paragraph">也可以使用 Sunstone 介面中的「更新虛擬機器配置」按鈕更新上下文資訊。其他網路介面可以熱插拔到正在運作的虛擬機器上。</block>
+  <block id="4a2bbbb02bc3a095a00b0a08ed023fbd" category="paragraph">虛擬路由器可部署以為虛擬網路提供路由和 NAT 服務。虛擬網路可跨多個叢集，實現靈活的網路拓撲。</block>
+  <block id="9890271de2f4963455c5a74268b91dfa" category="section-title">監控與營運</block>
+  <block id="92df0b85672fe7244e0a7ade6669b9db" category="paragraph">OpenNebula 包含一個全面的監控系統，可即時提供有關雲端基礎架構效能和運作狀況的洞察。該系統從虛擬機器管理程式、虛擬機器、儲存和網路元件收集指標，使管理員能夠監控資源利用率並識別潛在問題。</block>
+  <block id="fa12717a520f164728d2441d1730918e" category="paragraph">OpenNebula 包含 Prometheus 導出器，用於收集基於 Prometheus 的監控系統的指標。它還與 Grafana 集成，提供可自訂的儀表板，用於視覺化收集到的指標。</block>
+  <block id="efbfc5589bbf02cb9ae647f7dc8620f7" category="inline-image-macro">使用 Grafana 監控 OpenNebula</block>
+  <block id="0d4717396cb9d60ded8854c3ca70d0cd" category="paragraph"><block ref="0d4717396cb9d60ded8854c3ca70d0cd" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="244a3a99360bfd33fa5450c744bb3386" category="paragraph">NetApp Data Infrastructure Insights 可用於監控與 OpenNebula 一起使用的 ONTAP 儲存系統。它提供有關儲存效能、容量和健全狀況的詳細深入分析，讓管理員能夠最佳化虛擬機器的儲存資源。</block>
+  <block id="1d6684cc4d7c458ffe8ae20fef24e4d9" category="inline-link">OpenNebula CLI 參考</block>
+  <block id="eecd9cbf7713bc646fb4f1d55126cc3c" category="inline-link">CLI 組態參考</block>
+  <block id="6b705a689fcabe7da1a2abd331723a65" category="paragraph">OpenNebula CLI 用於對雲端基礎架構執行各種操作，包括虛擬機器管理、儲存管理和網路管理。它提供了一種強大而靈活的方式來自動化任務並與其他工具整合。有關 OpenNebula CLI 的更多資訊，請參閱<block ref="b9efa49f0ee5d9b9f1631ad54cdabb38" category="inline-link-rx"></block>。有關自訂 CLI 輸出，請參閱<block ref="522ad94017b32835f9f4c765cd18d756" category="inline-link-rx"></block>。</block>
+  <block id="eef272697681d2a82d43d857b5a0c012" category="paragraph">自訂腳本也可以作為 VM 生命週期的一部分執行。Hooks 允許根據 OpenNebula 平台中的特定事件（例如 VM 部署、終止或遷移）觸發自訂操作。這使管理員能夠自動化工作流程並與外部系統整合。</block>
+  <block id="8df468cd001ad62b0b6009884162e32f" category="inline-image-macro">OpenNebula 鉤子和虛擬機器生命週期</block>
+  <block id="c93b7f0b272fc924391907cf1d4fac98" category="paragraph"><block ref="c93b7f0b272fc924391907cf1d4fac98" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="713e0a53fc866de19a1fc24fdd0917ec" category="inline-link">OpenNebula 使用鉤子</block>
+  <block id="a6119bebceabeca100208406f4b56c9b" category="paragraph">有關 OpenNebula Hooks 的更多資訊，請參閱<block ref="17fd9bd4715d0782d3995cfad07ca40c" category="inline-link-rx"></block>。</block>
+  <block id="6b1a4deb1d19ae1ab998477d8b29d528" category="inline-link-macro">Shift Toolkit 轉換</block>
+  <block id="8a0fe58e4bfcc1167b439d211100a77d" category="inline-link">OneSwap 工具</block>
+  <block id="b3eab7392cfcd7470fe5831208c57a7b" category="paragraph"><block ref="252fed8c15c95ef9364f2ab0d73e7bca" category="inline-link-rx"></block>允許將虛擬機器從 vSphere 遷移到 OpenNebula KVM 環境。它從 vSphere VMDK 檔案建立映像並產生相應的 OpenNebula VM 範本。NetApp Shift toolkit 可以將 vSphere VMDK 檔案轉換為 QCOW2 格式以供 OpenNebula 使用。使用 NetApp Shift toolkit API 與 OneSwap 可以快速且有效率地自動化 ONTAP 檔案共用上的遷移過程。有關 NetApp Shift toolkit 的更多資訊，請參閱 <block ref="061684e1b8f3eb4af428a4701a29ad48" category="inline-link-macro-rx"></block>。</block>
+  <block id="5539d24fbdf3da155c088fa08d5b20d6" category="paragraph">OpenNebula 支援使用 rsync、restic 和 Veeam 進行備份。Veeam 整合僅適用於 Enterprise 版本。備份資料儲存區用於儲存虛擬機器及其資料的備份。備份工作可排程在特定時間間隔執行，確保虛擬機器定期備份。</block>
+  <block id="8f731981731e712ca2afabc4e47202d0" category="paragraph">根據備份策略的不同，備份可以是增量快照或完整備份。增量快照僅擷取自上次備份以來所做的更改，從而減少儲存需求和備份時間。完整備份會建立虛擬機器及其資料的完整副本。qcow2 格式允許在增量備份中使用變更區塊追蹤（CBT）。</block>
+  <block id="a7cd46ee2fb19493f6bd784eda4faa3f" category="inline-link">OpenNebula Veeam 整合</block>
+  <block id="19f83e0fc349756261187e552a574fa0" category="paragraph">OpenNebula 提供 oVirt 相容的 REST API 伺服器，可與 Veeam Backup &amp; Replication 軟體整合。如需詳細資訊、請參閱<block ref="7a7b26bb64b02307360a4feb2ff72c72" category="inline-link-rx"></block>。</block>
+  <block id="ced8e2d5fd839c48d740c3ee526aaef9" category="summary">OpenNebula 支援 ONTAP 的多種儲存類型，包括 NAS 協定的 NFS 和 SMB，以及 SAN 協定的 FC、iSCSI 和 NVMe-oF。</block>
+  <block id="5975f35c9c4cfd024173a3a90d97b9d2" category="doc">OpenNebula 支援的儲存類型</block>
+  <block id="cce1c22be134c83b936a3baed8b4d3b3" category="paragraph">OpenNebula 支援 NetApp ONTAP 的多種儲存傳輸協定，包括用於 NAS 的 NFS 和 SMB，以及用於 SAN 的 FC、iSCSI 和 NVMe-oF。使用者可以根據現有技能和需求選擇合適的儲存傳輸協定。如果不打算使用 ONTAP 提供的任何資料服務，請考慮使用 SANtricity 系統，該系統能夠透過 FC、iSCSI、Infiniband 和 NVMe-oF 傳輸協定提供區塊儲存。</block>
+  <block id="eec628affe69d3fe1fb0c91e5499ab6e" category="paragraph">OpenNebula 使用的資料儲存通常掛載在 /var/lib/one/datastores 資料夾下，或由 /etc/one/oned.conf 檔案中的 DATASTORE_LOCATION 屬性定義。儲存可以透過 /etc/fstab 檔案掛載，也可以使用 Automounter 或其他環境支援的方法動態掛載。大多數資料夾的權限都設定為由 oneadmin 使用者和群組擁有。請確保 Hypervisor 主機可以使用所需的協定存取儲存系統。</block>
+  <block id="799333ae726a3ebc527f6b5c7eca25e0" category="paragraph">使用自動掛載工具時，請使用直接掛載，以避免自動掛載工具接管父資料夾控制權的問題。若要建立直接掛載，請在 /etc/auto.master.d/ 目錄下建立檔案。例如，可以使用下列命令建立一個名為 one.autofs 的檔案：</block>
+  <block id="616c588c0543ef568c5cc7ebaab66b90" category="paragraph">前端伺服器需要存取鏡像資料儲存。將鏡像資料儲存掛載到虛擬機器管理程式主機上是可選的，但為了獲得更好的效能，建議這樣做。系統資料儲存必須掛載到虛擬機器管理程式主機上，因為它們託管虛擬機器磁碟。核心資料儲存和檔案資料儲存用於儲存虛擬機器核心、記憶體磁碟以及虛擬機器在上下文關聯過程中所需的其他檔案。它們可以掛載到前端伺服器和虛擬機器管理程式主機上。備份資料儲存用於虛擬機器備份，可以掛載到 OpenNebula 叢集中的所有主機上。如果 KVM 主機可以透過 SSH（用於 rsync）或 SFTP（用於 restic）存取備份資料儲存主機，則其他叢集上的虛擬機器也可以使用同一個備份資料儲存。如果使用 Veeam，則應啟用 oVirtAPI。</block>
+  <block id="0c63dd24f835ff78f1197849f9edd470" category="paragraph">NAS 協定（ NFS 和 SMB ）支援前端和 Hypervisor 主機之間的共用檔案系統。ONTAP 快照可以對用戶端可見、以便存取資料的時間點複本。ONTAP FlexCache 可用於地理分散區域內的映像資料存放區。ONTAP NFS 支援 nConnect 、透過每個工作階段使用多個連線來提升效能。使用 FlexGroup 處理大型資料存放區（ &gt; 100TB ）時、建議使用 pNFS 將負載分散到多個節點。請記住在 ONTAP 叢集中為每個控制器至少設定一個資料 LIF 、且 Hypervisor 主機需要具備連線能力。</block>
+  <block id="b27971c437b8bab4647edf6c174461ed" category="paragraph">所有資料儲存類型（映像、系統、核心和檔案以及備份）均支援 NAS 協定。</block>
+  <block id="a32a029e75c86ef516811ab347990d89" category="paragraph">企業版包含 NetApp 驅動程式，可在 AFF 和 FAS 系統上使用 iSCSI 協定。其他 SAN 協定（FC、InfiniBand 和 NVMe-oF）通常配置為使用 LVM 驅動程式。LVM 精簡池是為每個虛擬機器建立的，用於精簡配置和快照支援。Hypervisor 主機需要連接到儲存系統。使用 LVM 儲存類型不需要叢集 LVM 支援。</block>
+  <block id="f107720b30db1a57f5598dafea82e9b1" category="paragraph">若要使用 NetApp 驅動程式、需要在 Hypervisor 主機上設定 iSCSI 工作階段和多重路徑。對於 LVM 驅動程式、除了系統資料存放區之外、邏輯磁碟區需要建立檔案系統並掛載。對於系統資料存放區、磁碟區群組需要命名為「vg-one-&lt;datastore_id&gt;」、其中 &lt;datastore_id&gt; 是 OpenNebula 中資料存放區的數字識別碼。所有資料存放區類型（映像、系統、核心和檔案、以及備份）都支援 SAN 傳輸協定。</block>
+  <block id="f319d038f117a09b806943c972c0db2b" category="section-title">NetApp ONTAP API 驅動程式</block>
+  <block id="20c35723a515cded1517c13454fddb47" category="inline-link-macro">OpenNebula 文件</block>
+  <block id="5dd619828db0039008bb07d0701175ed" category="paragraph">OpenNebula 的原生 NetApp 整合利用 ONTAP 的 API 自動建立和管理磁碟區、LUN、快照和對應。這種方法提供了最高等級的自動化，避免了手動設定 iSCSI 和 LVM。如需更多資訊，請參閱 <block ref="61c64c712bee83ba2c24cfdf5cf294e9" category="inline-link-macro-rx"></block>。</block>
+  <block id="4de362d9eeba7c0023d5549db3fe28f7" category="cell">資料存放區類型</block>
+  <block id="19f48d00111bb15ab0110744dfbbc78f" category="paragraph">是的^1^</block>
+  <block id="fc4308c3caa893409bcd4515c8b9cdae" category="cell">核心和檔案</block>
+  <block id="2756400dc25a9ea5ba8cede9ef2fccb8" category="list-text">NetApp 驅動程式可在企業版中用於 iSCSI 協定，以利用原生 ONTAP 功能。</block>
+  <block id="65deb566e2e31fd371e9f59d432e4746" category="section-title">OpenNebula 叢集儲存類型支援 ONTAP</block>
+  <block id="6c96d1af69c2a351926791397eebf724" category="paragraph">以下是在以 NetApp ONTAP 作為後端時，OpenNebula 不同儲存類型所支援功能的比較。</block>
+  <block id="21021ea0e52be8e9c599f4dff41e5be0" category="cell">功能</block>
+  <block id="502de0ca02b6a1c74a8a9c374793c768" category="cell">NetApp ONTAP API</block>
+  <block id="feca737b127a39f2a1d5c365031937c0" category="cell">LVM-thin</block>
+  <block id="08c1ff38b0725dfc2641157c092122a8" category="cell">NFS/SMB</block>
+  <block id="5fb3ed27e0993f4b76024933682f11a2" category="cell">影像儲存 ^1^</block>
+  <block id="b8efeecbddea7e32fc8fd850746fde72" category="cell">即時快照</block>
+  <block id="3e787b783e255f23ac8c29e00d0ea2c1" category="cell">複製虛擬機器或映像</block>
+  <block id="bd6abf1796163a6193857ca46e714aca" category="cell">增量備份^2^</block>
+  <block id="c325b0e50c2b1c81fda897465948fbac" category="list-text">映像儲存是指使用後端作為 OpenNebula 映像資料存放區。LVM-thin 和 ONTAP API 方法涉及從映像來源複製或建立區塊裝置。</block>
+  <block id="e5098ba4bba01463768e02b291bd044d" category="list-text">增量備份適用於<block ref="947f13878c6bd4981c91c790c5d83ff5" prefix=" " category="inline-code"></block>磁碟（透過 NFS/SMB）或支援追蹤變更的區塊裝置。OpenNebula NetApp ONTAP 驅動程式使用捲動快照來建立增量備份。</block>
+  <block id="ea055808a5b40821bde7d56469cd291b" category="admonition">增量備份需要載入<block ref="1373d0cb4ac444c16b7b2e6f8f402381" prefix=" " category="inline-code"></block> 核心模組。</block>
+  <block id="c86f6ad61f8c60248afe050d27971d29" category="sidebar">OpenNebula</block>
+  <block id="ae02d3be4b0b9f2c4295c4c13c37a38b" category="sidebar">KVM 的 OpenNebula 資源</block>
+  <block id="50bf63442df1bb911b591132e177c57d" category="sidebar">了解 OpenNebula</block>
+  <block id="df6cab6f3e31b663a0a4c1599e6d83b5" category="sidebar">安裝 OpenNebula</block>
+  <block id="e4eb59430ae7a41fdd4dc826485f5ddf" category="sidebar">OpenNebula 與 NetApp 架構</block>
+  <block id="13317dc2edd0e239b522c5700ae38a66" category="sidebar">NetApp OpenNebula 解決方案是一系列技術能力，用於展示 NetApp 儲存設備使用 OpenNebula 進行虛擬化的能力。</block>
+  <block id="5a8c64fcb779ba2581399c2a0a9dd5e4" category="sidebar">NetApp OpenNebula 解決方案</block>
+  <block id="40a9571f884dff614eb1fca2dafa2740" category="sidebar">為 OpenNebula 配置 NetApp 儲存空間</block>
+  <block id="f46248b53f7bd6fb008d2301896857b2" category="sidebar">OpenNebula 7.0 文件</block>
+  <block id="d910364c8ddf307ddf0398afc7618007" category="sidebar">為 OpenNebula Enterprise Edition 設定 NetApp SAN 資料存放區</block>
+  <block id="3c1b0c01a0c4c7cfec573316ba9e13b1" category="sidebar">OpenNebula 文件（先前版本 - 4.x 至 6.x）</block>
+  <block id="8c09c6c876281c4f63f0e35750f7f328" category="sidebar">OpenNebula YouTube 頻道</block>
+  <block id="fc5c3064b1a297be89cf61bfd623c55f" category="sidebar">OpenNebula 論壇</block>
+  <block id="d7e29a10c09f4896443875d8258d08b9" category="sidebar">OpenNebula GitHub 儲存庫</block>
+  <block id="ed1404c8c64bb02204a9576a14bf3bfa" category="sidebar">關於 OpenNebula</block>
+  <block id="67749e6e266ee5ff64ea0ea2e983405d" category="sidebar">NetApp 上的 OpenNebula 概述</block>
+  <block id="fae50285a56e2519a749a9e6f1e7aa21" category="sidebar">NetApp 儲存設備用於 OpenNebula</block>
+  <block id="8629e03df0633263ab40227fe3986a47" category="sidebar">使用 NetApp 為 OpenNebula 配置儲存協議</block>
+  <block id="ff9a52b1a7c26847f2ab026a07420444" category="sidebar">配置 NetApp ONTAP iSCSI 儲存設備</block>
 </blocks>

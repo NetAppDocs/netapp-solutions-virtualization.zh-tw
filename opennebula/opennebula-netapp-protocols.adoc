@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: opennebula/opennebula-netapp-protocols.html 
+keywords: netapp, opennebula, all-flash, nfs, iscsi, ontap, storage, aff 
+summary: 使用 NAS 協定（NFS、SMB）和 SAN 協定（FC、iSCSI、NVMe）為 OpenNebula 配置 ONTAP 儲存設備。選擇適當的協定特定程序，為您的 OpenNebula 環境配置共用儲存設備。 
+---
+= 了解 OpenNebula 與 NetApp ONTAP 的儲存傳輸協定
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 NAS 協定（NFS、SMB）和 SAN 協定（FC、iSCSI、NVMe）為 OpenNebula 配置 ONTAP 儲存設備。選擇適當的協定特定程序，為您的 OpenNebula 環境配置共用儲存設備。
+
+確保 OpenNebula 前端主機和虛擬機管理程式主機具有光纖通道（FC）、乙太網路或其他受支援的介面，並透過網路線連接到交換器，從而與 ONTAP 邏輯介面通訊。務必檢查 https://mysupport.netapp.com/matrix/#welcome["互通性矩陣工具"]以瞭解支援的組態。範例案例假設每台 OpenNebula 主機上都有兩張高速網路介面卡，這兩張網路介面卡連接在一起以建立綁定介面，從而提高容錯能力和效能。所有網路流量（包括主機管理、VM/容器流量和儲存存取）都使用相同的上行鏈路連線。當有更多網路介面可用時，請考慮將儲存流量與其他類型的流量分開。
+
+有關 ONTAP 儲存架構和支援的儲存類型的資訊，請參閱 link:opennebula-netapp-architecture.html["了解 NetApp 儲存架構於 OpenNebula"] 和 link:opennebula-storage-types.html["了解 OpenNebula 支援的儲存類型"]。
+
+
+NOTE: 當使用 LVM 和 SAN 協定（FC、iSCSI、NVMe-oF）時，磁碟區組可以包含多個 LUN 或 NVMe 命名空間。在這種情況下，所有 LUN 或命名空間都必須屬於同一個一致性群組，以確保資料完整性。我們不支援跨越多個ONTAP SVM 的磁碟區組。每個磁碟區組必須由同一 SVM 中的 LUN 或命名空間建立。
+
+
+
+== 選擇儲存協議
+
+選擇符合您環境和要求的協議：
+
+* link:opennebula-netapp-iscsi.html["使用 iSCSI 配置 NetApp 驅動程式"] - 配置 OpenNebula NetApp 驅動程式，透過支援多路徑的標準乙太網路，使用 iSCSI 存取區塊儲存。此功能僅限企業版使用。它利用 ONTAP 原生複製實現高效率的虛擬機器配置。
+* link:opennebula-ontap-smb.html["配置 SMB/CIFS 存儲"] - 為 OpenNebula 設定 SMB/CIFS 檔案共享，支援多通道，以實現容錯和增強多網路連線的效能。
+* link:opennebula-ontap-nfs.html["配置 NFS 存儲"] - 使用多個網路連線，為 OpenNebula 配置 NFS 儲存，並搭配 nConnect 或 session trunking，以提升容錯能力和效能。
+* link:opennebula-ontap-fc.html["使用 FC 設定 LVM Thin"] - 設定邏輯磁碟區管理器（LVM）與光纖通道，以實現跨 OpenNebula 主機的高效能、低延遲區塊儲存存取。
+* link:opennebula-ontap-iscsi.html["使用 iSCSI 設定 LVM Thin"] - 設定邏輯磁碟區管理器（LVM）與 iSCSI，以便透過支援多路徑的標準乙太網路存取區塊儲存。
+* link:opennebula-ontap-nvme-fc.html["使用 NVMe/FC 設定 LVM Thin"] - 使用現代 NVMe 協議，透過光纖通道配置邏輯磁碟區管理器（LVM）和 NVMe，以實現高效能區塊儲存。
+* link:opennebula-ontap-nvme-tcp.html["使用 NVMe/TCP 設定 LVM Thin"] - 使用現代 NVMe 協議，透過 TCP 設定邏輯磁碟區管理器（LVM）和 NVMe，以便在標準乙太網路上實現高效能區塊儲存。
+
+
+
+NOTE: 如果需要 E-Series 或 EF-Series 儲存協定的協助，請查看連結 https://docs.netapp.com/us-en/e-series/config-linux/index.html["NetApp E 系列和 EF 系列文件介紹如何在 Linux 環境中設定 LVM"]以及 LVM Thin 文件之一以供參考。
