@@ -30,8 +30,12 @@ summary: '使用ONTAP為 Proxmox 虛擬環境設定邏輯磁碟區管理器 (LVM
 apt list | grep multipath-tools
 # If need to install, execute the following line.
 apt-get install multipath-tools
-systemctl enable multipathd
+systemctl enable --now multipathd
 ----
++
+
+NOTE: ONTAP 裝置多重路徑所需的組態已包含在套件中。如需詳細資訊，請參閱 link:https://docs.netapp.com/us-en/ontap-sanhost/hu-proxmox-ve-9x.html#step-1-confirm-the-multipath-configuration-for-your-host["關於 Proxmox VE 9.x for FCP 和 iSCSI 與 ONTAP 儲存的 ONTAP 9 文件"]
+
 . 收集所有 Proxmox VE 主機的 WWPN 並將其提供給儲存管理員。
 +
 [source, shell]

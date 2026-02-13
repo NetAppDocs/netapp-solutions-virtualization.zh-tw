@@ -8564,4 +8564,7 @@
   <block id="fae50285a56e2519a749a9e6f1e7aa21" category="sidebar">NetApp 儲存設備用於 OpenNebula</block>
   <block id="8629e03df0633263ab40227fe3986a47" category="sidebar">使用 NetApp 為 OpenNebula 配置儲存協議</block>
   <block id="ff9a52b1a7c26847f2ab026a07420444" category="sidebar">配置 NetApp ONTAP iSCSI 儲存設備</block>
+  <block id="12db34d0277dc14c8dfb7f00306bcdb1" category="list-text">Metrocluster 支援高可用性。</block>
+  <block id="193267cce237caa1ad9fccf574952dd4" category="inline-link-macro">關於 Proxmox VE 9.x for FCP 和 iSCSI 與 ONTAP 儲存的 ONTAP 9 文件</block>
+  <block id="191c3e0b6a997326d8f620ef8fbb2776" category="admonition">ONTAP 裝置多重路徑所需的組態已包含在套件中。如需詳細資訊，請參閱 <block ref="bbf51a4dc5cabbb4a7cd9e6e15ab2e54" category="inline-link-macro-rx"></block></block>
 </blocks>
