@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: openshift/osv-vm-dp-using-vgs.html 
-keywords: OpenShift, OCP, Trident, Trident protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization,Data Protection, Data Management for VMs, VM protection, Volume Group Snapshots 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, Data Protection, Data Management for VMs, VM protection, Volume Group Snapshots 
 summary: 使用Trident磁碟區組快照保護 Red Hat OpenShift 虛擬化中的虛擬機，以確保崩潰一致的備份和快速復原。此程序示範如何使用 Kubernetes 和NetApp ONTAP配置、快照和還原多個 VM 磁碟。 
 ---
 = 使用Trident磁碟區組快照保護 Red Hat OpenShift 虛擬化中的虛擬機

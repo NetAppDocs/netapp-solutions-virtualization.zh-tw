@@ -1719,14 +1719,10 @@
   <block id="3e50a0145c990c27ae65e8976658d044" category="list-text"><block ref="3e50a0145c990c27ae65e8976658d044" category="inline-link-macro-rx"></block></block>
   <block id="472d13eb415cd6107aeef3a1ae6cd705" category="summary">NetApp提供了許多產品來幫助我們的客戶在基於容器的環境中協調和管理持久數據，例如 Red Hat OpenShift。</block>
   <block id="dd99886a26d3b0bfc6c607830f9e7019" category="doc">了解NetApp Trident與 Red Hat OpenShift 的集成</block>
-  <block id="54283b72e941e950513b99a2293f70b8" category="paragraph">了解NetApp Trident保護，該保護已通過 OpenShift 虛擬化解決方案的應用程式和持久性儲存管理驗證。</block>
-  <block id="c4c4d8eb1a938d23dbd4e3561819fbf1" category="paragraph">Trident是由NetApp維護的開源儲存配置器和編排器， NetApp Trident保護可協助您在基於容器的環境（例如 Red Hat OpenShift）中編排和管理持久性資料。</block>
   <block id="900bda04002ffdec7966ea3d7d98194b" category="paragraph"><block ref="900bda04002ffdec7966ea3d7d98194b" category="inline-image-macro-rx" type="image"></block></block>
   <block id="cd351007d4a671a321b6881f730d0dc3" category="paragraph">以下頁麵包含有關NetApp產品的更多信息，這些產品已在 Red Hat OpenShift with NetApp解決方案中經過應用程式和持久性儲存管理驗證：</block>
   <block id="b427c728eaaa53d5c94c13cde0411106" category="inline-link-macro">Trident文檔</block>
   <block id="38a66e64d72c4bab859830a3603ac8eb" category="list-text"><block ref="38a66e64d72c4bab859830a3603ac8eb" category="inline-link-macro-rx"></block></block>
-  <block id="593761100422aee4bdc18b693f31d86b" category="inline-link-macro">Trident保護文檔</block>
-  <block id="678a9deea346abba1fb1c0458355563f" category="list-text"><block ref="678a9deea346abba1fb1c0458355563f" category="inline-link-macro-rx"></block></block>
   <block id="65cd53ff19e601ea00bf9688be4dd86a" category="summary">搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化</block>
   <block id="d42b44fb81f291c6ab4e79de6575323c" category="doc">使用ONTAP部署 Red Hat OpenShift Virtualization 的需求</block>
   <block id="5bcb2c405229387b9d1cd5b7fbf439a7" category="paragraph">查看使用ONTAP儲存系統安裝和部署 OpenShift 虛擬化的需求。</block>
@@ -2002,14 +1998,10 @@
   <block id="386516d20f942ea44530abce3a0d6658" category="section-title">刪除恢復</block>
   <block id="7d1b1dead1b5c837eb4e8627adae0e1b" category="paragraph">您可以使用 Velero CLI 刪除 Restore CR</block>
   <block id="62493b3471e85f7b7102c1acae457868" category="paragraph">您可以使用 oc 指令以及 UI 來刪除復原 CR</block>
-  <block id="1821a63ecd868360f33ee8c307c19f29" category="doc">使用Trident Protect 保護 Red Hat OpenShift 虛擬化中的虛擬機</block>
   <block id="880438dc3c158f0520f9576a507cb60f" category="paragraph">使用快照和備份保護 OpenShift 虛擬化中的虛擬機器。此程序包括使用ONTAP S3 物件儲存建立 AppVault、配置Trident Protect 以擷取 VM 資料（包括 Kubernetes 資源物件、持久磁碟區和內部影像），並在必要時還原資料。</block>
   <block id="ae4c2d0da7b1da91fd7f98644678ccf9" category="paragraph">OpenShift 虛擬化環境中的虛擬機器是在 OpenShift 容器平台的工作節點中執行的容器化應用程式。保護虛擬機器元資料以及虛擬機器的持久性磁碟非常重要，以便在它們遺失或損壞時可以還原它們。</block>
   <block id="4f2e2fd0041732a5bfeffd80536904be" category="inline-link-macro">Trident犯罪現場調查</block>
-  <block id="cb1f1e88b6db83dc715d1cb1d8733445" category="inline-link-macro">Trident保護</block>
-  <block id="e33e8d48f0bb799b37b5bc749487254d" category="paragraph">OpenShift 虛擬化虛擬機器的持久性磁碟可以透過使用整合到 OpenShift 叢集的ONTAP儲存進行支援<block ref="d66058559be29002c97cec8314567a26" category="inline-link-macro-rx"></block>。在本節中我們使用<block ref="cc24e09f500ab5b39acb9ba4de3f5622" category="inline-link-macro-rx"></block>建立虛擬機器（包括其資料磁碟區）的快照和備份到ONTAP物件儲存。</block>
   <block id="cfb19c3733743fd549ce0c727fedef08" category="paragraph">然後，我們在需要時從快照或備份中還原。</block>
-  <block id="c086ef24cd8b21f804c162916c382ae8" category="paragraph">Trident Protect 支援 OpenShift 叢集上的應用程式和虛擬機器的快照、備份、復原和災難復原。對於 OpenShift 虛擬化虛擬機，可以使用Trident Protect 保護的資料包括與虛擬機器關聯的 Kubernetes 資源物件、持久磁碟區和內部影像。</block>
   <block id="a6040c159eeb9dc3a8ee2778db8e299e" category="paragraph">**以下是本節範例所使用的各個元件的版本**</block>
   <block id="8029f49e67976ee4be8e5ee35ae01297" category="inline-link-macro">OpenShift 叢集 4.17</block>
   <block id="200698ac6537b28ad9734722a73080db" category="list-text"><block ref="200698ac6537b28ad9734722a73080db" category="inline-link-macro-rx"></block></block>
@@ -2017,15 +2009,11 @@
   <block id="287f7b64542d2f7312b8d3de9b3f8b26" category="list-text"><block ref="287f7b64542d2f7312b8d3de9b3f8b26" category="inline-link-macro-rx"></block></block>
   <block id="a1862e00d8111386cdf238bd23bb97db" category="inline-link-macro">Trident25.02</block>
   <block id="ff6395262d82836eedf127f3a80c2ce7" category="list-text"><block ref="ff6395262d82836eedf127f3a80c2ce7" category="inline-link-macro-rx"></block></block>
-  <block id="8646f7af8fba1737c1ced6f2d0eed098" category="inline-link-macro">Trident保護 25.02</block>
-  <block id="45317a3a74be40b0ff3578e7b5297766" category="list-text"><block ref="45317a3a74be40b0ff3578e7b5297766" category="inline-link-macro-rx"></block></block>
   <block id="8c1ba5eb61420c0029961110f20d7829" category="inline-link-macro">ONTAP 9.16</block>
   <block id="a13c7db7d74afd839261d6b5eef45b76" category="list-text"><block ref="a13c7db7d74afd839261d6b5eef45b76" category="inline-link-macro-rx"></block></block>
   <block id="9e2fd9553f3b1f1f9aa36beca4f46a7f" category="section-title">為物件儲存建立 App Vault</block>
   <block id="e17a719a6366dd11d450cd1e2c5967de" category="example-title">建立 AppVault</block>
-  <block id="ad701f18604247a6a058dd775e3fc022" category="paragraph">在為應用程式或虛擬機器建立快照和備份之前，必須在Trident Protect 中配置物件儲存來儲存快照和備份。這是使用儲存桶 CR 完成的。只有管理員可以建立儲存桶 CR 並對其進行配置。在Trident Protect 中，儲存桶 CR 稱為 AppVault。AppVault 物件是儲存桶的聲明性 Kubernetes 工作流程表示。AppVault CR 包含儲存桶在保護作業（例如備份、快照、復原作業和SnapMirror複製）中所使用的必要配置。</block>
   <block id="20e0e1d713d2f39f16898ab621ce4a16" category="paragraph">在此範例中，我們將展示如何使用ONTAP S3 作為物件儲存。以下是為ONTAP S3 建立 AppVault CR 的工作流程： 1.在ONTAP叢集中的 SVM 中建立 S3 物件儲存伺服器。2.在物件儲存伺服器中建立一個儲存桶。3.在 SVM 中建立 S3 使用者。將存取密鑰和密鑰保存在安全的地方。4.在 OpenShift 中，建立一個金鑰來儲存ONTAP S3 憑證。5.為ONTAP S3 建立 AppVault 對象</block>
-  <block id="a5ac9b5456b97ca447f18f063406daea" category="paragraph">**為ONTAP S3 設定Trident保護 AppVault**</block>
   <block id="37a9b7cb85e77fd6a74d8009cdd8a7df" category="inline-image-macro">ONTAP S3 Appvault 已建立</block>
   <block id="6afc7e89d60452ea0a1961d489ba04e1" category="paragraph"><block ref="6afc7e89d60452ea0a1961d489ba04e1" category="inline-image-macro-rx" type="image"></block></block>
   <block id="947f19e597d1f0b50f7169331bdb939d" category="section-title">在 OpenShift Virtualization 中建立 VM</block>
@@ -2190,13 +2178,8 @@
   <block id="8338d70e0350b47b250bcd770f7e6343" category="paragraph"><block ref="8338d70e0350b47b250bcd770f7e6343" category="inline-image-macro-rx" type="image"></block></block>
   <block id="2b8a498ff5a5d59604f3b541192e2fb4" category="paragraph">備份將根據此計劃創建，並可從「備份」標籤中查看。</block>
   <block id="2e5299fed2cfe1761ad175396bd26e19" category="paragraph"><block ref="2e5299fed2cfe1761ad175396bd26e19" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="71a8646f5d7ed7c876a19ff81bccb6d1" category="doc">使用Trident Protect 在 Red Hat OpenShift Virtualization 中為虛擬機器設定故障轉移和故障復原</block>
   <block id="25004d3f662b99445efdd2f577721c43" category="paragraph">使用Trident Protect 為 OpenShift Virtualization 中的虛擬機器設定災難復原。此過程包括使用ONTAP S3 建立 AppVault、在來源和災難復原命名空間之間建立 AppMirror 關係、排程複製以及執行故障轉移和故障復原作業以在網站中斷期間維持虛擬機器可用性。</block>
   <block id="5cd13346424792191b48974af666e183" category="list-text">必須安裝Trident 。在使用 OpenShift Virtualization 操作員在叢集上安裝 OpenShift Virtualization 之前，必須建立後端和儲存類別。</block>
-  <block id="78dd70e05042b12a0e3269236194ed10" category="inline-link-macro">安裝三叉戟保護</block>
-  <block id="5a94d84de6c3446c8d18d7e451b0ee14" category="list-text">必須安裝Trident Protect 才能為 OpenShift VM 實作故障轉移和故障復原作業。請參閱此處的說明<block ref="33de37297967c96aa0b75869ddb17044" category="inline-link-macro-rx"></block></block>
-  <block id="a22886aa40c3917e950e183080c76112" category="inline-image-macro">OCP-v trident protected 安裝在 trident-protect 命名空間中</block>
-  <block id="e5bfea7a1fc6eb1ad109f598f71ec80c" category="paragraph"><block ref="e5bfea7a1fc6eb1ad109f598f71ec80c" category="inline-image-macro-rx" type="image"></block></block>
   <block id="d59ce64481ee53a5e3af6710efc0b479" category="paragraph">OpenShift Virtualization 中必須有一個可用的 VM。有關部署新 VM 或將現有 VM 遷移到 OpenShift Virtualization 的詳細信息，請參閱文件中的相應部分。</block>
   <block id="3581c46b7eec38ce850b20f09099b741" category="inline-image-macro">安裝在 source-ns 命名空間中的 OCP-v VM</block>
   <block id="e477803592f44cdb2efd8445b19c3653" category="paragraph"><block ref="e477803592f44cdb2efd8445b19c3653" category="inline-image-macro-rx" type="image"></block></block>
@@ -2206,11 +2189,9 @@
   <block id="f29421ad98d05722b53303fb3e551243" category="paragraph">確保 ONTAP S3 保管庫已建立且處於可用狀態</block>
   <block id="ca2d8b6115af60005a3ff445f33397f3" category="inline-image-macro">trident-protect 命名空間中的 OCP-v appvault</block>
   <block id="4d22ca0764b49c93cccecbb8850b02ae" category="paragraph"><block ref="4d22ca0764b49c93cccecbb8850b02ae" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="166619e9e17175678375f8cdc1a1591c" category="section-title">為虛擬機器建立Trident保護應用程式</block>
   <block id="3eb534dd2cc996be0f44dbcaab5bcf1d" category="paragraph">在虛擬機器所在的命名空間中建立應用自訂資源。</block>
   <block id="0901b77c87ff8c3428ddb5fb8143f250" category="inline-image-macro">source-ns 命名空間中的 OCP-v 應用程式</block>
   <block id="007e2424c414a2df986160beaad9b0de" category="paragraph"><block ref="007e2424c414a2df986160beaad9b0de" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="b7692004b0adef75deee3e519871e97d" category="section-title">在新的命名空間中為災難復原虛擬機器建立Trident保護應用程式</block>
   <block id="34333d34e84e035b6bf767d0f3139123" category="paragraph"><block ref="34333d34e84e035b6bf767d0f3139123" category="inline-image-macro-rx" type="image"></block></block>
   <block id="734a811b8e48ab8540db8b6840f2c82f" category="section-title">在來源命名空間中建立 AppMirror 計劃</block>
   <block id="9d8a2182f45d04be9b619200a4e9f404" category="paragraph">如下所示，使用 yaml 為 AppMirror 建立一個計劃。這將使用計劃（每 5 分鐘）建立快照並保留 2 個快照</block>
@@ -2603,8 +2584,6 @@
   <block id="e9c81e67a451d04b832faa62b80e711c" category="video-title">使用Amazon FSx for NetApp ONTAP在 ROSA 上的 OpenShift 虛擬化中即時遷移虛擬機</block>
   <block id="3699cb747ce71b2fed488fef61ad35be" category="video-title">工作負載遷移 - Red Hat OpenShift 與NetApp</block>
   <block id="03c39d763ca15978d9ef16c2ba5fe98a" category="section-title">資料保護和災難復原</block>
-  <block id="e0da49b5df3487900e358f73e4c78a73" category="video-title">使用Trident Protect 保護虛擬機</block>
-  <block id="3dbc9d2bc429734f02c8a3d8afff4ab3" category="video-title">使用Trident Protect 進行虛擬機器災難復原</block>
   <block id="79a7f926e9efd864ab3d8398313226de" category="video-title">使用Trident的進階資料管理功能對 OpenShift VM 進行故障轉移/故障復原（僅提供早期存取程式）</block>
   <block id="17dcee806d40bcff0ceea64c03d54cce" category="section-title">儲存整合與管理</block>
   <block id="cd87f3aa48bcd2407ce3ff99ce497956" category="video-title">使用 Red Hat 認證的Trident操作員安裝Trident</block>
@@ -8567,4 +8546,25 @@
   <block id="12db34d0277dc14c8dfb7f00306bcdb1" category="list-text">Metrocluster 支援高可用性。</block>
   <block id="193267cce237caa1ad9fccf574952dd4" category="inline-link-macro">關於 Proxmox VE 9.x for FCP 和 iSCSI 與 ONTAP 儲存的 ONTAP 9 文件</block>
   <block id="191c3e0b6a997326d8f620ef8fbb2776" category="admonition">ONTAP 裝置多重路徑所需的組態已包含在套件中。如需詳細資訊，請參閱 <block ref="bbf51a4dc5cabbb4a7cd9e6e15ab2e54" category="inline-link-macro-rx"></block></block>
+  <block id="fce579e2b8eca0cf6765e4d77b07475d" category="paragraph">了解 NetApp Trident Protect，它已通過驗證，可用於 OpenShift Virtualization 解決方案的應用程式和持久性儲存管理。</block>
+  <block id="65ea3b818c50a0aadbd82694fd825c9a" category="paragraph">Trident 是一個開源儲存設定器和編排器，由 NetApp 維護，NetApp Trident Protect 可協助您在基於容器的環境（例如 Red Hat OpenShift）中編排和管理持久性資料。</block>
+  <block id="5ec3b68db6f1825ef893a3df02e8cb74" category="inline-link-macro">Trident Protect 說明文件</block>
+  <block id="3a984bfb64105d2cab0a81dc1af80642" category="list-text"><block ref="3a984bfb64105d2cab0a81dc1af80642" category="inline-link-macro-rx"></block></block>
+  <block id="b9f9d8ab7728b19c689309af7e3aefef" category="doc">使用 Trident Protect 保護 Red Hat OpenShift Virtualization 中的虛擬機</block>
+  <block id="9b6a034e6854c5f27feb3ac185829f8d" category="inline-link-macro">Trident Protect</block>
+  <block id="ac71c4d21bb2fbca171b057c4fbdfa0f" category="paragraph">OpenShift Virtualization VM 的持續磁碟可由使用 <block ref="d66058559be29002c97cec8314567a26" category="inline-link-macro-rx"></block> 整合至 OpenShift 叢集的 ONTAP 儲存設備提供支援。在本節中、我們使用 <block ref="e549df9ba6f12288cca9d79527f10372" category="inline-link-macro-rx"></block> 建立 VM 的快照和備份、包括其資料磁碟區至 ONTAP 物件儲存設備。</block>
+  <block id="c2dd4428ac6222d4abc4fdad61a8e9f1" category="paragraph">Trident Protect 支援對 OpenShift 叢集上的應用程式和虛擬機器進行快照、備份、還原和災難復原。對於 OpenShift Virtualization 虛擬機器，Trident Protect 可保護的資料包括與虛擬機器關聯的 Kubernetes 資源物件、持久磁碟區和內部鏡像。</block>
+  <block id="858d1bbfede21b3edba173e16575d1b2" category="inline-link-macro">Trident Protect 25.02</block>
+  <block id="9d466dd3378ec2773ed896c1894ca7b0" category="list-text"><block ref="9d466dd3378ec2773ed896c1894ca7b0" category="inline-link-macro-rx"></block></block>
+  <block id="d1997f81bf158c9d30df18d996e06d01" category="paragraph">在為應用程式或虛擬機器建立快照和備份之前，必須在 Trident Protect 中配置物件儲存來儲存快照和備份。這可以透過儲存桶 CR 來實現。只有管理員才能建立和配置儲存桶 CR。在 Trident Protect 中，儲存桶 CR 稱為 AppVault。AppVault 物件是儲存桶的聲明式 Kubernetes 工作流程表示。AppVault CR 包含儲存桶在保護作業（例如備份、快照、復原作業和 SnapMirror 複製）中所需的設定。</block>
+  <block id="079dddd4d4443155dd6786175af87e1e" category="paragraph">**為 ONTAP S3 設定 Trident Protect AppVault**</block>
+  <block id="f1ba847d6c9174289db37c0a61512128" category="doc">使用 Trident Protect 在 Red Hat OpenShift Virtualization 中為虛擬機器設定故障轉移和故障復原</block>
+  <block id="dc84984abc7de0d1dfdb34895d0f13bc" category="inline-link-macro">安裝 Trident Protect</block>
+  <block id="27b133f8cf3565f166808593b6fb3be2" category="list-text">若要實現 OpenShift 虛擬機器的故障轉移和故障復原操作，必須安裝 Trident Protect。請參閱此處的說明<block ref="3bf8a3a602689bdae45850e9c7400b5b" category="inline-link-macro-rx"></block></block>
+  <block id="5317d0172f118abc73f0a2df44acf7fd" category="inline-image-macro">OCP-v Trident Protect 已安裝在 trident-protect 命名空間中</block>
+  <block id="249083bb7a5f6247b648d6d27dced11e" category="paragraph"><block ref="249083bb7a5f6247b648d6d27dced11e" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="049f156007c224e7ed4ab9e57d03bbbb" category="section-title">為虛擬機器建立 Trident Protect 應用程式</block>
+  <block id="50b12fb9dc3c4acc08c0bff3aad3baf3" category="section-title">在新的命名空間中為災難復原虛擬機器建立 Trident Protect 應用程式</block>
+  <block id="92b72e1a477bb22316b8809fbb5782d9" category="video-title">使用 Trident Protect 保護虛擬機</block>
+  <block id="0bb0fe78cec7e68d89f6dbb07d2b8093" category="video-title">使用 Trident Protect 進行虛擬機器災難復原</block>
 </blocks>

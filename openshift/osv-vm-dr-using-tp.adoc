@@ -1,10 +1,10 @@
 ---
 sidebar: sidebar 
 permalink: openshift/osv-vm-dr-using-tp.html 
-keywords: OpenShift, OCP, Trident, Trident protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, ROSA, Red Hat OpenShift Virtualization 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, ROSA, Red Hat OpenShift Virtualization 
 summary: ROSA 上的 Red Hat OpenShift 虛擬化 
 ---
-= 使用Trident Protect 在 Red Hat OpenShift Virtualization 中為虛擬機器設定故障轉移和故障復原
+= 使用 Trident Protect 在 Red Hat OpenShift Virtualization 中為虛擬機器設定故障轉移和故障復原
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -21,10 +21,10 @@ summary: ROSA 上的 Red Hat OpenShift 虛擬化
 == 先決條件
 
 * 必須安裝Trident 。在使用 OpenShift Virtualization 操作員在叢集上安裝 OpenShift Virtualization 之前，必須建立後端和儲存類別。
-* 必須安裝Trident Protect 才能為 OpenShift VM 實作故障轉移和故障復原作業。請參閱此處的說明link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-installation.html["安裝三叉戟保護"]
+* 若要實現 OpenShift 虛擬機器的故障轉移和故障復原操作，必須安裝 Trident Protect。請參閱此處的說明link:https://docs.netapp.com/us-en/trident/trident-protect/trident-protect-installation.html["安裝 Trident Protect"]
 
 
-image:redhat-openshift-ocpv-tp-001.png["OCP-v trident protected 安裝在 trident-protect 命名空間中"]
+image:redhat-openshift-ocpv-tp-001.png["OCP-v Trident Protect 已安裝在 trident-protect 命名空間中"]
 
 OpenShift Virtualization 中必須有一個可用的 VM。有關部署新 VM 或將現有 VM 遷移到 OpenShift Virtualization 的詳細信息，請參閱文件中的相應部分。
 
@@ -97,7 +97,7 @@ image:redhat-openshift-ocpv-tp-002.png["trident-protect 命名空間中的 OCP-v
 
 
 
-== 為虛擬機器建立Trident保護應用程式
+== 為虛擬機器建立 Trident Protect 應用程式
 
 在虛擬機器所在的命名空間中建立應用自訂資源。
 
@@ -111,7 +111,7 @@ image:redhat-openshift-ocpv-tp-004.png["source-ns 命名空間中的 OCP-v 應�
 
 
 
-== 在新的命名空間中為災難復原虛擬機器建立Trident保護應用程式
+== 在新的命名空間中為災難復原虛擬機器建立 Trident Protect 應用程式
 
 [source, CLI]
 ----

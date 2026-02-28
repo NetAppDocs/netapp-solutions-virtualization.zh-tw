@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: openshift/osv-trident-install.html 
-keywords: OpenShift, OCP, Trident, Trident protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
 summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
 ---
 = 在 Red Hat OpenShift 叢集上安裝Trident並建立儲存對象
