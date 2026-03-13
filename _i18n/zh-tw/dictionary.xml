@@ -2183,12 +2183,6 @@
   <block id="d59ce64481ee53a5e3af6710efc0b479" category="paragraph">OpenShift Virtualization 中必須有一個可用的 VM。有關部署新 VM 或將現有 VM 遷移到 OpenShift Virtualization 的詳細信息，請參閱文件中的相應部分。</block>
   <block id="3581c46b7eec38ce850b20f09099b741" category="inline-image-macro">安裝在 source-ns 命名空間中的 OCP-v VM</block>
   <block id="e477803592f44cdb2efd8445b19c3653" category="paragraph"><block ref="e477803592f44cdb2efd8445b19c3653" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="93548c2eaed0aa421119ccb8d4011aa9" category="section-title">使用ONTAP S3 建立 App Vault</block>
-  <block id="44ec316b16babd7a30392ef3aa9b614b" category="paragraph">本節介紹如何使用 ontap S3 物件儲存在 trident protected 中設定應用程式保管庫。</block>
-  <block id="08dbf6549f498a3998c329d45a90ea26" category="paragraph">使用 oc 命令和下面顯示的 yaml 檔案為 ontap s3 建立機密和 appvault 自訂資源。確保在 trident protected 命名空間中建立它們。</block>
-  <block id="f29421ad98d05722b53303fb3e551243" category="paragraph">確保 ONTAP S3 保管庫已建立且處於可用狀態</block>
-  <block id="ca2d8b6115af60005a3ff445f33397f3" category="inline-image-macro">trident-protect 命名空間中的 OCP-v appvault</block>
-  <block id="4d22ca0764b49c93cccecbb8850b02ae" category="paragraph"><block ref="4d22ca0764b49c93cccecbb8850b02ae" category="inline-image-macro-rx" type="image"></block></block>
   <block id="3eb534dd2cc996be0f44dbcaab5bcf1d" category="paragraph">在虛擬機器所在的命名空間中建立應用自訂資源。</block>
   <block id="0901b77c87ff8c3428ddb5fb8143f250" category="inline-image-macro">source-ns 命名空間中的 OCP-v 應用程式</block>
   <block id="007e2424c414a2df986160beaad9b0de" category="paragraph"><block ref="007e2424c414a2df986160beaad9b0de" category="inline-image-macro-rx" type="image"></block></block>
@@ -8567,4 +8561,10 @@
   <block id="50b12fb9dc3c4acc08c0bff3aad3baf3" category="section-title">在新的命名空間中為災難復原虛擬機器建立 Trident Protect 應用程式</block>
   <block id="92b72e1a477bb22316b8809fbb5782d9" category="video-title">使用 Trident Protect 保護虛擬機</block>
   <block id="0bb0fe78cec7e68d89f6dbb07d2b8093" category="video-title">使用 Trident Protect 進行虛擬機器災難復原</block>
+  <block id="b16acd8ae1ca5e379b2e4aa604f8a2ba" category="section-title">使用 ONTAP S3 建立 AppVault</block>
+  <block id="472263ee87de0443326619011c98d149" category="paragraph">本節介紹如何使用 ONTAP S3 物件儲存在 Trident Protect 中設定 AppVault 物件。</block>
+  <block id="c1a6380543e106c0301282521b55a3fc" category="paragraph">使用 oc 命令和下面顯示的 yaml 檔案為 ONTAP s3 建立密鑰和 AppVault 自訂資源。確保在 trident protect 命名空間中建立它們。</block>
+  <block id="4035a79b3668307381cda3c40c13747d" category="paragraph">確保已建立 ONTAP S3 儲存庫並處於可用狀態</block>
+  <block id="6cd1f4dd55f2126ac98b438f1fa31844" category="inline-image-macro">trident-protect 命名空間中的 OCP-v AppVault</block>
+  <block id="c047817699debbb2dda60dae4514bd1c" category="paragraph"><block ref="c047817699debbb2dda60dae4514bd1c" category="inline-image-macro-rx" type="image"></block></block>
 </blocks>
