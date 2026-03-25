@@ -1,0 +1,455 @@
+---
+sidebar: sidebar 
+permalink: migration/shift-toolkit-migrate-esxi2proxmox.html 
+keywords: netapp, vmware, esxi, vm, migration, virtualization, proxmox, proxmox ve 
+summary: 使用 Shift Toolkit 將虛擬機器從 VMware ESXi 遷移到 Proxmox VE，方法是準備虛擬機器、轉換磁碟格式和設定目標環境。 
+---
+= 使用 Shift Toolkit 將虛擬機器從 VMware ESXi 遷移至 Proxmox VE
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 Shift Toolkit 將虛擬機器從 VMware ESXi 遷移到 Proxmox VE，方法是準備虛擬機器、轉換磁碟格式和設定目標環境。
+
+Shift Toolkit 能夠透過目標環境中的磁碟格式轉換和網路重新配置，實現虛擬化平台之間的虛擬機器遷移。
+
+
+
+== 開始之前
+
+在開始遷移之前，請確認滿足以下先決條件。
+
+.Proxmox VE
+. 運作最低要求為 3 個以上節點的叢集，具有仲裁功能，運行 Proxmox VE 9.x 及更高版本，並新增 ONTAP NFS 儲存設備作為儲存資源池。
++
+** 叢集管理員級別權限
+** Proxmox 版本為 >= 9.x
+** Proxmox 節點可透過網路存取。
+** 配置了適當磁碟區和 qtree 的 NFSv3 儲存池
+** 網路（橋接器）應配置正確的 vLAN
+
+
+
+
+.虛擬機器需求
+* 確保將 VM VMDK 放置在 NFSv3 磁碟區上（給定 VM 的所有 VMDK 都應該屬於同一個磁碟區）。
+* VMware 工具應該在客體虛擬機器上運作，以成功準備虛擬機器
+* 確保需要遷移的 VM 處於 RUNNING 狀態以進行準備
+* Shift 工具包透過向 VM 注入指令碼來執行 VM 準備：
++
+** 新增 VirtIO 驅動程式
+** 移除 VMware 工具
+** 備份 IP 位址、路由和 DNS 資訊
+
+
+
+
+
+NOTE: 在觸發遷移之前，應先關閉虛擬機器電源
+
+
+NOTE: VMware Tools 的卸載將在虛擬機器啟動後，在目標 Hypervisor 上進行。
+
+* 執行 Invoke-VMScript 準備 Windows 虛擬機器時，請使用本機管理員帳戶，或使用屬於本機 Administrators 群組的 Active Directory 帳戶。對於 Linux 系統，請使用無需密碼即可執行命令的帳戶（例如，透過免密碼 sudo）。
+* 對於 Windows VM，請確保 VirtIO ISO 已掛載；否則，準備程序將會失敗。VirtIO ISO 驅動程式可從此處下載。指令碼將自動偵測已掛載的磁碟機並複製所需檔案。
++
+** 請確保使用連結中指定的 ISO，因為準備腳本使用 .msi 套件來安裝驅動程式和 qemu-guest-agents。完成所有必要條件後，登入 Shift toolkit UI，並將站台設定為以 Proxmox VE 作為目標 Hypervisor。若要新增，請按一下「Add New Site」並選擇「Destination」。
+
+
+
+
+
+
+== 步驟 1：新增目的地站台（Proxmox VE）
+
+將目標 Proxmox VE 環境新增至 Shift Toolkit。
+
+.步驟
+. 點擊“新增網站”，然後選擇“目標位置”。
++
+.顯示範例
+[%collapsible]
+====
+image:shift-toolkit-450.png["新增目標站點"]
+
+====
+. 請輸入目的地站點詳細資料：
++
+*Site Name*：提供網站名稱 *Hypervisor*：選擇 Proxmox VE (PVE) 作為目標 *Site Location*：選擇預設選項 *Connector*：選擇預設選項
+
+. 按一下“繼續”。
++
+.顯示範例
+[%collapsible]
+====
+image:shift-toolkit-451.png["新增目的地站台詳細資料"]
+
+====
+. 輸入目的地 PVE 詳細資料
++
+*端點*：Proxmox 節點的 IP 位址或 FQDN *使用者名稱*：用於存取的 Linux 使用者名稱（格式為：username）* 例如，ntapshift。無需提及 @pam。*密碼*：用於存取的密碼
+
+. 選擇“接受自簽名憑證”，然後按一下“繼續”。
++
+.顯示範例
+[%collapsible]
+====
+image:shift-toolkit-452.png["Proxmox VE 詳細資料"]
+
+====
+. 按一下“建立網站”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-453.png[建立網站]
+
+====
++
+
+NOTE: 來源磁碟區和目的地磁碟區將相同，因為磁碟格式轉換是在磁碟區層級且在同一磁碟區內進行的。
+
+
+
+
+
+== 步驟 2：建立資源組
+
+將虛擬機器組織成資源群組，以保留啟動順序和啟動延遲配置。
+
+.開始之前
+* 在建立資源組之前，請確保已配置 Qtree（如先決條件部分所述）。
+
+
+.步驟
+. 導航至“資源組”，然後按一下“建立新資源組”。
+. 從下拉式選單中選擇*來源網站*，然後點擊*建立*。
+. 提供資源組詳細資訊並選擇工作流程：
++
+** *基於複製的遷移*：執行從來源虛擬機器到目標虛擬機器的端對端遷移
+** *基於複製的轉換*：將磁碟格式轉換為選定的虛擬機器管理程式類型
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-454.png[資源組詳情]
+
+====
+
+
+. 按一下“繼續”。
+. 使用搜尋選項選擇虛擬機器（預設篩選條件為「資料儲存」）。
++
+
+NOTE: 在轉換之前，將虛擬機器移動以進行轉換或遷移到新建立的ONTAP SVM 上的指定資料儲存庫。這有助於隔離生產 NFS 資料存儲，並且指定的資料存儲可用於暫存虛擬機器。
+
++
+
+NOTE: 資料儲存下拉式選單僅顯示 NFSv3 資料儲存。  NFSv4 資料儲存不顯示。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-455.png[虛擬機器選擇]
+
+====
+. 更新遷移詳情：
++
+** 選擇*目標網站*
+** 選擇 *目標 Proxmox 項目*
+** 配置資料儲存到 Qtree 的映射
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-456.png[遷移詳情]
+
+====
++
+
+NOTE: 將虛擬機器從 ESXi 轉換為 Proxmox VE 時，請確保目標路徑（儲存轉換後虛擬機器的位置）設定為 qtree。可以建立多個 qtree 並用於儲存轉換後的虛擬機器磁碟。
+
++
+
+NOTE: 可以建立多個 qtree 並用於相應地儲存轉換後的 VM 磁碟。
+
+
+
+. 配置所有選定虛擬機器的啟動順序和啟動延遲：
++
+** *1*：第一台啟動的虛擬機
+** *3*：預設值
+** *5*：最後一個啟動的虛擬機
+
+
+. 按一下“建立資源組”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-457.png[建立資源組]
+
+====
+
+
+.結果
+資源組已創建，可以進行藍圖配置。
+
+
+
+== 步驟 3：建立遷移藍圖
+
+建立遷移計劃藍圖，包括平台映射、網路配置和虛擬機器設定。
+
+.步驟
+. 導航至“藍圖”並點擊“建立新藍圖”。
+. 為藍圖命名並配置主機映射：
++
+** 選擇「來源站點」和關聯的 vCenter
+** 選擇 *Destination Site* 和關聯的 Proxmox VE 目標
+** 配置叢集和主機映射
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-458.png[主機映射]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-459.png[主機映射]
+
+====
+
+
+. 選擇資源組詳細信息，然後按一下“繼續”。
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-460.png[資源組詳情]
+
+====
+. 如果存在多個資源組，請設定資源組的執行順序。
+. 設定網路對應到對應的虛擬交換器。
++
+
+NOTE: 對於測試遷移，預設選擇「不配置網路」，Shift 工具包不會執行 IP 位址分配。磁碟轉換完成且虛擬機器在 PVE 端啟動後，需要手動分配 bubble 邏輯網路，以避免與生產網路發生衝突。
+
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-461.png[網路映射]
+
+====
+. 查看儲存映射（根據虛擬機器選擇自動選擇）。
++
+
+NOTE: 請確保事先配置 qtree 並分配必要的權限，以便可以從 SMB 共用建立和啟動虛擬機器。
+
+. 在虛擬機器詳細資訊下，選擇配置詳細信息，並為每種作業系統類型提供服務帳戶憑證：
++
+** *Windows*：使用具有本機管理員權限的使用者（也可以使用網域憑證，但請確保在轉換之前虛擬機器上存在該使用者設定檔）。
+** *Linux*：使用可以無需密碼提示即可執行 sudo 命令的使用者（該使用者應在 sudoers 清單中或已新增至 sudoers 清單中）。 `/etc/sudoers.d/`資料夾）
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-462.png[VM 憑證]
+
+====
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-463.png[VM 憑證]
+
+====
++
+
+NOTE: Configuration 選項可讓您選擇磁碟映像格式並跳過 override prepareVM。磁碟映像格式預設為 QCOW2，但如果需要 RAW 格式，則可以選擇。override prepareVM 允許跳過虛擬機器準備工作，從而使管理員能夠執行自訂腳本來準備虛擬機器以進行遷移。如果選取此選項，Shift toolkit 將不會注入任何腳本或新增 VirtIO 驅動程式。
+
+
+
+. 配置IP設定：
++
+** *無需配置*：預設選項
+** *保留 IP 位址*：保持與來源系統相同的 IP 位址
+** *DHCP*：為目標虛擬機器指派 DHCP 權限
++
+在 prepareVM 階段，確保虛擬機器已啟動，VMware Tools 已安裝，並且準備腳本以適當的權限運行。
+
+
+
+. 配置虛擬機器設定：
++
+** 調整 CPU/RAM 參數（可選）
+** 修改啟動順序和啟動延遲
+** *開啟電源*：選擇在遷移後開啟虛擬機器電源（預設：開啟）
+** *移除 VMware Tools*：轉換後移除 VMware Tools（預設：已選取）
+** *虛擬機器韌體*：第一代 > BIOS 和第二代 > EFI（自動）
+** *保留 MAC 位址*：出於許可要求，請保留 MAC 位址。
+** *服務帳戶覆蓋*：如有需要，請指定單獨的服務帳戶
+** *VLAN覆蓋*：當目標虛擬機器管理程式使用不同的VLAN名稱時，選擇正確的標記VLAN名稱
++
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-464.png[虛擬機器配置]
+
+====
+
+
+. 按一下“繼續”。
+. 選擇日期和時間安排遷移。
++
+
+NOTE: 至少提前 30 分鐘安排遷移，以便留出時間準備虛擬機器。
+
+. 點選「建立藍圖」。
+
+
+.結果
+Shift Toolkit 會啟動 prepareVM 作業，該作業會在來源虛擬機器上執行腳本，為遷移做好準備。
+
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-465.png[PrepareVM 作業]
+
+====
+準備過程：
+
+* 注入腳本以新增驅動程式（RHEL/CentOS、Alma Linux）、移除 VMware 工具以及備份 IP/路由/DNS 訊息
+* 使用 invoke-VMScript 連線到客戶虛擬機器並執行準備任務
+* 對於 Windows 虛擬機器：將腳本儲存在 `C:\NetApp`
+* 對於 Linux 虛擬機器：將腳本儲存在 `/NetApp`和 `/opt`
+
+
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-466.png[Windows 準備腳本]
+
+====
+當 prepareVM 成功完成後，藍圖狀態將更新為「Active」。遷移將按計劃時間進行，或者也可以點擊「遷移」選項手動啟動。
+
+
+
+== 步驟 4：執行遷移
+
+觸發遷移工作流程，將 VM 從 VMware ESXi 轉換為 Proxmox VE。
+
+.開始之前
+* 所有虛擬機器均依照計畫的維護時間表正常關機。
+* 確保 Shift VM 是網域的一部分
+* 確保 CIFS 共享配置了適當的權限
+* 用於遷移或轉換的 qtree 具有正確的安全風格
+
+
+.步驟
+. 在藍圖上，按一下「遷移」。
+. Shift Toolkit 會執行下列操作：
++
+** 刪除藍圖中所有虛擬機器的現有快照
+** 觸發 Blueprint 的 VM 快照 - 從來源端
+** 磁碟轉換前觸發磁碟區快照
+** 建立具有與其相關聯之虛擬磁碟的 VM
+** 將所有 VM 的 VMDK 轉換為 QCOW2 或 RAW 格式，並覆寫虛擬磁碟
+** 在目標位置啟動資源群組中的 VM
+** 在每個虛擬機器上註冊網絡
+** 移除 VMware Tools，並根據作業系統類型使用觸發腳本或 cron job 指派 IP 位址
+
+
+
+
+轉換過程只需幾秒鐘即可完成，這是最快的遷移方法，並可減少虛擬機器停機時間。
+
+.結果
+任務完成後，藍圖狀態將變成「遷移完成」。
+
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-467.png[遷移完成]
+
+====
+.顯示範例
+[%collapsible]
+====
+image::shift-toolkit-468.png[Proxmox VE 中的虛擬機]
+
+====
+
+
+== Shift 工具組工作流程
+
+以下各節介紹 Shift 工具包觸發哪些步驟來轉換 VMDK 並在 Proxmox VE 端建立 VM。
+
+.轉換 VMDK
+Shift 工具包將自動尋找與每個虛擬機器關聯的 VMDK，包括主啟動磁碟。
+
+
+NOTE: 如果存在多個 VMDK 文件，則每個 VMDK 文件都會被轉換。
+
+.將 QCOW2 或 RAW 映像上傳到 PVE NFS 型儲存資源池
+將虛擬機器磁碟映像轉換為 qcow2 或 RAW 格式後，Shift toolkit 會將檔案放置到對應的儲存池中，並將每個磁碟新增至對應的 VM ID 資料夾中。
+
+image::shift-toolkit-469.png[shift toolkit 469]
+
+.建立虛擬機器
+Shift 工具組會根據作業系統進行 REST API 呼叫，以建立每個 VM。
+
+
+NOTE: 虛擬機器在對應的 Proxmox 節點下建立
+
+.首次啟動 VM
+根據虛擬機器作業系統，Shift 工具包會自動分配虛擬機器開機選項以及儲存控制器介面。對於 Linux 發行版，會使用 VirtIO 或 VirtIO SCSI。對於 Windows 系統，虛擬機器會以 SATA 介面開機，然後排程的指令碼會自動安裝 VirtIO 驅動程式，並將介面變更為 VirtIO。網路會根據選擇進行相應分配。
+
+image::shift-toolkit-470.png[Proxmox VE VM 詳細資料]
+
+
+
+== 在 Proxmox VE 中遷移和建立 VM 所需的最低權限
+
+本節概述建立具有執行 VM 遷移所需最低權限的專用使用者帳戶所需的步驟。
+
+. 建立 Linux 使用者
++
+.. useradd -m -s /bin/bash ntapshift
+.. passwd ntapshift
+
+
+. 將使用者新增至 Proxmox
++
+.. pveum useradd ntapshift@pam
+
+
+. 建立遷移角色
++
+.. pveum roleadd ntapshift-migrator -privs "Datastore.AllocateSpace, Datastore.AllocateTemplate, Datastore.Audit, SDN.Audit, SDN.Use, Sys.AccessNetwork, Sys.Audit, Sys.Modify, VM.Allocate, VM.Audit, VM.Config.CDROM, VM.Config.CPU, VM.Config.Cloudinit, VM.Config.Disk, VM.Config.HWType, VM.Config.Memory, VM.Config.Network, VM.Config.Options, VM.Console, VM.Migrate, VM.PowerMgmt"
+
+
+. 在叢集根目錄中指派角色
++
+.. pveum aclmod / -user ntapshift@pam -role ntapshift-migrator
+
+
+. 將角色指派給特定節點
++
+.. pveum aclmod /nodes/<node-name> -user ntapshift@pam -role ntapshift-migrator
+
+
+
+
+
+NOTE: （將 `<node-name>`替換為每個實際的 Proxmox 節點名稱）
