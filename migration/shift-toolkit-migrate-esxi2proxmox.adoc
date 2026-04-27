@@ -56,9 +56,9 @@ NOTE: 在觸發遷移之前，應先關閉虛擬機器電源
 NOTE: VMware Tools 的卸載將在虛擬機器啟動後，在目標 Hypervisor 上進行。
 
 * 執行 Invoke-VMScript 準備 Windows 虛擬機器時，請使用本機管理員帳戶，或使用屬於本機 Administrators 群組的 Active Directory 帳戶。對於 Linux 系統，請使用無需密碼即可執行命令的帳戶（例如，透過免密碼 sudo）。
-* 對於 Windows VM，請確保 VirtIO ISO 已掛載；否則，準備程序將會失敗。VirtIO ISO 驅動程式可從此處下載。指令碼將自動偵測已掛載的磁碟機並複製所需檔案。
+* 對於 Windows 虛擬機，請確保 VirtIO ISO 映像已掛載；否則，準備程序將會失敗。VirtIO ISO 驅動程式可從link:https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.271-1/virtio-win-0.1.271.iso["這裡"]下載。腳本將自動偵測已掛載的磁碟機並複製所需檔案。
 +
-** 請確保使用連結中指定的 ISO，因為準備腳本使用 .msi 套件來安裝驅動程式和 qemu-guest-agents。完成所有必要條件後，登入 Shift toolkit UI，並將站台設定為以 Proxmox VE 作為目標 Hypervisor。若要新增，請按一下「Add New Site」並選擇「Destination」。
+** 請確保使用連結中指定的 ISO 文件，因為準備腳本會使用 .msi 軟體包來安裝驅動程式和 qemu-guest-agents。完成所有必要步驟後，登入 Shift toolkit UI，並將網站設定為以 Proxmox VE 為目標虛擬機器管理程式。若要新增站點，請按一下「Add New Site」並選擇「Destination」。
 
 
 

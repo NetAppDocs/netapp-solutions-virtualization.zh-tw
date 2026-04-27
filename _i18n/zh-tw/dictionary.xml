@@ -8625,8 +8625,6 @@
   <block id="2250ade21f70f3898f30d19c23e4f560" category="admonition">在觸發遷移之前，應先關閉虛擬機器電源</block>
   <block id="643765be95e96ba0bd0d50b581f23ba9" category="admonition">VMware Tools 的卸載將在虛擬機器啟動後，在目標 Hypervisor 上進行。</block>
   <block id="e0a9da9332918532fa3fb3eadaa4ed4e" category="list-text">執行 Invoke-VMScript 準備 Windows 虛擬機器時，請使用本機管理員帳戶，或使用屬於本機 Administrators 群組的 Active Directory 帳戶。對於 Linux 系統，請使用無需密碼即可執行命令的帳戶（例如，透過免密碼 sudo）。</block>
-  <block id="f1229500f6a7c4d3c2d90804fdb089b8" category="list-text">對於 Windows VM，請確保 VirtIO ISO 已掛載；否則，準備程序將會失敗。VirtIO ISO 驅動程式可從此處下載。指令碼將自動偵測已掛載的磁碟機並複製所需檔案。</block>
-  <block id="bc0f647d8dee9e215c7b045379244a6e" category="list-text">請確保使用連結中指定的 ISO，因為準備腳本使用 .msi 套件來安裝驅動程式和 qemu-guest-agents。完成所有必要條件後，登入 Shift toolkit UI，並將站台設定為以 Proxmox VE 作為目標 Hypervisor。若要新增，請按一下「Add New Site」並選擇「Destination」。</block>
   <block id="165d8350def49f049896fbe15e76a272" category="section-title">步驟 1：新增目的地站台（Proxmox VE）</block>
   <block id="58c19cc9f30ac5f53cecad2b57f1b183" category="paragraph">將目標 Proxmox VE 環境新增至 Shift Toolkit。</block>
   <block id="2be3d66150efaf11bc807c60b267e960" category="paragraph"><block ref="2be3d66150efaf11bc807c60b267e960" category="inline-image-macro-rx" type="image"></block></block>
@@ -9037,4 +9035,6 @@
   <block id="3b512de059a0505d85337f42502cc459" category="example-title">檢視儀表板</block>
   <block id="a203c70d64ac00a0da7baa307e769325" category="image-alt">SMP 控制面板顯示叢集健全狀況</block>
   <block id="f0000b12e34e9d2e8ad82c701c4729db" category="paragraph">Storage Manager for Proxmox 提供了一種簡化且統一的方式來管理 Proxmox 環境中的保護、複製和復原作業。透過與 ONTAP 直接整合，該解決方案將企業級儲存的效率、可靠性和效能融入日常 VM 工作流程中。ONTAP 的空間高效 Snapshot、快速複製功能和內建複寫功能可提供一致且可預測的資料保護，而 SMP 則將這些功能簡化到一個直觀、以任務為中心的介面中。</block>
+  <block id="cb2322662ab0efc3a672040563903109" category="list-text">對於 Windows 虛擬機，請確保 VirtIO ISO 映像已掛載；否則，準備程序將會失敗。VirtIO ISO 驅動程式可從<block ref="a0c092fa69648d84887cd7b874e6d0bb" category="inline-link-macro-rx"></block>下載。腳本將自動偵測已掛載的磁碟機並複製所需檔案。</block>
+  <block id="20bd4f3e222783e1dc397b4d18429ecc" category="list-text">請確保使用連結中指定的 ISO 文件，因為準備腳本會使用 .msi 軟體包來安裝驅動程式和 qemu-guest-agents。完成所有必要步驟後，登入 Shift toolkit UI，並將網站設定為以 Proxmox VE 為目標虛擬機器管理程式。若要新增站點，請按一下「Add New Site」並選擇「Destination」。</block>
 </blocks>
