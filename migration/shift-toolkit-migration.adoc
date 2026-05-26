@@ -26,6 +26,8 @@ Shift Toolkit 透過支援下列虛擬機器管理程式之間的雙向遷移，
 * link:shift-toolkit-migrate-hyperv2esxi.html["Microsoft Hyper-V 到 VMware ESXi"]
 * link:shift-toolkit-migrate-esxi2olvm.html["VMware ESXi 到 Oracle Linux Virtualization Manager (OLVM)"]
 * link:shift-toolkit-migrate-esxi2osv.html["VMware ESXi 到 Red Hat OpenShift 虛擬化"]
+* link:shift-toolkit-migrate-esxi2osvmtv.html["使用虛擬化遷移工具包 (MTV) 將 VMware ESXi 遷移到 Red Hat OpenShift Virtualization"]
+* link:shift-toolkit-migrate-esxi2proxmox.html["VMware ESXi 到 Proxmox VE"]
 
 
 
