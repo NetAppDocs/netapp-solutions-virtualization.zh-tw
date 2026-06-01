@@ -9041,4 +9041,26 @@
   <block id="ff9844b2de7cfcbbdfa55375ab39a06f" category="list-text"><block ref="ff9844b2de7cfcbbdfa55375ab39a06f" category="inline-link-macro-rx"></block></block>
   <block id="990fa9f57e4aad9dabc3374936fa135c" category="inline-link-macro">VMware ESXi 到 Proxmox VE</block>
   <block id="0844e7bd233e5a61e8cb4e245ed8e467" category="list-text"><block ref="0844e7bd233e5a61e8cb4e245ed8e467" category="inline-link-macro-rx"></block></block>
+  <block id="5ee3244123f8d6e1cd95dd20bbd4c917" category="section-title">驗證遷移</block>
+  <block id="a72a581a13e85fc031dd394d163e7318" category="paragraph">Shift 工具包現在提供了一個針對藍圖層級的驗證選項，該選項在遷移狀態標記為「成功」或「部分失敗」後啟用。成功後，驗證選項將啟動新作業，並依照藍圖對映中指定的 VM 設定進行檢查。驗證遷移作業的狀態將顯示在作業監控中，點擊作業並選擇「檢視日誌」即可查看詳細資訊。</block>
+  <block id="f32310bcb640784ccc77c7dd4c4b3dbf" category="admonition">在建立藍圖時也可以選擇驗證選項，在這種情況下，遷移作業完成後 5 分鐘將觸發驗證作業。</block>
+  <block id="9d40980b6999e7f166bfa40856a00fec" category="admonition">如果在遷移作業之後選擇驗證，則會立即觸發驗證作業，且精靈會列出作業。</block>
+  <block id="56ac9d919bb8cab4f6077b76fb1f62a9" category="image-alt">驗證遷移作業詳細資料</block>
+  <block id="bcf221f3eb2ff23d03e933df5dc05c15" category="image-alt">驗證 Migration 作業清單</block>
+  <block id="4215a20f35c33323f41cfdcc53561758" category="section-title">拆分工作流程</block>
+  <block id="b648dea0c6088fda044bba8739f233dd" category="paragraph">分割工作流程（僅適用於使用 ONTAP NAS 驅動程式的 OpenShift 遷移藍圖）會自動發現與虛擬機器關聯的磁碟區及其對應的 FlexClone 磁碟區。</block>
+  <block id="8aa0551ed462370f4ba674dbd90ceb17" category="paragraph">根據 ONTAP 版本，系統會自動選擇適當的分割策略。一般準則如下：</block>
+  <block id="6d574a30eced387339f80ba54a89cc7d" category="list-text">在 ONTAP 9.17.1 及更高版本中，支援磁碟區的分割克隆，並可並行執行 20 個磁碟區。</block>
+  <block id="3880a6f70719d876e231d8e2879f85ee" category="list-text">適用於 ONTAP 9.17.1 之前的版本，使用最多四個並行執行緒進行 Volume Move</block>
+  <block id="1a3cae237cc41487606878fecfbf5dbd" category="paragraph">拆分複製程序會持續監控進度並相應地管理工作佇列。拆分或磁碟區移動作業完成後，相關的 Snapshot 複本就會刪除。</block>
+  <block id="9c3a731812fdeaa07c81b64877fdd363" category="paragraph">拆分步驟作業的狀態將顯示在「作業監控」中。若要檢視更多詳細資訊，請按一下拆分作業並選取「View Logs」。</block>
+  <block id="e9957f4f6643604e2e240ef6506687cd" category="admonition">Shift Toolkit 目前不會在刪除快照後調整磁碟區大小。此功能計劃在未來版本中推出。</block>
+  <block id="240aa9b96ee46082f68f7be9164d556b" category="image-alt">拆分 Workflow 策略選擇</block>
+  <block id="17ad14aae32d21937aca67c32e7957b4" category="image-alt">拆分 Workflow 作業進度</block>
+  <block id="403f27f7aab7b0ad3c0682d7cca0a733" category="section-title">進階 Hypervisor 設定</block>
+  <block id="d77c1cd5f2b0ce7f2dd95f4c5bc3c495" category="paragraph">Shift Toolkit 包含用於將遷移作業遷移到目標 Hypervisor 的進階 Hypervisor 設定。這些設定允許遷移管理員根據需要為每個 VM 遷移批次啟用功能。Shift Toolkit 在執行時讀取這些設定，因此每個作業在啟動時都會套用所選選項。</block>
+  <block id="4502be711601ff984509d35dfc59750d" category="image-alt">進階 Hypervisor 設定概述</block>
+  <block id="d54ff9be113864ba45f6c548b61f0360" category="image-alt">進階 Hypervisor 設定選項</block>
+  <block id="891154c0cb3c52a4cadf0de9b589ee45" category="image-alt">進階 Hypervisor 設定組態</block>
+  <block id="8639d82053466ca0d28ba6da8779cf53" category="image-alt">進階 Hypervisor 設定工作詳細資料</block>
 </blocks>

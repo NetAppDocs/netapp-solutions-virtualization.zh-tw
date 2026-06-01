@@ -347,3 +347,56 @@ Shift Toolkit 提供了在工作流程的任何步驟取消正在執行的作業
 
 
 由於 Shift Toolkit 不會以任何方式修改來源虛擬機，因此回滾非常簡單，只需啟動來源虛擬機即可。無需採取其他回滾操作。
+
+
+
+== 驗證遷移
+
+Shift 工具包現在提供了一個針對藍圖層級的驗證選項，該選項在遷移狀態標記為「成功」或「部分失敗」後啟用。成功後，驗證選項將啟動新作業，並依照藍圖對映中指定的 VM 設定進行檢查。驗證遷移作業的狀態將顯示在作業監控中，點擊作業並選擇「檢視日誌」即可查看詳細資訊。
+
+
+NOTE: 在建立藍圖時也可以選擇驗證選項，在這種情況下，遷移作業完成後 5 分鐘將觸發驗證作業。
+
+
+NOTE: 如果在遷移作業之後選擇驗證，則會立即觸發驗證作業，且精靈會列出作業。
+
+image::shift-toolkit-471.png[驗證遷移作業詳細資料]
+
+image::shift-toolkit-472.png[驗證 Migration 作業清單]
+
+
+
+== 拆分工作流程
+
+分割工作流程（僅適用於使用 ONTAP NAS 驅動程式的 OpenShift 遷移藍圖）會自動發現與虛擬機器關聯的磁碟區及其對應的 FlexClone 磁碟區。
+
+根據 ONTAP 版本，系統會自動選擇適當的分割策略。一般準則如下：
+
+* 在 ONTAP 9.17.1 及更高版本中，支援磁碟區的分割克隆，並可並行執行 20 個磁碟區。
+* 適用於 ONTAP 9.17.1 之前的版本，使用最多四個並行執行緒進行 Volume Move
+
+
+拆分複製程序會持續監控進度並相應地管理工作佇列。拆分或磁碟區移動作業完成後，相關的 Snapshot 複本就會刪除。
+
+拆分步驟作業的狀態將顯示在「作業監控」中。若要檢視更多詳細資訊，請按一下拆分作業並選取「View Logs」。
+
+
+NOTE: Shift Toolkit 目前不會在刪除快照後調整磁碟區大小。此功能計劃在未來版本中推出。
+
+image::shift-toolkit-473.png[拆分 Workflow 策略選擇]
+
+image::shift-toolkit-474.png[拆分 Workflow 作業進度]
+
+
+
+== 進階 Hypervisor 設定
+
+Shift Toolkit 包含用於將遷移作業遷移到目標 Hypervisor 的進階 Hypervisor 設定。這些設定允許遷移管理員根據需要為每個 VM 遷移批次啟用功能。Shift Toolkit 在執行時讀取這些設定，因此每個作業在啟動時都會套用所選選項。
+
+image::shift-toolkit-475.png[進階 Hypervisor 設定概述]
+
+image::shift-toolkit-476.png[進階 Hypervisor 設定選項]
+
+image::shift-toolkit-477.png[進階 Hypervisor 設定組態]
+
+image::shift-toolkit-478.png[進階 Hypervisor 設定工作詳細資料]
