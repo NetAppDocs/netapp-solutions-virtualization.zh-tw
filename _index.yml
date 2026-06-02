@@ -62,6 +62,14 @@ indexpage:
       url: "/vmware/vmw-getting-started-snapcenter.html"
     - title: NetApp Disaster Recovery
       url: "/vmware/vmw-dr-gs.html"
+  - title: End User Computing（EUC）解決方案
+    links:
+    - title: 了解 NetApp 的終端使用者運算
+      url: "/euc/euc-overview.html"
+    - title: NetApp 儲存設備對終端使用者運算的優勢
+      url: "/euc/euc-benefits.html"
+    - title: Omnissa Horizon 和 NetApp 架構
+      url: "/euc/omnissa-netapp-architecture.html"
   - title: 解決方案請求和回饋
     links:
     - title: 請求自動化

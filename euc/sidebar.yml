@@ -1,0 +1,15 @@
+---
+section: euc
+title: 使用 NetApp 的終端使用者運算
+url: "/euc/index.html"
+entries:
+- title: 了解 NetApp 的終端使用者運算
+  pdf-filename: 使用 NetApp 的終端使用者運算概觀
+  entries:
+  - title: 使用 NetApp 的終端使用者運算概觀
+    url: "/euc/euc-overview.html"
+  - title: NetApp 儲存設備對終端使用者運算的優勢
+    url: "/euc/euc-benefits.html"
+- title: Omnissa Horizon 和 NetApp 架構
+  pdf-filename: Omnissa Horizon 和 NetApp 架構
+  url: "/euc/omnissa-netapp-architecture.html"

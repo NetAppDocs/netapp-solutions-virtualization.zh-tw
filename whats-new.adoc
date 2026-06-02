@@ -15,6 +15,13 @@ summary: NetApp虛擬化解決方案附件的最新變更日誌。
 
 
 
+== 2026 年 5 月 10 日
+
+* 為 NetApp ONTAP 新增終端使用者運算（EUC）解決方案。
+
+
+
+
 == 2026年1月15日
 
 * 更新了 Proxmox VE 解決方案內容，以反映 Proxmox VE 9 版本。

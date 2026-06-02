@@ -1,0 +1,96 @@
+---
+sidebar: sidebar 
+permalink: euc/omnissa-netapp-architecture.html 
+keywords: euc, digital workspace, virtual desktop, vdi, virtual desktop infrastructure, cloud desktop, virtual application, application virtualization, app virtualization, virtual desktop management, desktop management, application management 
+summary:  
+---
+= Omnissa 與 NetApp 架構
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節概述了 Omnissa 與 NetApp 的架構，包括解決方案中涉及的元件和技術。此外，本節還重點介紹了在最終用戶運算 (EUC) 環境中使用 NetApp 儲存的優勢，以及它如何幫助企業優化虛擬桌面和應用程式部署。
+
+
+
+== 架構概述
+
+Omnissa 與 NetApp 的架構旨在為 EUC 環境提供可擴充且靈活的解決方案。該解決方案包含多個元件，包括 Omnissa 管理平台、NetApp 儲存陣列以及虛擬桌面和應用程式基礎架構。Omnissa 管理平台提供集中式介面，用於管理虛擬桌面和應用程式基礎架構，而 NetApp 儲存陣列則為虛擬桌面和應用程式提供高效能且可靠的儲存。該架構旨在支援各種 EUC 使用案例，包括虛擬桌面基礎架構（VDI）、應用程式虛擬化以及使用者資料的檔案共用。
+
+image:omnissa-netapp-architecture-001.png["Omnissa 與 NetApp 架構"]
+
+Omnissa Horizon 可部署在內部部署、雲端或混合式環境中，使企業能夠靈活選擇最適合自身需求的部署模式。該架構旨在支援廣泛的使用案例，包括 VDI、應用程式虛擬化和 Remote Desktop Services（RDS）。
+
+Omnissa Horizon Client 是用於存取虛擬桌面和應用程式的終端使用者介面。它適用於 Windows、macOS、Linux、iOS 和 Android 裝置，使用者能夠透過各種裝置連線到他們的虛擬桌面和應用程式。對於無法安裝用戶端軟體的裝置，可以使用網頁瀏覽器作為 HTML 用戶端。
+
+瘦客戶端和零客戶端也可用於存取虛擬桌面和應用程式，為希望向大量使用者部署虛擬桌面和應用程式的組織提供了一種經濟高效的解決方案。
+
+Omnissa Horizon 可讓您建立和代理與 Windows 虛擬桌面、Linux 虛擬桌面、Remote Desktop Server (RDS) – 託管應用程式和桌面、Linux 託管應用程式以及 Windows 實體機的連線。
+
+Horizon Connection 伺服器透過 Active Directory 對使用者進行身分驗證，並將要求導向適當且有權的資源。
+
+Omnissa Horizon Agents 安裝在實體機器、虛擬桌面和遠端桌面工作階段主機 (RDSH) 上，以實現與 Horizon Connection 伺服器的通訊，並提供無縫的使用者體驗。這些代理程式也提供工作階段管理、列印和 USB 重新導向等功能。
+
+Unified Access Gateway（UAG）是一種安全網關，可提供對虛擬桌面和應用程式的遠端存取。它通常部署在 DMZ 中，並提供從企業網路外部對 Horizon Connection 伺服器的安全存取。
+
+外部資料庫執行個體用於儲存 Horizon Connection 伺服器事件和其他資訊。此資料庫可以託管在 Microsoft SQL Server、PostgreSQL 或 Oracle Database 上，使組織能夠靈活地選擇最適合其需求的資料庫平台。
+
+使用 Horizon SaaS 時，需要部署 Horizon Edge Gateway 設備來建立與 Horizon SaaS 服務的連線。Edge Gateway 提供對 Horizon SaaS 服務的安全存取，使組織能夠在利用雲端解決方案優勢的同時，保持對其虛擬桌面和應用程式基礎架構的控制。
+
+如需更多詳細資料、請參閱 https://techzone.omnissa.com/resource/horizon-8-architecture["Horizon 8 架構"]。
+
+NetApp 儲存陣列用於為虛擬桌面和應用程式以及使用者資料提供高效能、高可靠性的儲存。NetApp 儲存陣列提供靈活的部署選項，並可根據組織需求的成長進行擴展。它們還提供資料去重、壓縮和精簡配置等功能，可協助組織優化儲存資源並降低成本。
+
+
+
+== Pod 和 Block 架構
+
+Omnissa Horizon 採用 Pod 和 Block 架構，為最終使用者運算（EUC）環境提供可擴充且可重複的解決方案。一個 Pod 是一組互連的 Horizon Connection 伺服器，可為多達 20,000 個虛擬桌面和應用程式工作階段提供服務。一個 Pod 最多可包含 7 台 Horizon Connection 伺服器，這些伺服器必須位於同一資料中心，不能跨資料中心。多個 Pod 可以使用 Cloud Pod Architecture（CPA）互連，從而為更大規模的環境提供可擴充的解決方案。透過 CPA，工作階段數可擴充至 250,000。對於更高的工作階段數，可以在架構中新增額外的 CPA。
+
+區塊是用於託管虛擬桌面和 RDSH 工作階段的運算叢集集合。每個區塊都有自己的 Hypervisor 管理程式，在 VMware 環境中為 vCenter。在 VCF 環境中，每個 Workload Domain 都會建立一個區塊。區塊可以與 Pod 位於同一資料中心，也可以位於不同的資料中心。對於遠端代理程式，建議每個區塊的最大工作階段數為 1000。每個區塊的 VM 數量會因 Horizon VM 組態而異。
+
+虛擬桌面和 Windows 伺服器用於 RDSH 工作階段，託管於區塊中的運算叢集上。在 vSphere 環境中，虛擬機器託管於連接至運算叢集的 Datastore 上。ONTAP tools for VMware vSphere 提供 vCenter 整合，讓管理員能直接從 vCenter 介面管理 NetApp 儲存設備。ONTAP 支援區塊協定（iSCSI、NVMeoF 和 Fibre Channel）以及檔案協定（NFS）以連接 Datastore。
+
+vSphere API for Array Integration (VAAI) 是一組 API，允許 vSphere 將某些儲存操作卸載到儲存陣列，從而提高效能和效率。NetApp 儲存陣列支援 VAAI，從而實現硬體輔助鎖定、區塊清零和完整複製等功能。對於 NFS Datastores，需要在 vSphere 主機上安裝 VAAI 元件才能啟用 VAAI 支援。借助 VAAI，虛擬桌面配置時間可以顯著縮短。
+
+image:omnissa-netapp-architecture-003.png["含檔案儲存的資料存放區"]
+
+NetApp 儲存陣列還提供資料去重、壓縮和精簡配置等功能，可以幫助企業優化儲存資源並降低成本。這些功能在最終用戶運算（EUC）環境中尤其重要，因為這類環境中可能存在大量需要儲存資源的虛擬桌面和應用程式。
+
+為了確保 vSphere Datastore 託管虛擬桌面和 RDSH 工作階段的高可用性、可以使用 NetApp SnapMirror 主動同步複寫、將資料存放區保護到次要 NetApp 儲存陣列。如果主要儲存陣列發生故障、次要儲存陣列可以接管、並使用統一存取模式提供虛擬桌面和應用程式的存取、而不會造成任何停機時間。對於 NFS Datastore 、可以使用 NetApp MetroCluster 組態進行保護。
+
+image:omnissa-netapp-architecture-002.png["具有區塊儲存設備的資料存放區"]
+
+
+NOTE: Pod 中的 Horizon Connection 伺服器不支援跨站點的延伸叢集組態。在資料中心內的虛擬桌面和應用程式需要高可用性的使用案例中使用此功能。託管在 MetroCluster 上的使用者資料檔案共用可從多個資料中心提供主動 - 主動存取使用者資料。每個資料中心都可以擁有自己的檔案伺服器（SVM）來託管使用者資料的檔案共用。SVM 使用 MetroCluster 組態進行保護，為使用者資料提供高可用性和災難恢復功能。
+
+
+
+== 應用程式虛擬化
+
+VDI 環境面臨的一個常見挑戰是預先安裝應用程式導致的 VDI 範本數量龐大。透過 Omnissa Horizon，App Volumes 可用於將應用程式串流傳輸到虛擬桌面和已發佈的應用程式主機。使用者可寫入磁碟區允許使用者安裝應用程式。這減少了對持續性桌面的需求。透過 App Volumes，應用程式可即時封裝並交付至虛擬桌面和 RDSH 工作階段。基於 Machine Manager，封裝後的應用程式儲存在 Datastores 上的 VMDK 檔案或 SMB 檔案共用上的 VHD 檔案中，這些檔案由 App Volumes Agent 管理，用於在虛擬桌面和 RDSH 伺服器上進行掛載和卸載。
+
+image:omnissa-netapp-architecture-004.png["App Volumes 架構"]
+
+Microsoft SQL Server 或 SQL Server Express 可用作 App Volumes Manager 的資料庫。vSphere 資料存放區可以是 VMFS 或 NFS。這些資料存放區可以使用 ONTAP tools for VMware vSphere 進行資源配置，該工具提供 vCenter 整合，可直接從 vCenter 介面管理 NetApp 儲存設備。
+
+除了 Omnissa Horizon 之外，Omnissa App Volumes 還支援 Citrix Virtual Apps and Desktops 和 Microsoft Remote Desktop Services (RDS)。這使得企業能夠利用 App Volumes 在多個 EUC 平台上交付應用程式，從而提供一致的使用者體驗並簡化應用程式管理。
+
+如需更多詳細資料、請參閱 https://techzone.omnissa.com/resource/app-volumes-architecture["App Volumes 架構"]。
+
+
+
+== 使用者設定檔管理
+
+使用者設定檔管理是任何最終使用者運算（EUC）環境的關鍵組成部分,因為它能確保使用者在不同的虛擬桌面和應用程式中獲得一致的體驗。Omnissa Horizon 支援多種使用者設定檔管理解決方案,包括 Microsoft FSLogix 和 Omnissa Dynamic Environment Manager（DEM），或二者的組合。FSLogix 提供容器化的使用者設定檔解決方案,可實現快速登入,並在不同的虛擬桌面和應用程式中提供一致的使用者體驗。DEM 提供更精細的使用者設定檔管理方法,讓管理員可以根據特定條件和標準管理使用者設定和組態。要了解有關 DEM 的更多資訊,請參閱 https://techzone.omnissa.com/resource/dynamic-environment-manager-architecture["Dynamic Environment Manager 架構"]。
+
+透過使用 FSLogix 將使用者設定檔容器化，使用者可以被分配到任何虛擬桌面或 RDSH 會話，並且仍然能夠存取其個人化設定和資料。使用者資料可以重定向到 SMB 檔案共享，以減少容器大小並簡化管理。DEM 和 FSLogix 都需要一個檔案共用來儲存使用者設定檔容器和設定。ONTAP 支援全域命名空間（GNS），這允許為跨多個資料中心託管使用者設定檔的檔案共用建立單一命名空間，或可與 Microsoft 分散式檔案系統（DFS）集成，為使用者設定檔儲存提供統一的命名空間。這為使用者設定檔提供了高可用性和災難復原能力，並無論使用者身處何地或存取哪個虛擬桌面，都能提供無縫體驗。
+
+ONTAP FlexGroup 為在 EUC 環境中託管使用者設定檔提供可擴充且高效能的解決方案。FlexGroups 其設計旨在提供高處理量和低延遲，使其成為託管需要快速存取資料的使用者設定檔的理想選擇。
+
+ONTAP FlexCache 與 Microsoft DFS 結合使用，可為使用者設定檔提供分散式快取解決方案，加速使用者資料存取速度，並提升最終使用者運算（EUC）環境的效能。透過 FlexCache，頻繁存取的使用者設定檔資料可以快取在本地，降低延遲，改善使用者體驗。

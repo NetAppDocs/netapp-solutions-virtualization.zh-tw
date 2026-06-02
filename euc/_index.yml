@@ -1,0 +1,20 @@
+---
+indexpage:
+  title: 使用 NetApp 的終端使用者運算
+  summary: NetApp 終端使用者運算解決方案可協助組織為任何裝置上的使用者提供安全、可擴充的虛擬桌面和應用程式。
+  lead: NetApp 終端使用者運算解決方案可協助組織為任何裝置上的使用者提供安全、可擴充的虛擬桌面和應用程式。
+  tiles:
+  - title: 開始
+    links:
+    - title: 了解 NetApp 的終端使用者運算
+      url: euc-overview.html
+    - title: NetApp 儲存設備對終端使用者運算的優勢
+      url: euc-benefits.html
+  - title: 使用 Omnissa Horizon 和 NetApp 進行終端使用者運算
+    links:
+    - title: Omnissa Horizon 和 NetApp 架構
+      url: omnissa-netapp-architecture.html
+  - title: 其他資源
+    links:
+    - title: Omnissa Tech Zone
+      url: https://techzone.omnissa.com
