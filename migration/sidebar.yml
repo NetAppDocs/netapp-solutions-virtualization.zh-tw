@@ -30,8 +30,10 @@ entries:
       url: "/migration/shift-toolkit-migrate-hyperv2esxi.html"
     - title: 將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization
       url: "/migration/shift-toolkit-migrate-esxi2osv.html"
-    - title: 使用虛擬化遷移工具包將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization
+    - title: 使用 Shift 工具包和虛擬化遷移工具包將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift 虛擬化
       url: "/migration/shift-toolkit-migrate-esxi2osvmtv.html"
+    - title: 手動部署 Shift 運算子
+      url: "/migration/shift-toolkit-deploy-operator.html"
     - title: 將虛擬機器從 VMware ESXi 遷移到 Oracle Linux Virtualization Manager (OLVM)
       url: "/migration/shift-toolkit-migrate-esxi2olvm.html"
     - title: 將虛擬機器從 VMware ESXi 遷移到 Proxmox VE

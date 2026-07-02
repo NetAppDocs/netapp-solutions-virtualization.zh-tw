@@ -7765,7 +7765,6 @@
   <block id="3df92176361d792627830768779df508" category="inline-link-macro">使用NetApp Disaster RecoveryNFS 資料儲存進行災難復原</block>
   <block id="ffdcb7d3677c196661a9e4ad7577206b" category="paragraph">請造訪 NetApp 解決方案文件中心以查看完整解決方案： <block ref="2c1099f5b5e7f13bd13b6333caafbe18" category="inline-link-macro-rx"></block></block>
   <block id="92c14cace513a50c24d49c4b13e1921d" category="sidebar">使用NetApp Disaster Recovery保護 VMware 資料存儲</block>
-  <block id="e7e5267e37f6f0b79b838b5279ec25fe" category="sidebar">使用虛擬化遷移工具包將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization</block>
   <block id="3f92bc0cd3d2eee6f501ab309588039f" category="sidebar">VCF 9 DR 與NetApp Disaster Recovery</block>
   <block id="72c2cb3a1c4fe511d4aa5e485a6894c5" category="sidebar">關於將現有 vSphere 叢集轉換為 VCF</block>
   <block id="29f9284e7442c54b5708da5878ed3103" category="sidebar">將現有 vSphere 叢集與 NFS 資料儲存進行轉換</block>
@@ -8639,7 +8638,6 @@
   <block id="9aa9e231f950da618c182450dfecb607" category="paragraph">以下各節介紹 Shift 工具包觸發哪些步驟來轉換 VMDK 並在 Proxmox VE 端建立 VM。</block>
   <block id="f293d7a41626208fcbb41b3a794a30a2" category="paragraph-title">將 QCOW2 或 RAW 映像上傳到 PVE NFS 型儲存資源池</block>
   <block id="f2ff48db9876dd928f72f730cad6c55e" category="paragraph">將虛擬機器磁碟映像轉換為 qcow2 或 RAW 格式後，Shift toolkit 會將檔案放置到對應的儲存池中，並將每個磁碟新增至對應的 VM ID 資料夾中。</block>
-  <block id="5d23268a1279c853582c3863ce0d4b7e" category="image-alt">shift toolkit 469</block>
   <block id="0bdfa5286269feba4d23388e0c2f0e21" category="paragraph-title">建立虛擬機器</block>
   <block id="9f6129bd27c47f979bd135fd817b20d3" category="paragraph">Shift 工具組會根據作業系統進行 REST API 呼叫，以建立每個 VM。</block>
   <block id="7201b4542207ea349ce6ee4e5fe1a1ef" category="admonition">虛擬機器在對應的 Proxmox 節點下建立</block>
@@ -9178,4 +9176,59 @@
   <block id="900072db4db9aa5a93fea4d351c838fd" category="paragraph">遷移完成後，需要分離複製磁碟區。分離方法取決於 ONTAP 版本：ONTAP 9.17.1 及更新版本使用 clone split，舊版則使用 vol move。提供的 ZIP 套件中的「Post migrate」資料夾內包含一個用於啟動分離程序的指令碼。</block>
   <block id="2c965de51648fb5524d2eb0e957d4709" category="list-text">VMDK 可以透過多種方式進行配置：所有 VMDK 可以駐留在單一磁碟區上（無需儲存 vMotion），每個 VMDK 可以放置在自己的單獨磁碟區上，或多個 VMDK 可以組織在一個磁碟區內的 qtree 中。</block>
   <block id="57ab8ea8689e4a7f85baeb77d04e766e" category="admonition">Shift 工具包會自動偵測佈局並選擇合適的複製方法和 NAS 儲存驅動程式。</block>
+  <block id="c47f55c3a8bac3fc95565439ca167866" category="summary">使用 NetApp Trident CSI 和虛擬化遷移工具套件，以容器化服務的形式，手動將 Shift 運算子以標準模式部署。</block>
+  <block id="c493434a73d41c1c89504b5c2119f8f7" category="doc">手動部署 Shift Operator（標準模式）</block>
+  <block id="0b3dcbbfd02210c8232664ad58afacc1" category="paragraph">手動將 NetApp Shift 工具包與 NetApp Trident CSI 和 Migration Toolkit for Virtualization （MTV） 一起部署為容器化服務。此程序可實現自動化儲存配置和虛擬機器磁碟遷移，並利用註解和標籤在元件之間正確路由請求。</block>
+  <block id="03d8535f3d709d87cf73393d68dc935e" category="section-title">架構組件</block>
+  <block id="32de03dbc9044dcd99ef755bfa9a61c7" category="paragraph">了解 NetApp Shift 工具包、Trident CSI 和 Migration Toolkit for Virtualization 如何協同運作，以在您的 OpenShift 環境中實現自動化儲存佈建和 VM 磁碟遷移。</block>
+  <block id="06a7cceb4ea9c104f5c471b398a24c44" category="image-alt">Shift 運算子架構圖</block>
+  <block id="87ed922160e9b4c75ab1ef893b525db3" category="paragraph">*NetApp Shift 工具組*</block>
+  <block id="d6407f63c84b09b3d67be7c599991a55" category="list-text">透過鏡像倉庫以容器化服務的形式部署</block>
+  <block id="20c3dba8e3ea0c01024e755c5c6207fd" category="list-text">公開一個端點，用於監聽來自 MTV 且帶有特定註解的持久性磁碟區宣告 (PVC) 請求</block>
+  <block id="db8eec9fefc21532a5c922c37968316b" category="list-text">負責處理虛擬機器磁碟遷移任務，包括格式轉換</block>
+  <block id="6bcc7e2f71f96347b4b98736fe8a1979" category="paragraph">*NetApp Trident CSI（版本 26.06 或更高版本）*</block>
+  <block id="7bd93547c704f452dc59535fa98c61cd" category="list-text">充當容器儲存介面 (CSI) 配置器</block>
+  <block id="cfbba3393ca298e784a32cb3ff60f2b7" category="list-text">接收來自 Shift 工具包的 PVC 匯入請求</block>
+  <block id="f5516a7a904aaee238c3bb33a023bb89" category="list-text">根據 PVC 註解和標籤套用邏輯，以確定是直接處理請求還是將其重新導向至 Shift</block>
+  <block id="3e209c0b838737b9e42fa2e1abc60d0d" category="paragraph">*Migration Toolkit for Virtualization （MTV 2.12 或更高版本）*</block>
+  <block id="c4b04e4af346af9c1e524e3c888249c3" category="list-text">統籌虛擬機器遷移計劃</block>
+  <block id="48fead57851c63d0a08f7d92570dc697" category="list-text">在虛擬機器遷移期間，發出儲存配置所需的 PVC 請求</block>
+  <block id="027261bcfd50e8709c7c09eadd20093c" category="list-text">添加註釋以指導下游處理</block>
+  <block id="e058688fa340803d3bc8ecc02ebe596c" category="paragraph">在部署 Shift 操作員之前，請確認您的 OpenShift 環境中已安裝並設定所需的元件。</block>
+  <block id="9b1fb571d14c63b89bbbeba56ad51220" category="list-text">虛擬化遷移工具包 Operator 執行版本為 2.12 或更新版本</block>
+  <block id="39ff57afbe369c71d87164292f4d0267" category="inline-link-macro">Trident 安裝指南</block>
+  <block id="3582bb9bff4c360d1b876af2b7038b93" category="list-text">Trident 透過 OpenShift OperatorHub 安裝 - <block ref="05c6198e6f7839675430d2fe772b5bcd" category="inline-link-macro-rx"></block></block>
+  <block id="ff7b16168d3a95f59b6b096ad2f62444" category="list-text">NetApp Shift 以容器形式部署，NetApp Trident 可存取 Shift 端點。</block>
+  <block id="ed34562ebeafe2fa2386ac50a8bdb482" category="list-text">專門為 Shift 工具包使用而建立並標記的 Storage Class</block>
+  <block id="db94c9b7bf6cc982e79f2c27b5743ca7" category="list-text">標籤表示 Shift 工具包是預期的處理程序</block>
+  <block id="4351ff451e06ead04e9a98f9ede6648a" category="list-text">MTV 對 PVC 包含以下註解：<block ref="c465c4208b1e1f3418330711672ef4c0" prefix=" " category="inline-code"></block></block>
+  <block id="f80c7b604cf5d54f61f5580c1db23856" category="section-title">步驟 1：下載並解壓縮 Shift 安裝程式</block>
+  <block id="eb54a35ee77c8f156cf491f203292ee0" category="paragraph">Shift 安裝套件包含部署 Shift 操作員及安裝 Shift 所需的一切。</block>
+  <block id="a7a83b5e4f375c0585588b9c7ff92219" category="inline-link-macro">NetApp 支援網站工具箱</block>
+  <block id="728751c4a9e9dd7ddddfcf57839671a3" category="list-text">從 <block ref="b9c63223260665c8c6f7e5af5c329877" category="inline-link-macro-rx"></block> 下載最新版本的 Shift 安裝程式。</block>
+  <block id="4a0495ab86984b1ab31e239d58d8efb5" category="list-text">解壓縮安裝包：</block>
+  <block id="e85555dea2db4b5d9ec968264e242b59" category="list-text">切換到安裝程式目錄：</block>
+  <block id="8de8c10653c019dccd733a2c9ad025d2" category="section-title">步驟 2：建立 Shift 命名空間和 API 憑證</block>
+  <block id="8e4df91281e9b10e50416eba936b5e2a" category="paragraph">為 Shift 操作員設定專用命名空間，並建立安全 API 存取所需的憑證。</block>
+  <block id="519042fdff45eca9e93f6c7975a33261" category="list-text">建立 Shift 命名空間：</block>
+  <block id="ec280ac477abf1fd860b10b773a737d2" category="list-text">在 Shift 命名空間內建立 Shift API 存取的 Secret：</block>
+  <block id="acb6fff399445a7c3982d06abd52c5e6" category="section-title">步驟 3：部署 Shift 運算子</block>
+  <block id="27cb2025888a0b8910a51ba44b8a1256" category="paragraph">將 Shift 操作員配置套用到您的 OpenShift 叢集，並驗證所需的 pod 是否成功運作。</block>
+  <block id="4063ac6d9d4e7d61536ceaaf647337fa" category="list-text">從 shift-installer 目錄執行部署指令：</block>
+  <block id="1a676394126819000e99e53f06f4d3c8" category="list-text">使用 pod 建立狀態驗證安裝：</block>
+  <block id="8637d6c1f3e0436f7f2ec935b829bd22" category="paragraph">範例輸出：</block>
+  <block id="2adfd096e132762d7bb1806ee670838a" category="section-title">步驟 4：配置 Shift 整合的 Storage Class</block>
+  <block id="c2bb497b0e08f4c5770ce936ceb5ceed" category="paragraph">建立新的 Storage Class 或使用 Shift 整合所需的註解更新現有 Storage Class。</block>
+  <block id="6920c9eaa8408cbe9ae61a5d1873db9d" category="paragraph">儲存類別必須包含以下註解：</block>
+  <block id="57fd0c2d34b3faae09e8bcf9699feaff" category="list-text"><block ref="ef0a3ae2e4a56e2f40e59efcda1b4f3e" prefix="" category="inline-code"></block></block>
+  <block id="d85e934facee7138a2b76f8e8d3e3b18" category="list-text"><block ref="0baedb18fca27b94ae9ef70c324b3dc6" prefix="" category="inline-code"></block></block>
+  <block id="c289c6150aaba247cc1eac2250f16f40" category="list-text">驗證現有儲存類別：</block>
+  <block id="0bdf847d5b76241a4b323312bcf8bac1" category="list-text">使用所需的註解修補儲存類別：</block>
+  <block id="1c878a34021ac193182a89fe8da7f0ab" category="admonition">可以透過執行以下命令來取得後端 UUID：<block ref="7e745824a540942db553f6f4251bb92b" prefix=" " category="inline-code"></block></block>
+  <block id="01e12de62fa77fda2815719aed8ff892" category="section-title">接下來</block>
+  <block id="3a36f8654c90283d28de9331a4458a28" category="paragraph">完成 Shift 操作員部署和儲存類別配置後，即可建立並觸發 MTV 方案。</block>
+  <block id="6f95d4f44cf1afc50df6a1c231ff124e" category="inline-link-macro">Migration Toolkit for Virtualization 文件</block>
+  <block id="da7f041e9cc4cf4c35dad13e6d6d4256" category="paragraph">有關製定 MTV 計劃的詳細資訊，請參閱<block ref="52cfaab11b47ceb91fc31cd678248f92" category="inline-link-macro-rx"></block>。</block>
+  <block id="5b72c021801ffa146c82f90658cd7575" category="image-alt">VM 磁碟映像已上傳至 Proxmox VE NFS 儲存池</block>
+  <block id="5494dd2ac7ee98a0fa80c17d1b6858a0" category="sidebar">手動部署 Shift 運算子</block>
 </blocks>
