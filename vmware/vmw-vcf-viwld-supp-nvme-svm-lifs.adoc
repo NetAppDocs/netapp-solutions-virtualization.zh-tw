@@ -18,6 +18,7 @@ summary: '建立具有多個邏輯介面 (LIF) 的儲存虛擬機器 (SVM)，為
 
 
 
+[[step-1-create-the-svms-and-lifs]]
 == 步驟 1：建立 SVM 和 LIF
 
 完成以下步驟，為 NVMe/TCP 流量建立具有多個 LIF 的 SVM。
@@ -58,6 +59,7 @@ image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
 
 
 
+[[step-2-create-the-nvme-namespace]]
 == 步驟 2：建立 NVMe 命名空間
 
 NVMe 命名空間類似 iSCSi 或 FC 的 LUN。您必須先建立 NVMe 命名空間，然後才能從 vSphere Client 部署 VMFS 資料儲存區。
@@ -103,6 +105,7 @@ image:vmware-vcf-asa-093.png["按一下「+新增」以建立 NVMe 命名空間"
 
 
 
+[[whats-next]]
 == 下一步是什麼？
 
 建立 SVM 和 LIF 後，link:vmw-vcf-viwld-supp-nvme-network.html["為 NVMe/TCP (NVMe/TCP) vVols配置網絡"] 。

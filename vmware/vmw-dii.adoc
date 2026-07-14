@@ -18,6 +18,7 @@ NetApp Data Infrastructure Insights （以前稱為Cloud Insights）是一個基
 
 
 
+[[monitoring-on-premises-storage-with-data-infrastructure-insights]]
 == 利用Data Infrastructure Insights監控本地存儲
 
 Data Infrastructure Insights透過採集單元軟體運行，該軟體設定了 VMware vSphere 和NetApp ONTAP儲存系統等資產的資料收集器。這些收集器收集數據並將其傳輸到Data Infrastructure Insights。然後，該平台利用各種儀表板、小部件和指標查詢將資料組織成有見地的分析，供使用者解釋。
@@ -28,6 +29,7 @@ image:vmware-dii.png["Data Infrastructure Insights"]
 
 
 
+[[solution-deployment-overview]]
 == 解決方案部署概述
 
 此解決方案介紹如何使用Data Infrastructure Insights監控本機 VMware vSphere 和ONTAP儲存系統。
@@ -45,6 +47,7 @@ image:vmware-dii.png["Data Infrastructure Insights"]
 
 
 
+[[prerequisites]]
 == 先決條件
 
 此解決方案使用以下組件：
@@ -57,10 +60,12 @@ image:vmware-dii.png["Data Infrastructure Insights"]
 
 
 
+[[solution-deployment]]
 == 解決方案部署
 
 
 
+[[configure-data-collectors]]
 === 配置資料收集器
 
 若要為 VMware vSphere 和ONTAP儲存系統設定資料收集器，請完成下列步驟：
@@ -103,6 +108,7 @@ image:vmware-asa-034.png["配置收集器"]
 ====
 
 
+[[add-annotations-to-assets]]
 === 向資產添加註釋
 
 註解是標記資產的有用方法，以便可以在Cloud Insights中可用的各種視圖和指標查詢中對其進行過濾和識別。
@@ -129,6 +135,7 @@ image:vmware-asa-037.png["運行所有規則"]
 ====
 
 
+[[explore-and-correlate-assets]]
 === 探索並關聯資產
 
 Cloud Insights對儲存系統和 vSphere 叢集上一起運作的資產得出合理的結論。
@@ -167,6 +174,7 @@ image:vmware-asa-043.png["虛擬機器效能指標"]
 ====
 
 
+[[use-cloud-insights-to-identify-noisy-neighbors]]
 === 使用Cloud Insights辨識吵鬧的鄰居
 
 Cloud Insights具有儀表板，可輕鬆隔離對在同一儲存磁碟區上執行的其他虛擬機器產生負面影響的對等虛擬機器。
@@ -195,6 +203,7 @@ image:vmware-asa-047.png["工作負載爭用"]
 ====
 
 
+[[view-over-and-under-utilized-resources-in-cloud-insights]]
 === 在Cloud Insights中查看過度使用和未充分利用的資源
 
 透過將虛擬機器資源與實際工作負載需求相匹配，可以優化資源利用率，從而節省基礎架構和雲端服務的成本。可自訂Cloud Insights中的數據，以輕鬆顯示過度或未充分利用的虛擬機器。
@@ -223,6 +232,7 @@ image:vmware-asa-051.png["關閉虛擬機"]
 ====
 
 
+[[use-queries-to-isolate-and-sort-metrics]]
 === 使用查詢來隔離和排序指標
 
 Cloud Insights擷取的資料量相當全面。指標查詢提供了一種以有用的方式對大量資料進行排序和組織的有效方法。
@@ -243,12 +253,14 @@ image:vmware-asa-053.png["ONTAP基礎 - VMware"]
 ====
 
 
+[[conclusion]]
 == 結論
 
 該解決方案旨在作為入門指南，幫助您了解如何開始使用NetApp Cloud Insights ，並展示該可觀察性解決方案可以提供的一些強大功能。該產品內建數百個儀表板和指標查詢，可以輕鬆立即開始使用。  Cloud Insights的完整版本可試用 30 天，基本版本可供NetApp客戶免費使用。
 
 
 
+[[additional-information]]
 == 附加資訊
 
 要了解有關此解決方案中提出的技術的更多信息，請參閱以下附加資訊。

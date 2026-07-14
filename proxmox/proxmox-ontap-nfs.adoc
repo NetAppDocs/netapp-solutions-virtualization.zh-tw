@@ -24,6 +24,7 @@ ONTAP支援 Proxmox VE 支援的所有 NFS 版本。使用 link:https://docs.net
 video::f6c9aba3-b070-45d6-8048-b22e001acfd4[panopto,width=360]
 
 
+[[storage-administrator-tasks]]
 == 儲存管理員任務
 
 完成以下任務，即可在ONTAP上配置 NFS 存儲，以便與 Proxmox VE 一起使用。
@@ -59,6 +60,7 @@ image:proxmox-ontap-nfs-003.png["NFS 磁碟區資訊"]
 
 
 
+[[virtualization-administrator-tasks]]
 == 虛擬化管理員任務
 
 完成以下任務，將 NFS 磁碟區新增為 Proxmox VE 中的存儲，並配置 nConnect 或會話中繼以提高效能。

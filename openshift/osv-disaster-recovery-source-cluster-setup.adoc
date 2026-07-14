@@ -1,0 +1,178 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-disaster-recovery-source-cluster-setup.html 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
+summary: Red Hat OpenShift 虛擬化 
+---
+= Red Hat OpenShift 虛擬化災難復原的來源叢集設定
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節提供關於使用 NetApp Trident Protect 和 AppMirror 設定來源叢集，以進行 OpenShift Virtualization 工作負載災難復原的資訊。這包括使用 ONTAP S3 建立 AppVault、為來源 VM 建立 Trident Protect 應用程式，以及使用 Trident Protect 建立 VM 的隨選和排程快照。這些步驟對於確保正確設定來源叢集以將資料複寫到災難復原目標叢集，並在發生災難時啟用 VM 復原至關重要。
+
+
+
+[[setup-disaster-recovery-source-cluster-for-openshift-virtualization]]
+== 為 OpenShift 虛擬化設定災難復原來源叢集
+
+以下所有步驟均在來源叢集上執行，即受保護的虛擬機器目前運作所在的叢集。
+
+
+
+[[create-appvault-using-ontap-s3]]
+== 使用 ONTAP S3 建立 AppVault
+
+本節說明如何使用 ONTAP S3 物件儲存在 Trident Protect 中設定 AppVault 物件。此步驟建立的 AppVault 將用於儲存來自來源叢集的複寫資料，這些資料將用於災難復原目標叢集中的復原。
+
+使用 oc 命令和下面顯示的 yaml 檔案，為 ONTAP s3 建立金鑰和 AppVault 自訂資源。確保在 trident-protect 命名空間中建立它們。
+
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+apiVersion: v1
+# You can provide the keys either as stringData or base 64 encoded data
+stringData:
+  accessKeyID: "<access key id as obtained from ONTAP>"
+  secretAccessKey: "<secret access key as obtained from ONTAP>"
+#data:
+  #accessKeyID: <base 64 encoded value of access key>
+  #secretAccessKey: <base 64 encoded value of secret access key>
+kind: Secret
+metadata:
+  name: appvault-secret
+  namespace: trident-protect
+type: Opaque
+
+----
+[source, yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppVault
+metadata:
+  name: ontap-s3-appvault
+  namespace: trident-protect
+spec:
+  providerConfig:
+    s3:
+      bucketName: oc-dr
+      endpoint: <data lif to use to access S3>
+      secure: "false" # Setting this to "false" will disable TLS, which is not recommended for production environments.
+      skipCertValidation: "true" # When TLS is enabled, setting skipCertValidation to "true" will skip TLS certificate validation, which is not recommended for production environments.
+  providerCredentials:
+    accessKeyID:
+      valueFromSecret:
+        key: accessKeyID
+        name: appvault-secret
+    secretAccessKey:
+      valueFromSecret:
+        key: secretAccessKey
+        name: appvault-secret
+  providerType: OntapS3
+----
+確保已建立 ONTAP S3 儲存庫並處於可用狀態
+
+[source, cli]
+----
+oc create -f app-vault-secret.yaml -n trident-protect
+oc create -f app-vault.yaml -n trident-protect
+----
+image:osv-disaster-recovery-003.png["trident-protect 命名空間中的 OCP-v AppVault"]
+
+====
+
+
+[[create-a-trident-protect-app-for-the-source-vm]]
+== 為來源虛擬機器建立 Trident Protect 應用程式
+
+在來源虛擬機器所在的命名空間中建立應用程式自訂資源。
+
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+# cat app.yaml
+apiVersion: protect.trident.netapp.io/v1
+kind: Application
+metadata:
+  creationTimestamp: null
+  name: test-source-app
+  namespace: test-dr-ns
+spec:
+  includedNamespaces:
+  - namespace: test-dr-ns
+----
+[source, cli]
+----
+tridentctl-protect create app <source-vm> -n <source-ns> --namespaces <source-ns>
+----
+image:osv-disaster-recovery-004.png["source-ns 命名空間中的 OCP-v 應用程式"]
+
+下面顯示了應用程式自訂資源中包含的命名空間中的虛擬機器及其 PVC。
+
+image:osv-disaster-recovery-005.png["VM 及其在命名空間中的 PVC，包含在應用程式自訂資源中"]
+
+====
+
+
+[[create-a-snapshot-of-the-vm-using-trident-protect]]
+== 使用 Trident Protect 建立虛擬機器快照
+
+您可以使用 Trident Protect CLI 或 API 按需建立虛擬機器快照。此快照將儲存在上一個步驟建立的 AppVault 中，並可用於災難復原目標叢集中的復原。
+
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+# snapshot.yaml
+apiVersion: protect.trident.netapp.io/v1
+kind: Snapshot
+metadata:
+  name: test-source-dr-init-snapshot
+  namespace: test-dr-ns
+spec:
+  applicationRef: test-source-app
+  appVaultRef: ontap-s3-appvault
+  reclaimPolicy: Delete
+
+----
+image:osv-disaster-recovery-006.png["使用 Trident Protect CLI 建立的虛擬機器 OCP-v 隨需快照"]
+
+====
+
+
+[[create-a-scheduled-snapshot-of-the-vm-using-trident-protect]]
+== 使用 Trident Protect 建立虛擬機器的排程快照
+
+您也可以透過在與 Application 自訂資源相同的命名空間中建立 Schedule 自訂資源來建立排程快照。該排程將按照指定的排程自動建立虛擬機器的快照，並將其儲存在 AppVault 中。
+
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: Schedule
+metadata:
+  name: appmirror-sched1
+spec:
+  appVaultRef: ontap-s3-appvault
+  applicationRef: test-source-app
+  backupRetention: "0"
+  enabled: true
+  granularity: Custom
+  recurrenceRule: |-
+    DTSTART:20240901T000200Z
+    RRULE:FREQ=MINUTELY;INTERVAL=5
+  snapshotRetention: "2"
+----
+====

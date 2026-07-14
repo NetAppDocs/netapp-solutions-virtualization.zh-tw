@@ -18,6 +18,7 @@ keywords: vmware, vsphere, vcf, snapcenter, ontap tools, videos, demos
 
 
 
+[[vmware-datastore-provisioning-with-ontap]]
 == 使用ONTAP配置 VMware 資料儲存庫
 
 .適用於 VMware 的ONTAP工具 - 概述
@@ -30,6 +31,7 @@ video::3135c36f-3a13-4c95-aac9-b2a0001816dc[panopto,width=360]
 video::a34bcd1c-3aaa-4917-9a5d-b01200f97f08[panopto]
 
 
+[[snapcenter-plug-in-for-vmware-vsphere]]
 == SnapCenter Plug-in for VMware vSphere
 
 .SnapCenter Plug-in for VMware vSphere- 解決方案先決條件
@@ -44,12 +46,14 @@ video::ed41002e-585c-445d-a60c-b01200fb1188[panopto,width=360]
 video::8df4ad1f-83ad-448b-9405-b01200fb2567[panopto,width=360]
 
 
+[[3-2-1-data-protection-solutions]]
 == 3-2-1 資料保護解決方案
 
 .使用適用於 VMware vSphere 和NetApp Backup and Recovery的SnapCenter Plug-in for VMware vSphere，為 VMFS 資料儲存提供 3-2-1 資料保護
 video::7c21f3fc-4025-4d8f-b54c-b0e001504c76[panopto,width=360]
 
 
+[[vmware-cloud-on-aws-with-aws-fsx-ontap]]
 == 帶有 AWS FSx ONTAP 的VMware Cloud on AWS
 
 .使用 iSCSI 的 Windows 用戶端連線儲存與 FSx ONTAP
@@ -68,6 +72,7 @@ video::52661f10-3f90-4f3d-865a-b01200f06d31[panopto,width=360]
 video::685c0dc2-9d8a-42ff-b46d-b01200f056b0[panopto,width=360]
 
 
+[[azure-vmware-solutions]]
 == Azure VMware 解決方案
 
 .Azure VMware 解決方案補充資料儲存概述（包含Azure NetApp Files）
@@ -82,6 +87,7 @@ video::986bb505-6f3d-4a5a-b016-b01200f03f18[panopto,width=360]
 video::255640f5-4dff-438c-8d50-b01200f017d1[panopto,width=360]
 
 
+[[vmware-cloud-foundation-with-netapp-ontap]]
 == 採用NetApp ONTAP 的VMware Cloud Foundation
 
 .NFS 資料存儲作為 VCF 工作負載域的主要存儲
@@ -90,6 +96,7 @@ video::9b66ac8d-d2b1-4ac4-a33c-b16900f67df6[panopto]
 video::1d0e1af1-40ae-483a-be6f-b156015507cc[panopto]
 
 
+[[netapp-cloud-insights]]
 == NetAppCloud Insights
 
 .NetApp Cloud Insights - 現代資料中心的可觀察性

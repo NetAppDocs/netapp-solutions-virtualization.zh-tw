@@ -18,6 +18,7 @@ summary:
 
 
 
+[[introduction]]
 == 介紹
 
 這種方法使企業能夠輕鬆遷移工作負載、最佳化資源使用率並在兩個環境中保持一致的操作。
@@ -26,6 +27,7 @@ summary:
 
 
 
+[[vmware-deployment-scenarios-with-netapp]]
 == NetApp的 VMware 部署場景
 
 本節介紹跨本地端和公有雲的 VMware 環境的各種部署選項。每個雲端供應商都在其各自的公有雲產品中支援 VMware 軟體定義資料中心 (SDDC) 和/或 VMware 雲端基礎 (VCF) 堆疊。

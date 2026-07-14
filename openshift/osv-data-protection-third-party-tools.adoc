@@ -1,0 +1,298 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-data-protection-third-party-tools.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization, OADP operator, OpenShift Data Protection Application operator, velero 
+summary: Red Hat OpenShift 虛擬化資料保護與NetApp ONTAP 
+---
+= 使用 OpenShift API for Data Protection （OADP） 對 Red Hat OpenShift Virtualization 中的虛擬機器進行資料保護
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+帶有 Velero 的 OpenShift API for Data Protection (OADP) 為 OpenShift Virtualization 中的虛擬機器提供備份、復原和災難復原功能。使用Trident CSI 快照將持久磁碟區和 VM 元資料備份到NetApp ONTAP S3 或StorageGRID S3。  OADP 與 Velero API 和 CSI 儲存驅動程式集成，以管理容器化虛擬機器的資料保護操作。
+
+OpenShift 虛擬化環境中的虛擬機器是在 OpenShift 容器平台的工作節點中執行的容器化應用程式。保護虛擬機器元資料以及虛擬機器的持久性磁碟非常重要，以便在它們遺失或損壞時可以還原它們。
+
+OpenShift 虛擬化虛擬機器的持久性磁碟可以透過使用整合到 OpenShift 叢集的ONTAP儲存進行支援link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"]。在本節中我們使用link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/installing/installing-oadp-ocs.html["OpenShift 資料保護 API (OADP)"]執行虛擬機器（包括其資料卷）的備份
+
+* ONTAP物件存儲
+* 儲存網格
+
+
+然後我們在需要時從備份中恢復。
+
+OADP 支援 OpenShift 叢集上應用程式的備份、還原和災難復原。可以使用 OADP 保護的資料包括 Kubernetes 資源物件、持久磁碟區和內部映像。
+
+image:redhat-openshift-oadp-001.png["OpenShift 資料保護 API"]
+
+Red Hat OpenShift 利用開源社群開發的資料保護解決方案。link:https://velero.io/["維萊羅"] 是一款開源工具，用於安全地備份和復原、執行災難復原以及遷移 Kubernetes 叢集資源和持久磁碟區。為了方便使用 Velero，OpenShift 開發了 OADP 運算子和 Velero 外掛程式，以便與 CSI 儲存驅動程式整合。公開的 OADP API 核心是以 Velero API 為基礎。安裝並設定 OADP 運算子後，即可執行基於 Velero API 所公開作業的備份/復原作業。
+
+image:redhat-openshift-oadp-002.png["OpenShift 資料保護 API"]
+
+OADP 1.3 可從 OpenShift 叢集 4.12 及更高版本的操作員中心取得。它有一個內建的資料移動器，可以將 CSI 磁碟區快照移至遠端物件儲存。透過在備份期間將快照移至物件儲存位置，這提供了可移植性和耐用性。災難發生後，快照可用於復原。
+
+**以下是本節範例中使用的各種組件**
+
+* OpenShift 叢集 4.14
+* 透過 Red Hat 提供的 OpenShift Virtualization Operator 安裝 OpenShift Virtualization
+* OADP Operator 1.3 由 Red Hat 提供
+* 適用於 Linux 的 Velero CLI
+* 適用於 ONTAP 的 Trident 24.02 CSI 驅動程式
+* ONTAP 9.12
+
+
+link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"] link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/installing/installing-oadp-ocs.html["OpenShift 資料保護 API (OADP)"] link:https://velero.io/["維萊羅"]
+
+
+
+[[create-on-demand-backup-for-vms-in-red-hat-openshift-virtualization-using-velero]]
+== 使用 Velero 為 Red Hat OpenShift Virtualization 中的虛擬機器建立隨選備份
+
+使用 Velero 和NetApp ONTAP S3 或StorageGRID在 OpenShift Virtualization 中備份虛擬機器。此過程包括為按需備份建立備份自訂資源 (CR) 和為計劃備份建立計劃 CR。每個備份都會擷取虛擬機器元資料和持久性卷，並將它們儲存在指定的物件儲存位置以用於復原或合規目的。
+
+
+
+[[steps-to-create-a-backup-of-a-vm]]
+=== 建立虛擬機器備份的步驟
+
+若要建立整個 VM（VM 元資料和 VM 磁碟）的隨選備份，請按一下「備份」標籤。這將建立一個備份自訂資源 (CR)。提供了一個範例 yaml 來建立備份 CR。使用此 yaml，將備份指定命名空間中的 VM 及其磁碟。可以設定其他參數，如下所示link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/backing_up_and_restoring/oadp-creating-backup-cr.html["文件"]。
+
+CSI 將建立支援磁碟的持久性磁碟區的快照。建立虛擬機器的備份及其磁碟的快照，並將其儲存在 yaml 中指定的備份位置。備份將按照 ttl 的規定在系統中保留 30 天。
+
+....
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: backup1
+  namespace: openshift-adp
+spec:
+  includedNamespaces:
+  - virtual-machines-demo
+  snapshotVolumes: true
+  storageLocation: velero-demo-1
+  ##velero-demo-1 is the backupStorageLocation
+  ##previously created when Velero is configured.
+
+  ttl: 720h0m0s
+....
+備份完成後，其階段將顯示為已完成。
+
+image:redhat-openshift-oadp-backup-001.png["備份完成"]
+
+您可以使用 S3 瀏覽器應用程式檢查物件儲存中的備份。備份路徑顯示在配置的儲存桶中，前綴名稱為（velero/demobackup）。您可以看到備份的內容包括虛擬機器的磁碟區快照、日誌和其他元資料。
+
+
+NOTE: 在 StorageGrid 中，您也可以使用租用戶管理器提供的 S3 控制台來檢視備份物件。
+
+image:redhat-openshift-oadp-backup-002.png["S3 中的備份對象"]
+
+
+
+[[creating-scheduled-backups]]
+=== 建立排程備份
+
+若要按排程建立備份，您需要建立 Schedule CR。排程只是一個 Cron 表達式，可讓您指定建立備份的時間。以下是建立 Schedule CR 的範例 yaml。
+
+[source, yaml]
+----
+apiVersion: velero.io/v1
+kind: Schedule
+metadata:
+  name: <schedule>
+  namespace: openshift-adp
+spec:
+  schedule: 0 7 * * *
+  template:
+    hooks: {}
+    includedNamespaces:
+    - <namespace>
+    storageLocation: velero-demo-1
+    defaultVolumesToFsBackup: true
+    ttl: 720h0m0s
+----
+Cron表達式 0 7 * * * 表示每天7:00建立備份。也指定了要包含在備份中的命名空間和備份的儲存位置。因此，不是使用備份 CR，而是使用計劃 CR 在指定的時間和頻率建立備份。
+
+一旦創建了計劃，它將被啟用。
+
+image:redhat-openshift-oadp-backup-003.png["已建立時間表"]
+
+備份將根據此計劃創建，並可從「備份」標籤中查看。
+
+image:redhat-openshift-oadp-backup-004.png["已建立時間表"]
+
+
+
+[[restore-a-vm-from-backup-in-red-hat-openshift-virtualization-using-velero]]
+== 使用 Velero 從 Red Hat OpenShift Virtualization 中的備份還原虛擬機
+
+使用 Velero 和 OpenShift API for Data Protection (OADP) 在 OpenShift Virtualization 中還原虛擬機器。此流程包括建立復原自訂資源 (CR) 以從備份中還原虛擬機器及其持久性磁碟區，並可選擇還原至原始命名空間、不同的命名空間或使用備用儲存類別。
+
+
+
+[[prerequisites]]
+=== 先決條件
+
+為了從備份中恢復，我們假設虛擬機器所在的命名空間被意外刪除了。
+
+
+
+[[restore-to-the-same-namespace]]
+=== 還原到同一命名空間
+
+[%collapsible]
+====
+要從我們剛剛建立的備份中恢復，我們需要建立一個恢復自訂資源 (CR)。我們需要為其提供一個名稱，提供我們想要從中還原的備份的名稱，並將 restorePVs 設為 true。可以設定其他參數，如下所示link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/backing_up_and_restoring/restoring-applications.html["文件"]。點選建立按鈕。
+
+image:redhat-openshift-oadp-restore-001.png["建立恢復 CR"]
+
+....
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore1
+  namespace: openshift-adp
+spec:
+  backupName: backup1
+  restorePVs: true
+....
+當階段顯示完成時，您可以看到虛擬機器已恢復到拍攝快照時的狀態。  （如果備份是在虛擬機器運行時建立的，則從備份還原虛擬機器將啟動還原的虛擬機器並使其處於運作狀態）。  VM 恢復到相同的命名空間。
+
+image:redhat-openshift-oadp-restore-002.png["恢復完成"]
+
+====
+
+
+[[restore-to-a-different-namespace]]
+=== 還原到不同的命名空間
+
+[%collapsible]
+====
+若要將 VM 還原到不同的命名空間，您可以在 Restore CR 的 yaml 定義中提供 namespaceMapping。
+
+以下範例 yaml 檔案建立一個復原 CR，以在將備份帶到虛擬機器命名空間時還原虛擬機器及其磁碟在虛擬機器-demo 命名空間中。
+
+....
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-to-different-ns
+  namespace: openshift-adp
+spec:
+  backupName: backup
+  restorePVs: true
+  includedNamespaces:
+  - virtual-machines-demo
+  namespaceMapping:
+    virtual-machines-demo: virtual-machines
+....
+當階段顯示完成時，您可以看到虛擬機器已恢復到拍攝快照時的狀態。  （如果備份是在虛擬機器運行時建立的，則從備份還原虛擬機器將啟動還原的虛擬機器並使其處於運作狀態）。  VM 已還原至 yaml 中指定的不同命名空間。
+
+image:redhat-openshift-oadp-restore-003.png["還原到新命名空間已完成"]
+
+====
+
+
+[[restore-to-a-different-storage-class]]
+=== 還原到不同的儲存類別
+
+[%collapsible]
+====
+Velero 提供了透過指定 json 補丁來修改復原期間資源的通用功能。在恢復資源之前，json 補丁會套用到資源上。json 補丁在 configmap 中指定，並在 restore 命令中引用該 configmap。此功能使您能夠使用不同的儲存類別進行復原。
+
+在下面的範例中，虛擬機器在建立期間使用 ontap-nas 作為其磁碟的儲存類別。建立了名為backup1的虛擬機器備份。
+
+image:redhat-openshift-oadp-restore-004.png["使用 ontap-nas 的虛擬機"]
+
+image:redhat-openshift-oadp-restore-005.png["虛擬機器備份 ontap-nas"]
+
+透過刪除虛擬機器來模擬虛擬機器的遺失。
+
+要使用不同的儲存類別（例如 ontap-nas-eco 儲存類別）還原虛擬機，您需要執行以下兩個步驟：
+
+**步驟 1**
+
+在 openshift-adp 命名空間中建立一個設定映射（控制台），如下所示： 填寫螢幕截圖中顯示的詳細資訊： 選擇命名空間：openshift-adp 名稱：change-storage-class-config（可以是任意名稱） 鍵：change-storage-class-config.yaml： 值：
+
+....
+version: v1
+resourceModifierRules:
+  - conditions:
+      groupResource: persistentvolumeclaims
+      resourceNameRegex: "^rhel*"
+      namespaces:
+        - virtual-machines-demo
+    patches:
+      - operation: replace
+        path: "/spec/storageClassName"
+        value: "ontap-nas-eco"
+....
+image:redhat-openshift-oadp-restore-006.png["配置地圖使用者介面"]
+
+產生的配置映射物件應如下所示（CLI）：
+
+image:redhat-openshift-oadp-restore-007.png["配置地圖 CLI"]
+
+此配置圖將在建立復原時套用資源修改規則。將應用程式補丁將以 rhel 開頭的所有持久化卷聲明的儲存類別名稱替換為 ontap-nas-eco。
+
+**步驟 2**
+
+若要復原虛擬機，請使用 Velero CLI 中的下列命令：
+
+....
+#velero restore create restore1 --from-backup backup1 --resource-modifier-configmap change-storage-class-config -n openshift-adp
+....
+虛擬機器與使用儲存類別 ontap-nas-eco 建立的磁碟在相同命名空間中復原。
+
+image:redhat-openshift-oadp-restore-008.png["VM 還原 ontap-nas-eco"]
+
+====
+
+
+[[delete-a-backup-cr-or-restore-cr-in-red-hat-openshift-virtualization-using-velero]]
+== 使用 Velero 在 Red Hat OpenShift Virtualization 中刪除備份 CR 或還原 CR
+
+使用 Velero 刪除 OpenShift Virtualization 中虛擬機器的備份和復原資源。使用 OpenShift CLI 刪除備份同時保留物件儲存數據，或使用 Velero CLI 刪除備份自訂資源 (CR) 和相關儲存數據。
+
+
+
+[[deleting-a-backup]]
+=== 刪除備份
+
+您可以使用 OC CLI 工具刪除備份 CR，而不刪除物件儲存資料。
+
+[source, cli]
+----
+oc delete backup <backup_CR_name> -n <velero_namespace>
+----
+如果要刪除備份 CR 並刪除關聯的物件儲存資料，可以使用 Velero CLI 工具來完成此操作。
+
+從 link:https://velero.io["velero.io"] 下載 Velero CLI。請使用與您的 OADP operator 版本相容的版本。您可以在文件 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-single/backup_and_restore/index#velero-oadp-version-relationship_velero-cli-tool["這裡"] 中找到相容的版本。
+
+使用 Velero CLI 執行以下刪除命令
+
+[source, cli]
+----
+velero backup delete <backup_CR_name> -n <velero_namespace>
+----
+
+
+[[deleting-a-restore]]
+=== 刪除恢復
+
+您可以使用 Velero CLI 刪除 Restore CR
+
+[source, cli]
+----
+velero restore delete restore --namespace openshift-adp
+----
+您可以使用 oc 指令以及 UI 來刪除復原 CR
+
+[source, cli]
+----
+oc delete restore <restore_CR_name> -n <velero_namespace>
+----

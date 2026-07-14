@@ -3,74 +3,58 @@ section: osv
 title: OpenShift 虛擬化
 url: "/openshift/index.html"
 entries:
-- title: 開始
+- title: 概況
   pdf-filename: Red Hat OpenShift 虛擬化概述
+  url: "/openshift/osv-overview.html"
+- title: 部署模型
+  pdf-filename: Red Hat OpenShift Virtualization 部署模型
+  url: "/openshift/osv-deployment-models.html"
+- title: 儲存和虛擬化入門
+  pdf-filename: Red Hat OpenShift 儲存與虛擬化
   entries:
-  - title: 關於 OpenShift 虛擬化
-    url: "/openshift/osv-overview.html"
-  - title: OpenShift 的儲存配置
-    url: "/openshift/os-netapp-overview.html"
-  - title: NetApp Trident儲存集成
-    url: "/openshift/os-storint-overview.html"
-- title: 部署最佳實踐
-  pdf-filename: NetApp上的 Red Hat OpenShift 虛擬化最佳實踐
-  url: "/openshift/os-osv-bpg.html"
-- title: 安裝Trident
-  pdf-filename: 安裝Trident
-  url: "/openshift/osv-trident-install.html"
-- title: 本地部署
-  pdf-filename: 在本機部署 Red Hat OpenShift 虛擬化
-  entries:
-  - title: 部署要求
-    url: "/openshift/osv-deployment-prerequisites.html"
-  - title: 部署 OpenShift 虛擬化
+  - title: 儲存入門
+    url: "/openshift/osv-storage-getting-started.html"
+  - title: 儲存配置
+    url: "/openshift/osv-trident-install.html"
+  - title: 使用ONTAP部署 Red Hat OpenShift 虛擬化
     url: "/openshift/osv-deployment.html"
-  - title: 建立虛擬機
-    url: "/openshift/osv-workflow-create-vm.html"
-  - title: 從 VMware 遷移虛擬機
-    url: "/openshift/osv-workflow-vm-migration-mtv.html"
-  - title: 在兩個叢集節點之間遷移虛擬機
-    url: "/openshift/osv-workflow-vm-live-migration.html"
-  - title: 克隆虛擬機
-    url: "/openshift/osv-workflow-clone-vm.html"
-  - title: 從快照建立虛擬機
-    url: "/openshift/osv-workflow-vm-from-snapshot.html"
-- title: 使用 FSxN 在 ROSA 上部署
-  pdf-filename: 使用Amazon FSx for ONTAP在 ROSA 上部署 Red Hat OpenShift Virtuzluation
-  entries:
-  - title: 在 ROSA 上部署 OpenShift
-    url: "/openshift/osv-rosa-overview.html"
-  - title: 重啟或即時遷移虛擬機
-    url: "/openshift/osv-rosa-vm-workflows.html"
-- title: 使用Trident和Trident Protect 保護虛擬機
-  entries:
-  - title: 使用磁碟區組快照保護虛擬機
-    url: "/openshift/osv-vm-dp-using-vgs.html"
-  - title: 使用快照和備份保護虛擬機
-    url: "/openshift/osv-vm-dp-using-tp.html"
-  - title: 設定故障轉移和故障回复
-    url: "/openshift/osv-vm-dr-using-tp.html"
-- title: 使用第三方工具保護虛擬機
+  - title: 虛擬機器部署
+    url: "/openshift/osv-vm-deployment.html"
+  - title: 建立虛擬機器的其他方法
+    url: "/openshift/osv-vm-deployment-other-methods.html"
+  - title: 叢集節點間虛擬機器的即時遷移
+    url: "/openshift/osv-vm-live-migration.html"
+  - title: 虛擬機器在不同儲存類別之間的儲存遷移
+    url: "/openshift/osv-migration-vm-storage.html"
+- title: 資料保護
   pdf-filename: Red Hat OpenShift 虛擬化資料保護
   entries:
-  - title: 使用 OADP 和 Velero 保護虛擬機
-    url: "/openshift/osv-vm-dp-using-velero-overview.html"
-  - title: 安裝 OADP
-    url: "/openshift/osv-oadp-installation.html"
-  - title: 使用 Velero 備份虛擬機
-    url: "/openshift/osv-vm-dp-using-velero.html"
-  - title: 使用 Velero 恢復虛擬機
-    url: "/openshift/osv-vm-restore-using-velero.html"
-  - title: 刪除備份和還原
-    url: "/openshift/osv-vm-dp-delete-using-velero.html"
-- title: 使用 DII 監控虛擬機
-  pdf-filename: Red Hat OpenShift 虛擬化監控
+  - title: 使用 Trident Protect 進行備份和還原
+    url: "/openshift/osv-vm-dp-using-tp.html"
+  - title: 使用磁碟區組快照保護虛擬機
+    url: "/openshift/osv-vm-dp-using-vgs.html"
+  - title: 使用第三方工具進行備份和還原
+    url: "/openshift/osv-data-protection-third-party-tools.html"
+- title: 災難復原
+  pdf-filename: Red Hat OpenShift 虛擬化災難復原
   entries:
-  - title: 關於DII
+  - title: 需求
+    url: "/openshift/osv-disaster-recovery-requirements.html"
+  - title: 來源集群設定
+    url: "/openshift/osv-disaster-recovery-source-cluster-setup.html"
+  - title: 目標叢集設定
+    url: "/openshift/osv-disaster-recovery-target-cluster-setup.html"
+  - title: 災難復原 - 手動災難復原
+    url: "/openshift/osv-disaster-recovery-simulate-dr.html"
+  - title: 故障復原 - 即時災難復原
+    url: "/openshift/osv-disaster-recovery-failback.html"
+- title: 使用Data Infrastructure Insights監控虛擬機
+  pdf-filename: Red Hat OpenShift Virtualization 使用 Data Infrastructure Insights 監控
+    VM
+  entries:
+  - title: 關於Data Infrastructure Insights
     url: "/openshift/os-ci-overview.html"
-  - title: 配置 D II
+  - title: 配置Data Infrastructure Insights
     url: "/openshift/os-ci-integration.html"
-  - title: 使用 DII 監控虛擬機
+  - title: 使用Data Infrastructure Insights監控虛擬機
     url: "/openshift/os-ci-samples.html"
-- title: 其他資源
-  url: "/openshift/os-additional-information.html"

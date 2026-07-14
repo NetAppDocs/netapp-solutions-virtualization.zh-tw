@@ -22,7 +22,7 @@ entries:
     url: "/migration/shift-toolkit-ui.html"
   - title: 使用 Shift Toolkit 遷移虛擬機
     entries:
-    - title: 概況
+    - title: 遷移過程概述
       url: "/migration/shift-toolkit-migration.html"
     - title: 將虛擬機器從 VMware ESXi 移轉到 Microsoft Hyper-V
       url: "/migration/shift-toolkit-migrate-esxi2hyperv.html"

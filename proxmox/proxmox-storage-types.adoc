@@ -15,18 +15,21 @@ Proxmox 虛擬環境 (VE) 支援多種與NetApp ONTAP相容的儲存協議，包
 
 
 
+[[nas-protocol-support]]
 == NAS協議支持
 
 NAS 協定（NFS 和 SMB）支援所有 Proxmox VE 內容類型，通常在資料中心層級配置一次。客戶虛擬機器可以在 NAS 儲存上使用 raw、qcow2 或 VMDK 磁碟格式。ONTAP快照可以對用戶端可見，以便存取特定時間點的資料副本。
 
 
 
+[[san-protocol-support]]
 == SAN協定支援
 
 SAN 協定（FC、iSCSI 和 NVMe-oF）通常會依照主機進行配置，並支援 Proxmox VE 中的 VM 磁碟和容器映像內容類型。客戶虛擬機器可以在區塊儲存上使用原始磁碟格式、VMDK 磁碟格式或 qcow2 磁碟格式。
 
 
 
+[[storage-type-compatibility-matrix]]
 == 儲存類型相容性矩陣
 
 [cols="25% 15% 15% 15% 15% 15%"]

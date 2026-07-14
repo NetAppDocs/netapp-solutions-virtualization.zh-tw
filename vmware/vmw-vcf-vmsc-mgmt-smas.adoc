@@ -20,6 +20,7 @@ image:vmware-vcf-asa-mgmt-stretchcluster-001.png["單一實例 - 多可用區域
 
 
 
+[[scenario-overview]]
 == 場景概述
 
 延伸叢集解決方案可以在預設叢集上實現，也可以在 VCF 管理或工作負載域中的附加叢集上實現。主資料儲存和補充資料儲存均支援 FC 上的 VMFS。 iSCSI 上的 VMFS 僅支援補充資料儲存。請參閱IMT以了解具有SnapMirror主動同步的 NVMe-oF 上的 VMFS 支援。
@@ -60,6 +61,7 @@ NOTE: 每當叢集擴展或縮小時，都需要更新叢集的ONTAP工具上的
 ====
 
 
+[[additional-information]]
 == 附加資訊
 
 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
@@ -68,6 +70,7 @@ NOTE: 每當叢集擴展或縮小時，都需要更新叢集的ONTAP工具上的
 
 
 
+[[video-demo-for-this-solution]]
 == 此解決方案的視訊演示
 
 .使用ONTAP工具為 VCF 擴展集群

@@ -26,6 +26,7 @@ SRA 與 SRM 一起使用，用於管理傳統 VMFS 和 NFS 資料儲存的生產
 
 
 
+[[scenario-overview]]
 == 場景概述
 
 此場景涵蓋以下進階步驟：
@@ -40,6 +41,7 @@ SRA 與 SRM 一起使用，用於管理傳統 VMFS 和 NFS 資料儲存的生產
 
 
 
+[[architecture]]
 == 架構
 
 下圖顯示了典型的 VMware Site Recovery 架構，其中配置了適用於ONTAP tools for VMware vSphere，採用 3 節點高可用性配置。
@@ -48,6 +50,7 @@ image:vmware-nfs-srm-005.png["配置設備"]{nbsp}
 
 
 
+[[prerequisites]]
 == 先決條件
 
 此場景需要以下組件和配置：
@@ -72,12 +75,14 @@ NetApp建議為 NFS 採用冗餘網路設計，為儲存系統、交換器、網
 
 
 
+[[deployment-steps]]
 == 部署步驟
 
 以下部分概述了使用ONTAP儲存系統實作和測試 VMware Site Recovery Manager 設定的部署步驟。
 
 
 
+[[create-snapmirror-relationship-between-ontap-storage-systems]]
 === 在ONTAP儲存系統之間建立SnapMirror關係
 
 必須在來源 ONTAP 儲存系統和目標ONTAP儲存系統之間建立SnapMirror關係，以保護資料儲存磁碟區。
@@ -88,6 +93,7 @@ NetApp建議為 NFS 採用冗餘網路設計，為儲存系統、交換器、網
 
 
 
+[[configure-the-srm-appliance]]
 === 配置 SRM 設備
 
 完成以下步驟來設定 SRM 設備和 SRA 適配器。
@@ -142,6 +148,7 @@ image:vmware-nfs-srm-004.png["新增新的 SRM 適配器"]
 ====
 
 
+[[configure-site-recovery-for-srm]]
 === 為 SRM 設定站點恢復
 
 完成以下步驟來設定網站配對、建立保護群組、
@@ -324,6 +331,7 @@ image:vmware-nfs-srm-026.png["測試網絡"]
 ====
 
 
+[[disaster-recovery-operations-with-srm]]
 == 使用 SRM 進行災難復原操作
 
 本節將介紹使用 SRM 進行災難復原的各種功能，包括測試故障轉移、執行故障轉移、執行重新保護和故障復原。
@@ -390,6 +398,7 @@ image:vmware-nfs-srm-032.png["Filover 已完成"]
 
 
 
+[[additional-information]]
 == 附加資訊
 
 有關將ONTAP儲存與 VMware SRM 結合使用的NetApp文檔，請參閱 https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-srm-overview.html#why-use-ontap-with-srm["搭載ONTAP 的VMware Site Recovery Manager"]

@@ -18,6 +18,7 @@ keywords: hybrid cloud, rosa, fsx ontap, azure vmware, netapp hci, videos, demos
 
 
 
+[[red-hat-openshift-service-on-aws-rosa-with-fsx-ontap]]
 == 帶有 FSx ONTAP 的AWS 上的 Red Hat OpenShift 服務（ROSA）
 
 .使用託管控制平面在 AWS 上將Amazon FSx for NetApp ONTAP與 Red Hat OpenShift 服務結合使用
@@ -30,6 +31,7 @@ video::36ecf505-5d1d-4e99-a6f8-b11c00341793[panopto,width=360]
 video::e9a07d79-42a1-4480-86be-b01200fa62f5[panopto,width=360]
 
 
+[[netapp-hci-solutions]]
 == NetApp HCI 解決方案
 
 .適用於 Red Hat 虛擬化上的 Red Hat OpenShift 的NetApp HCI

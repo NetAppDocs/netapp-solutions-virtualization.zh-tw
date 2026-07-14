@@ -34,6 +34,7 @@ NOTE: Trident在 25.06 版本中僅支援 iSCSI 協定的磁碟區組快照。
 
 
 
+[[step-1-install-openshift-4-19-and-enable-featuregate-for-volume-group-snapshots]]
 == 步驟 1：安裝 OpenShift 4.19 並為磁碟區組快照啟用 FeatureGate
 
 使用 Kubernetes 版本 1.32 安裝 OpenShift 4.19 叢集。此版本將磁碟區組快照功能提升至 Beta 狀態。  OpenShift 的後續版本可能包含 v1.32 以上的 Kubernetes 版本，這些版本也支援此功能。
@@ -58,6 +59,7 @@ image:redhat-openshift-ocpv-vgs-002.png["啟用 VolumeGroupSnapshot FeatureGate"
 
 
 
+[[step-2-install-and-configure-trident-25-06-for-volume-group-snapshots]]
 == 步驟 2：安裝並設定Trident 25.06 以用於磁碟區組快照
 
 Trident 25.06 中僅支援 iSCSI 協定的磁碟區組Trident功能。注意：您需要安裝Trident版本 25.06.1 才能在 OpenShift Cluster 4.19 上啟用 iSCSI 協定。
@@ -176,6 +178,7 @@ image:redhat-openshift-ocpv-vgs-006.png["卷冊組快照類"]
 
 
 
+[[step-3-install-openshift-virtualization-and-create-a-test-vm-with-multiple-disks]]
 == 步驟 3：安裝 OpenShift Virtualization 並建立具有多個磁碟的測試 VM
 
 安裝 OpenShift Virtualization Operator 以在叢集中啟用 VM 管理功能。安裝後，建立一個具有多個持久性磁碟的測試虛擬機器來示範磁碟區組快照功能。
@@ -207,6 +210,7 @@ image:redhat-openshift-ocpv-vgs-009.png["VM 磁碟"]
 
 
 
+[[step-4-label-vm-disks-for-group-snapshot-protection]]
 == 步驟 4：標記 VM 磁碟以進行群組快照保護
 
 磁碟區組快照使用標籤選擇器來識別哪些 PVC 屬於一起，確保所有相關的 VM 磁碟在同一時間點同時擷取。
@@ -274,6 +278,7 @@ image:redhat-openshift-ocpv-vgs-011.png["ONTAP一致性組"]
 
 
 
+[[step-5-restore-vm-disks-from-snapshots]]
 == 步驟 5：從快照還原 VM 磁碟
 
 此步驟驗證快照是否可以在需要時成功還原虛擬機器資料。假設我們失去了 `sample.txt`來自兩個資料磁碟的每個檔案。

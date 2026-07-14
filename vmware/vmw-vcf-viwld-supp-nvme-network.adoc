@@ -20,6 +20,7 @@ summary: '在 VI 工作負載域中的 ESXi 主機上設定 NVMe over TCP (NVMe/
 
 
 
+[[step-1-create-distributed-port-groups-for-nvmetcp-traffic]]
 == 步驟 1：為 NVME/TCP 流量建立分散式連接埠群組
 
 完成以下步驟為每個 NVMe/TCP 網路建立一個新的分散式連接埠群組。
@@ -81,6 +82,7 @@ image:vmware-vcf-asa-079.png["將上行鏈路 1 移至未使用狀態"]
 
 
 
+[[step-2-create-the-vmkernel-adapters-on-each-esxi-host]]
 == 步驟 2：在每個 ESXi 主機上建立 VMkernel 適配器
 
 在工作負載域中的每個 ESXi 主機上建立 VMkernel 適配器。
@@ -139,6 +141,7 @@ image:vmware-vcf-asa-098.png["檢查 VMkernel 選擇"]
 
 
 
+[[step-3-add-nvmetcp-adapter]]
 == 步驟 3：新增 NVMe/TCP 轉接器
 
 工作負載域叢集中的每個 ESXi 主機都必須為每個專用於儲存流量的已建立 NVMe/TCP 網路安裝 NVMe/TCP 軟體適配器。
@@ -199,6 +202,7 @@ image:vmware-vcf-asa-103.png["裝置下方列出的 NVMe 命名空間"]
 
 
 
+[[whats-next]]
 == 下一步是什麼？
 
 配置網路後，link:vmw-vcf-viwld-supp-nvme-storage.html["為 NVMe vVols配置存儲"] 。

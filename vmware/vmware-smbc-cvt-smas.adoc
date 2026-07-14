@@ -18,6 +18,7 @@ summary:
 
 
 
+[[overview]]
 == 概況
 
 link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/["NetApp Snapmirror 主動同步（SM 主動同步）"]是在虛擬化環境中實現零復原時間目標 (RTO) 和零復原點目標 (RPO) 的強大解決方案。
@@ -32,6 +33,7 @@ SM 主動同步（以前稱為SnapMirror業務連續性 (SMBC)）使業務服務
 
 
 
+[[prerequisites]]
 == 先決條件
 
 * NetApp儲存系統：確保您有兩個具有 Snapmirror 許可證的NetApp儲存叢集（來源和目標）。
@@ -47,6 +49,7 @@ SM 主動同步（以前稱為SnapMirror業務連續性 (SMBC)）使業務服務
 
 
 
+[[steps-to-convert-from-asymmetric-to-symmetric-sm-active-sync]]
 == 從非對稱 SM 主動同步轉換為對稱 SM 主動同步的步驟
 
 在下面的範例中，selectrz1 是主站點，selectrz2 是輔助站點。

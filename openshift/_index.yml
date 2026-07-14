@@ -10,56 +10,48 @@ indexpage:
     links:
     - title: 關於 OpenShift 虛擬化
       url: osv-overview.html
-    - title: OpenShift 的儲存配置
-      url: os-netapp-overview.html
-    - title: NetApp Trident儲存集成
-      url: os-storint-overview.html
-    - title: 部署最佳實踐
-      url: os-osv-bpg.html
+    - title: OpenShift 虛擬化部署模型
+      url: osv-deployment-models.html
     - title: 部落格
       url: "../blogs.html"
     - title: 影片
       url: "../videos/openshift-videos.html"
-  - title: 本地部署
+  - title: 儲存和虛擬化入門
     links:
-    - title: 部署要求
-      url: osv-deployment-prerequisites.html
+    - title: 儲存入門
+      url: osv-storage-getting-started.html
+    - title: 儲存配置
+      url: osv-trident-install.html
     - title: 使用ONTAP部署 Red Hat OpenShift 虛擬化
       url: osv-deployment.html
-    - title: 建立虛擬機
-      url: osv-workflow-create-vm.html
-    - title: 克隆虛擬機
-      url: osv-workflow-clone-vm.html
-    - title: 從快照建立虛擬機
-      url: osv-workflow-vm-from-snapshot.html
-  - title: 遷移虛擬機
+    - title: 虛擬機器部署
+      url: osv-vm-deployment.html
+    - title: 建立虛擬機器的其他方法
+      url: osv-vm-deployment-other-methods.html
+    - title: 叢集節點間虛擬機器的即時遷移
+      url: osv-vm-live-migration.html
+    - title: 虛擬機器在不同儲存類別之間的儲存遷移
+      url: osv-migration-vm-storage.html
+  - title: 使用 NetApp 儲存保護虛擬機器
     links:
-    - title: 將虛擬機器從 VMware 遷移到 OpenShift 集群
-      url: osv-workflow-vm-migration-mtv.html
-    - title: 在兩個叢集節點之間遷移虛擬機
-      url: osv-workflow-vm-live-migration.html
-  - title: 使用Trident和Trident Protect 保護虛擬機
-    links:
-    - title: 安裝Trident
-      url: osv-trident-install.html
+    - title: 使用 Trident Protect 進行備份和還原
+      url: osv-vm-dp-using-tp.html
     - title: 使用磁碟區組快照保護虛擬機
       url: osv-vm-dp-using-vgs.html
-    - title: 使用快照和備份保護虛擬機
-      url: osv-vm-dp-using-tp.html
-    - title: 設定故障轉移和故障回复
-      url: osv-vm-dr-using-tp.html
-  - title: 使用第三方工具保護虛擬機
+    - title: 使用第三方工具進行備份和還原
+      url: osv-data-protection-third-party-tools.html
+  - title: 災難復原
     links:
-    - title: 使用 OADP 和 Velero 保護虛擬機
-      url: osv-vm-dp-using-velero-overview.html
-    - title: 安裝 OADP
-      url: osv-oadp-installation.html
-    - title: 使用 Velero 備份虛擬機
-      url: osv-vm-dp-using-velero.html
-    - title: 使用 Velero 恢復虛擬機
-      url: osv-vm-restore-using-velero.html
-    - title: 刪除備份和還原
-      url: osv-vm-dp-delete-using-velero.html
+    - title: 災難復原的要求和注意事項
+      url: osv-disaster-recovery-requirements.html
+    - title: 災難復原來源叢集設置
+      url: osv-disaster-recovery-source-cluster-setup.html
+    - title: 災難復原的目標叢集設置
+      url: osv-disaster-recovery-target-cluster-setup.html
+    - title: 災難復原 - 手動災難復原
+      url: osv-disaster-recovery-simulate-dr.html
+    - title: 故障復原 - 即時災難復原
+      url: osv-disaster-recovery-failback.html
   - title: 使用Data Infrastructure Insights監控虛擬機
     links:
     - title: 關於Data Infrastructure Insights

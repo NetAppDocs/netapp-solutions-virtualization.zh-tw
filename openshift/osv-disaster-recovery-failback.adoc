@@ -1,0 +1,109 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-disaster-recovery-failback.html 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
+summary: Red Hat OpenShift 虛擬化 
+---
+= OpenShift 虛擬化災難復原中的虛擬機器故障回復
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節提供有關使用 NetApp Trident Protect 和 AppMirror 在 OpenShift Virtualization 災害復原中進行 VM 容錯回復程序的資訊。在執行容錯移轉作業以切換至災害復原目標叢集之後，您可以使用容錯回復程序來反轉複寫方向，並將原始來源叢集還原為 VM 的主要叢集。這包括將容錯移轉期間對 VM 所做的任何變更重新同步回原始來源叢集，然後反向提升複寫關係。透過遵循這些步驟，您可以確保在發生災害復原事件之後，您的 VM 能夠在原始來源叢集上執行，且所有變更均保持完整。
+
+
+
+[[failback-for-openshift-virtualization-disaster-recovery]]
+== OpenShift 虛擬化災難復原的容錯回復
+
+使用 Trident Protect，您可以透過以下步驟在故障轉移作業後實現「故障復原」。在此工作流程中，為了恢復原始複寫方向，Trident Protect 會在反轉複寫方向之前，將所有應用程式變更複寫（重新同步）回原始來源應用程式。
+
+此程序從已完成容錯移轉至目的地的關係開始，並涉及下列步驟：
+
+. 從故障轉移狀態開始。
+. 反向重新同步複製關係
++
+當您對故障轉移的複製關係進行反向同步時，目標應用程式將變為來源應用程式，而來源應用程式將變為目標應用程式。故障轉移期間對目標應用程式所做的變更將被保留。
+
++
+.. 在原始目標叢集上，刪除 AppMirrorRelationship CR。這將使目標叢集變為來源叢集。如果新目標叢集上仍有任何保護排程，請將其刪除。
++
+.顯示範例
+[%collapsible]
+====
+image:osv-disaster-recovery-013.png["OCP-v AppMirror 關係已刪除以啟動故障復原"]
+
+====
+.. 在新來源叢集（原目標叢集）上建立快照，以擷取故障轉移期間所做的任何變更。這可確保在重新同步過程中，所有變更都會複製回原始來源叢集。
++
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+# snapshot.yaml
+apiVersion: protect.trident.netapp.io/v1
+kind: Snapshot
+metadata:
+  name: test-source-dr-init-snapshot-failback
+  namespace: test-dr-ns
+spec:
+  applicationRef: test-dest-app
+  appVaultRef: ontap-s3-appvault
+  reclaimPolicy: Delete
+----
+image:osv-disaster-recovery-014.png["使用 Trident Protect CLI 在新來源叢集上建立的虛擬機器 OCP-v 隨需快照"] image:osv-disaster-recovery-015.png["使用 Trident Protect CLI 在新來源叢集上建立虛擬機器的 OCP-v 隨需快照"] image:osv-disaster-recovery-016.png["使用 Trident Protect CLI 在新來源叢集上建立的虛擬機器 OCP-v 隨需快照"]
+
+====
+.. 從新來源叢集（原始目標）到原始來源叢集建立複寫關係，並設定反向的值。
++
+.顯示範例
+[%collapsible]
+====
+# application-mirror-relationship.yaml
+
+[source, yaml]
+----
+apiVersion: protect.trident.netapp.io/v1
+kind: AppMirrorRelationship
+metadata:
+  name: amr1
+spec:
+  desiredState: Established
+  destinationAppVaultRef: ontap-s3-appvault
+  destinationApplicationRef: dr-source-vm-failback
+  namespaceMapping:
+  - destination: test-dr-ns
+    source: test-dr-ns-dest
+  recurrenceRule: |-
+    DTSTART:20240901T000200Z
+    RRULE:FREQ=MINUTELY;INTERVAL=5
+  sourceAppVaultRef: ontap-s3-appvault
+  sourceApplicationName: test-dest-app
+  sourceApplicationUID: "uid of the app in the original source cluster"
+  storageClassName: "sc-nas"
+----
+image:osv-disaster-recovery-017.png["OCP-v AppMirror 關係在原始來源叢集中建立，以反轉複製方向"] image:osv-disaster-recovery-018.png["OCP-v AppMirror 關係在原始目標叢集中建立，以反轉複製方向"]
+
+====
+.. 透過將 AppMirrorRelationship CR 中的 desiredState 欄位更新為 "Promoted"，將複寫關係從新來源叢集（原始目的地）提升至原始來源叢集。
++
+.顯示範例
+[%collapsible]
+====
+image:osv-disaster-recovery-019.png["OCP-v AppMirror 原始來源叢集中的關係已提升為完成故障復原"]
+
+現在您將看到虛擬機器在原始來源叢集中運作。故障回復程序現已完成。您現在可以清理原始目標叢集中的資源。如果您希望在故障回復程序後保持災難復原能力，也可以設定新的複寫關係。
+
+
+NOTE: 不要執行正常的重新同步作業，因為這會捨棄在容錯移轉程序期間寫入目的地叢集的資料。
+
+====
+
+
+

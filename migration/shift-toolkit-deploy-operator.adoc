@@ -17,6 +17,7 @@ summary: 使用 NetApp Trident CSI 和虛擬化遷移工具套件，以容器化
 
 
 
+[[architecture-components]]
 == 架構組件
 
 了解 NetApp Shift 工具包、Trident CSI 和 Migration Toolkit for Virtualization 如何協同運作，以在您的 OpenShift 環境中實現自動化儲存佈建和 VM 磁碟遷移。
@@ -26,7 +27,7 @@ image::shift_operator_architecture.png[Shift 運算子架構圖]
 *NetApp Shift 工具組*
 
 * 透過鏡像倉庫以容器化服務的形式部署
-* 公開一個端點，用於監聽來自 MTV 且帶有特定註解的持久性磁碟區宣告 (PVC) 請求
+* 公開一個端點，用於監聽來自 MTV 並帶有特定註解的持久性磁碟區宣告 (PVC) 請求。
 * 負責處理虛擬機器磁碟遷移任務，包括格式轉換
 
 
@@ -46,6 +47,7 @@ image::shift_operator_architecture.png[Shift 運算子架構圖]
 
 
 
+[[before-you-begin]]
 == 開始之前
 
 在部署 Shift 操作員之前，請確認您的 OpenShift 環境中已安裝並設定所需的元件。
@@ -53,19 +55,26 @@ image::shift_operator_architecture.png[Shift 運算子架構圖]
 * 虛擬化遷移工具包 Operator 執行版本為 2.12 或更新版本
 * Trident 透過 OpenShift OperatorHub 安裝 - link:https://docs.netapp.com/us-en/trident/trident-install/openshift-operator-deploy.html["Trident 安裝指南"]
 * NetApp Shift 以容器形式部署，NetApp Trident 可存取 Shift 端點。
-* 專門為 Shift 工具包使用而建立並標記的 Storage Class
-* 標籤表示 Shift 工具包是預期的處理程序
+* 專門為 Shift 工具包使用而建立並標註的 Storage Class
+* 這些註解將 Shift 工具包識別為預期的處理程序，並指定目標 Trident 後端。
 * MTV 對 PVC 包含以下註解： `forklift.konveyor.io/netapp-shift: "true"`
 
 
 
 
+[[step-1-download-and-extract-the-shift-installer]]
 == 步驟 1：下載並解壓縮 Shift 安裝程式
 
 Shift 安裝套件包含部署 Shift 操作員及安裝 Shift 所需的一切。
 
+
+NOTE: 如果您的叢集無法存取 quay.io，請跳過此步驟並改為按照 <<離線安裝（氣隙叢集）>> 程序操作。完成離線映像匯入後，請返回步驟 2。
+
 .步驟
 . 從 link:https://mysupport.netapp.com/site/tools/tool-eula/netapp-shift-toolkit["NetApp 支援網站工具箱"] 下載最新版本的 Shift 安裝程式。
++
+image::shift_operator_download-installer.png[Shift 安裝程式下載頁面]
+
 . 解壓縮安裝包：
 +
 [source, bash]
@@ -82,6 +91,7 @@ cd shift-installer
 
 
 
+[[step-2-create-the-shift-namespace-and-api-credentials]]
 == 步驟 2：建立 Shift 命名空間和 API 憑證
 
 為 Shift 操作員設定專用命名空間，並建立安全 API 存取所需的憑證。
@@ -93,7 +103,7 @@ cd shift-installer
 ----
 oc create ns shift
 ----
-. 在 Shift 命名空間內建立 Shift API 存取的 Secret：
+. 在 Shift 命名空間內建立 Shift API 存取的 Secret。請將範例值替換為您環境中的唯一使用者名稱和強式密碼：
 +
 [source, bash]
 ----
@@ -104,8 +114,89 @@ oc create secret generic shift-credentials -n shift \
 
 
 
+NOTE: 請將密碼替換為您偏好的值。
 
-== 步驟 3：部署 Shift 運算子
+
+
+[[step-3-create-tls-certificate-configmaps]]
+== 步驟 3：建立 TLS 憑證 ConfigMaps
+
+建立 ConfigMaps，提供 Shift 服務用於處理 HTTPS 流量的 TLS 憑證和私鑰。
+
+頒發憑證時，CN/SAN 必須設定為 `shift-toolkit-service.shift.svc.cluster.local`。憑證檔案和金鑰檔案必須分別命名為 `server.cert`和 `server.key`。
+
+.步驟
+. 建立 TLS 憑證的 ConfigMap：
++
+[source, bash]
+----
+oc create configmap shift-toolkit-service-server-crt -n shift \
+  --from-file=server.cert=server.cert
+----
+. 建立 TLS 私鑰的 ConfigMap：
++
+[source, bash]
+----
+oc create configmap shift-toolkit-service-server-key -n shift \
+  --from-file=server.key=server.key
+----
+
+
+
+NOTE: 如果未使用 HTTPS，請在 `bundle.yaml`中設定 `INSECURE_TLS=true`。即使已停用 HTTPS 且未實際使用 TLS 憑證，仍應按照上述說明建立所需的 ConfigMaps。
+
+
+
+[[step-4-create-the-ca-bundle-configmap]]
+== 步驟 4：建立 CA 套件 ConfigMap
+
+建立 ConfigMap，提供 PVC 監聽器用於驗證 Shift 服務 TLS 憑證的 CA 套件。
+
+.步驟
+. 指向 `--from-file` `server.cert`PEM 檔案。
++
+ConfigMap 中的金鑰必須為 `ca.crt`。有了此 ConfigMap，監聽器便會以 `INSECURE_TLS=false`執行，並使用 `SHIFT_CA_CERT_FILE`針對此套件組合驗證 Shift 憑證。
+
+. 建立 CA 套件組合的 ConfigMap：
++
+[source, bash]
+----
+oc create configmap shift-toolkit-service-ca -n shift \
+  --from-file=ca.crt=ca.cert
+----
+
+
+
+
+[[step-5-create-persistent-volume-claims]]
+== 步驟 5：建立持續性磁碟區宣告
+
+在部署套件組合之前，建立 Shift filedb（資料庫）和日誌所需的 PVC。
+
+.步驟
+. 在套用 PVC 定義之前，請更新 `deploy/filedb-pvc.yaml`和 `deploy/logs-pvc.yaml`，以指定適合您叢集的 `storageClassName`（例如， `ontap-storageclass`）。
++
+
+NOTE: 這些 PVC 必須在步驟 6：部署 Shift 運算子中部署套件組合之前建立並可供使用。
+
+. 套用 filedb PVC 清單：
++
+[source, bash]
+----
+oc apply -f deploy/filedb-pvc.yaml
+----
+. 套用日誌 PVC 清單：
++
+[source, bash]
+----
+oc apply -f deploy/logs-pvc.yaml
+----
+
+
+
+
+[[step-6-deploy-the-shift-operator]]
+== 步驟 6：部署 Shift 運算子
 
 將 Shift 操作員配置套用到您的 OpenShift 叢集，並驗證所需的 pod 是否成功運作。
 
@@ -135,8 +226,12 @@ shift-pvc-listener-57d546f6b8-r9mgc      1/1     Running   0          18s
 
 
 
+NOTE: 若要取消部署，請執行 `oc delete -f deploy/bundle.yaml --ignore-not-found`。此指令會移除由 `bundle.yaml`部署的資源，同時保留命名空間和金鑰。
 
-== 步驟 4：配置 Shift 整合的 Storage Class
+
+
+[[step-7-configure-the-storage-class-for-shift-integration]]
+== 步驟 7：配置 Shift 整合的 Storage Class
 
 建立新的 Storage Class 或使用 Shift 整合所需的註解更新現有 Storage Class。
 
@@ -148,20 +243,6 @@ shift-pvc-listener-57d546f6b8-r9mgc      1/1     Running   0          18s
 
 
 .步驟
-. 驗證現有儲存類別：
-+
-[source, bash]
-----
-oc get sc
-----
-+
-範例輸出：
-
-+
-[source, console]
-----
-nimnas1172 (default)   csi.trident.netapp.io   Delete          Immediate         true
-----
 . 使用所需的註解修補儲存類別：
 +
 [source, bash]
@@ -189,12 +270,127 @@ storageclass.storage.k8s.io/nimnas1172 patched
 
 NOTE: 可以透過執行以下命令來取得後端 UUID： `oc get tbc -n trident`
 
+. 驗證現有儲存類別：
++
+[source, bash]
+----
+oc get sc
+----
++
+範例輸出：
+
++
+[source, console]
+----
+nimnas1172 (default)   csi.trident.netapp.io   Delete          Immediate         true
+----
 
 
 
 
-== 接下來
+[[step-8-create-and-trigger-the-mtv-plan]]
+== 步驟 8：建立並觸發 MTV 計畫
 
 完成 Shift 操作員部署和儲存類別配置後，即可建立並觸發 MTV 方案。
 
+image::shift_mtv_plan_overview.png[MTV 遷移計畫]
+
 有關製定 MTV 計劃的詳細資訊，請參閱link:https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.3/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vms-web-console["Migration Toolkit for Virtualization 文件"]。
+
+以下螢幕截圖顯示觸發移轉計畫時執行的步驟順序。
+
+image::shift_migration_plan_steps.png[遷移計劃執行步驟]
+
+以下螢幕截圖顯示了使用 Shift 工具包轉換並隨後由 NetApp Trident 匯入的 PVC。
+
+image::shift_pvcs_trident_imported.png[由 NetApp Trident 匯入的 PVC]
+
+image::shift_migration_completed.png[遷移計劃已成功完成]
+
+*遷移計畫已成功完成* — 5 台虛擬機器和約 5 TB 的資料在約 6 分鐘內完成遷移。
+
+.接下來
+遷移完成後，必須分離每個複製磁碟區。分離方法取決於 ONTAP 版本：ONTAP 9.17.1 及更新版本使用 clone split，舊版則使用 vol move。
+
+克隆分割和磁碟區移動都是背景操作，運作期間不會影響生產工作負載。您可以在 NetApp Console 自動化目錄中的「遷移後分離」小工具中找到用於啟動分離程序的腳本。
+
+
+
+[[offline-installation-air-gapped-clusters]]
+== 離線安裝（氣隙叢集）
+
+本節介紹一種適用於無法存取 quay.io 的叢集的*替代安裝路徑*。如果您的叢集可以存取 quay.io，請依照步驟 1–8 操作。
+
+對於無法存取 quay.io 的叢集，請在部署套件組合之前，將映像檔 tarball 匯入 OpenShift 內部登錄。
+
+無需外部鏡像倉庫路由。鏡像推送操作和套件鏡像引用均使用 `image-registry.openshift-image-registry.svc:5000`，可透過叢集網路存取並由叢集 CA 保護。
+
+.開始之前
+* `oc` CLI 已使用叢集管理員權限登入
+* `skopeo` 已安裝
+* 主機上可用的映像 tarball：
++
+** `shift-toolkit-1.0.0-image.tar`
+** `shift-toolkit-listener-1.0.0-image.tar`
+
+
+
+
+.步驟
+. 啟用內部登錄（一次性步驟；如已設定，請跳過）：
++
+[source, bash]
+----
+oc patch configs.imageregistry.operator.openshift.io cluster \
+  --type=merge -p '{"spec":{"defaultRoute":true}}'
+oc get route default-route -n openshift-image-registry
+----
+. 使用作用中 `oc`工作階段產生登錄憑證：
++
+請勿使用原始服務帳戶權杖，因為它可能會在 Blob 上傳期間失敗。請使用 `oc registry login`建立與登錄重新導向流程相容的驗證檔案。
+
++
+[source, bash]
+----
+REGISTRY=image-registry.openshift-image-registry.svc:5000
+oc registry login --skip-check \
+  --registry=$REGISTRY \
+  --to=/tmp/registry-auth.json
+----
+. 將 Shift 工具包映像推送至內部登錄：
++
+[source, bash]
+----
+skopeo copy \
+  docker-archive:shift-toolkit-1.0.0-image.tar \
+  docker://$REGISTRY/shift/shift-toolkit:1.0.0 \
+  --dest-tls-verify=false \
+  --dest-authfile=/tmp/registry-auth.json
+----
+. 將 Shift 工具包監聽器映像推送至內部登錄：
++
+[source, bash]
+----
+skopeo copy \
+  docker-archive:shift-toolkit-listener-1.0.0-image.tar \
+  docker://$REGISTRY/shift/shift-toolkit-listener:1.0.0 \
+  --dest-tls-verify=false \
+  --dest-authfile=/tmp/registry-auth.json
+----
+. 更新 `deploy/bundle.yaml`中的映像參考，以使用內部登錄：
++
+[source, bash]
+----
+sed -i \
+  -e "s|quay.io/netapp/shift-toolkit:1.0.0|$REGISTRY/shift/shift-toolkit:1.0.0|g" \
+  -e "s|quay.io/netapp/shift-toolkit-listener:1.0.0|$REGISTRY/shift/shift-toolkit-listener:1.0.0|g" \
+  -e "s|imagePullPolicy: Always|imagePullPolicy: IfNotPresent|g" \
+  deploy/bundle.yaml
+----
+. 部署軟體包：
++
+[source, bash]
+----
+oc apply -f deploy/bundle.yaml
+----
+

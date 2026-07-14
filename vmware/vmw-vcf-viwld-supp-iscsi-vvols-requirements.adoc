@@ -18,6 +18,7 @@ summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 iSCSI vVols 
 
 
 
+[[infrastructure-requirements]]
 == 基礎設施需求
 
 確保以下組件和配置已到位。
@@ -29,6 +30,7 @@ summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 iSCSI vVols 
 
 
 
+[[recommended-iscsi-network-design]]
 == 推薦的 iSCSI 網路設計
 
 您應該為 iSCSI 配置完全冗餘的網路設計。下圖說明了冗餘配置的範例。它為儲存系統、交換器、網路適配器和主機系統提供容錯功能。有關更多信息，請參閱NetApplink:https://docs.netapp.com/us-en/ontap/san-config/index.html["SAN 配置參考"^] 。
@@ -44,6 +46,7 @@ NOTE: 在同一 IP 網路上配置多個 VMkernel 適配器的情況下，請在
 
 
 
+[[whats-next]]
 == 下一步是什麼？
 
 在審查了部署要求之後，link:vmw-vcf-viwld-supp-iscsi-vvols-svm-lifs.html["建立 SVM 和 LIF"] 。

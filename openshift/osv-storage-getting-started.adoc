@@ -1,0 +1,118 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-storage-getting-started.html 
+keywords: Trident, persistent storage 
+summary: NetApp 提供多種產品，協助客戶在容器型環境（例如 Red Hat OpenShift）中協調和管理持久性資料。 
+---
+= 了解NetApp Trident與 Red Hat OpenShift 的集成
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+儲存對於容器化應用程式至關重要，它能確保資料在動態且往往短暫的環境中持續可用並且高效管理。現代容器儲存解決方案旨在與應用程式無縫擴展，可根據應用程式需求靈活動態分配儲存資源，從而支援成長和多樣化的工作負載。由於 OpenShift 虛擬化技術使虛擬機器能夠以容器的形式運行，因此它們與 OpenShift 叢集中的其他應用程式使用相同的儲存空間。
+
+NetApp ONTAP 是一款強大且高度可擴展的資料管理軟體，是 NetApp 企業級儲存解決方案的核心。它提供統一的儲存架構，可與各種儲存環境無縫整合，包括本地部署、雲端和混合部署。ONTAP 支援多種通訊協定，例如 NFS、CIFS/SMB、iSCSI、FC 和基於 TCP 的 NVMe，從而能夠與不同的應用程式和工作負載無縫整合。它支援將 SAN、NAS 和物件儲存整合到單一平台，從而簡化管理並降低成本。NetApp ONTAP 既可在本地部署使用，也可在雲端以託管服務形式提供。
+
+
+
+[[netapp-trident]]
+== NetApp Trident
+
+Trident 是由 NetApp 開發的開源儲存協調器，旨在簡化 ONTAP 儲存於容器化環境中的使用。它支援為容器化應用程式動態佈建和管理持續性儲存。
+
+
+
+[[key-features-of-trident]]
+=== Trident 的主要功能
+
+**CSI 相容性** 確保與最新的 Kubernetes 儲存功能和標準相容。**聲明式設定** 允許使用者在 YAML 檔案中定義儲存需求，Trident 將自動管理這些需求。**驅動程式** Trident 支援 ONTAP 支援的 NFS、CIFS/SMB、iSCSI、FC 和 NVMe/TCP 協定的驅動程式。**混合雲和多雲支援** Trident 支援 ONTAP 本地儲存以及超大規模雲端服務商（例如 AWS 中的 FSx for NetApp ONTAP、Azure 中的 Azure NetApp Files 和 Google Cloud 中的 Google Cloud NetApp Volumes）中的託管儲存服務的驅動程式。**進階資料管理** 利用 ONTAP 的快照和複製功能，實現高效的資料保護並快速佈建測試和開發環境。
+
+有關 Trident 的完整詳細資訊，請參閱 NetApp Trident link:https://docs.netapp.com/us-en/trident/["文件在此處"]
+
+
+
+[[trident-protect]]
+== Trident Protect
+
+Trident Protect 是 Trident 的進階功能，可為容器化環境提供增強的資料保護和安全性。其設計旨在確保關鍵資料免受潛在威脅和資料遺失情境的影響。所有 Trident 使用者均可免費使用此功能，並可在任何已安裝 Trident 的 OpenShift 叢集中輕鬆啟用。
+
+
+
+[[key-features-of-trident-protect]]
+=== Trident Protect 的主要功能
+
+**自動備份** Trident Protect 可對容器應用程式和虛擬機器進行自動、原則驅動的備份，確保定期備份而無需人工介入。
+
+**快照管理** 它利用 ONTAP 的快照功能，為容器應用程式和虛擬機器建立頻繁的時間點副本，提供可靠的復原機制。
+
+**資料加密** 確保資料在儲存和傳輸過程中均已加密，滿足嚴格的安全要求並保護敏感資訊。
+
+**合規與審計** 提供工具和功能，幫助組織滿足合規要求並定期稽核其資料保護實務。
+
+**災難復原** 與 ONTAP 的複寫功能整合，提供強大的災難復原解決方案，即使面對災難性事件也能確保業務連續性。
+
+有關 Trident Protect 的完整詳細資訊，請參閱 NetApp Trident Protect link:https://docs.netapp.com/us-en/trident/trident-protect/learn-about-trident-protect.html["文件在此處"]。
+
+
+
+[[netapp-ontap-hardware-models-and-protocols-supported]]
+== NetApp ONTAP 硬體型號與支援的通訊協定
+
+NetApp ONTAP 軟體可在多種硬體型號上運行，每種型號都旨在滿足不同的效能和容量需求。Trident 擴展了其強大的功能，以支援各種 NetApp ONTAP 系統，包括全快閃 FAS （AFF）、全 SAN 陣列 （ASA） 和 ASA R2 系統。這種支援確保企業能夠在容器化環境中充分發揮其高效能儲存解決方案的潛力。
+
+**全快閃 FAS （AFF）系統** AFF 系統具有卓越的效能和低延遲，使其成為高需求應用程式的理想選擇。
+
+**All SAN Array (ASA) 系統** ASA 系統專為專用 SAN 環境而設計，提供強大的效能和可靠性。
+
+**ASA R2 Systems** ASA R2 系統為 SAN 環境提供增強的功能和效能。
+
+**AFX** NetApp AFX 是一種專為企業級 AI 工作負載而設計的解耦式全快閃儲存架構。它提供高效能 NAS，支援運算能力和容量的獨立擴充。NetApp AFX 儲存系統與其他基於 ONTAP 的系統（ASA、AFF 和 FAS）的差異在於其儲存層的實作方式。AFX 使用分散式檔案系統，從而實現高效能和可擴充性，而其他基於 ONTAP 的系統則採用傳統的儲存架構。
+
+. AFF 支援的協定：NFS、CIFS/SMB、iSCSI、FC、NVMe/TCP
+. ASA 支援的協定：iSCSI、FC、NVMe/TCP
+. ASA R2 支援的協定：iSCSI、FC、NVMe/TCP
+. AFX 支援的協定：從 Trident 25.10 開始，僅支援 NFS 協定；不支援 SMB 協定。
+
+
+
+
+[[trident-drivers-for-ontap-storage]]
+== 用於 ONTAP 儲存的 Trident 驅動程式
+
+Trident 包含以下 CSI 驅動程式，每個驅動程式都能夠在後端儲存中佈建磁碟區。
+
+
+
+[[for-nas-protocols-on-supported-hardware-models]]
+=== 適用於支援硬體型號上的 NAS 通訊協定
+
+. ontap-nas：一個 PVC 映射到一個 PV，該 PV 是一個專用的 flexvolume
+. ontap-nas-economy：每個配置的 PV 都是一個 qtree，每個 FlexVolume 可配置的 qtree 數量（預設值為 200，可配置範圍為 50 到 300）。一個 PVC 映射到一個 PV，該 PV 是共享 flexvolume 上的一個 qtree。
+
+
+
+NOTE: 您可以將所有虛擬機器的磁碟作為 qtree 放置在單一磁碟區中。但是，請注意，Trident 不支援快照、複製和複寫功能。當這些功能由儲存管理員管理時，它們並非針對單一 PV 進行細粒度控制。
+
+. ontap-nas-flexgroup：每個配置的 PV 都是一個完整的 ONTAP FlexGroup，並且會使用分配給 SVM 的所有集合體。
+
+
+
+
+[[for-san-protocols-on-supported-hardware-models]]
+=== 對於受支援硬體型號上的 SAN 通訊協定
+
+. ontap-san：一個 PVC 映射到一個 PV，該 PV 是專用 FlexVol 上的一個 LUN。
+. ontap-san-economy：一個 PVC 映射到一個 PV，PV 是共享 FlexVolume 上的一個 LUN。共享 FlexVolume 中可以有多個 LUN。（預設值為 100，每個 FlexVolume 磁碟區可配置為 50 到 200 個 LUN/PV）
+
+
+
+NOTE: 您可以將所有虛擬機器的磁碟作為 LUN 放置在單一磁碟區中。但是，此驅動程式雖然支援 Snapshots 和 Clones，但不支援 Replication。當 Replication 由儲存管理員管理時，它不是以 PV 為單位的細粒度控制。
+
+image:redhat-openshift-osv-storage-001.png["用於 ONTAP 儲存的 Trident 驅動程式"]
+
+有關透過 Trident 驅動程式公開的功能以及必須由儲存管理員套用的功能的完整清單，請參閱 Trident 文件中的link:https://docs.netapp.com/us-en/trident/trident-reco/integrate-trident.html#ontap-backend-drivers["ONTAP 後端驅動程式"]章節。

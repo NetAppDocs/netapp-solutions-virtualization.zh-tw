@@ -18,6 +18,7 @@ summary: '本技術報告介紹如何使用 Cirrus Migrate Cloud (CMC) 的 Migra
 
 
 
+[[high-level-architecture]]
 == 進階架構
 
 下圖說明了使用 CMC MigrateOps 將 VMware 上的虛擬機器磁碟 (VMDK) 資料遷移到 AWS 的高階架構：
@@ -26,10 +27,12 @@ image:migrate-ec2-fsxn-001.png["使用 FSx ONTAP將虛擬機器移轉到 Amazon 
 
 
 
+[[how-to-migrate-your-vmware-vms-to-aws-using-amazon-ec2-and-fsx-ontap-iscsi]]
 == 如何使用 Amazon EC2 和 FSx ONTAP iSCSI 將 VMware VM 移轉到 AWS
 
 
 
+[[prerequisites]]
 === 先決條件
 
 在開始演練步驟之前，請確保滿足以下先決條件：

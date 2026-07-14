@@ -26,6 +26,7 @@ image:redhat-openshift-ocpv-rosa-023.png["OCP-v VM重啟文件"]
 
 
 
+[[vm-live-migration]]
 == 虛擬機器即時遷移
 
 在本節中，我們將執行 VM 即時遷移，然後檢查磁碟的內容。即時遷移是指將正在運作的虛擬機器 (VM) 從一台實體主機移至另一台主機的過程，而不會中斷正常操作或導致任何停機，或對最終使用者造成其他不利影響。即時遷移被認為是虛擬化的重要步驟。它允許將整個虛擬機器連同正在運行的作業系統 (OS)、記憶體、儲存和網路連接從當前節點移動到目標節點。下面我們將看到如何執行虛擬機器從目前節點到新節點的即時遷移。
@@ -48,6 +49,7 @@ image:redhat-openshift-ocpv-rosa-023.png["OCP-v VM重啟文件"]
 
 
 
+[[demo-video]]
 == 示範影片
 
 .使用Amazon FSx for NetApp ONTAP在 ROSA 上的 OpenShift 虛擬化中即時遷移虛擬機

@@ -19,6 +19,7 @@ PBS 支援多種儲存後端，包括本機儲存、NFS、iSCSI 和 S3 相容的
 
 
 
+[[solution-architecture]]
 == 解決方案架構
 
 此解決方案包含以下組件：

@@ -18,6 +18,7 @@ summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化
 
 
 
+[[prerequisites]]
 == 先決條件
 
 為了從備份中恢復，我們假設虛擬機器所在的命名空間被意外刪除了。

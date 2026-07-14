@@ -1,0 +1,80 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-disaster-recovery-simulate-dr.html 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
+summary: Red Hat OpenShift 虛擬化 
+---
+= OpenShift 虛擬化災難復原中的 VM 故障移轉
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節介紹如何使用 NetApp Trident Protect 和 AppMirror 將虛擬機器從來源叢集故障轉移到災難復原目標叢集。這有助於測試故障轉移程序，以及對來源叢集執行計劃性維護。按照這些步驟操作，您可以確保在災難復原事件發生後，虛擬機器在災難復原目標叢集上正常運行，並且所有變更都完好無損。
+
+
+
+[[failover-without-site-outage-for-openshift-virtualization]]
+== OpenShift 虛擬化無站台中斷的容錯移轉
+
+本節介紹如何在不中斷網站服務的情況下，將虛擬機器從來源叢集進行故障轉移。這對於測試故障轉移程序以及對來源叢集執行計劃內維護非常有用。+
+
+若要在不中斷站台服務的情況下執行容錯移轉，首先要確保來源叢集和目標叢集已依照前幾節所述設定災難恢復。然後，執行以下步驟：
+
+. 建立來源叢集與目標叢集之間的 AppMirror 關係。AppMirror 關係建立後，最新快照將傳輸至目標命名空間。目標命名空間中的 VM 已建立 PVC，但 VM Pod 尚未在目標命名空間中建立。
++
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+# application-mirror-relationship.yaml
+apiVersion: protect.trident.netapp.io/v1
+kind: AppMirrorRelationship
+metadata:
+  name: amr1
+spec:
+  desiredState: Established
+  destinationAppVaultRef: ontap-s3-appvault
+  destinationApplicationRef: test-dest-app
+  namespaceMapping:
+  - destination: test-dr-ns-dest
+    source: test-dr-ns
+  recurrenceRule: |-
+    DTSTART:20240901T000200Z
+    RRULE:FREQ=MINUTELY;INTERVAL=5
+  sourceAppVaultRef: ontap-s3-appvault
+  sourceApplicationName: test-source-app
+  sourceApplicationUID: "<application-uid-of-the-source-app>"
+  storageClassName: "sc-nas"
+----
+image:osv-disaster-recovery-009.png["OCP-v AppMirror 在 trident-protect 命名空間中的關係"]
+
+image:osv-disaster-recovery-010.png["OCP-v AppMirror 關係已在 trident-protect 命名空間中建立"]
+
+
+NOTE: 應從目標叢集的 CLI 建立 AppMirror 關係。應以「已建立」作為所需狀態來建立此關係。這將確保最新的快照資料複製到目標叢集。
+
+====
+. 提升 AppMirror 關係。將關係的期望狀態變更為「已提升」，即可在目標命名空間中建立虛擬機器。虛擬機器仍在來源命名空間中運作。最新的快照資料將複製到目標叢集，虛擬機器將在目標叢集上啟動。此方法可讓您測試容錯移轉並保持虛擬機器可用性，而無需關閉整個來源叢集。
++
+.顯示範例
+[%collapsible]
+====
+[source, cli]
+----
+oc patch amr amr1 -n test-dr-ns-dest --type=merge -p '{"spec":{"desiredState":"Promoted"}}'
+----
+image:osv-disaster-recovery-012.png["OCP-v AppMirror 關係已提升"]
+
+[source, cli]
+----
+oc get pod, pvc,vm -n test-dr-ns-dest
+oc get pod, pvc,vm -n test-dr-ns
+----
+====
+

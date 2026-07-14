@@ -1,0 +1,66 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-deployment-models.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: Red Hat OpenShift 虛擬化 
+---
+= OpenShift/OpenShift Virtualization 的部署模型
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+OpenShift 容器平台部署模型主要根據其運行的基礎架構（雲端或本地端）以及管理方式（由 Red Hat 或客戶管理）進行分類。OpenShift 虛擬化技術可以安裝在 OpenShift 容器平台上。
+
+
+
+[[key-deployment-models-include]]
+== 主要部署模型包括
+
+. **Managed Services （Red Hat Managed）**：在此模式下，Red Hat 負責管理 OpenShift 容器平台的基礎架構和運維。客戶則負責管理其運行在該平台上的應用程式和工作負載。例如：
++
+.. **Red Hat OpenShift Service on AWS (ROSA)**：一項託管服務，可輕鬆與 AWS 服務整合。OpenShift Virtualization 安裝在 AWS 上的 EC2 裸機執行個體上。
+.. **Azure Red Hat OpenShift (ARO)**：這是 Azure 雲端上的託管服務。OpenShift 虛擬化技術運行於 Azure 虛擬機器之上。
+.. **Red Hat OpenShift Dedicated (OSD)**：由 Red Hat 管理，部署在 Google Cloud 上的完全託管服務。OpenShift Virtualization 部署在 Google Cloud 裸機執行個體上。
+
+
+. **自架服務（客戶管理）**：在這種情況下，OpenShift 容器平台由客戶直接部署和管理在其自身的基礎架構上。此基礎架構可以是公有雲，也可以是本地部署。
++
+.. **公有雲：**部署在 AWS、Azure 或 GCP 上，使用安裝程式佈建的基礎架構 （IPI） 或使用者佈建的基礎架構 （UPI）。
+.. **裸機：**直接部署在實體硬體上。
+.. **虛擬化：**部署在 VMware vSphere 等平台上。
+
+
+
+
+
+
+[[infrastructure-deployment-options]]
+=== 基礎架構部署選項
+
+. **安裝程式設定的基礎架構 （IPI）：** 安裝程式可自動設定基礎架構元件，例如網路和機器。
+. **使用者配置的基礎架構 （UPI）：** 使用者手動建立和管理基礎架構，從而對環境擁有更大的控制權。
+
+
+
+
+[[specialized-deployment-models]]
+== 專業部署模式
+
+. **單節點 OpenShift （SNO）：** 安裝在單一實體機或虛擬機上的完整 OpenShift 叢集，通常用於邊緣運算。
+. **中斷連線（實體隔離）部署：**部署在受限的網路環境中，沒有外部網際網路存取。
+. **Red Hat OpenShift Virtualization Engine：** 僅限裸機的虛擬化基礎架構，專為企業提供可靠、企業級的解決方案，用於部署、管理和擴充 VM。作為 OpenShift 功能的子集，此版本的 OpenShift 專門針對僅限虛擬機器的工作負載。
+
+
+
+
+[[additional-resources]]
+== 其他資源
+
+有關 OpenShift Container platform 的完整詳細資訊，請參閱 Red Hat link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/overview/ocp-overview["文件在此。"]
+
+有關 OpenShift 虛擬化的完整詳細資訊，請參閱 Red Hat link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/virtualization/index["文件在此。"]

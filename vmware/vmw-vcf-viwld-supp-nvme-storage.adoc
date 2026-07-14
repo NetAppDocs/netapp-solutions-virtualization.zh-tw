@@ -56,6 +56,7 @@ image:vmware-vcf-asa-107.png["連接到資料儲存區的主機"]
 
 
 
+[[additional-information]]
 == 附加資訊
 
 * 有關配置 SAN 冗餘的更多信息，請參閱link:https://docs.netapp.com/us-en/ontap/san-config/index.html["NetApp SAN 設定參考"^]。

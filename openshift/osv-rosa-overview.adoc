@@ -20,6 +20,7 @@ summary: ROSA 上的 Red Hat OpenShift 虛擬化
 
 
 
+[[prerequisites]]
 == 先決條件
 
 * link:https://signin.aws.amazon.com/signin?redirect_uri=https://portal.aws.amazon.com/billing/signup/resume&client_id=signup["AWS 帳號"]
@@ -39,6 +40,7 @@ summary: ROSA 上的 Red Hat OpenShift 虛擬化
 
 
 
+[[initial-setup]]
 == 初始設定
 
 設定 trident 後端、儲存類別和 VolumeSnapshotClass。您可以參考link:osv-trident-install.html["Trident安裝部分"]了解詳情。
@@ -99,6 +101,7 @@ deletionPolicy: Retain
 
 
 
+[[create-a-vm-from-the-template]]
 === **從範本建立虛擬機器**
 
 使用 Web 控制台從範本建立 VM。從 AWS 主控台上的 RedHat OpenShiftService 建立一個虛擬機器。叢集上有可用的範本可用於建立虛擬機器。在下面的螢幕截圖中，我們從這個清單中選擇了 fedora VM。為虛擬機器命名，然後按一下**自訂虛擬機器**。選擇**磁碟**選項卡並按一下**新增磁碟**。最好將磁碟名稱變更為有意義的名稱，確保選擇 **trident-csi** 作為儲存類別。點選**儲存**。點選**建立虛擬機器**
@@ -117,6 +120,7 @@ image:redhat-openshift-ocpv-rosa-008.png["OCP-v VM 正在運行"]
 
 
 
+[[review-all-the-objects-created-for-the-vm]]
 === **檢查為虛擬機器建立的所有物件**
 
 存儲磁碟。image:redhat-openshift-ocpv-rosa-009.png["OCP-v 儲存磁碟"]
@@ -135,6 +139,7 @@ VM 的檔案系統將顯示分割區、檔案系統類型和掛載點。image:re
 
 
 
+[[connect-to-the-vm]]
 === **連接到虛擬機器**
 
 按一下「開啟 Web 控制台」按鈕，然後使用來賓憑證登入image:redhat-openshift-ocpv-rosa-016.png["OCP-v VM 連接"]

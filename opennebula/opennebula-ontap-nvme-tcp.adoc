@@ -18,6 +18,7 @@ summary: 配置基於 TCP 的 NVMe 邏輯磁碟區管理器（LVM）資料存儲
 
 
 
+[[initial-virtualization-administrator-tasks]]
 == 初始虛擬化管理員任務
 
 完成這些初始任務，為 OpenNebula 主機做好 NVMe/TCP 連線的準備，並收集儲存管理員所需的必要資訊。
@@ -34,6 +35,7 @@ nvme show-hostnqn
 
 
 
+[[storage-administrator-tasks]]
 == 儲存管理員任務
 
 如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
@@ -47,6 +49,7 @@ nvme show-hostnqn
 
 
 
+[[final-virtualization-administrator-tasks]]
 == 最終虛擬化管理員任務
 
 完成以下任務，將 NVMe 命名空間配置為 OpenNebula 中的共用 LVM 資料儲存。

@@ -18,6 +18,7 @@ NetApp Data Infrastructure Insights （以前稱為Cloud Insights）可監控本
 
 
 
+[[introduction]]
 == 介紹
 
 透過Data Infrastructure Insights，您可以監控、排除故障並優化所有資源，包括公有雲和私有資料中心。
@@ -26,6 +27,7 @@ NetApp Data Infrastructure Insights （以前稱為Cloud Insights）可監控本
 
 
 
+[[data-infrastructure-insights-capabilities]]
 == Data Infrastructure Insights能力
 
 * Data Infrastructure Insights提供混合多雲監控，讓您可以全端觀察基礎架構和工作負載。

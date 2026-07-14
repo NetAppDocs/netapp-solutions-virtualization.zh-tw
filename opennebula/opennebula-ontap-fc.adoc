@@ -18,6 +18,7 @@ summary: '設定邏輯磁碟區管理器 (LVM) 資料儲存與光纖通道，以
 
 
 
+[[initial-virtualization-administrator-tasks]]
 == 初始虛擬化管理員任務
 
 完成這些初始任務，為 OpenNebula 主機建立 FC 連線做好準備，並收集儲存管理員所需的必要資訊。
@@ -60,6 +61,7 @@ cat /sys/class/fc_host/host*/port_name
 
 
 
+[[storage-administrator-tasks]]
 == 儲存管理員任務
 
 如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
@@ -73,6 +75,7 @@ cat /sys/class/fc_host/host*/port_name
 
 
 
+[[final-virtualization-administrator-tasks]]
 == 最終虛擬化管理員任務
 
 完成以下任務，將 FC LUN 設定為 OpenNebula 中的共用 LVM 資料儲存區。

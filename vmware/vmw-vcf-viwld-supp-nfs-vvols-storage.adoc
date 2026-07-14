@@ -18,6 +18,7 @@ summary: 在 VI 工作負載域中配置 NFS vVols儲存。ONTAP tools for VMwar
 
 
 
+[[step-1-deploy-ontap-tools-for-vmware-vsphere]]
 == 步驟 1：ONTAP tools for VMware vSphere
 
 對於 VI 工作負載域， ONTAP工具安裝到 VCF 管理集群，但向與 VI 工作負載域關聯的 vCenter 註冊。
@@ -87,6 +88,7 @@ image:vmware-vcf-asa-035.png["自訂OTV模板2"]
 
 
 
+[[step-2-add-a-storage-system]]
 == 步驟 2：新增儲存系統
 
 執行下列步驟使用ONTAP工具新增儲存系統。
@@ -131,6 +133,7 @@ image:vmware-vcf-asa-017.png["授權集群證書"]
 
 
 
+[[step-3-create-an-nfs-datastore-in-ontap-tools]]
 == 步驟 3：在ONTAP工具中建立 NFS 資料儲存庫
 
 完成以下步驟以部署在 NFS 上執行的ONTAP資料儲存。使用ONTAP工具。
@@ -187,6 +190,7 @@ image:vmware-vcf-aff-045.png["審核總結並完成"]
 
 
 
+[[step-4-create-a-vvols-datastore-in-ontap-tools]]
 == 步驟 4：在ONTAP工具中建立vVols資料儲存區
 
 若要在ONTAP工具中建立vVols資料存儲，請完成以下步驟。
@@ -247,6 +251,7 @@ image:vmware-vcf-aff-049.png["摘要頁面"]
 
 
 
+[[additional-information]]
 == 附加資訊
 
 * 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"^]。

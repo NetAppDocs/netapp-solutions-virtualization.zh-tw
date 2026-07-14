@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-disaster-recovery-requirements.html 
+keywords: OpenShift, OCP, Trident, Trident Protect, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, Red Hat OpenShift Virtualization 
+summary: Red Hat OpenShift 虛擬化 
+---
+= Trident Protect/AppMirror 適用於 OpenShift 虛擬化災難復原的先決條件
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+本節提供有關使用 NetApp Trident Protect 以及 AppMirror 對 OpenShift 虛擬化工作負載進行災難復原的先決條件的資訊。這包括必要的叢集組態、儲存需求，以及設定 Trident Protect 和 AppMirror 以有效災難復原在 OpenShift 虛擬化環境中執行的虛擬機器所需的安裝步驟。
+
+
+
+[[prerequisites]]
+== 先決條件
+
+. 已安裝並設定 OpenShift Virtualization 的 Red Hat OpenShift 叢集。如需安裝說明，請參閱 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.21/html/installation_overview/index["文件在此處"]。
+. 兩台 NetApp ONTAP 儲存系統，每台系統上都配置了一個 SVM，用於為作用中叢集和災難復原 OpenShift 叢集提供儲存。每個 SVM 必須至少配置一個管理 LIF 和一個資料 LIF，並且這些 LIF 必須能夠從對應的 OpenShift 叢集存取。
+. 在兩個 ONTAP 系統之間設定叢集對等連接和 SVM 對等連接，以允許將資料從來源叢集的 SVM 複製到目標叢集的 SVM。有關如何設定叢集對等連線和 SVM 對等連線的說明，請參閱link:https://docs.netapp.com/us-en/ontap/peering/index.html["ONTAP 叢集對等互連文件在此處"]。
+. NetApp Trident 已安裝並設定於 OpenShift 叢集上，用於從 ONTAP SVM 佈建持續性儲存。如需安裝說明，請參閱 link:https://docs.netapp.com/us-en/trident/["Trident 文件在此"]。
+. 已為 ONTAP SVM 建立 Trident 後端組態，且已在 OpenShift 叢集上設定 StorageClass 以使用該 Trident 後端作為資源配置程式。如需有關如何建立 Trident 後端組態與 StorageClass 的說明，請參閱 link:https://docs.netapp.com/us-en/trident/trident-use/backends.html["Trident 後端設定文件在此處"]。
+. 叢集管理員對 OpenShift 叢集的存取權限，以及對 ONTAP 儲存系統的管理員存取權限，以執行必要的組態設定。
+. 管理員工作站已安裝  `tridentctl` 和  `oc` 工具，並已新增至 $PATH 環境變數，以便與 OpenShift 叢集和 Trident 互動。
+. OpenShift 叢集上需要有足夠的硬體資源來支援 OpenShift Virtualization operator 和將要佈建的虛擬機器。有關資源需求的詳細資訊，請參閱 link:https://docs.openshift.com/container-platform/4.7/virt/install/preparing-cluster-for-virt.html#virt-cluster-resource-requirements_preparing-cluster-for-virt["文件在此處"]。
+. （選用）配置 OpenShift 虛擬化節點放置規則，以指定叢集節點的子集來託管 OpenShift 虛擬化操作員、控制器和虛擬機器。有關如何配置節點放置規則的說明，請參閱 link:https://docs.openshift.com/container-platform/4.7/virt/install/virt-specifying-nodes-for-virtualization-components.html["文件在此處"]。
+. 對於支援 OpenShift 虛擬化的儲存後端，建議使用專用的 StorageClass，從特定的 Trident 後端請求儲存，而該後端又由專用的 SVM 提供支援。這樣可以確保 OpenShift 叢集上基於虛擬機器的工作負載所服務的資料維持一定程度的多租用戶特性。
+. OpenShift Virtualization 中必須有一個可用的 VM。有關部署新 VM 或將現有 VM 遷移到 OpenShift Virtualization 的詳細信息，請參閱文件中的相應部分。
+
+
+
+
+[[install-netapp-trident-protect-for-openshift-virtualization]]
+== 安裝 NetApp Trident Protect for OpenShift Virtualization
+
+若要使用 NetApp Trident Protect 啟用 OpenShift Virtualization 工作負載的災難復原功能，您必須在 OpenShift 叢集上安裝並設定 Trident Protect。Trident Protect 可以使用 Helm chart 進行安裝。
+
+
+NOTE: Trident Protect 的安裝必須在 Trident 安裝之後進行。
+
+有關完整的安裝說明，請參閱link:https://docs.netapp.com/us-en/trident/trident-protect/learn-about-trident-protect.html["Trident Protect 文件在此處"]。
+
+.顯示範例
+[%collapsible]
+====
+image:osv-disaster-recovery-001.png["Trident Protect 安裝"]
+
+image:osv-disaster-recovery-002.png["Trident Protect 安裝完成"]
+
+====

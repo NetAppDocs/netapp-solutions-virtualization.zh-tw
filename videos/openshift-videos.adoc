@@ -18,6 +18,7 @@ keywords: openshift, virtualization, netapp, trident, videos, demos
 
 
 
+[[vm-management-and-operations]]
 == 虛擬機器管理和操作
 
 .使用 iSCSI 儲存在 OpenShift Virtualization 中建立 VM
@@ -32,6 +33,7 @@ video::bac58645-dd75-4e92-b5fe-b12b015dc199[panopto,width=360]
 video::27773297-a80c-473c-ab41-b01200fa009a[panopto,width=360]
 
 
+[[data-protection-and-disaster-recovery]]
 == 資料保護和災難復原
 
 .使用 Trident Protect 保護虛擬機
@@ -42,6 +44,7 @@ video::ae4bdcf7-b344-4f19-89ed-b2d500f94efd[panopto,width=360]
 video::f2a8fa24-2971-4cdc-9bbb-b1f1007032ea[panopto,width=360]
 
 
+[[storage-integration-and-management]]
 == 儲存整合與管理
 
 .使用 Red Hat 認證的Trident操作員安裝Trident
@@ -52,6 +55,7 @@ video::2e2c6fdb-4651-46dd-b028-b1ed00d37da3[panopto,width=360]
 video::d3eacf8c-888f-4028-a695-b1ed00d28dee[panopto,width=360]
 
 
+[[automation-and-monitoring]]
 == 自動化和監控
 
 .Ansible 自動化部署Trident並在 OpenShift 叢集上建立儲存類

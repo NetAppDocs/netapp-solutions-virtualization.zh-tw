@@ -1,0 +1,221 @@
+---
+sidebar: sidebar 
+permalink: openshift/osv-vm-deployment-other-methods.html 
+keywords: OpenShift, OCP, Trident, NetApp ONTAP, Red Hat OpenShift, OpenShift Virtualization, CNV, Container Native Virtualization, Red Hat OpenShift Virtualization 
+summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化 
+---
+= 使用其他方法，透過 ONTAP 儲存以 Red Hat OpenShift Virtualization 建立 VM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+除了使用 OpenShift 虛擬化使用者介面建立虛擬機器的方法之外，還有其他方法可以在 OpenShift 虛擬化平台上建立虛擬機器。本節概述其中的一些方法。
+
+
+
+[[create-a-vm-from-a-yaml-file-with-red-hat-openshift-virtualization]]
+== 使用 Red Hat OpenShift Virtualization 從 YAML 檔案建立虛擬機
+
+也可以透過套用 YAML 檔案並使用 `oc apply`指令來建立虛擬機器。這種方法適用於喜歡使用命令列介面 （CLI） 或希望使用腳本自動建立虛擬機器的使用者。若要使用此方法建立虛擬機器，您可以建立一個 YAML 檔案來定義虛擬機器及其關聯資源，例如虛擬機器磁碟的 PVC。然後，您可以使用 `oc apply -f <yaml-file>`指令套用該 YAML 檔案，在 OpenShift 叢集上建立虛擬機器。
+
+.顯示範例
+[%collapsible]
+====
+[source, yaml]
+----
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: test-vms-vm
+  namespace: test-5vms
+  labels:
+    app: test-vms-vm
+    vm.kubevirt.io/template: centos-stream9-server-small
+spec:
+  dataVolumeTemplates:
+    - apiVersion: cdi.kubevirt.io/v1beta1
+      kind: DataVolume
+      metadata:
+        name: test-vms-vm-rootdisk
+      spec:
+        sourceRef:
+          kind: DataSource
+          name: centos-stream9
+          namespace: openshift-virtualization-os-images
+        storage:
+          resources:
+            requests:
+              storage: 30Gi
+  runStrategy: Always
+  template:
+    metadata:
+      labels:
+        kubevirt.io/domain: test-vms-vm
+    spec:
+      domain:
+        cpu:
+          cores: 1
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - bootOrder: 1
+              disk:
+                bus: virtio
+              name: rootdisk
+            - disk:
+                bus: virtio
+              name: cloudinitdisk
+          interfaces:
+            - masquerade: {}
+              model: virtio
+              name: default
+        resources:
+          requests:
+            memory: 2Gi
+      networks:
+        - name: default
+          pod: {}
+      terminationGracePeriodSeconds: 180
+      volumes:
+        - dataVolume:
+            name: test-vms-vm-rootdisk
+          name: rootdisk
+        - cloudInitNoCloud:
+            userData: |-
+              #cloud-config
+              user: admin
+              password: <replace with your password>
+              chpasswd: { expire: False }
+          name: cloudinitdisk
+----
+====
+
+
+[[create-a-vm-from-a-snapshot-copy-with-red-hat-openshift-virtualization]]
+== 使用 Red Hat OpenShift Virtualization 從快照副本建立 VM
+
+您可以使用 OpenShift 虛擬化技術從快照建立虛擬機器。此程序包括建立 VolumeSnapshotClass、對虛擬機器的持久性磁碟區聲明 （PVC） 進行快照、將快照還原到新的 PVC，以及部署使用還原後的 PVC 作為根磁碟的新虛擬機器。
+
+透過Trident和 Red Hat OpenShift，使用者可以對其所配置的儲存類別上的持久磁碟區進行快照。利用此功能，使用者可以取得磁碟區的某個時間點的副本並使用它來建立新磁碟區或將同一磁碟區還原到先前的狀態。這啟用或支援各種用例，從回滾到克隆到資料恢復。
+
+對於 OpenShift 中的 Snapshot 操作，必須定義資源 VolumeSnapshotClass、VolumeSnapshot 和 VolumeSnapshotContent。
+
+* VolumeSnapshotContent 是從叢集中的磁碟區取得的實際快照。它是類似於用於儲存的 PersistentVolume 的叢集範圍的資源。
+* VolumeSnapshot 是建立磁碟區快照的請求。它類似於 PersistentVolumeClaim。
+* VolumeSnapshotClass 允許管理員為 VolumeSnapshot 指定不同的屬性。它允許您對從同一磁碟區取得的不同快照設定不同的屬性。
+
+
+image:redhat-openshift-060.png["快照架構的虛擬機"]
+
+.顯示範例
+[%collapsible]
+====
+**先決條件**
+
+您必須擁有一台已連接 PVC 的現有虛擬機，該虛擬機已配置在 Trident 儲存類別上，且該虛擬機必須處於運作狀態，才能對 PVC 進行快照。您必須已建立 VolumeSnapshotClass，才能用於建立 VolumeSnapshot。此項目應已作為安裝 OpenShift 虛擬化的先決條件之一建立。如需詳細資訊，請參閱 link:osv-trident-install.html["步驟 3：建立 VolumeSnapshotClass 配置"]。
+
+**要建立虛擬機器快照，請完成下列步驟：**
+
+. 識別連接到來源虛擬機器的 PVC，然後建立該 PVC 的快照。導航至 `Storage > VolumeSnapshots`並點擊建立磁碟區快照。
+. 選擇要為其建立 Snapshot 的 PVC，輸入 Snapshot 的名稱或接受預設值，並選擇適當的 VolumeSnapshotClass。然後點擊“創建”。
+. 這將建立該時間點的 PVC 快照。
+
+
+image:redhat-openshift-062.png["建立快照"]
+
+**從快照建立新虛擬機器**
+
+. 首先，將快照還原到新的 PVC 中。導覽至儲存 > VolumeSnapshots，按一下要復原的快照旁邊的省略號，然後按一下還原為新 PVC。
+. 輸入新 PVC 的詳細信息，然後按一下「恢復」。這將建立一個新的 PVC。
+
+
+image:redhat-openshift-063.png["將快照還原到新的 PVC"]
+
+. 接下來，從此 PVC 建立一個新的 VM。導航至“虛擬化”>“虛擬機器”，然後按一下“建立”>“使用 YAML”。
+. 在 spec > template > spec >volumes 部分中，指定從快照而不是從容器磁碟建立的新 PVC。根據您的要求提供新虛擬機器的所有其他詳細資訊。
+
+
+[source, yaml]
+----
+- name: rootdisk
+  persistentVolumeClaim:
+    claimName: rhel8-short-frog-rootdisk-28dvb-snapshot-restore
+----
+. 按一下「建立」以建立新的虛擬機器。
+. 虛擬機器建立成功後，存取並驗證新虛擬機器與建立快照時使用 PVC 建立的虛擬機器的狀態是否相同。
+
+
+====
+
+
+[[clone-a-vm-in-openshift-virtualization-using-trident]]
+== 使用 Trident 在 OpenShift Virtualization 中複製 VM
+
+此程序包括利用 Trident CSI 磁碟區複製，可讓您透過關閉來源虛擬機器或保持來源虛擬機器運作來建立新的虛擬機器。
+
+.顯示範例
+[%collapsible]
+====
+**VM 複製**
+
+在 Trident 的 Volume CSI 克隆功能的支援下，可以克隆 OpenShift 中現有的 VM。 CSI 卷克隆允許透過複製 PV 來使用現有 PVC 作為資料來源建立新的 PVC。新的 PVC 建立新之後，它將作為一個獨立的實體運行，並且與來源 PVC 沒有任何連結或依賴關係。
+
+image:redhat-openshift-057.png["VM克隆架構"]
+
+對於 CSI 卷克隆，需要考慮以下某些限制：
+
+. 來源 PVC 和目標 PVC 必須在同一個專案中。
+. 同一儲存類別內支援克隆。
+. 僅當來源磁碟區和目標磁碟區使用相同的 VolumeMode 設定時才可以執行複製；例如，一個區塊磁碟區只能複製到另一個區塊磁碟區。
+
+
+OpenShift 叢集中的虛擬機器可以透過兩種方式複製：
+
+. 透過關閉來源虛擬機
+. 透過保持來源虛擬機器處於活動狀態
+
+
+**透過關閉來源虛擬機器**
+
+透過關閉 VM 來複製現有 VM 是 OpenShift 的原生功能，是在Trident的支援下實現的。完成以下步驟來複製虛擬機器。
+
+. 導覽至工作負載>虛擬化>虛擬機，然後按一下要複製的虛擬機旁的省略號。
+. 點擊複製虛擬機器並提供新虛擬機器的詳細資訊。
++
+image:redhat-openshift-058.png["克隆虛擬機"]
+
+. 按一下複製虛擬機器；這將關閉來源虛擬機器並啟動複製虛擬機器的建立。
+. 此步驟完成後，您可以存取並驗證複製的VM的內容。
+
+
+**透過保持來源虛擬機器運作**
+
+也可以透過克隆來源 VM 的現有 PVC，然後使用克隆的 PVC 建立新 VM 來複製現有 VM。此方法不需要您關閉來源虛擬機器。完成以下步驟即可在不關閉虛擬機器的情況下複製虛擬機器。
+
+. 導覽至儲存 > 持久性磁碟區聲明，然後按一下連接到來源虛擬機器的 PVC 旁的省略號。
+. 點擊克隆 PVC 並提供新 PVC 的詳細資訊。
++
+image:redhat-openshift-059.png["克隆PVC"]
+
+. 然後點擊克隆。這會為新的 VM 建立 PVC。
+. 導覽至“工作負載”>“虛擬化”>“虛擬機器”，然後按一下“建立”>“使用 YAML”。
+. 在 spec > template > spec >volumes 部分中，附加克隆的 PVC 而不是容器磁碟。根據您的要求提供新虛擬機器的所有其他詳細資訊。
+
+
+[listing]
+----
+- name: rootdisk
+  persistentVolumeClaim:
+    claimName: rhel8-short-frog-rootdisk-28dvb-clone
+----
+. 按一下「建立」以建立新的虛擬機器。
+. VM建立成功後，存取並驗證新VM是否為來源VM的複製。
+
+
+====

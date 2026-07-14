@@ -18,6 +18,7 @@ summary: 使用 ONTAP 透過 iSCSI 設定 OpenNebula 資料儲存區。此程序
 
 
 
+[[initial-virtualization-administrator-tasks]]
 == 初始虛擬化管理員任務
 
 完成這些初始任務，為 OpenNebula 主機做好 iSCSI 連線的準備，並收集儲存管理員所需的必要資訊。
@@ -62,6 +63,7 @@ cat /etc/iscsi/initiator.name
 
 
 
+[[storage-administrator-tasks]]
 == 儲存管理員任務
 
 如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
@@ -93,6 +95,7 @@ NETAPP_TARGET="iqn.1992-08.com.netapp:sn.85c23687d5d911f086c4d039eac4d4b3:vs.6"
  TIP: System Manager displays the UUID in the URL when viewing the resource details.
 
 
+[[final-virtualization-administrator-tasks]]
 == 最終虛擬化管理員任務
 
 完成以下任務以設定 OpenNebula 上的 iSCSI Datastore。

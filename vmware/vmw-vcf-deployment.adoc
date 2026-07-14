@@ -18,6 +18,7 @@ summary: 使用ONTAP部署、整合或升級 VMware Cloud Foundation 9 環境。
 
 
 
+[[deploy-a-new-vcf-9-instance]]
 == 部署新的 VCF 9 實例
 
 使用此工作流程部署乾淨的 VMware Cloud Foundation (VCF) 9.0 環境。部署後，您可以遷移工作負載或開始配置應用程式並提供基礎架構服務。
@@ -127,6 +128,7 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 
 
 
+[[converge-existing-components-into-vcf-9]]
 == 將現有組件融合到 VCF 9
 
 您可能已經擁有 VCF 機群的一些組件並且希望重複使用它們。當您重新使用 vCenter 實例時，資料儲存區通常會使用ONTAP工具進行配置，這些工具可以作為 VCF 的主要儲存。
@@ -147,6 +149,7 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 
 
 
+[[upgrade-an-existing-vcf-environment-to-vcf-9]]
 == 將現有 VCF 環境升級到 VCF 9
 
 使用標準升級流程將早期的 VCF 部署升級到版本 9.0。結果是運行 9.0 版本的 VCF 環境，具有升級的管理和工作負載域。
