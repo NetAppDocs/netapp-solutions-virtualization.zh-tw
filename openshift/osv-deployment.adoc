@@ -38,9 +38,9 @@ summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化
 * 安裝了 tridentctl 和 oc 工具並新增至 $PATH 的管理員工作站
 
 
-由於 OpenShift 虛擬化是由安裝在 OpenShift 叢集上的運算子管理，因此會對記憶體、CPU 和儲存產生額外的負荷，在規劃叢集的硬體需求時必須將這些因素納入考量。如需詳細資訊，請參閱文件 link:https://docs.openshift.com/container-platform/4.7/virt/install/preparing-cluster-for-virt.html#virt-cluster-resource-requirements_preparing-cluster-for-virt["這裡"]。
+由於 OpenShift 虛擬化是由安裝在 OpenShift 叢集上的運算子管理，因此會對記憶體、CPU 和儲存產生額外的負荷，在規劃叢集的硬體需求時必須將這些因素納入考量。如需詳細資訊，請參閱文件 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/virtualization/installing["這裡"]。
 
-您也可以透過設定節點放置規則，指定 OpenShift 叢集節點的子集來託管 OpenShift Virtualization 的操作員、控制器和虛擬機器。若要設定 OpenShift Virtualization 的節點放置規則，請參閱相關文件link:https://docs.openshift.com/container-platform/4.7/virt/install/virt-specifying-nodes-for-virtualization-components.html["這裡"]。
+您也可以透過設定節點放置規則，指定 OpenShift 叢集節點的子集來託管 OpenShift Virtualization 的操作員、控制器和虛擬機器。若要設定 OpenShift Virtualization 的節點放置規則，請參閱相關文件link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/virtualization/installing["這裡"]。
 
 對於支援 OpenShift Virtualization 的存儲， NetApp建議使用專用的 StorageClass，該 StorageClass 從特定的Trident後端請求存儲，而該後端又由專用的 SVM 支援。這對於為 OpenShift 叢集上基於 VM 的工作負載提供的資料保持了一定程度的多租用戶等級。
 

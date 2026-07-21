@@ -40,7 +40,7 @@ NOTE: Trident在 25.06 版本中僅支援 iSCSI 協定的磁碟區組快照。
 使用 Kubernetes 版本 1.32 安裝 OpenShift 4.19 叢集。此版本將磁碟區組快照功能提升至 Beta 狀態。  OpenShift 的後續版本可能包含 v1.32 以上的 Kubernetes 版本，這些版本也支援此功能。
 
 .步驟
-. 請依照 Red Hat 文件中的說明安裝 OpenShift Cluster 版本 4.19： https://docs.openshift.com/container-platform/4.19/installing/index.html["安裝 OpenShift 容器平台"] 。
+. 請依照 Red Hat 文件中的說明安裝 OpenShift Cluster 版本 4.19： https://docs.redhat.com/en/documentation/openshift_container_platform/4.19#Install["安裝 OpenShift 容器平台"]。
 . 驗證 OpenShift 叢集中的 Kubernetes 版本。
 +
 下圖顯示了安裝有 Kubernetes v1.32 的 OpenShift Cluster v4.19。

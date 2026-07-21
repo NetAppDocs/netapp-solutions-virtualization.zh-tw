@@ -29,7 +29,7 @@ summary: Red Hat OpenShift 虛擬化
 . 叢集管理員對 OpenShift 叢集的存取權限，以及對 ONTAP 儲存系統的管理員存取權限，以執行必要的組態設定。
 . 管理員工作站已安裝  `tridentctl` 和  `oc` 工具，並已新增至 $PATH 環境變數，以便與 OpenShift 叢集和 Trident 互動。
 . OpenShift 叢集上需要有足夠的硬體資源來支援 OpenShift Virtualization operator 和將要佈建的虛擬機器。有關資源需求的詳細資訊，請參閱 link:https://docs.openshift.com/container-platform/4.7/virt/install/preparing-cluster-for-virt.html#virt-cluster-resource-requirements_preparing-cluster-for-virt["文件在此處"]。
-. （選用）配置 OpenShift 虛擬化節點放置規則，以指定叢集節點的子集來託管 OpenShift 虛擬化操作員、控制器和虛擬機器。有關如何配置節點放置規則的說明，請參閱 link:https://docs.openshift.com/container-platform/4.7/virt/install/virt-specifying-nodes-for-virtualization-components.html["文件在此處"]。
+. （選用）配置 OpenShift 虛擬化節點放置規則，以指定叢集節點的子集來託管 OpenShift 虛擬化操作員、控制器和虛擬機器。有關如何配置節點放置規則的說明，請參閱 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/virtualization/installing["文件在此處"]。
 . 對於支援 OpenShift 虛擬化的儲存後端，建議使用專用的 StorageClass，從特定的 Trident 後端請求儲存，而該後端又由專用的 SVM 提供支援。這樣可以確保 OpenShift 叢集上基於虛擬機器的工作負載所服務的資料維持一定程度的多租用戶特性。
 . OpenShift Virtualization 中必須有一個可用的 VM。有關部署新 VM 或將現有 VM 遷移到 OpenShift Virtualization 的詳細信息，請參閱文件中的相應部分。
 

@@ -1637,16 +1637,13 @@
   <block id="33e21be4621466b82dfeadc86146bca5" category="admonition">有關存儲配置和Trident使用最佳實踐的更多詳細信息，請參閱<block ref="c4b7d1f87124c1f002477e0806e6a640" category="inline-link-macro-rx"></block></block>
   <block id="460ccbaee201d664bddad7ac0114a01e" category="section-title">OpenShift 虛擬化 - 調整與擴充指南</block>
   <block id="c99898f6c3739220abaa22e0c7affa88" category="inline-link-macro">OpenShift 叢集擴充建議與限制</block>
-  <block id="a9c1d6fbad26d5e424c61a505b903b54" category="paragraph">Red Hat 已記錄<block ref="ccdd52ebfa059d6d412b588ec698f0ec" category="inline-link-macro-rx"></block>。</block>
   <block id="860ba13330672d31460e2a3fc1b49a71" category="inline-link-macro">OpenShift 虛擬化調整指南</block>
   <block id="1c22afadd32208698907e68ecbf64c42" category="inline-link-macro">OpenShift Virtualization 4.x 支援的限制</block>
-  <block id="774fc1f2388e4338a61ad60dc294c50a" category="paragraph">此外，他們還記錄了<block ref="5a2f0e6b9da027094c81002619eb99a9" category="inline-link-macro-rx"></block>和<block ref="e8677739388ad10428adf0f294cbf3a4" category="inline-link-macro-rx"></block>。</block>
   <block id="1df2b40621ab4f4345448f5351a714be" category="admonition">需要有效的 Red Hat 訂閱才能存取上述內容。</block>
   <block id="27ad68bf9d5e7d41885198c16ebd3f47" category="paragraph">調整指南包含許多調整參數的信息，包括：</block>
   <block id="7a0287a9d3888ebd08d15b6b7692255b" category="list-text">調整參數以一次性或批次建立多個虛擬機</block>
   <block id="1213e374decd179142d79acf4713c402" category="list-text">虛擬機器即時遷移</block>
   <block id="88bdc113be6799d2f759ad6146b156ac" category="inline-link-macro">為即時遷移配置專用網絡</block>
-  <block id="34e7c5695b56bfa93a7baaf609ca2b96" category="list-text"><block ref="34e7c5695b56bfa93a7baaf609ca2b96" category="inline-link-macro-rx"></block></block>
   <block id="55dd80bfac009ffca4cf6e468c2eae9d" category="list-text">透過包含工作負載類型來客製化虛擬機器模板</block>
   <block id="df5e1a88f72776caa164db15f10da251" category="paragraph">支援的限制記錄了在 OpenShift 上執行虛擬機器時測試的物件最大值</block>
   <block id="19bf269066a2e1c6eb34adfb1f08dc16" category="paragraph">**虛擬機器最大數量包括**</block>
@@ -1705,7 +1702,6 @@
   <block id="f5806bcee67fc8f13f0255068a186e42" category="list-text">在下一個畫面下載安裝程式、唯一的拉取金鑰和用於管理的 CLI 工具。</block>
   <block id="1d761031264b6e6deafa834577fad17c" category="paragraph"><block ref="1d761031264b6e6deafa834577fad17c" category="inline-image-macro-rx" type="image"></block></block>
   <block id="7586dbf5f3ac1a66383f6c201a17a341" category="inline-link-macro">安裝說明</block>
-  <block id="c7daf823271052cb8912656769e85130" category="list-text">關注<block ref="031f6892cefd9bd35a861ba4dda1d58c" category="inline-link-macro-rx"></block>由 Red Hat 提供，可部署到您選擇的環境。</block>
   <block id="220887aee59c37fa79fc366cba7dad4e" category="section-title">NetApp驗證的 OpenShift 部署</block>
   <block id="d711fd24836980dd490f3c01dd3ee8de" category="paragraph">NetApp已在其實驗室中使用安裝程式設定基礎架構 (IPI) 部署方法在以下每個資料中心環境中測試並驗證了 Red Hat OpenShift 的部署：</block>
   <block id="aa9095c5ba77e3549672e5c4fae1fedc" category="inline-link-macro">裸機上的 OpenShift</block>
@@ -2309,81 +2305,47 @@
   <block id="b1e05f95fcee66798249d66e3101cb35" category="inline-image-macro">虛擬機器即時遷移成功</block>
   <block id="cb24d3e79336095b10baac9a5922cba4" category="paragraph"><block ref="cb24d3e79336095b10baac9a5922cba4" category="inline-image-macro-rx" type="image"></block></block>
   <block id="81eba1cf4a97ef1d4ca000e8f110983f" category="doc">將虛擬機器從 VMware 遷移到 Red Hat OpenShift 集群</block>
-  <block id="a47137c469f5a7f79056688f589a19a0" category="paragraph">使用 OpenShift 虛擬化遷移工具包將虛擬機器從 VMware 遷移到 OpenShift 叢集。此遷移涉及安裝虛擬化遷移工具包 (MTV)、建立來源和目標提供者、建立遷移計劃以及執行冷遷移或熱遷移。</block>
   <block id="9dcd15803764262516ebcd5c3ddfa8e5" category="example-title">冷遷移</block>
-  <block id="350fde57c13f169a557d0e2e27efbc13" category="paragraph">這是預設的遷移類型。複製資料時來源虛擬機器將關閉。</block>
   <block id="8519592c86ffceb84f2fe46969e882da" category="example-title">暖遷移</block>
   <block id="2b0436423e0622e28d0fc6f004c192c7" category="paragraph">在這種類型的遷移中，大部分的資料是在來源虛擬機器 (VM) 運行時的預複製階段複製。然後在切換階段關閉虛擬機器並複製剩餘資料。</block>
   <block id="b50ccc5814caa90d8b86a307ca422257" category="paragraph">以下影片展示了使用 ontap-san 儲存類別進行持久性儲存將 RHEL VM 從 VMware 冷遷移到 OpenShift Virtualization 的示範。</block>
   <block id="1a77203f1aab519882f2e846b9d9b719" category="video-title">使用 Red Hat MTV 將虛擬機器遷移到具有NetApp ONTAP儲存的 OpenShift 虛擬化</block>
   <block id="c018e127ecd02f5fde489e4444402e79" category="section-title">使用虛擬化遷移工具包將虛擬機器從 VMware 遷移到 OpenShift 虛擬化</block>
-  <block id="eb03da645205ff140b53714fba4aa86f" category="paragraph">在本節中，我們將了解如何使用虛擬化遷移工具包 (MTV) 將虛擬機器從 VMware 遷移到在 OpenShift Container 平台上運行並使用Trident與NetApp ONTAP儲存整合的 OpenShift 虛擬化。</block>
-  <block id="ea79c776da84047793859d6582eb03d9" category="paragraph">下圖顯示了 VM 從 VMware 遷移到 Red Hat OpenShift Virtualization 的高階視圖。</block>
   <block id="c336c9ad9134740606b128e74f8662c3" category="paragraph"><block ref="c336c9ad9134740606b128e74f8662c3" category="inline-image-macro-rx" type="image"></block></block>
   <block id="7a4a5d7419037b65e3a5d2f120b2e45a" category="section-title">範例遷移的先決條件</block>
-  <block id="92308586782b1ac3ca67d5246beb4254" category="section-title">**在 VMware 上**</block>
-  <block id="ab31f70ad4d51f1953d4174e7a97998c" category="list-text">安裝了使用 rhel 9.3 的 RHEL 9 VM，其配置如下：</block>
   <block id="c859d53505195ea9836fd1dd18a342de" category="list-text">CPU：2個，記憶體：20GB，硬碟：20GB</block>
-  <block id="49dcb604dd937c117e3eb904336b63a6" category="list-text">使用者憑證：root 使用者和管理員使用者憑證</block>
-  <block id="45b7cf9911c7c95a3e96680e5101a366" category="list-text">VM 準備好後，安裝 postgresql 伺服器。</block>
-  <block id="a1d26d1742c3c5015c533cb7b4125649" category="list-text">postgresql 伺服器已啟動並啟用在啟動時啟動</block>
-  <block id="d486afc72ff9ff542e8957b66aabe34f" category="admonition">確保啟動 postgresql 伺服器並啟用服務在啟動時啟動。</block>
-  <block id="3bc4bf0e263e39cc80e52b11fd83fc18" category="section-title">**在 OpenShift 叢集上**</block>
   <block id="d6cd4900fddb3efade4a282a26e76510" category="paragraph">在安裝 MTV 之前已完成以下安裝：</block>
   <block id="4091416f34eaa4b10a962e894436640b" category="list-text">OpenShift Cluster 4.17 或更高版本</block>
   <block id="fe585575fafda5b094d69d750c2031ad" category="list-text">為 iSCSI 啟用的叢集節點上的多路徑（用於 ontap-san 儲存類別）。如果使用 node-prep 標誌安裝Trident 25.02，則可以輕鬆啟用多路徑。您可以參考<block ref="9560b5e03b7757e35e94a89a11bb7aec" category="inline-link-macro-rx"></block>了解詳情。</block>
   <block id="6cb98c702d737bfc7e9c7113f96bd114" category="list-text">安裝所需的後端和儲存類別以及快照類別。請參閱<block ref="9560b5e03b7757e35e94a89a11bb7aec" category="inline-link-macro-rx"></block>了解詳情。</block>
-  <block id="4662ff3eab124bb57ed62299c1453baf" category="list-text"><block ref="4662ff3eab124bb57ed62299c1453baf" category="inline-link-macro-rx"></block></block>
   <block id="a6a9e03000e651d3f17ef6322686504e" category="section-title">安裝 MTV</block>
-  <block id="b20b36d31c21c88b330220afadc4c248" category="paragraph">現在您可以安裝虛擬化遷移工具包 (MTV)。請參閱提供的說明<block ref="78541cf70d4432a26af2ad2bc2f1599e" category="inline-link-macro-rx"></block>尋求安裝協助。</block>
-  <block id="833a308c57b0294d5fc8b47fcbc273aa" category="paragraph">虛擬化遷移工具包 (MTV) 使用者介面整合到 OpenShift Web 控制台中。你可以參考<block ref="0501eeadc64b28b9be041bb74afe3ad8" category="inline-link-macro-rx"></block>開始使用使用者介面執行各種任務。</block>
-  <block id="ba34a808d5ef47822d13b6eaae380955" category="paragraph">**建立來源提供者**</block>
-  <block id="9dfd530db6afa78f79d825306725d533" category="paragraph">為了將 RHEL VM 從 VMware 遷移到 OpenShift Virtualization，您需要先為 VMware 建立來源提供者。參考說明<block ref="5a232a9d86f11be106236c73b37bba4f" category="inline-link-macro-rx"></block>建立來源提供者。</block>
   <block id="698f626f0a4cef07823d743a2dbe05f6" category="paragraph">您需要以下內容來建立 VMware 來源提供者：</block>
-  <block id="2f01f330ac5bbca687428a4aea084ec7" category="list-text">中心網址</block>
-  <block id="f8e71877199d54f902a68305fe9e4d65" category="list-text">VCenter 憑證</block>
-  <block id="85b0b1a49d5b88187baef2af24bc6e5c" category="list-text">vCenter 伺服器指紋</block>
   <block id="67410b0417131e71e5479ef47bf0b29d" category="list-text">儲存庫中的 VDDK 映像</block>
   <block id="959b7c4b71886115429518587644aebe" category="paragraph">來源提供者建立範例：</block>
   <block id="70e5b89fc1b2f47a0bd5055703229114" category="paragraph"><block ref="70e5b89fc1b2f47a0bd5055703229114" category="inline-image-macro-rx" type="image"></block></block>
   <block id="431899a140e7168ac10851938d985f34" category="admonition">虛擬化遷移工具包 (MTV) 使用 VMware 虛擬磁碟開發工具包 (VDDK) SDK 來加速從 VMware vSphere 傳輸虛擬磁碟。因此，儘管是可選的，但強烈建議創建 VDDK 影像。若要使用此功能，您需要下載 VMware 虛擬磁碟開發工具包 (VDDK)，建立 VDDK 映像，然後將 VDDK 映像推送到您的映像登錄。</block>
   <block id="4a6d1c59688d4bfd35bf9273bf11f8ea" category="paragraph">請按照提供的說明進行操作<block ref="102736775f16e15f2f98ffe552b0757e" category="inline-link-macro-rx"></block>建立 VDDK 映像並將其推送到可從 OpenShift 叢集存取的登錄。</block>
-  <block id="3eb78782382908bcbe75ff430f148a0a" category="paragraph">**建立目的地提供者**</block>
-  <block id="41a9e71e2ab20cb7e1db9492b652a4e7" category="paragraph">由於 OpenShift 虛擬化提供者是來源提供者，因此主機叢集會自動新增。</block>
-  <block id="25570b7a362c49ef673bd98cf2359271" category="paragraph">**建立遷移計劃**</block>
   <block id="3008c031ed8e56d6902d0efc66eaa035" category="paragraph">請按照提供的說明進行操作<block ref="39595bf3d6cb45be93d62f6764c92ee0" category="inline-link-macro-rx"></block>建立遷移計劃。</block>
   <block id="5254832d8ded5bf2d2f6fe4975628d7b" category="paragraph">創建計劃時，如果尚未創建，則需要創建以下內容：</block>
   <block id="cfd81ec3034efddb911513d79b28d9db" category="list-text">將來源網路對應到目標網路的網路映射。</block>
-  <block id="367829c9ebbf303aad8f4325f563de34" category="list-text">將來源資料儲存映射到目標儲存類別的儲存映射。為此，您可以選擇 ontap-san 儲存類別。一旦建立了遷移計劃，計劃的狀態應該顯示*就緒*，您現在應該能夠*開始*該計劃。</block>
   <block id="7d42c5ccd50e37e78e13b9f02e3f2672" category="paragraph"><block ref="7d42c5ccd50e37e78e13b9f02e3f2672" category="inline-image-macro-rx" type="image"></block></block>
   <block id="ae422c773154ec4e3584e4129f0338f2" category="section-title">執行冷遷移</block>
-  <block id="ef53e330f7c1069c8dca0ff4d2bc9430" category="paragraph">點擊“*開始*”將運行一系列步驟來完成虛擬機器的遷移。</block>
   <block id="65886e6a0e7d708d3b34ad183285af8f" category="paragraph"><block ref="65886e6a0e7d708d3b34ad183285af8f" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="34373848e0ca7ca6e900caa35abc6e28" category="paragraph">當所有步驟完成後，您可以透過點擊左側導覽功能表中的「虛擬化」下的「虛擬機器」來查看遷移後的虛擬機器。提供了存取虛擬機器的說明<block ref="9866532d9d0f47e3947d77adbdcf2432" category="inline-link-macro-rx"></block>。</block>
-  <block id="87a2f6eb52f66b7c3f568cc74f0aae89" category="paragraph">您可以登入虛擬機器並驗證 posgresql 資料庫的內容。資料庫、表格和表格中的項目應該與來源虛擬機器上建立的相同。</block>
   <block id="1364195e95ca5b0e3c66e96f4e2a9a9c" category="section-title">執行熱遷移</block>
-  <block id="53b91456048695e128bc09f94b0d5177" category="paragraph">若要執行熱遷移，在建立如上所示的遷移計劃後，您需要編輯計劃設定以變更預設遷移類型。點擊冷遷移旁邊的編輯圖示並切換按鈕將其設定為熱遷移。點選**儲存**。現在點擊**開始**來開始遷移。</block>
-  <block id="5b46ee2f7f314dd53cb2736290e3a431" category="admonition">確保在從 VMware 中的區塊儲存移動時，已為 OpenShift 虛擬化 VM 選擇了區塊儲存類別。此外，volumeMode 應設定為 block，存取模式應為 rwx，以便您稍後可以執行 VM 的即時遷移。</block>
   <block id="c4ca4238a0b923820dcc509a6f75849b" category="inline-image-macro">1</block>
   <block id="f39ab2ad64bfbfae2fe0db9a63e9035c" category="paragraph"><block ref="f39ab2ad64bfbfae2fe0db9a63e9035c" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="5de57bdb9016faaac72425532f060f01" category="paragraph">點選**0 of 1 vms done**，展開虛擬機，你就能看到遷移的進度。</block>
   <block id="c81e728d9d4c2f636f067f89cc14862c" category="inline-image-macro">2</block>
   <block id="783095d889c6a5b944021cb59e82f41f" category="paragraph"><block ref="783095d889c6a5b944021cb59e82f41f" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="c6bdb87e07de0cd5b6c25afb99fc94ef" category="paragraph">經過一段時間後，磁碟傳輸完成，遷移等待進入切換狀態。資料卷處於暫停狀態。返回計劃並點擊**切換**按鈕。</block>
   <block id="eccbc87e4b5ce2fe28308fd9f2a7baf3" category="inline-image-macro">3</block>
   <block id="6d2b2608ef2027d133acce38cbad551b" category="paragraph"><block ref="6d2b2608ef2027d133acce38cbad551b" category="inline-image-macro-rx" type="image"></block></block>
   <block id="a87ff679a2f3e71d9181a67b7542122c" category="inline-image-macro">4</block>
   <block id="531b515c50b4983b63d19830ce636da6" category="paragraph"><block ref="531b515c50b4983b63d19830ce636da6" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="f60cdda36b64acbbb5112378fbb5edbe" category="paragraph">對話方塊中將顯示目前時間。如果您想要安排稍後的切換，請將時間變更為未來的時間。如果沒有，要立即執行切換，請按一下**設定切換**。</block>
   <block id="e4da3b7fbbce2345d7772b0674a318d5" category="inline-image-macro">5</block>
   <block id="18c1544d194be50d71cd713191944781" category="paragraph"><block ref="18c1544d194be50d71cd713191944781" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="ca1518e449b84cd22cda76f8293632d3" category="paragraph">幾秒鐘後，當切換階段開始時，DataVolume 從暫停狀態變成 ImportScheduled 狀態，再變成 ImportInProgress 狀態。</block>
   <block id="1679091c5a880faf6fb5e6087eb1b2dc" category="inline-image-macro">6</block>
   <block id="8ef6a7da10782832ab37e6e0559a48bb" category="paragraph"><block ref="8ef6a7da10782832ab37e6e0559a48bb" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="ec1d8ebe12dee5bf05594afe6362e76d" category="paragraph">當切換階段完成後，DataVolume 進入成功狀態並且 PVC 被綁定。</block>
   <block id="8f14e45fceea167a5a36dedd4bea2543" category="inline-image-macro">7</block>
   <block id="1510d8e5933b871c1880afbdd01f694e" category="paragraph"><block ref="1510d8e5933b871c1880afbdd01f694e" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="4460d8fd66206202680336abfed77dcd" category="paragraph">遷移計畫繼續完成 ImageConversion 階段，最後完成 VirtualMachineCreation 階段。  VM 在 OpenShift Virtualization 上進入運作狀態。</block>
   <block id="c9f0f895fb98ab9159f51fd0297e236d" category="inline-image-macro">8</block>
   <block id="0857af525a84b794970c3d5af0038668" category="paragraph"><block ref="0857af525a84b794970c3d5af0038668" category="inline-image-macro-rx" type="image"></block></block>
   <block id="488c7ca3bc4568c13763a0005aec6c5d" category="doc">為 Proxmox 虛擬環境配置ONTAP存儲</block>
@@ -5944,7 +5906,6 @@
   <block id="b091cca3c38411ebccaa15d67b196b7d" category="section-title">步驟 1：安裝 OpenShift 4.19 並為磁碟區組快照啟用 FeatureGate</block>
   <block id="39411065bb3f9af6f7d4a4bc5206b85f" category="paragraph">使用 Kubernetes 版本 1.32 安裝 OpenShift 4.19 叢集。此版本將磁碟區組快照功能提升至 Beta 狀態。  OpenShift 的後續版本可能包含 v1.32 以上的 Kubernetes 版本，這些版本也支援此功能。</block>
   <block id="4fab3ac3adaf161d0999c39a4465e268" category="inline-link">安裝 OpenShift 容器平台</block>
-  <block id="845bca907d593fe77d37df2c235adddc" category="list-text">請依照 Red Hat 文件中的說明安裝 OpenShift Cluster 版本 4.19：<block ref="8cb82eed0e197b5440127bef64403dbd" category="inline-link-rx"></block> 。</block>
   <block id="9291fb30450614096a9eafbcf2c2c7c1" category="list-text">驗證 OpenShift 叢集中的 Kubernetes 版本。</block>
   <block id="a997f40d1ab14d9245c066df1b6c27fa" category="paragraph">下圖顯示了安裝有 Kubernetes v1.32 的 OpenShift Cluster v4.19。</block>
   <block id="8610b796f94678d0b867309c9fbe0fbe" category="inline-image-macro">帶有 K8s V1.32 的 OpenShift 集群</block>
@@ -7562,7 +7523,6 @@
   <block id="bd8a25969535733ad405bca867f49e7c" category="inline-link-macro">Data Infrastructure Insights免費試用</block>
   <block id="9be58f2fc8b11ec837406376ca6b3e2a" category="inline-link-macro">Data Infrastructure Insights入職</block>
   <block id="f02cbd756692867bd2994397f1f82ebd" category="paragraph">要開始使用Data Infrastructure Insights，您可以在以下位置註冊：<block ref="07a69b47e6f7b8f6f6ef99c9b01c17b3" category="inline-link-macro-rx"></block> 。詳情請參閱 <block ref="949f6bdca51c6b6c5b04a1ea189c50a0" category="inline-link-macro-rx"></block></block>
-  <block id="3a7538b0fd0264e941c9ff94c7b04234" category="list-text">新增了 2 個資料庫，1 個表，並在表中新增了 1 行。參考<block ref="40bb38658c07bd15a5cdbf95b0fb5b22" category="inline-link-macro-rx"></block>有關在 RHEL 上安裝 PostgreSQL 伺服器以及建立資料庫和表格條目的說明。</block>
   <block id="b0ca1029f4ff13f056b7ea81ce11c817" category="video-title">使用適用於 VMware vSphere 和NetApp Backup and Recovery的SnapCenter Plug-in for VMware vSphere，為 VMFS 資料儲存提供 3-2-1 資料保護</block>
   <block id="0e9fc982771fdbc255376a0a4e36ff3b" category="list-text">*整合資料保護與低成本災難復原：*使用NetApp SnapCenter卸載虛擬工作負載備份與復原。利用NetApp Disaster Recovery實現更低的 RPO 和更短的 RTO 資料複製時間。這樣就無需昂貴的替代基礎設施，為 VMware 工作負載提供經濟實惠的災難保護。無論從本地到本機NetApp ONTAP環境，或是到 VMware 雲， NetApp支援的儲存都能確保強大的保護。</block>
   <block id="3ac044667ceab0f32d760316263d9f76" category="list-text">使用ONTAP One，即可存取所有ONTAP功能和強大的安全性，而無需支付授權費用。與NetApp Disaster Recovery結合使用可進一步降低成本。</block>
@@ -9255,8 +9215,6 @@
   <block id="f352bdfa62d4cd3a91acf18bc6bd58c6" category="paragraph">查看使用 ONTAP 儲存系統部署 OpenShift 虛擬化的先決條件和其他詳細資訊。</block>
   <block id="994ce4d207257ad462b7ca0cfba94a56" category="list-text">在以 Trident 為佈建程式的 OpenShift 叢集上設定的 Trident VolumeSnapshotClass</block>
   <block id="0b94a8b88dcf62aabaac051550aa7a1c" category="list-text">Trident StorageClass 配置為 OpenShift 叢集或 OpenShift Virtualization 的預設設定。</block>
-  <block id="25ced4ea77fb3b084e145cdd001552d7" category="paragraph">由於 OpenShift 虛擬化是由安裝在 OpenShift 叢集上的運算子管理，因此會對記憶體、CPU 和儲存產生額外的負荷，在規劃叢集的硬體需求時必須將這些因素納入考量。如需詳細資訊，請參閱文件 <block ref="5567155f6e22c8094be9809ad1dc7b27" category="inline-link-macro-rx"></block>。</block>
-  <block id="1b732dae2b4a5fb16dddb63721ad11fd" category="paragraph">您也可以透過設定節點放置規則，指定 OpenShift 叢集節點的子集來託管 OpenShift Virtualization 的操作員、控制器和虛擬機器。若要設定 OpenShift Virtualization 的節點放置規則，請參閱相關文件<block ref="6617bccbdffa3cad28730e30155080a9" category="inline-link-macro-rx"></block>。</block>
   <block id="4cd48cf1542e0d97080f62cabe2cc94e" category="section-title">NetApp Trident CSI、儲存設定檔、OpenShift 虛擬化磁碟區存取模式</block>
   <block id="2dac0e812ebc8a565013396d9f39e4a7" category="paragraph">在 OpenShift 虛擬化中，啟動來源是用於從範本佈建虛擬機器 （VM） 的磁碟映像。它們通常以 DataVolumes 或持久性磁碟區宣告 （PVC） 的形式儲存在 openshift-virtualization-os-images 命名空間中。為了使 OpenShift 虛擬化正常運作，在使用 Operator 安裝 OpenShift 虛擬化之前，必須完成兩項儲存配置任務：</block>
   <block id="faa08d22a790cfeb541d65e344fa4dc9" category="list-text">您必須為叢集設定預設的 StorageClass。否則，OpenShift Virtualization 將無法自動匯入開機來源映像。</block>
@@ -9307,7 +9265,6 @@
   <block id="0b51a1098502f93d2fa83b8fcf0eb986" category="list-text">叢集管理員對 OpenShift 叢集的存取權限，以及對 ONTAP 儲存系統的管理員存取權限，以執行必要的組態設定。</block>
   <block id="8e0531a8f7270e0b0cf1564719e6c067" category="list-text">管理員工作站已安裝 <block ref="c67fd1b99934afa248dfeb285a9a4191" prefix=" " category="inline-code"></block> 和 <block ref="fb024832e51eb5f6da9113a745f1eb59" prefix=" " category="inline-code"></block> 工具，並已新增至 $PATH 環境變數，以便與 OpenShift 叢集和 Trident 互動。</block>
   <block id="e8515cf6d36d6d226802285e8e9d395c" category="list-text">OpenShift 叢集上需要有足夠的硬體資源來支援 OpenShift Virtualization operator 和將要佈建的虛擬機器。有關資源需求的詳細資訊，請參閱 <block ref="12814a138115de5ff61bb58e170e4fef" category="inline-link-macro-rx"></block>。</block>
-  <block id="f77f48e02d245d31b40bf8fe8bef7a7a" category="list-text">（選用）配置 OpenShift 虛擬化節點放置規則，以指定叢集節點的子集來託管 OpenShift 虛擬化操作員、控制器和虛擬機器。有關如何配置節點放置規則的說明，請參閱 <block ref="09083d51d6b16d21e4bf8cd1c4a58f0a" category="inline-link-macro-rx"></block>。</block>
   <block id="24f4cab5eadc8d210ea06e6ed987f1b4" category="list-text">對於支援 OpenShift 虛擬化的儲存後端，建議使用專用的 StorageClass，從特定的 Trident 後端請求儲存，而該後端又由專用的 SVM 提供支援。這樣可以確保 OpenShift 叢集上基於虛擬機器的工作負載所服務的資料維持一定程度的多租用戶特性。</block>
   <block id="356947b48bb728afb42bd7f9deac7829" category="section-title">安裝 NetApp Trident Protect for OpenShift Virtualization</block>
   <block id="d7b2cfff1185c147bf9e659ff6b72351" category="paragraph">若要使用 NetApp Trident Protect 啟用 OpenShift Virtualization 工作負載的災難復原功能，您必須在 OpenShift 叢集上安裝並設定 Trident Protect。Trident Protect 可以使用 Helm chart 進行安裝。</block>
@@ -9596,4 +9553,187 @@
   <block id="cff9b0e8b1c1c7426b72f45e3a9ac644" category="sidebar">來源集群設定</block>
   <block id="824c1665365457f3bde955b98c2b7f55" category="sidebar">目標叢集設定</block>
   <block id="2aeae710edc424cc326d6cb63b550031" category="sidebar">Red Hat OpenShift Virtualization 使用 Data Infrastructure Insights 監控 VM</block>
+  <block id="2c596413f7f9ee1efaa7fc41145df5c9" category="paragraph">Red Hat 已記錄在案<block ref="e72861cc2ffb2a6f6b2f87c56b1d8448" category="inline-link-macro-rx"></block>。</block>
+  <block id="7868d2e71c1c27e2a8485d667b537155" category="paragraph">此外，他們還記錄了 <block ref="1bdd2b72ac809b354864a3247a207d41" category="inline-link-macro-rx"></block> 和 <block ref="e8677739388ad10428adf0f294cbf3a4" category="inline-link-macro-rx"></block>。</block>
+  <block id="91d4980348340733f698961b8bd2b5a1" category="list-text"><block ref="91d4980348340733f698961b8bd2b5a1" category="inline-link-macro-rx"></block></block>
+  <block id="ce13298964940b432f5dc3759956e597" category="list-text">按照 Red Hat 提供的 <block ref="3532d0b80dc5cd43a24a54e35bbc755c" category="inline-link-macro-rx"></block> 部署到您選擇的環境。</block>
+  <block id="27d15430e2f80a592305cc8f4b2594dd" category="summary">使用 NetApp Console 備份與恢復服務備份與恢復 OpenShift Virtualization 虛擬機器</block>
+  <block id="d2347e34ff39042d5ed3b57589e2aaff" category="doc">使用 NetApp Console Backup and Recovery Service 備份與還原 VM</block>
+  <block id="39313be88d24d85682caee6310326580" category="paragraph">使用 NetApp Console 備份與恢復 Red Hat OpenShift Virtualization 中的 VM。此程序涵蓋透過 NetApp Console 的 Backup and Recovery Service 建立與管理備份與恢復作業，並使用 Azure Blob Storage Container 作為備份目標。</block>
+  <block id="3e4963527730ef6f33d6ebc197fafc0b" category="inline-link-macro">console.netapp.com</block>
+  <block id="454bb1110d6093b9ef29fd01d063b03f" category="inline-link-macro">NetApp Console 文件</block>
+  <block id="2016c21dd1e5e2a15af83cdc13f75c3d" category="paragraph">NetApp Console 提供對本地和雲端環境中儲存設備和資料服務的集中管理。它提供統一的控制、簡易的操作和安全的管理。使用者可以透過使用者介面存取多種資料服務和管理功能，網址為 <block ref="57d9a76eb3ea9a991b2c0d0149aa4e43" category="inline-link-macro-rx"></block>。有關 NetApp Console 的完整詳細資訊，請參閱 <block ref="bbbdb0a6353fba3ffbca16f93165f81c" category="inline-link-macro-rx"></block>。</block>
+  <block id="bef219d35a4468480b0ce759221cdceb" category="inline-link-macro">NetApp Backup and Recovery 文件</block>
+  <block id="39f27cf4fd52c6f2739caf044cc75c54" category="paragraph">本節重點介紹 NetApp Backup and Recovery 資料服務，適用於 Kubernetes 工作負載，特別是 OpenShift 虛擬機器。NetApp Backup and Recovery Service 可讓您透過單一介面來探索、管理、建立保護原則，並將這些原則與您的 Kubernetes 應用程式和 VM 建立關聯。如需完整指南，請參閱 <block ref="2352cdf0425b05cbedea7c5bb22d8b7e" category="inline-link-macro-rx"></block>。</block>
+  <block id="2121e1c4047d73ac044da238dfcb8c7c" category="section-title">備份與恢復工作流程</block>
+  <block id="d0d866cff9449845be954e7830c7fe15" category="list-text">*請確保您已安裝 Console Agent*</block>
+  <block id="fa442739b617c9579e06786426c2a01d" category="inline-link-macro">NetApp Console Setup 文件</block>
+  <block id="92b44970e3b6278226c83583a27c3b08" category="paragraph">請確保在執行 OpenShift 叢集的環境中已部署主控台代理程式。有關安裝主控台代理程式的詳細資訊，請參閱 <block ref="499aa61525e0f14391f9320d3b059c0b" category="inline-link-macro-rx"></block>。</block>
+  <block id="92ac5fc0212c94ee50e6dc85913caeec" category="example-title">顯示範例</block>
+  <block id="70ac342b8e64320dd52ec0df3b6f6351" category="paragraph">在 NetApp Console 中，按一下快照所示的「Deploy Agent」，並將代理程式部署到 OpenShift 叢集執行的環境中。</block>
+  <block id="ae4010bee50e94c0b799cfdf2d9ea7c2" category="paragraph">在本例中，我們選擇本地部署。複製代理程式安裝程式 URL，使用 curl 命令在執行於 vSphere 上的 Ubuntu 機器上下載代理程式安裝程式，然後執行安裝程式以部署 Console 代理程式。</block>
+  <block id="c9f604da5ba951fbc0657b27f46decd4" category="inline-link-macro">文件</block>
+  <block id="7a1fb8eab659be867f9aa7eeb45a2d5e" category="paragraph">使用代理程式的 IP 位址在 URL 中進行註冊。請參閱<block ref="e71416951a24fa701af997a8078305e1" category="inline-link-macro-rx"></block>以取得詳細說明。代理程式註冊完成後，您可以在 NetApp Console 中看到它，如下快照所示。</block>
+  <block id="0348fe7b2816d84b85a6c6624b44ea83" category="inline-image-macro">Console Agent 安裝</block>
+  <block id="eb48faca9f9459e75a2db54177714d09" category="paragraph"><block ref="eb48faca9f9459e75a2db54177714d09" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="0e5dd3dc1046e3313f97def07538bec5" category="inline-image-macro">使用代理程式安裝程式 URL</block>
+  <block id="59281354a150bfc9a468d9336d398b1e" category="paragraph"><block ref="59281354a150bfc9a468d9336d398b1e" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="5c28216821bc11d589f206a40441cd2e" category="inline-image-macro">Console Agent 已連接至 NetApp Console</block>
+  <block id="54fe39d8dbaf7cbb3ffa13d85cb74ad3" category="paragraph"><block ref="54fe39d8dbaf7cbb3ffa13d85cb74ad3" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d0e532a765655c01971792a44030cd06" category="list-text">*將 Azure Blob 儲存 Container 設定為 OpenShift VM 備份與恢復方案的備份目標。*</block>
+  <block id="3bf6fc1c51504c47104eb4e9e985df3c" category="paragraph">在本例中，我們使用 Azure Blob 儲存體作為備份目標。您也可以使用 AWS S3、Google Cloud Storage、StorageGRID 或 ONTAP 物件儲存作為備份目標。</block>
+  <block id="e65ff2f26bec9a86892ccc267c743916" category="paragraph">如需更多詳細資訊，請審查 <block ref="01d5df3496ee1ccad0deaaf29f960871" category="inline-link-macro-rx"></block>。</block>
+  <block id="eda6b0cdf5b9e00b1bc3986c7b343954" category="paragraph">若要在 NetApp Console 中探索 Azure Blob 儲存 Container 作為備份目標，您需要從 Azure 入口網站取得下列資訊。</block>
+  <block id="d525f4de0ca60678d5a55e260286b696" category="paragraph">若要取得這些值，請在 Azure 入口網站中執行下列操作。</block>
+  <block id="d2bdcd2c99e9ffd55e98b2f5c60012e1" category="list-text">建立 Blob 儲存 Container。</block>
+  <block id="c6cbbe90982649fed977bbef9a266939" category="list-text">建立企業應用程式，並為該應用程式指派 Blob 儲存 Container 所需的存取。取得該應用程式的應用程式 ID、目錄 ID 和用戶端金鑰，以便在 NetApp Console 中將 Azure Blob 儲存 Container 探索為備份目標。</block>
+  <block id="eac11ebaf2eccc837bb436a8e6a99cdd" category="list-text">*建立儲存設備帳戶和 Blob Container*</block>
+  <block id="062332ddd9176f4d70407f958004eb30" category="list-text">在您的訂閱中建立資源群組。</block>
+  <block id="68521ccb4d4a252dbd7e2fdfa4ce2c16" category="list-text">建立儲存設備帳戶，然後建立 Blob Container。</block>
+  <block id="add55592acf21be3b81edc0cbd46b3c5" category="inline-image-macro">儲存帳戶</block>
+  <block id="683073aa48db3a084d7fba80041c286c" category="paragraph"><block ref="683073aa48db3a084d7fba80041c286c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="5292ec19b2386ed2831a6edb794c3672" category="inline-image-macro">Blob 儲存設備</block>
+  <block id="57bc7d1eafa19a6373384ab9ea13e5bb" category="paragraph"><block ref="57bc7d1eafa19a6373384ab9ea13e5bb" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="ffe385b5294f9b5512f7d73f2afca2cf" category="paragraph"><block ref="ffe385b5294f9b5512f7d73f2afca2cf" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1a80b46344633c06893a8e0d12441843" category="inline-image-macro">已建立 Blob Container</block>
+  <block id="814bed63be31293227b2313c446f4d71" category="paragraph"><block ref="814bed63be31293227b2313c446f4d71" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="6fcfafd79d3fa30e507ca8b0ca62f7fd" category="list-text">*建立具有適當權限的企業應用程式。*在 Azure 入口網站中完成以下步驟。</block>
+  <block id="3aaeacb9bd1daf55a3013db1838be5bb" category="list-text">在您的 Azure 訂閱中建立企業應用程式。</block>
+  <block id="a165ca4672cc07679391481b06c8c0c1" category="list-text">註冊應用程式。取得您剛剛註冊的應用程式 ID 和目錄 ID。</block>
+  <block id="a8eef4a054be9a166431ee2a63779f83" category="list-text">為應用程式指派角色以提供對儲存設備 Blob Container 的存取。+ 為此，請前往先前建立的儲存設備 Blob 的 IAM，然後按一下 *Add Role Assignment*。+ 選擇 Storage Account Contributor 角色，然後按一下「下一步」。選擇「將存取權限指派給使用者、群組或服務主體」，然後在「選擇成員」部分中選擇您建立的企業應用程式。+ 按一下 *Review + assign* 完成指派。+ 重複此程序以新增下面列出的其他角色。應用程式存取 Blob Container 需要所有這些角色。</block>
+  <block id="77340a10ba8a60ac8f126fc31f4e06b3" category="list-text">儲存區塊資料讀取器</block>
+  <block id="43a75a85e4a5f4ca31d88a3753adbcea" category="list-text">儲存 Blob 資料貢獻者</block>
+  <block id="ada8f1fe7e46af0fb022f367a63efff1" category="list-text">儲存帳戶貢獻者</block>
+  <block id="f0902b22e99efe18ffbe84ad78a5a8c6" category="list-text">最後，為該應用程式建立一個用戶端密鑰。</block>
+  <block id="59e0dbc2db867d77094ef64283edf486" category="inline-image-macro">建立企業應用程式</block>
+  <block id="085bd351f816a815f5b605f3a767397f" category="paragraph"><block ref="085bd351f816a815f5b605f3a767397f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="13bfd4c3b34c21e89b74cc4f1345048b" category="inline-image-macro">建立企業應用程式</block>
+  <block id="559ff4ada908345dc74ec1d7294b023f" category="paragraph"><block ref="559ff4ada908345dc74ec1d7294b023f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="b2b0f955e6148aa7c46b34351755af93" category="inline-image-macro">註冊企業應用程式</block>
+  <block id="3f709dd23bd195f7caf65b38193bfbbc" category="paragraph"><block ref="3f709dd23bd195f7caf65b38193bfbbc" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="fba1b435aaa1984762e5718212489d3a" category="inline-image-macro">取得應用程式 ID、目錄 ID</block>
+  <block id="68297c56ac356ca07a239104784e48ae" category="paragraph"><block ref="68297c56ac356ca07a239104784e48ae" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="b5e484d4a70e57c6e3ae9bbd4a4be336" category="inline-image-macro">儲存帳戶 IAM</block>
+  <block id="b7abfd3bd94c10bba11f4d296eed4175" category="paragraph"><block ref="b7abfd3bd94c10bba11f4d296eed4175" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="3b72cb900f31b63ae43bce787442871f" category="inline-image-macro">新增角色分配</block>
+  <block id="f26a2658e2f02205ee96ecbf1ebc4f98" category="paragraph"><block ref="f26a2658e2f02205ee96ecbf1ebc4f98" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="0a77a0c1687266a5f0bc52c0a7ae1458" category="inline-image-macro">選擇服務主體</block>
+  <block id="ae2fb4afdba5a3b2fd7fc53e81b10d35" category="paragraph"><block ref="ae2fb4afdba5a3b2fd7fc53e81b10d35" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="3007a2d1b235031b45325b79aff81c8e" category="inline-image-macro">審查與指派</block>
+  <block id="125b49b45dba6bc862c4ad96548ab0d6" category="paragraph"><block ref="125b49b45dba6bc862c4ad96548ab0d6" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="20cc259d11a528fae528da074cff16f2" category="inline-image-macro">為應用程式建立用戶端密鑰</block>
+  <block id="b3da44ea04ea26fa8ecb91e08822d8ed" category="paragraph"><block ref="b3da44ea04ea26fa8ecb91e08822d8ed" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="f41a77b060d9d363844edf312c0861b4" category="inline-image-macro">為應用程式建立用戶端密碼</block>
+  <block id="ea003985dc60a7ee5e55c2ebdd1e03af" category="paragraph"><block ref="ea003985dc60a7ee5e55c2ebdd1e03af" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="aec8bdbd5d41ce90f82d8ecdb5a155c3" category="list-text">*在 NetApp Console 中，探索 OpenShift 叢集。*</block>
+  <block id="36845cdde0f8cdcf05e3e0ecfa06bbe9" category="paragraph">此步驟需要 OpenShift 叢集正在執行，且 Console 代理程式已部署在相同的環境中。請遵循以下步驟，在 NetApp Console 中探索 OpenShift 叢集。</block>
+  <block id="1bb3ec2ad24de7a02a8da233deb3611a" category="list-text">在 NetApp Console 中，選擇 *Inventory &gt; Kubernetes*，並提供 OpenShift 叢集的詳細資訊。</block>
+  <block id="21c11c3ea7078eb6474c9f2e25977609" category="list-text">選擇部署在 OpenShift 叢集所在相同環境中的代理程式。</block>
+  <block id="120b2cd7f6107019d6bb753fca08468e" category="list-text">複製提供的命令來安裝 Trident Protect，並從用於在 OpenShift 叢集上執行<block ref="fb024832e51eb5f6da9113a745f1eb59" prefix=" " category="inline-code"></block>命令的機器上執行這些命令。</block>
+  <block id="3fb0f1fdcb645bb0f899b56be4e3fe4b" category="list-text">Trident Protect 安裝成功後，按一下 *Discover*。NetApp Console 透過代理程式探索 OpenShift 叢集及其所有資源，並在使用者介面中顯示這些資源。</block>
+  <block id="0d5feb86f13107f21942f7cafac26a80" category="inline-image-macro">探索 OpenShift 叢集</block>
+  <block id="5066e74c49b866f41b7d6d2e1cb688ac" category="paragraph"><block ref="5066e74c49b866f41b7d6d2e1cb688ac" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e41dc1bbd2b5a8d4c1fecf90fdc8460e" category="inline-image-macro">安裝 Trident Protect，然後點選「發現」</block>
+  <block id="a8a598bcc07a965ecca12d2b8e12883f" category="paragraph"><block ref="a8a598bcc07a965ecca12d2b8e12883f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="58dd069f75074a1e2988efeb50df432e" category="list-text">*在 NetApp Console 中，探索 Azure Blob 儲存設備。*</block>
+  <block id="773506c1968843e051ba94c201b1aa39" category="paragraph">若要在 NetApp Console 中探索 Azure Blob Storage，您需要先前在 Azure 入口網站中建立的企業應用程式的應用程式（用戶端）ID、用戶端密碼和目錄（租戶）ID。</block>
+  <block id="fa1d91c013bdde87fb25fdccf733952e" category="paragraph">當您在 NetApp Console 中提供這些詳細資訊時，NetApp Console 會探索 Azure Blob Storage 並將其填入使用者介面。</block>
+  <block id="8c2b55e47868eb7d93b32972c99dee61" category="paragraph">Azure 憑證儲存在 NetApp Console 中，用於存取 Azure Blob 儲存設備以進行備份與恢復作業。</block>
+  <block id="06ede67dddc3dbc8c568679073cc6353" category="inline-image-macro">探索備份目標</block>
+  <block id="802d328976d77a48163a498e2da3e6e9" category="paragraph"><block ref="802d328976d77a48163a498e2da3e6e9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="c102700ecc8594878d7a08c01626fe11" category="inline-image-macro">新增 Azure 憑證</block>
+  <block id="468a1c9a6394aa037e4b669c89d93ca2" category="paragraph"><block ref="468a1c9a6394aa037e4b669c89d93ca2" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="b570a53f78e7444e3e7011d7f4473807" category="inline-image-macro">所需憑證資訊</block>
+  <block id="be474882f90cae9fab4f83374a208c70" category="paragraph"><block ref="be474882f90cae9fab4f83374a208c70" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="6ccd9e3d1cf217ac52c90f1fba4821b8" category="inline-image-macro">提供 Azure 憑證</block>
+  <block id="7ab428a77d2452b74748345b9d5a92db" category="paragraph"><block ref="7ab428a77d2452b74748345b9d5a92db" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d17fe259d5f9fa8fbbc66a45235a1da4" category="inline-image-macro">選擇 Azure 訂閱和 Marketplace 訂閱</block>
+  <block id="3c0851404d814f0874f41948d0cb426d" category="paragraph"><block ref="3c0851404d814f0874f41948d0cb426d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d3236c36e55c92018fcc970ba119ba18" category="inline-image-macro">審查並新增</block>
+  <block id="c618c50be96910fbdb5a49e05676d2ce" category="paragraph"><block ref="c618c50be96910fbdb5a49e05676d2ce" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="de2d3aa9084b7cd8f4651af126e1683f" category="inline-image-macro">已新增 Azure 憑證並探索到 Azure Blob 儲存設備</block>
+  <block id="77115b5cebe8b8fd1111523ff20ba4d8" category="paragraph"><block ref="77115b5cebe8b8fd1111523ff20ba4d8" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="4ad52c0ddddb6a9b8be37e2607f31d47" category="list-text">*在 NetApp Console 中，為虛擬機器建立應用程式並使用備份來保護它們*</block>
+  <block id="4707fe51c490b49cfc15cd47ea3e8d21" category="paragraph">在此步驟中，請在 NetApp Console 中為需要保護的虛擬機器建立應用程式。您可以為單一虛擬機器或多個虛擬機器建立應用程式。您也可以使用命名空間建立應用程式，以保護 OpenShift 叢集中某個命名空間內的所有虛擬機器。</block>
+  <block id="9fde4f02d367a28b74a6a85bc5c84da0" category="paragraph">您還需要一個與應用程式關聯的保護原則。您可以建立新的保護原則，也可以使用現有的保護原則。在本範例中，我們為應用程式建立了新的保護原則並與其關聯。系統會根據關聯的保護原則為應用程式建立備份。保留的備份數量取決於保護原則中定義的保留政策。</block>
+  <block id="327865e84610af8bf5c222e54891ca94" category="inline-image-macro">建立虛擬機器應用程式</block>
+  <block id="d67dee9a9eaa730e83457ef048dae1fd" category="paragraph"><block ref="d67dee9a9eaa730e83457ef048dae1fd" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1fd376016c46dcea09bd465d69a40fdf" category="inline-image-macro">請提供詳細資訊</block>
+  <block id="49ffc248d162af0f13ba74e6ac54c2a9" category="paragraph"><block ref="49ffc248d162af0f13ba74e6ac54c2a9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="bbb15f1c1df6f61e17ecb97f7db7d1c9" category="inline-image-macro">保護命名空間中的所有虛擬機器</block>
+  <block id="1a8fac7515f3921578023709945a64f9" category="paragraph"><block ref="1a8fac7515f3921578023709945a64f9" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="7450638714d0cb7798de3e04bf28a8aa" category="inline-image-macro">建立新的保護原則</block>
+  <block id="ef346e9e5e7d66b4cb216921870d8322" category="paragraph"><block ref="ef346e9e5e7d66b4cb216921870d8322" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="4e3f96d6653bfc26c5277a916daa5dd5" category="inline-image-macro">提供名稱</block>
+  <block id="12a50864631aff6fa76541fe8d95289a" category="paragraph"><block ref="12a50864631aff6fa76541fe8d95289a" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e082643212c96754cdf45168e350c9e8" category="inline-image-macro">提供原則詳細資料</block>
+  <block id="a1d2cdacb6d56b528c4ea05ad7543f6f" category="paragraph"><block ref="a1d2cdacb6d56b528c4ea05ad7543f6f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="c507cd5bd05b44eecb62239f7e2195f8" category="inline-image-macro">選擇本機快照設定和 Azure Blob 儲存體作為備份目標</block>
+  <block id="6c99b905c58f1f9762aad97a8fe78f2b" category="paragraph"><block ref="6c99b905c58f1f9762aad97a8fe78f2b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="e8193da8386751dd98266b07486d85fe" category="inline-image-macro">保護原則已建立</block>
+  <block id="d208f4075a4b6c2ad9ebc16d1a365f78" category="paragraph"><block ref="d208f4075a4b6c2ad9ebc16d1a365f78" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d65999f28c84ee34a3f51aa46df3cb5b" category="inline-image-macro">使用此原則的應用程式保護已啟動</block>
+  <block id="7849ee2f7f7155ab934efc5143f6a336" category="paragraph"><block ref="7849ee2f7f7155ab934efc5143f6a336" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="192111480d54d375094666509a88b782" category="inline-image-macro">應用程式已受保護且運作正常</block>
+  <block id="f272473c9b091b42e3bb36afa8c144c8" category="paragraph"><block ref="f272473c9b091b42e3bb36afa8c144c8" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a4eecdb80586b811fa9352567cc251a2" category="inline-image-macro">使用 2 個磁碟保護 1 部虛擬機器</block>
+  <block id="3609e3aaeadf4c66430a53016de6a17b" category="paragraph"><block ref="3609e3aaeadf4c66430a53016de6a17b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="c412a2a6c576ddce9ac0dec6e77214c5" category="inline-image-macro">使用 2 個磁碟保護 5 部虛擬機器，每部虛擬機器使用 2 個磁碟。</block>
+  <block id="9d1e07a2ab3c70a74461ca2d2d4bba34" category="paragraph"><block ref="9d1e07a2ab3c70a74461ca2d2d4bba34" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="a6cf9b74a6c92aed4f8bd780a126d530" category="paragraph">如果您的應用程式/虛擬機器有多個磁碟，且備份失敗並出現以下錯誤，請編輯<block ref="ee07bc7b19725cce08b47c27d90c9669" prefix=" " category="inline-code"></block>和<block ref="82c52933761271d07c0a31590a842da1" prefix=" " category="inline-code"></block> API 規則，使其包含所示的動詞。</block>
+  <block id="791a48fbf69af66346d28e14300b3f35" category="example-title">&lt;strong&gt;顯示修復&lt;/strong&gt;</block>
+  <block id="4b4f639c0f9c6f8dba83c9e753f181d3" category="inline-image-macro">保護每個含有超過 1 個磁碟的虛擬機器時發生錯誤</block>
+  <block id="653bc198535b8362dc0a19a307cb6175" category="paragraph"><block ref="653bc198535b8362dc0a19a307cb6175" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="7dfaba13e5f3f9d05ebf99d7e254411e" category="list-text">*從備份還原應用程式*</block>
+  <block id="4bf47f40440694f893cc54498982bab9" category="list-text">您可以根據需要，從眾多可用的備份方案中選擇一種來還原您的虛擬機器。</block>
+  <block id="37c1c4ac0386cb8b83ca801523bf809c" category="list-text">您可以還原到原始命名空間或不同的命名空間。</block>
+  <block id="03dc0d8a1c2d7d7a67ef163e47fd0c34" category="list-text">您可以選擇需要還原的資源。</block>
+  <block id="bac5238f2d833903d36adf7bc4926283" category="list-text">還原虛擬機器時，您可以選擇要使用的儲存設備類別。</block>
+  <block id="be2d9748b10adaff5ad70b1bc24f9e62" category="inline-image-macro">選擇還原點</block>
+  <block id="38c634d30febebc8d9b19c55b05ff450" category="paragraph"><block ref="38c634d30febebc8d9b19c55b05ff450" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="429bba7be602d4ad37ec10084f3cc727" category="inline-image-macro">從備份還原應用程式</block>
+  <block id="76076fd96336cadbcf39c961c598d835" category="paragraph"><block ref="76076fd96336cadbcf39c961c598d835" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="3b8986ecd5d533b1f99dd6d0a599f9d6" category="paragraph"><block ref="3b8986ecd5d533b1f99dd6d0a599f9d6" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="1ae3f9f4ade34d73e49b363cc506142c" category="paragraph"><block ref="1ae3f9f4ade34d73e49b363cc506142c" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="b57ac50c27c9a4afbf84faa89562bcd1" category="paragraph">由於 OpenShift 虛擬化是由安裝在 OpenShift 叢集上的運算子管理，因此會對記憶體、CPU 和儲存產生額外的負荷，在規劃叢集的硬體需求時必須將這些因素納入考量。如需詳細資訊，請參閱文件 <block ref="29cdb142dc7fc017947192cde482642d" category="inline-link-macro-rx"></block>。</block>
+  <block id="6d6bc17e64e01157d8c98618fb5b835b" category="paragraph">您也可以透過設定節點放置規則，指定 OpenShift 叢集節點的子集來託管 OpenShift Virtualization 的操作員、控制器和虛擬機器。若要設定 OpenShift Virtualization 的節點放置規則，請參閱相關文件<block ref="29cdb142dc7fc017947192cde482642d" category="inline-link-macro-rx"></block>。</block>
+  <block id="5f93bf74ad1bcca3cffa41b3a1f07ab3" category="list-text">（選用）配置 OpenShift 虛擬化節點放置規則，以指定叢集節點的子集來託管 OpenShift 虛擬化操作員、控制器和虛擬機器。有關如何配置節點放置規則的說明，請參閱 <block ref="a83b38d759ec3301990687edf16d9d75" category="inline-link-macro-rx"></block>。</block>
+  <block id="1353b8b85f4f2b9985b574f4d9da08ff" category="list-text">請依照 Red Hat 文件中的說明安裝 OpenShift Cluster 版本 4.19：<block ref="82a2f4b7c8f19b3cc5cf81a313c30071" category="inline-link-rx"></block>。</block>
+  <block id="73595b8ea28041212bfe0b3f304aed87" category="paragraph">使用 OpenShift 虛擬化移轉工具套件，將虛擬機器從 VMware 移轉至 OpenShift 叢集。此移轉包括安裝虛擬化移轉工具套件 （MTV）、建立來源和目的地供應商、建立移轉計劃，以及執行冷移轉或熱移轉。</block>
+  <block id="da01d739eef47f7a26a0699856e02180" category="paragraph">這是預設的移轉類型。來源虛擬機器將在資料複製期間關閉。</block>
+  <block id="2cb1ea6cd5da2aea7a0f9be34a28c157" category="paragraph">本節說明如何使用 Migration Toolkit for Virtualization (MTV) 將虛擬機器從 VMware 移轉至在 OpenShift Container Platform 上執行，並使用 Trident 與 NetApp ONTAP 儲存設備整合的 OpenShift Virtualization。</block>
+  <block id="c913ebd6a5e7fa341507ee4d3690b2c3" category="paragraph">下圖顯示虛擬機器從 VMware 移轉到 Red Hat OpenShift Virtualization 的高階檢視。</block>
+  <block id="39662c177acec38ded5144e8e1b22c46" category="section-title">在 VMware 上</block>
+  <block id="95fcaa19b69dfba63faab97fd2a56f65" category="list-text">安裝了一台執行 RHEL 9.3 的 RHEL 9 虛擬機器，配置如下：</block>
+  <block id="39c4c17d154298de6d6b0c12770b9ac4" category="list-text">使用者憑證：root 使用者和 admin 使用者</block>
+  <block id="b4751c06abfb39b06882ab9a892bd397" category="list-text">虛擬機器準備就緒後，即安裝 PostgreSQL 伺服器。</block>
+  <block id="52fd2b74cdb9a749807e6a76324ea0b6" category="list-text">PostgreSQL 伺服器已啟動並設定為開機時自動啟動。</block>
+  <block id="addcbac18490a80fb84eda3795587db4" category="paragraph">這些命令確保伺服器在移轉後能夠在 OpenShift Virtualization 的虛擬機器中啟動。</block>
+  <block id="352e31f1a3aae50b277779be34a76fe4" category="list-text">新增了 2 個資料庫、1 個資料表和 1 列資料。如需在 RHEL 上安裝 PostgreSQL 伺服器以及建立資料庫和資料表項目的說明，請參閱 <block ref="40bb38658c07bd15a5cdbf95b0fb5b22" category="inline-link-macro-rx"></block>。</block>
+  <block id="4439eaee8e63d255712c7fa9383e8c53" category="admonition">確保啟動 PostgreSQL 伺服器並啟用開機啟動服務。</block>
+  <block id="0c0d27ee593f2a1a8b6a9df8d6283f69" category="section-title">在 OpenShift 叢集上</block>
+  <block id="c4a3913e8354ba2c7e7e16520357bb9c" category="list-text"><block ref="c4a3913e8354ba2c7e7e16520357bb9c" category="inline-link-macro-rx"></block></block>
+  <block id="7b72d6c4f1cc78426ebd9bf2dab22e65" category="paragraph">現在您可以安裝 Migration Toolkit for Virtualization （MTV）。請參閱提供的說明 <block ref="78541cf70d4432a26af2ad2bc2f1599e" category="inline-link-macro-rx"></block> 以取得安裝協助。</block>
+  <block id="d46d9c721fc7784b48ab686418a683c3" category="paragraph">虛擬化移轉工具套件 (MTV) 使用者介面已整合到 OpenShift Web 控制台中。您可以參考 <block ref="0501eeadc64b28b9be041bb74afe3ad8" category="inline-link-macro-rx"></block> 開始使用使用者介面執行各種任務。</block>
+  <block id="9513e2829b7844fda30bf786e4defd11" category="section-title">建立來源供應商</block>
+  <block id="dd60212b1324509a50e7c15f2e1efeec" category="paragraph">若要將 RHEL 虛擬機器從 VMware 移轉到 OpenShift 虛擬化環境，您需要先建立 VMware 的來源供應商。請參閱<block ref="5a232a9d86f11be106236c73b37bba4f" category="inline-link-macro-rx"></block>以取得建立來源供應商的說明。</block>
+  <block id="ab1fca4511714b4f4c8a79fa9d131a22" category="list-text">vCenter URL 位址</block>
+  <block id="0079bb013ffa269088384b76d343e9f3" category="list-text">vCenter 伺服器指紋</block>
+  <block id="37991fe1e0072557318ae97e4ed0e7d7" category="section-title">建立目的地供應商</block>
+  <block id="878d0e8751ec9197b95fe21f21338b8f" category="paragraph">主機叢集會自動新增為目的地供應商。</block>
+  <block id="32e5a1b0283521db9c220bc7e1601638" category="section-title">制定移轉計劃</block>
+  <block id="9bfa54d4131275e8b993bda340d6c145" category="list-text">儲存設備映射用於將來源資料儲存映射到目標儲存設備類別。為此，您可以選擇 ontap-san 儲存設備類別。建立移轉計劃後，計劃狀態應顯示為 *Ready*，此時您應能夠 *Start* 該計劃。</block>
+  <block id="d52e141f5b66719a465dfb02ab6e9a6c" category="paragraph">點選「開始」，依照步驟順序完成虛擬機器的移轉。</block>
+  <block id="6bbd37819bbfc308cf73d57b8d02df7d" category="inline-link-macro">OpenShift 虛擬化文件</block>
+  <block id="66bf1e95cac6e33ca803ae63bd1df49f" category="paragraph">所有步驟完成後，您可以透過點擊左側導覽功能表「虛擬化」下的「虛擬機器」來查看已移轉的虛擬機器。若要管理虛擬機器，請參閱 <block ref="b9dbf84d140872bee04a9b26b5d1407a" category="inline-link-macro-rx"></block>。</block>
+  <block id="4e459022f56ed6a9dd314c302781bea9" category="paragraph">您可以登入虛擬機器並驗證 PostgreSQL 資料庫的內容。資料庫、表格以及表格中的項目應該與來源 VM 上建立的內容完全一致。</block>
+  <block id="a2d28e18747c9d71352db6b2c6c8e8bd" category="paragraph">若要執行熱移轉，在建立如上所示的移轉計畫後，您需要編輯計畫設定以變更預設移轉類型。按一下冷移轉旁邊的編輯圖示，然後切換按鈕將其設定為熱移轉。按一下 *Save*。現在按一下 *Start* 以啟動移轉。</block>
+  <block id="75b776cb660fd64dc02fb5fc495f370c" category="admonition">在 VMware 中從區塊儲存設備移轉時，請確保已為 OpenShift Virtualization 虛擬機器選擇區塊儲存設備類別。此外，volumeMode 應設定為 Block，存取模式應設定為 ReadWriteMany （RWX），以便稍後執行虛擬機器的即時移轉。</block>
+  <block id="3e0cfa24f0206b444f2286308d494e17" category="paragraph">點選「已完成 1 個虛擬機器中的 0 個」，展開虛擬機器，即可查看移轉進度。</block>
+  <block id="6f120b88c258cd12ff5db235c1209cfa" category="paragraph">一段時間後，磁碟傳輸完成，移轉將等待進入切換狀態。DataVolume 處於暫停狀態。返回計劃並按一下 *Cutover* 按鈕。</block>
+  <block id="532bdd81cc8b169bb47a1cabe7a00e07" category="paragraph">對話方塊顯示目前時間。您可以變更時間以安排稍後進行切換，或按一下 *Set cutover* 立即執行切換。</block>
+  <block id="e6a3fcaf4992966a7d081ecf3a92da0c" category="paragraph">幾秒鐘後，當轉換階段開始時，DataVolume 會從「已暫停」狀態變更為 ImportScheduled，再變更為 ImportInProgress 狀態。</block>
+  <block id="bf3f0b2ca058bcdbf31e79b8d8fe0c84" category="paragraph">切換階段完成後，DataVolume 狀態變成成功，PVC 即會繫結。</block>
+  <block id="d59dcd95172517ecdb4895532a71f370" category="paragraph">移轉計畫繼續完成 ImageConversion 階段，最終完成 VirtualMachineCreation 階段。虛擬機器在 OpenShift 虛擬化環境中進入執行中狀態。</block>
+  <block id="735c16b2a9c39cd92d183ec84328eda5" category="sidebar">使用 NetApp Console 進行備份和還原</block>
 </blocks>

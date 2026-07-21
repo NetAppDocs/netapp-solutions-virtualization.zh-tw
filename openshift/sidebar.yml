@@ -29,6 +29,8 @@ entries:
 - title: 資料保護
   pdf-filename: Red Hat OpenShift 虛擬化資料保護
   entries:
+  - title: 使用 NetApp Console 進行備份和還原
+    url: "/openshift/osv-data-protection-console-br.html"
   - title: 使用 Trident Protect 進行備份和還原
     url: "/openshift/osv-vm-dp-using-tp.html"
   - title: 使用磁碟區組快照保護虛擬機

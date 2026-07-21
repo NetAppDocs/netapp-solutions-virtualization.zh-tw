@@ -34,6 +34,8 @@ indexpage:
       url: osv-migration-vm-storage.html
   - title: 使用 NetApp 儲存保護虛擬機器
     links:
+    - title: 使用 NetApp Console 進行備份和還原
+      url: osv-data-protection-console-br.html
     - title: 使用 Trident Protect 進行備份和還原
       url: osv-vm-dp-using-tp.html
     - title: 使用磁碟區組快照保護虛擬機
@@ -67,6 +69,6 @@ indexpage:
     - title: OpenShift 虛擬化：釋放虛擬環境的力量
       url: https://www.redhat.com/en/blog/openshift-virtualization-unleashing-the-power-of-cloud-native-virtual-environments
     - title: Red Hat OpenShift 文檔
-      url: https://docs.openshift.com/container-platform/4.15/virt/about_virt/about-virt.html
+      url: https://docs.openshift.com/container-platform/4.22
     - title: Red Hat 部落格
       url: https://www.redhat.com/en/blog/products
