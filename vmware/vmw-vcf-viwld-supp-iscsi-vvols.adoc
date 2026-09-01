@@ -2,20 +2,20 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-iscsi-vvols.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
-summary: '開始使用 iSCSI 配置vVols資料存儲，以便在 VMware Cloud Foundation (VCF) 虛擬基礎架構 (VI) 工作負載域中提供補充存儲。您將建立 SVM 和 LIF、設定 iSCSI 網路、ONTAP tools for VMware vSphere以及設定vVols資料儲存區。' 
+summary: '開始設定 vVols 資料存放區，以使用 iSCSI 作為 VMware Cloud Foundation (VCF) 工作負載網域中的補充儲存設備。您將建立 SVM 和 LIF、設定 iSCSI 連網、部署 ONTAP tools for VMware vSphere，並佈建 vVols 資料存放區。' 
 ---
-= 在 VI 工作負載域中新增 iSCSI vVols資料儲存作為補充儲存的部署工作流程
+= 在工作負載網域中新增 iSCSI vVols 資料存放區作為補充儲存設備的部署工作流程
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/
 
 
 [role="lead"]
-開始將 iSCI vVols資料儲存配置為 VMware Cloud Foundation (VCF) 虛擬基礎架構 (VI) 工作負載域中的補充儲存。您將建立 SVM 和 LIF、設定 iSCSI 網路、ONTAP tools for VMware vSphere以及設定儲存。
+開始在 VMware Cloud Foundation (VCF) 工作負載網域中將 iSCSI vVols 資料存放區設定為補充儲存設備。您將建立 儲存虛擬機器 和 LIF、設定 iSCSI 連網、部署 ONTAP tools for VMware vSphere，並設定儲存設備。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["一"]link:vmw-vcf-viwld-supp-iscsi-vvols-requirements.html["查看部署要求"]
 [role="quick-margin-para"]
-查看在 VMware Cloud Foundation VI 工作負載域中部署 iSCSI vVols 的要求。
+檢閱在 VMware Cloud Foundation 工作負載網域中部署 iSCSI vVols 的需求。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png["二"]link:vmw-vcf-viwld-supp-iscsi-vvols-svm-lifs.html["建立 SVM 和 LIF"]
 [role="quick-margin-para"]
@@ -23,7 +23,7 @@ summary: '開始使用 iSCSI 配置vVols資料存儲，以便在 VMware Cloud Fo
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["三"]link:vmw-vcf-viwld-supp-iscsi-vvols-network.html["設定網路"]
 [role="quick-margin-para"]
-在 ESXi 主機上設定 iSCSI 網路。
+在 vSphere 主機上設定 iSCSI 連網。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png["四"]link:vmw-vcf-viwld-supp-iscsi-vvols-storage.html["配置儲存"]
 [role="quick-margin-para"]

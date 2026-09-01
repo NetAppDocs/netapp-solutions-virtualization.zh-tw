@@ -20,7 +20,7 @@ indexpage:
       url: "/videos/index.html"
   - title: NetApp虛擬化解決方案
     links:
-    - title: VMware 本地端和雲端
+    - title: VMware 私有雲
       url: "/vmware/index.html"
     - title: 微軟 Hyper-V
       url: hyperv/index.html

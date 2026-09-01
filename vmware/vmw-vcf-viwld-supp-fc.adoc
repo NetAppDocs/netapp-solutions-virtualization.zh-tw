@@ -4,7 +4,7 @@ permalink: vmware/vmw-vcf-viwld-supp-fc.html
 keywords: netapp, vmware, cloud, foundation, vcf, asa, all-flash, array, ontap tools, otv, sddc, fc 
 summary:  
 ---
-= 將基於 FC 的 VMFS 資料儲存作為補充儲存新增至 VI 工作負載域
+= 將 FC 型 VMFS 資料存放區新增為工作負載網域的補充儲存設備
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary:
 
 
 [role="lead"]
-在此用例中，我們概述了使用光纖通道 (FC) 配置 VMFS 資料儲存作為 VMware Cloud Foundation (VCF) 虛擬基礎架構 (VI) 工作負載域的補充儲存的過程。此流程總結了為 VMware vSphere 部署ONTAP工具、註冊 VI 工作負載 vCenter 伺服器、定義儲存後端以及設定 FC 資料儲存庫。
+本使用案例概述如何使用 Fibre Channel （FC）設定 VMFS 資料存放區，作為 VMware Cloud Foundation （VCF）工作負載網域的補充儲存設備。此程序概述如何部署 ONTAP Tools for VMware vSphere、註冊工作負載 vCenter 伺服器、定義儲存設備後端及配置 FC 資料存放區。
 
 .開始之前
 確保以下組件和配置已到位。
@@ -33,9 +33,9 @@ summary:
 
 ====
 .步驟
-. 依照適用於ONTAP tools for VMware vSphere文件中的說明註冊 VI 工作負載 vCenter：link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-vcenter.html["註冊 VI 工作負載 vCenter"] 。
+. 請按照 ONTAP tools for VMware vSphere 說明文件中的指示來註冊工作負載網域 vCenter：link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-vcenter.html["註冊工作負載 vCenter"]。
 +
-註冊 VI 工作負載 vCenter 可啟用 vCenter 外掛程式。
+註冊工作負載網域 vCenter 伺服器即可啟用該 vCenter 外掛程式。
 
 . 依照適用於ONTAP tools for VMware vSphere文件中的說明，使用 vSphere 用戶端介面新增儲存後端：link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["使用 vSphere 用戶端介面定義儲存後端"] 。
 +
@@ -46,11 +46,18 @@ summary:
 
 
 
+[[reference-video]]
+== 參考影片
+
+.含 FC 的補充資料存放區
+video::96311abf-aa45-4ce9-984b-b4b001005bab[panopto,width=360]
+
+
 [[additional-information]]
 == 附加資訊
 
 * 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"^]。
-* 有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware Cloud Foundation 文檔"^]。
+* 有關設定 VCF 的資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware Cloud Foundation 文檔"^]。
 * 有關在ONTAP儲存系統上配置光纖通道的信息，請參閱 https://docs.netapp.com/us-en/ontap/san-management/index.html["SAN儲存管理"^]在ONTAP 9 文檔中。
 * 有關將 VMFS 與ONTAP儲存系統結合使用的信息，請參閱link:vmw-vmfs-deploy.html["VMFS 部署指南"]。
 * 有關此解決方案的視訊演示，請參閱link:../videos/vmware-videos.html#vmware-datastore-provisioning-with-ontap["VMware 資料儲存區配置"]。

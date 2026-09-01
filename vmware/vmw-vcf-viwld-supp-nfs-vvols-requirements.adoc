@@ -2,14 +2,14 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols-requirements.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
-summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 NFS vVols ，您需要一個完全配置的ONTAP AFF或ASA儲存系統、一個完整的 VCF 管理域和一個現有的 VI 工作負載域。審查建議的網路設計和基礎設施要求，以確保可靠、高效能的儲存整合。 
+summary: 要在 VMware Cloud Foundation 工作負載域中部署 NFS vVols，您需要一個完整設定的 ONTAP AFF 或 ASA 儲存系統、一個已完成的 VCF 管理域以及一個現有的 VI 工作負載域。請查看建議的網路設計和基礎架構需求，以確保可靠、高效能的儲存設備整合。 
 ---
-= 在 VI 工作負載域中新增 NFS vVols 的部署要求
+= 在工作負載域中新增 NFS vVols 的部署要求
 :allow-uri-read: 
 
 
 [role="lead"]
-查看在 VMware Cloud Foundation VI 工作負載域中部署 NFS vVols 的建議網路設計和基礎架構要求。您需要一個完全設定的ONTAP AFF或ASA儲存系統、一個完整的 VCF 管理網域和一個現有的 VI 工作負載域。
+請查看在 VMware Cloud Foundation 工作負載域中部署 NFS vVols 的建議網路設計和基礎架構需求。您需要一個完整設定的 ONTAP AFF 或 ASA 儲存系統、一個已完成的 VCF 管理域，以及一個現有的工作負載域。
 
 
 
@@ -20,7 +20,7 @@ summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 NFS vVols �
 
 * ONTAP AFF或FAS儲存系統，其乙太網路交換器上的實體資料連接埠專用於儲存流量。
 * VCF管理網域部署已完成，並且可以存取vSphere客戶端。
-* 之前已部署 VI 工作負載域。
+* 工作負載域已預先部署。
 
 
 

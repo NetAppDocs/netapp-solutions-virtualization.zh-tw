@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
-summary: '開始使用適用於ONTAP tools for VMware vSphere將 NFS 和vVols作為補充儲存新增至 VI 工作負載域。您將為ONTAP tools for VMware vSphere，使用 NFS 邏輯介面設定儲存虛擬機器 (SVM)，並設定 NFS 和vVols資料儲存區。' 
+summary: 開始使用 ONTAP tools for VMware vSphere，將 NFS 和 vVols 新增為 VCF 工作負載網域的補充儲存設備。您將部署 ONTAP tools for VMware vSphere、設定具有 NFS 邏輯介面的儲存虛擬機器 （SVM），並資源配置 NFS 和 vVols 資料存放區。 
 ---
-= 在 VI 工作負載域中新增 NFS vVols資料儲存作為補充儲存的部署工作流程
+= 在 VCF 工作負載網域中新增 NFS vVols 資料存放區作為補充儲存設備的部署工作流程
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: '開始使用適用於ONTAP tools for VMware vSphere將 NFS 和vVols作
 
 
 [role="lead"]
-開始使用適用於ONTAP tools for VMware vSphere在 VI 工作負載域中新增 NFS vVols資料儲存作為補充儲存。您將檢視部署需求、ONTAP tools for VMware vSphere、使用邏輯介面設定 SVM 以及設定儲存。
+開始使用 ONTAP tools for VMware vSphere，在 VCF 工作負載網域中新增 NFS vVols 資料存放區作為補充儲存設備。您將審查部署需求、部署 ONTAP tools for VMware vSphere、使用邏輯介面設定 SVM，以及設定儲存設備。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["一"]link:vmw-vcf-viwld-supp-nfs-vvols-requirements.html["查看部署要求"]
 [role="quick-margin-para"]
@@ -26,7 +26,7 @@ summary: '開始使用適用於ONTAP tools for VMware vSphere將 NFS 和vVols作
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["三"]link:vmw-vcf-viwld-supp-nfs-vvols-network.html["設定網路"]
 [role="quick-margin-para"]
-在 ESXi 主機上設定 NFS 網路。
+在 vSphere 主機上設定 NFS 連網。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png["四"]link:vmw-vcf-viwld-supp-nfs-vvols-storage.html["配置儲存"]
 [role="quick-margin-para"]

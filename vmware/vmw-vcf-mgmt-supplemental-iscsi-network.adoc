@@ -1,17 +1,17 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-mgmt-supplemental-iscsi-network.html 
-keywords: netapp, vmware, cloud, foundation, vcf, iscsi, network, esxi 
-summary: 在 VMware Cloud Foundation 管理網域中的 ESXi 主機上設定 iSCSI 網路以實現與ONTAP儲存系統的連線。您將建立具有 VLAN 分離的分散式連接埠群組，配置上行鏈路組合以實現冗餘，並在每個 ESXi 主機上設定 VMkernel 適配器以建立專用的 iSCSI 路徑來實現故障轉移功能。 
+keywords: netapp, vmware, cloud, foundation, vcf, iscsi, network, vSphere 
+summary: 在 VMware Cloud Foundation 管理網域中的 vSphere 主機上設定 iSCSI 連網，以啟用與 ONTAP 儲存系統的連線。您將建立具有 VLAN 隔離的分散式連接埠群組、設定上行鏈路綁定以實現備援，並在每台 vSphere 主機上設定 VMkernel 介面卡，以建立專用的 iSCSI 路徑來實現容錯移轉功能。 
 ---
-= 在 VCF 管理域中為 ESXi 主機設定 iSCSI 網路
+= 在 VCF 管理網域中的 vSphere 主機上設定 iSCSI 連網
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/
 
 
 [role="lead"]
-在 VMware Cloud Foundation 管理網域中的 ESXi 主機上設定 iSCSI 網路以實現與ONTAP儲存系統的連線。您將建立具有 VLAN 分離的分散式連接埠群組，配置上行鏈路組合以實現冗餘，並在每個 ESXi 主機上設定 VMkernel 適配器以建立專用的 iSCSI 路徑來實現故障轉移功能。
+在 VMware Cloud Foundation 管理網域中的 vSphere 主機上設定 iSCSI 連網，以啟用與 ONTAP 儲存系統的連線。您將建立具有 VLAN 隔離的分散式連接埠群組、設定上行鏈路綁定以實現備援，並在每台 vSphere 主機上設定 VMkernel 介面卡，以建立專用的 iSCSI 路徑來實現容錯移轉功能。
 
 使用 vSphere 用戶端在 VCF 管理網域叢集上執行下列步驟。
 
@@ -70,10 +70,10 @@ image:vmware-vcf-asa-026.png["將上行鏈路 1 移至未使用狀態"]
 
 
 
-[[step-2-create-vmkernel-adapters-on-each-esxi-host]]
-== 步驟 2：在每個 ESXi 主機上建立 VMkernel 適配器
+[[step-2-create-vmkernel-adapters-on-each-vsphere-host]]
+== 步驟 2：在每台 vSphere 主機上建立 VMkernel 介面卡
 
-在管理域中的每個 ESXi 主機上建立 VMkernel 適配器。
+在管理網域中的每台 vSphere 主機上建立 VMkernel 介面卡。
 
 .步驟
 . 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
@@ -132,4 +132,4 @@ image:vmware-vcf-asa-034.png["檢查 VMkernel 選擇"]
 [[whats-next]]
 == 下一步是什麼？
 
-在工作負載域中的所有 ESXi 主機上設定 iSCSI 網路後，link:vmw-vcf-mgmt-supplemental-iscsi-storage.html["在 ESXi 主機上設定 iSCSI 存儲"] 。
+在管理網域中的所有 vSphere 主機上設定 iSCSI 連網後，link:vmw-vcf-mgmt-supplemental-iscsi-storage.html["在 vSphere 主機上設定 iSCSI 儲存設備"]。

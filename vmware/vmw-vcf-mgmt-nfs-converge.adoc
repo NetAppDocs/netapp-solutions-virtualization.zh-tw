@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-mgmt-nfs-converge.html 
+keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, array, ontap tools, otv, sddc, sddc manager, ontap tools, ontap tools 10 
+summary: 使用 VCF 安裝程式工具將現有 vSphere 叢集合併到 VCF 管理網域。您將驗證 vCenter 應用裝置、部署 VCF 安裝程式、重複使用現有元件並安裝新元件，以完成 VCF 管理網域的建置。 
+---
+= 使用 VCF 安裝程式工具將 vSphere 叢集整合至 VCF 管理網域
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+使用 VCF 安裝程式工具將現有 vSphere 叢集合併到 VCF 管理網域。您將驗證 vCenter 應用裝置、部署 VCF 安裝程式、重複使用現有元件並安裝新元件，以完成 VCF 管理網域的建置。
+
+VCF 安裝程式工具會根據您環境中已部署的元件，決定哪些元件可以重複使用，哪些元件需要安裝。VCF 安裝程式工具也會驗證現有 vCenter 應用裝置，確保其符合融合要求。
+
+按照文件中記錄的步驟 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/converging-your-existing-vsphere-infrastructure-to-a-vcf-or-vvf-platform-.html["將您現有的 vSphere 基礎架構整合至 VCF 管理網域"]完成收斂程序。
+
+https://vmware.github.io/vcf-upgrade-planner/["VCF 升級規劃工具"] 根據您提供的輸入，提供完成收斂程序的高階步驟。

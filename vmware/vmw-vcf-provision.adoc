@@ -14,12 +14,12 @@ summary:
 
 
 [role="lead"]
-NetApp ONTAP儲存是 VMware Cloud Foundation (VCF) 管理和虛擬基礎架構 (VI) 工作負載域的理想主儲存解決方案。  ONTAP提供高效能、可擴展性、進階資料管理和無縫集成，以提高營運效率和資料保護。
+NetApp ONTAP 儲存設備是 VMware Cloud Foundation (VCF) 管理和工作負載網域的理想主儲存設備解決方案。ONTAP 提供高效能、擴充性、進階資料管理員和無縫整合，從而提高作業效率和資料保護。
 
 有關在適當的域中並使用適當的協定配置 VCF 環境的技術細節，請參閱以下解決方案。
 
 * link:vmw-vcf-mgmt-principal-fc.html["帶有 FC 的管理域"]
 * link:vmw-vcf-mgmt-principal-nfs.html["具有 NFS 的管理域"]
-* link:vmw-vcf-viwld-principal-fc.html["具有 FC 的虛擬基礎架構工作負載域"]
-* link:vmw-vcf-viwld-principal-nfs.html["具有 NFS 的虛擬基礎架構工作負載域"]
+* link:vmw-vcf-viwld-principal-fc.html["具有 FC 的工作負載域"]
+* link:vmw-vcf-viwld-principal-nfs.html["具有 NFS 的工作負載網域"]
 

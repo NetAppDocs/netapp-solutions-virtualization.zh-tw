@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nvme-network.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
-summary: '在 VI 工作負載域中的 ESXi 主機上設定 NVMe over TCP (NVMe/TCP) 儲存的網路。您將為 NVMe 流量建立分散式連接埠群組，在每個 ESXi 主機上設定 VMkernel 適配器，並新增 NVMe/TCP 適配器以實現可靠的連線和多路徑。' 
+summary: 在工作負載域中的 vSphere 主機上設定基於 TCP 的 NVMe （NVMe/TCP）儲存設備連網。您將為 NVMe 流量建立分散式連接埠群組，在每台 vSphere 主機上設定 VMkernel 介面卡，並新增 NVMe/TCP 介面卡以啟用可靠連線和多重路徑。 
 ---
-= 在 VCF VI 工作負載域中的 ESXi 主機上設定 NVMe/TCP 網路
+= 在 VCF 工作負載網域中的 vSphere 主機上設定 NVMe/TCP 連網
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,14 +14,14 @@ summary: '在 VI 工作負載域中的 ESXi 主機上設定 NVMe over TCP (NVMe/
 
 
 [role="lead"]
-在 VI 工作負載域中的 ESXi 主機上設定 NVMe over TCP (NVMe/TCP) 儲存的網路。您將為 NVMe 流量建立分散式連接埠群組，在每個 ESXi 主機上設定 VMkernel 適配器，並新增 NVMe/TCP 適配器以實現可靠的連線和多路徑。
+在工作負載域中的 vSphere 主機上設定基於 TCP 的 NVMe （NVMe/TCP）儲存設備連網。您將為 NVMe 流量建立分散式連接埠群組，在每台 vSphere 主機上設定 VMkernel 介面卡，並新增 NVMe/TCP 介面卡以啟用可靠連線和多重路徑。
 
-使用 vSphere 用戶端在 VI 工作負載域叢集上執行下列步驟。在這種情況下，使用 vCenter Single Sign-On，因此 vSphere 用戶端對於管理網域和工作負載網域都是通用的。
+使用 vSphere 用戶端在工作負載網域叢集上執行下列步驟。在本例中，由於使用 vCenter Single Sign-On，因此 vSphere 用戶端可同時適用於管理網域和工作負載網域。
 
 
 
 [[step-1-create-distributed-port-groups-for-nvmetcp-traffic]]
-== 步驟 1：為 NVME/TCP 流量建立分散式連接埠群組
+== 步驟 1：為 NVMe/TCP 流量建立分散式連接埠群組
 
 完成以下步驟為每個 NVMe/TCP 網路建立一個新的分散式連接埠群組。
 
@@ -82,13 +82,13 @@ image:vmware-vcf-asa-079.png["將上行鏈路 1 移至未使用狀態"]
 
 
 
-[[step-2-create-the-vmkernel-adapters-on-each-esxi-host]]
-== 步驟 2：在每個 ESXi 主機上建立 VMkernel 適配器
+[[step-2-create-the-vmkernel-adapters-on-each-vsphere-host]]
+== 步驟 2：在每台 vSphere 主機上建立 VMkernel 介面卡
 
-在工作負載域中的每個 ESXi 主機上建立 VMkernel 適配器。
+在工作負載域中的每台 vSphere 主機上建立 VMkernel 介面卡。
 
 .步驟
-. 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
+. 在 vSphere 用戶端，導覽至工作負載域清單中的其中一個 vSphere 主機。在 *Configure* 索引標籤中，選取 *VMkernel adapters*，然後按一下 *Add Networking……* 開始操作。
 +
 .顯示範例
 [%collapsible]
@@ -142,13 +142,13 @@ image:vmware-vcf-asa-098.png["檢查 VMkernel 選擇"]
 
 
 [[step-3-add-nvmetcp-adapter]]
-== 步驟 3：新增 NVMe/TCP 轉接器
+=== 步驟 3：新增 NVMe/TCP 轉接器
 
-工作負載域叢集中的每個 ESXi 主機都必須為每個專用於儲存流量的已建立 NVMe/TCP 網路安裝 NVMe/TCP 軟體適配器。
+工作負載域叢集中的每個 vSphere 主機，都必須為每個專用於儲存設備流量的已建立 NVMe/TCP 網路安裝 NVMe/TCP 軟體介面卡。
 
 若要安裝 NVMe/TCP 轉接器並發現 NVMe 控制器，請完成以下步驟。
 
-. 在 vSphere 用戶端中，導覽至工作負載域叢集中的其中一個 ESXi 主機。在「*配置*」標籤中，按一下選單中的「*儲存適配器*」。
+. 在 vSphere 用戶端中，導覽至工作負載網域叢集中的其中一台 vSphere 主機。在「*Configure*」標籤中，按一下選單中的「*Storage Adapters*」。
 . 從*新增軟體適配器*下拉選單中，選擇*新增 NVMe over TCP 適配器*。
 +
 .顯示範例

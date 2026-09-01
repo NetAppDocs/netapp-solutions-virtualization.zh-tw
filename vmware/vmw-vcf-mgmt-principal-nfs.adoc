@@ -14,22 +14,22 @@ summary:
 
 
 [role="lead"]
-在此用例中，我們概述了使用ONTAP上現有的 NFS 資料儲存作為 VMware Cloud Foundation (VCF) 管理域的主儲存的過程。此流程總結了所需的元件、設定步驟和部署流程。
+本使用案例概述在 ONTAP 上建立 NFS 資料存放區作為 VMware Cloud Foundation （VCF） 管理網域主儲存設備的步驟。本步驟總結所需的元件、組態步驟和部署流程。
 
 
 
 [[introduction]]
 == 介紹
 
-在適當的情況下，我們將參考外部文檔，以了解必須在 VCF 的 SDDC 管理器中執行的步驟，並參考特定於儲存配置部分的步驟。
+在適當情況下，我們將參考外部文件，以了解必須在 vCenter 中執行的步驟，並參考儲存組態部分特有的步驟。
 
-有關使用ONTAP轉換現有基於 NFS 的 vSphere 環境的信息，請參閱link:vmw-vcf-mgmt-nfs.html["將 vSphere 環境（NFS 資料儲存）轉換為 VCF 管理域"]。
-
-
-NOTE: VCF 版本 5.2 引進了將現有 vSphere 8 環境轉換為 VCF 管理域或匯入為 VCF VI 工作負載域的功能。在此版本之前，VMware vSAN 是 VCF 管理域的主要儲存的唯一選項。
+如果需要將 NFS 4.1 資料存放區用作主儲存設備，或需要將現有的基於 NFS 的 vSphere 環境轉換為 ONTAP，請參閱 link:vmw-vcf-mgmt-nfs.html["將 vSphere 環境（NFS 資料儲存）融合至 VCF 管理網域"]。
 
 
-NOTE: 此解決方案適用於支援NFS儲存的ONTAP平台，包括NetApp AFF和FAS。
+NOTE: VCF 5.2 版本引進了將現有 vSphere 8 環境轉換為 VCF 管理網域或匯入為 VCF VI 工作負載網域的功能。在此版本之前，VMware vSAN 是 VCF 管理網域主儲存設備的唯一選擇。NSX 控制器虛擬機器最好部署在基於 FC 的 VMFS 資料儲存區上，或使用雙網路交換器以避免單點故障。如果這些選項無法使用，請考慮使用 vSAN 來裝載這些虛擬機器。
+
+
+NOTE: 此解決方案適用於支援 NFS 儲存設備的 ONTAP 平台，包括 NetApp AFF、AFX 和 FAS。
 
 
 
@@ -40,14 +40,20 @@ NOTE: 此解決方案適用於支援NFS儲存的ONTAP平台，包括NetApp AFF�
 
 * NetApp儲存系統，其儲存虛擬機器 (SVM) 配置為允許 NFS 流量。
 * 已在 IP 網路上建立用於承載 NFS 流量並與 SVM 關聯的邏輯介面 (LIF)。
-* 一個 vSphere 8 集群，其中有 4 個 ESXi 主機和一個位於該集群上的 vCenter 設備。
-* 為 vMotion 和 NFS 儲存流量在為此目的建立的 VLAN 或網路區段上配置的分散式連接埠群組。
-* 下載 VCF 轉換所需的軟體。
+* 一個 vSphere 叢集，至少包含 2 台 vSphere 主機。
+* NFS 資料儲存裝載在其中一台 vSphere 主機上，且使用與管理網域相同的 NFS 伺服器和匯出路徑。
+
+
+
+NOTE: 部署 VCF 網域時，VCF 會驗證與 NFS 伺服器的連線性。此驗證在新增任何其他具有 NFS IP 位址的 vmkernel 介面卡之前，會使用 vSphere 主機上的管理介面卡完成。因此，必須確保以下兩種情況之一：1） 管理網路可路由至 NFS 伺服器；或 2） 已將管理網路的 LIF 新增至託管 NFS 資料儲存 Volume 的 SVM，以確保驗證能夠順利進行。
+
+* 確保 ONTAP NFS VAAI 工具安裝在其中一部 vSphere 主機上，該主機可被選為叢集"映像"的範本。
+* 部署 VCF 安裝程式工具。
 
 
 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
 
-有關配置 VCF 的信息，請參閱link:https://docs.vmware.com/en/VMware-Cloud-Foundation/index.html["VMware 雲端基礎文檔"]。
+有關設定 VCF 的資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware 雲端基礎文檔"]。
 
 
 
@@ -59,21 +65,21 @@ NOTE: 此解決方案適用於支援NFS儲存的ONTAP平台，包括NetApp AFF�
 [[management-domain-default-cluster]]
 === 管理域 - 預設集群
 
-初始叢集上的 NFS 主體儲存僅支援 VCF 棕地匯入工具。如果使用 Cloud Builder 工具（直到版本 5.2.x）部署 VCF，則僅支援 VSAN。
+VCF 安裝程式工具支援管理網域的 VMFS on FC、NFS v3 和 vSAN 資料儲存。以下步驟概述如何部署以 ONTAP 上的 NFSv3 資料儲存作為主儲存設備的管理網域。
 
-有關使用現有 vSphere 環境的更多信息，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/convert-or-import-a-vsphere-environment-into-vmware-cloud-foundation-admin.html["將現有 vSphere 環境轉換為管理域"]了解更多。
+
+NOTE: 部署後驗證或調整 NFS 資料儲存的 nConnect 值。
+
+有關使用現有 vSphere 環境的詳細資訊，請參閱link:vmw-vcf-mgmt-nfs.html["將 vSphere 環境（NFS 資料儲存）融合至 VCF 管理網域"]。
 
 
 
 [[management-domain-additional-cluster]]
 === 管理域 - 附加集群
 
-管理網域上的附加 vSphere 叢集可以透過下列選項進行部署：
+若要使用額外的叢集擴充管理域，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/building-your-private-cloud-infrastructure/working-with-workload-domains/expand-a-workload-domain/add-a-cluster-to-a-workload-domain-using-the-sddc-manager-ui.html["將 SDDC 叢集新增至 VCF 網域"]。
 
-* 在 vSphere 環境中擁有額外的集群，並使用 VCF 棕地導入工具將 vSphere 環境轉換為管理域。 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["ONTAP tools for VMware vSphere"] https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]可用於將 NFS 資料儲存部署到 vSphere 叢集。
-* 使用 SDDC API 部署額外的叢集。 vSphere 主機應該配置 NFS 資料儲存。使用 https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]將 LUN 部署到 vSphere 主機。
-* 使用 SDDC Manager UI 部署額外的叢集。但此選項僅建立 5.2.x 先前版本的 vSAN 資料儲存。
-
+從整體來看，為管理網域新增額外叢集的步驟如下：* 確保主機已完成部署，且網路池已在 vCenter 中設定。* 在 ONTAP 儲存系統上佈建 NFS 資料存放區 Volume，並將其匯出至額外叢集中的主機。* 在 vCenter 的管理網域上建立新的 SDDC 叢集，並依照精靈將額外叢集新增至管理網域。
 
 
 
@@ -82,4 +88,4 @@ NOTE: 此解決方案適用於支援NFS儲存的ONTAP平台，包括NetApp AFF�
 
 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
 
-有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware 雲端基礎文檔"]。
+有關設定 VCF 的資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware 雲端基礎文檔"]。

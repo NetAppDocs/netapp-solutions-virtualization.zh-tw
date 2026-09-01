@@ -1,0 +1,47 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-mgmt-vmfs.html 
+keywords: netapp, vmware, cloud, foundation, vcf, asa, aff, all-flash, fc, array, ontap tools, otv, sddc, sddc manager, ontap tools, ontap tools 10 
+summary: 將現有 vSphere 叢集（包含支援的 NetApp ONTAP VMFS 資料存放區）融合至 VMware Cloud Foundation 管理網域。您將審查組態需求、部署 ONTAP tools 並佈建 VMFS 資料存放區，然後使用 VCF Installer Tool 驗證並融合叢集。 
+---
+= 將 vCenter 伺服器執行個體融合至具有 VMFS 資料存放區的 VCF 管理網域的部署工作流程
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+將具有 NetApp ONTAP VMFS 資料儲存庫的現有 vSphere 叢集融合至 VMware Cloud Foundation 管理網域。您將審查組態需求、部署 ONTAP tools 並資源配置 VMFS 資料儲存庫，然後使用 VCF Installer 工具來驗證及使用現有元件、部署所需的新元件並設定平台。
+
+此工作流程也用於將任何受支援的 VMFS 資料儲存作為 VCF 管理網域的主儲存設備使用。
+
+有關轉換過程的總覽，請參閱 VMware 文件： https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/converging-your-existing-vsphere-infrastructure-to-a-vcf-or-vvf-platform-.html["將現有虛擬基礎架構融合至 VCF"]。
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["一"]link:vmw-vcf-mgmt-vmfs-requirements.html["查看配置要求"]
+[role="quick-margin-para"]
+審查使用 VMFS 資料儲存區將 vCenter 伺服器執行個體融合至 VCF 管理網域的關鍵需求。
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png["二"]link:vmw-vcf-mgmt-vmfs-deploy.html["部署 ONTAP tools 並資源配置受支援的 VMFS 資料存放區"]
+[role="quick-margin-para"]
+部署 ONTAP tools for VMware vSphere，並資源配置受支援的 VMFS 資料儲存。
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["三"]link:vmw-vcf-mgmt-vmfs-converge.html["將 vSphere 叢集融合至 VCF 管理網域"]
+[role="quick-margin-para"]
+使用 VCF 安裝程式工具來驗證、重複使用現有元件並部署構成 VCF 管理網域的新元件。
+
+
+
+[[reference-video]]
+== 參考影片：
+
+.iSCSI 多路徑與 AFF 和 ASA r2
+video::62c2a66c-1a07-4284-bc7b-b4ac00e9aeea[panopto,width=360]
+.含 NVMe/TCP 的補充資料存放區
+video::f85530ec-ff24-4c7d-abb4-b49b0176402c[panopto,width=360]
+.含 NVMe/FC 的補充資料存放區
+video::b2b16a35-05cd-49c9-a91a-b4ac0127813d[panopto,width=360]
+.含 FC 的補充資料存放區
+video::96311abf-aa45-4ce9-984b-b4b001005bab[panopto,width=360]

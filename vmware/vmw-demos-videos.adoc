@@ -93,6 +93,26 @@ video::255640f5-4dff-438c-8d50-b01200f017d1[panopto,width=360]
 video::9b66ac8d-d2b1-4ac4-a33c-b16900f67df6[panopto]
 .iSCSI 資料儲存作為 VCF 管理域的補充存儲
 video::1d0e1af1-40ae-483a-be6f-b156015507cc[panopto]
+.含 NVMe/FC 的補充資料存放區
+video::b2b16a35-05cd-49c9-a91a-b4ac0127813d[panopto,width=360]
+.含 FC 的補充資料存放區
+video::96311abf-aa45-4ce9-984b-b4b001005bab[panopto,width=360]
+.使用 ONTAP tools 為 VCF 建置具有 SnapMirror 主動同步 iSCSI 的延伸叢集
+video::4c21ee83-dc11-43bf-a9af-b4ac014aaa0e[panopto,width=360]
+.適用於 VCF 的 Stretch 集群，支援 SnapMirror 作用中同步 NVMe/TCP
+video::f85530ec-ff24-4c7d-abb4-b49b0176402c[panopto,width=360]
+.適用於 VCF 的 Stretch 叢集，支援 SnapMirror 主動同步 NAS
+video::76549cac-a1e3-4471-acf5-b49c00eebcf7[panopto,width=360]
+.iSCSI 多路徑與 AFF 和 ASA r2
+video::62c2a66c-1a07-4284-bc7b-b4ac00e9aeea[panopto,width=360]
+====
+.VKS 與 ONTAP
+[%collapsible%open]
+====
+.VKS 搭配 Virtual Distributed Switch 上的 Supervisor
+video::4ef64b3c-7a68-41d5-bacf-b4a8012b49f8[panopto,width=360]
+.搭配 VCF Automation 的 VKS
+video::571ced1a-58e8-4bf4-9c24-b4b10118bc22[panopto,width=360]
 ====
 .NetAppCloud Insights
 [%collapsible%open]

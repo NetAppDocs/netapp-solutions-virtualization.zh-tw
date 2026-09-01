@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nvme-requirements.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
-summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 NVMe vVols ，您需要一個完全設定的ONTAP AFF或ASA儲存系統、一個完整的 VCF 管理網域和一個現有的 VI 工作負載域。審查建議的網路設計和基礎設施要求，以確保可靠、高效能的儲存整合。 
+summary: 要在 VMware Cloud Foundation 工作負載網域中部署 NVMe/TCP 資料存放區，您需要一個完整設定的 ONTAP AFF 或 ASA 儲存系統、一個已完成的 VCF 管理網域，以及一個現有的工作負載網域。請審查建議的網路設計和基礎架構需求，以確保可靠、高效能的儲存設備整合。 
 ---
-= VI 工作負載域中 NVMe vVols的部署需求
+= VMware Cloud Foundation 工作負載域中 NVMe/TCP 資料存放區的部署要求
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 NVMe vVols �
 
 
 [role="lead"]
-查看在 VMware Cloud Foundation VI 工作負載域中部署 NVMe vVols 的建議網路設計和基礎架構要求。您需要一個完全設定的ONTAP AFF或ASA儲存系統、一個已部署的 VCF 管理網域和一個現有的 VI 工作負載域。
+請審查在 VMware Cloud Foundation 工作負載網域中部署 NVMe/TCP 資料儲存所需的建議網路設計和基礎架構要求。您需要一個完整設定的 ONTAP AFF 或 ASA 儲存系統、一個已部署的 VCF 管理網域，以及一個現有的工作負載網域。
 
 
 
@@ -23,7 +23,7 @@ summary: 要在 VMware Cloud Foundation VI 工作負載域中部署 NVMe vVols �
 
 * ONTAP AFF或ASA儲存系統，其乙太網路交換器上的實體資料連接埠專用於儲存流量。
 * VCF管理網域部署已完成，並且可以存取vSphere客戶端。
-* 之前已部署 VI 工作負載域。
+* 工作負載域已預先部署。
 
 
 

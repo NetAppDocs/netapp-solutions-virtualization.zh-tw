@@ -2,26 +2,26 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-iscsi-vvols-storage.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
-summary: 使用ONTAP工具在 VI 工作負載域中設定 iSCSI vVols儲存。您將為ONTAP tools for VMware vSphere、註冊儲存系統、建立儲存功能設定檔並在 vSphere 用戶端中設定vVols資料儲存區。 
+summary: 使用 ONTAP tools 在工作負載網域中設定 iSCSI vVols 儲存設備。您將在 vSphere 用戶端中部署 ONTAP tools for VMware vSphere 、註冊儲存系統、建立儲存功能設定檔，並資源配置 vVols 資料存放區。 
 ---
-= 使用ONTAP工具在 VCF VI 工作負載域中設定 iSCSI vVols存儲
-:hardbreaks:
+= 使用 ONTAP tools 在 VCF 工作負載網域中設定 iSCSI vVols 儲存設備
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
 
+
+
+
+[[configure-iscsi-vvols-storage-in-a-vcf-workload-domain-using-ontap-tools]]
+== 使用 ONTAP tools 在 VCF 工作負載網域中設定 iSCSI vVols 儲存設備
 
 [role="lead"]
-使用ONTAP工具在 VI 工作負載域中設定 iSCSI vVols儲存。您將為ONTAP tools for VMware vSphere、註冊儲存系統、建立儲存功能設定檔並在 vSphere 用戶端中設定vVols資料儲存區。
+使用 ONTAP tools 在工作負載網域中設定 iSCSI vVols 儲存設備。您將在 vSphere 用戶端中部署 ONTAP tools for VMware vSphere 、註冊儲存系統、建立儲存功能設定檔，並資源配置 vVols 資料存放區。
 
 
 
 [[step-1-deploy-ontap-tools-for-vmware-vsphere]]
-== 步驟 1：ONTAP tools for VMware vSphere
+=== 步驟 1：ONTAP tools for VMware vSphere
 
-對於 VI 工作負載域， ONTAP工具安裝到 VCF 管理集群，但向與 VI 工作負載域關聯的 vCenter 註冊。
+對於工作負載網域，ONTAP tools 安裝在 VCF 管理叢集中，但已註冊到與工作負載網域關聯的 vCenter。
 
 ONTAP tools for VMware vSphere作為 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。
 
@@ -89,7 +89,7 @@ image:vmware-vcf-asa-035.png["自訂OTV模板2"]
 
 
 [[step-2-add-a-storage-system]]
-== 步驟 2：新增儲存系統
+=== 步驟 2：新增儲存系統
 
 執行下列步驟使用ONTAP工具新增儲存系統。
 
@@ -134,7 +134,7 @@ image:vmware-vcf-asa-017.png["授權集群證書"]
 
 
 [[step-3-create-a-storage-capability-profile-in-ontap-tools]]
-== 步驟 3：在ONTAP工具中建立儲存功能設定檔
+=== 步驟 3：在ONTAP工具中建立儲存功能設定檔
 
 儲存能力設定檔描述了儲存陣列或儲存系統提供的功能。它們包括服務品質定義，並用於選擇符合設定檔中定義的參數的儲存系統。您可以使用所提供的設定檔之一，也可以建立新的設定檔。
 
@@ -201,7 +201,7 @@ image:vmware-vcf-asa-040.png["SCP摘要"]
 
 
 [[step-4-create-a-vvols-datastore-in-ontap-tools]]
-== 步驟 4：在ONTAP工具中建立vVols資料儲存區
+=== 步驟 4：在ONTAP工具中建立vVols資料儲存區
 
 若要在ONTAP工具中建立vVols資料存儲，請完成以下步驟。
 

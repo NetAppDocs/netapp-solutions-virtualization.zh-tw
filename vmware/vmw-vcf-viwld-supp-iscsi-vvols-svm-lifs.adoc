@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-iscsi-vvols-svm-lifs.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
-summary: '在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 (LIF)，以支援 VMware Cloud Foundation VI 工作負載域中vVols資料儲存區的 iSCSI 流量。您將新增一個新的 SVM，啟用 iSCSI，設定 LIF，並選擇性地啟用儲存 VM 管理帳戶。' 
+summary: 在 ONTAP 系統上建立儲存虛擬機器 （SVM） 和多個邏輯介面 （LIF），以支援 VMware Cloud Foundation 工作負載網域中 vVols 資料存放區的 iSCSI 流量。您將新增新的 SVM、啟用 iSCSI、設定 LIF，並可選擇啟用儲存虛擬機器管理帳戶。 
 ---
-= 為 VCF VI 工作負載域中的 iSCSI vVols資料儲存建立 SVM 和 LIF
+= 在 VCF 工作負載網域中為 iSCSI vVols 資料存放區建立 SVM 和 LIF
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: '在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 
 
 
 [role="lead"]
-在ONTAP系統上建立儲存虛擬機器 (SVM) 和多個邏輯介面 (LIF)，以支援 VMware Cloud Foundation VI 工作負載域中vVols資料儲存區的 iSCSI 流量。您將新增一個新的 SVM，啟用 iSCSI，設定 LIF，並選擇性地啟用儲存 VM 管理帳戶。
+在 ONTAP 系統上建立儲存虛擬機器 （SVM） 和多個邏輯介面 （LIF），以支援 VMware Cloud Foundation 工作負載網域中 vVols 資料存放區的 iSCSI 流量。您將會新增新的 SVM、啟用 iSCSI、設定 LIF，並可選擇啟用儲存虛擬機器管理帳戶。
 
 若要為現有 SVM 新增新的 LIF，請參閱ONTAP文件：link:https://docs.netapp.com/us-en/ontap/networking/create_a_lif.html["創建ONTAP LIF"^] 。
 
@@ -62,4 +62,4 @@ image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
 [[whats-next]]
 == 下一步是什麼？
 
-建立 SVM 和 LIF 後，link:vmw-vcf-viwld-supp-iscsi-vvols-network.html["在 ESXi 主機上設定 iSCSI 網路"] 。
+建立 SVM 和 LIF 之後， link:vmw-vcf-viwld-supp-iscsi-vvols-network.html["在 vSphere 主機上設定 iSCSI 連網"]。

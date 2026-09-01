@@ -24,7 +24,7 @@ summary: 查看將 iSCSI 資料儲存作為補充儲存新增至 VCF 管理域�
 確保以下組件和配置已到位。
 
 * ONTAP AFF或ASA儲存系統，其乙太網路交換器上的實體資料連接埠專用於儲存流量。
-* VCF管理網域部署已完成，並且可以存取vSphere客戶端。
+* VCF 管理域部署已完成，vSphere Web 用戶端可存取。
 
 
 
@@ -36,10 +36,10 @@ summary: 查看將 iSCSI 資料儲存作為補充儲存新增至 VCF 管理域�
 
 image:vmware-vcf-asa-074.png["iSCSI網路設計"]{nbsp}
 
-對於跨多路徑的多路徑和故障轉移，請在單獨的乙太網路中為 iSCSI 配置中的所有 SVM 每個儲存節點建立至少兩個 LIF。
+對於跨多路徑的多路徑和故障轉移，在 iSCSI 組態中，每個儲存節點至少需要建立兩個 LIF，且這些 LIF 應位於分隔的乙太網路中，並應用於所有 SVM。在 ONTAP 9.19.1 及更新版本中，您可以在 AFF 上的 SVM 上啟用對稱雙主動式多路徑選項。在 ASA 中，對稱雙主動式多路徑預設為啟用。
 
 
-TIP: 在同一 IP 網路上配置多個 VMkernel 適配器的情況下，建議在 ESXi 主機上使用軟體 iSCSI 連接埠綁定，以確保跨適配器實現負載平衡。請參閱知識庫文章link:https://knowledge.broadcom.com/external/article?legacyId=2038869["在 ESX/ESXi 中使用軟體 iSCSI 連接埠綁定的注意事項"^]。
+TIP: 如果在相同 IP 網路上設定了多個 VMkernel 介面卡，建議在 ESXi 主機上使用軟體 iSCSI 連接埠繫結，以確保介面卡之間的負載平衡。請參閱知識庫文章link:https://knowledge.broadcom.com/external/article?legacyId=2038869["在 vSphere 中使用軟體 iSCSI 連接埠繫結的注意事項"^]。
 
 
 

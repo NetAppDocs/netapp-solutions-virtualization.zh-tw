@@ -58,6 +58,8 @@ indexpage:
       url: https://www.vmware.com/resources/compatibility/search.php?deviceCategory=san&details=1&partner=64&isSVA=0&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc
   - title: 其他資源
     links:
+    - title: VMware Cloud Foundation 9.1 的新增功能
+      url: vmw-vcf-91-whatsnew.html
     - title: VMware vSphere 與ONTAP最佳實踐
       url: https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-overview.html
     - title: 採用NetApp ONTAP 的VMware vSphere 虛擬磁碟區 ( vVols )

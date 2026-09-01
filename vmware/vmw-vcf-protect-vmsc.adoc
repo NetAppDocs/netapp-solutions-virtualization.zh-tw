@@ -14,14 +14,14 @@ summary:
 
 
 [role="lead"]
-了解可用於將NetApp ONTAP高可用性與 VMware vSphere Metro Storage Cluster (vMSC) 整合的NetApp解決方案。這為 VMware Cloud Foundation (VCF) 管理和 VI 工作負載域提供了強大的解決方案。
+了解可用於將 NetApp ONTAP 高可用度與 VMware vSphere Metro Storage Cluster (vMSC) 整合的 NetApp 解決方案。這為 VMware Cloud Foundation (VCF) 管理和工作負載網域提供了強大的解決方案。
 
-這種組合可確保跨地理分散站點的持續資料可用性、無縫故障轉移和災難復原，從而增強關鍵工作負載的彈性和營運連續性。 SnapMirror主動同步功能使業務服務即使在整個站點發生故障時也能繼續運行，支援應用程式使用輔助副本透明地進行故障轉移。使用SnapMirror主動同步功能觸發故障轉移無需任何手動幹預或自訂腳本。
+這種組合確保了跨地理位置遍布世界各地站台的持續資料可用度、無縫容錯移轉和災難恢復，從而增強了關鍵工作負載的彈性和營運連續性。SnapMirror 作用中同步（SAN 和 NAS）即使在完整站台故障的情況下也能使業務服務繼續運作，支援應用程式使用次要複本透明地進行容錯移轉。使用 SnapMirror 作用中同步（SAN 和 NAS）觸發容錯移轉無需手動介入或自訂腳本。ONTAP 中介器用於監控主要站台的健全狀況，並在災難發生時自動容錯移轉至次要站台。ONTAP 中介器部署在不屬於任何站台的分隔伺服器或虛擬機器上，以確保仲裁可用，避免發生腦分割情況。
 
 請參閱以下解決方案以了解更多詳細資訊。
 
-* link:vmw-vcf-vmsc-mgmt-smas.html["使用SnapMirror主動同步為管理域延伸集群"]
+* link:vmw-vcf-vmsc-mgmt-smas.html["使用 SnapMirror 作用中同步（SAN 和 NAS）的管理網域延伸叢集"]
 * link:vmw-vcf-vmsc-mgmt-mcc.html["使用MetroCluster為管理域延伸集群"]
-* link:vmw-vcf-vmsc-viwld-smas.html["使用SnapMirror主動同步為 VI 工作負載域延伸集群"]
-* link:vmw-vcf-vmsc-viwld-mcc.html["使用MetroCluster為 VI 工作負載域延伸集群"]
+* link:vmw-vcf-vmsc-viwld-smas.html["使用 SnapMirror 作用中同步（SAN 和 NAS）的工作負載域延伸叢集"]
+* link:vmw-vcf-vmsc-viwld-mcc.html["使用 MetroCluster 的工作負載網域延伸叢集"]
 

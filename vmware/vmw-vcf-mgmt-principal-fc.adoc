@@ -14,19 +14,19 @@ summary:
 
 
 [role="lead"]
-在此用例中，我們概述了使用ONTAP上現有的基於 FC 的 VMFS 資料儲存作為 VMware Cloud Foundation (VCF) 管理域的主儲存的過程。此過程總結了所需的元件、配置和部署步驟。
+本使用案例概述在 ONTAP 上建立 FC 型 VMFS 資料儲存區作為 VMware Cloud Foundation （VCF） 管理網域主儲存設備的步驟。本步驟總結所需的元件、組態及部署步驟。
 
 
 
 [[introduction]]
 == 介紹
 
-在適當的情況下，我們將參考外部文檔，以了解必須在 VCF 的 SDDC 管理器中執行的步驟，並參考特定於儲存配置部分的步驟。
+在適當情況下，我們將參考外部文件，以了解必須在 vCenter 中執行的步驟，並參考儲存組態部分特有的步驟。
 
-有關使用ONTAP轉換現有基於 FC 的 vSphere 環境的信息，請參閱link:vmw-vcf-mgmt-fc.html["將 vSphere 環境（FC 資料儲存）轉換為 VCF 管理域"]。
+有關在含有 ONTAP 的 vSphere 環境中轉換現有 VMFS 資料存放區（包括 iSCSI 和 NVMe-oF）的資訊，請參閱link:vmw-vcf-mgmt-vmfs.html["將 vSphere 環境（VMFS 資料儲存）融合至 VCF 管理網域"]。
 
 
-NOTE: VCF 版本 5.2 引進了將現有 vSphere 8 環境轉換為 VCF 管理域或匯入為 VCF VI 工作負載域的功能。在此版本之前，VMware vSAN 是 VCF 管理域的主要儲存的唯一選項。
+NOTE: VCF 5.2 版本引進了將現有 vSphere 8 環境轉換為 VCF 管理網域或匯入為 VCF VI 工作負載網域的功能。在此版本之前，VMware vSAN 是 VCF 管理網域主儲存設備的唯一選擇。NSX 控制器虛擬機器最好部署在基於 FC 的 VMFS 資料儲存區上，或使用雙網路交換器以避免單點故障。如果這些選項無法使用，請考慮使用 vSAN 來裝載這些虛擬機器。
 
 
 NOTE: 此解決方案適用於支援FC儲存的ONTAP平台，包括NetApp ASA、 AFF和FAS。
@@ -45,7 +45,7 @@ NOTE: 此解決方案適用於支援FC儲存的ONTAP平台，包括NetApp ASA、
 
 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
 
-有關配置 VCF 的信息，請參閱link:https://docs.vmware.com/en/VMware-Cloud-Foundation/index.html["VMware 雲端基礎文檔"]。
+有關設定 VCF 的資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware 雲端基礎文檔"]。
 
 
 
@@ -57,21 +57,18 @@ NOTE: 此解決方案適用於支援FC儲存的ONTAP平台，包括NetApp ASA、
 [[management-domain-default-cluster]]
 === 管理域 - 預設集群
 
-初始叢集上的 FC 主儲存僅支援 VCF 棕地匯入工具。如果使用 Cloud Builder 工具（版本 5.2.x 之前的版本）部署 VCF，則僅支援 vSAN。
+VCF 安裝程式工具支援管理網域的 VMFS on FC、NFS v3 和 vSAN 資料儲存。以下步驟概述如何部署以 ONTAP 上的 FC 型 VMFS 資料儲存作為主儲存設備的管理網域。
 
-有關使用現有 vSphere 環境的更多信息，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2/map-for-administering-vcf-5-2/importing-existing-vsphere-environments-admin/convert-or-import-a-vsphere-environment-into-vmware-cloud-foundation-admin.html["將現有 vSphere 環境轉換為管理域"]了解更多。
+有關使用現有 vSphere 環境的詳細資訊，請參閱 link:vmw-vcf-mgmt-vmfs.html["將 vSphere 環境（VMFS 資料儲存）融合至 VCF 管理網域"]。
 
 
 
 [[management-domain-additional-cluster]]
 === 管理域 - 附加集群
 
-管理網域上的附加 vSphere 叢集可以透過下列選項進行部署：
+若要使用額外的叢集擴充管理域，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/building-your-private-cloud-infrastructure/working-with-workload-domains/expand-a-workload-domain/add-a-cluster-to-a-workload-domain-using-the-sddc-manager-ui.html["將 SDDC 叢集新增至 VCF 網域"]。
 
-* 在 vSphere 環境中擁有額外的集群，並使用 VCF 棕地導入工具將 vSphere 環境轉換為管理域。 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["ONTAP tools for VMware vSphere"] https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]可用於將 VMFS 資料儲存部署到 vSphere 叢集。
-* 使用 SDDC API 部署額外的叢集。 vSphere 主機應該配置 VMFS 資料儲存。使用 https://docs.netapp.com/us-en/ontap/san-admin/provision-storage.html["系統管理員或ONTAP API"]將 LUN 部署到 vSphere 主機。
-* 使用 SDDC Manager UI 部署額外的叢集。但此選項僅建立 VSAN 資料儲存至 5.2.x 版本。
-
+從整體來看，為管理網域新增額外叢集的步驟如下：* 確保主機已完成部署，且網路池已在 vCenter 中設定。* 在 ONTAP 儲存系統上配置 LUN，並呈現給額外叢集中的主機。* 在 vCenter 上的管理網域中建立新的 SDDC 叢集，並依照精靈將額外叢集新增至管理網域。
 
 
 
@@ -80,4 +77,4 @@ NOTE: 此解決方案適用於支援FC儲存的ONTAP平台，包括NetApp ASA、
 
 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
 
-有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware 雲端基礎文檔"]。
+有關設定 VCF 的資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware 雲端基礎文檔"]。

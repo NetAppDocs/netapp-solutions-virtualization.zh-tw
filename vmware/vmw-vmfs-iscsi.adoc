@@ -92,7 +92,7 @@ TIP: 建議每個節點使用兩個 iSCSI 網路介面。
 . link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-single-host-management-vmware-host-client-7-0/networking-in-the-vsphere-host-client-vSphereSingleHostManagementVMwareHostClient/managing-physical-network-adapters-in-the-vsphere-host-client-vSphereSingleHostManagementVMwareHostClient/view-physical-network-adapter-information-in-the-vsphere-host-client-vSphereSingleHostManagementVMwareHostClient.html++["決定 vSphere 主機上可用的實體 NIC 數量。"]
 . link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/configuring-iscsi-and-iser-adapters-and-storage-with-esxi/configure-the-software-iscsi-adapter-with-esxi.html++["配置 iSCSI 啟動器。"]一個典型的用例是軟體 iSCSI 啟動器。
 . link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsan/vsan/8-0/vsan-network-design/ip-network-transport-configuration/vsphere-tcp-ip-stacks.html++["驗證 iSCSI 的 TCPIP 堆疊是否可用"] 。
-. link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/assign-a-port-group-or-network-to-a-network-protocol-profile.html++["驗證 iSCSI 連接埠群組是否可用"] 。
+. link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-networking/basic-networking-with-vnetwork-distributed-switches/dvport-groups.html++["驗證 iSCSI 連接埠群組是否可用"]。
 +
 ** 我們通常使用具有多個上行鏈路連接埠的單一虛擬交換器。
 ** 使用 1:1 適配器映射。
@@ -104,6 +104,13 @@ TIP: 建議每個節點使用兩個 iSCSI 網路介面。
 . link:++https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/7-0/vsphere-storage-7-0/storage-hardware-acceleration-in-vsphere/vsphere-hardware-acceleration-on-block-storage/managing-hardware-acceleration-filter-and-plug-ins/verify-hardware-acceleration-support-status.html++["驗證硬體加速支援。"]
 
 
+
+
+[[reference-video]]
+== 參考影片：
+
+.iSCSI 多路徑與 AFF 和 ASA r2
+video::62c2a66c-1a07-4284-bc7b-b4ac00e9aeea[panopto]
 
 
 [[whats-next]]

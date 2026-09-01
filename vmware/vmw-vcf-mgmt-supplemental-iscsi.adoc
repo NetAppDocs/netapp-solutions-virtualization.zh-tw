@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-mgmt-supplemental-iscsi.html 
 keywords: netapp, vmware, cloud, foundation, vcf, iscsi, information 
-summary: '開始新增 iSCSI 資料儲存作為 VMware Cloud Foundation (VCF) 管理域的補充儲存。您將設定一個具有用於 iSCSI 的邏輯介面 (LIF) 的儲存虛擬機器 (SVM)，在 ESXi 主機上設定 iSCSI 網絡，ONTAP tools for VMware vSphere，並建立 VMFS 資料儲存區。' 
+summary: '開始將 iSCSI 資料儲存新增為 VMware Cloud Foundation (VCF) 管理域的補充儲存設備。您將設定具有 iSCSI 邏輯介面 (LIF) 的儲存虛擬機器 (SVM)、在 vSphere 主機上設定 iSCSI 連網、部署 ONTAP tools for VMware vSphere，並建立 VMFS 資料儲存。' 
 ---
 = 在 VCF 管理網域中新增 iSCSI 資料儲存作為補充儲存的部署工作流程
 :hardbreaks:
@@ -14,7 +14,7 @@ summary: '開始新增 iSCSI 資料儲存作為 VMware Cloud Foundation (VCF) �
 
 
 [role="lead"]
-開始新增 iSCSI 資料儲存作為 VMware Cloud Foundation (VCF) 管理域的補充儲存。您將設定一個具有用於 iSCSI 的邏輯介面 (LIF) 的儲存虛擬機器 (SVM)，在 ESXi 主機上設定 iSCSI 網絡，ONTAP tools for VMware vSphere，並建立 VMFS 資料儲存區。
+開始將 iSCSI 資料儲存新增為 VMware Cloud Foundation (VCF) 管理域的補充儲存設備。您將設定具有 iSCSI 邏輯介面 (LIF) 的儲存虛擬機器 (SVM)、在 vSphere 主機上設定 iSCSI 連網、部署 ONTAP tools for VMware vSphere，並建立 VMFS 資料儲存。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["一"]link:vmw-vcf-mgmt-supplemental-iscsi-requirements.html["查看部署要求"]
 [role="quick-margin-para"]
@@ -26,8 +26,16 @@ summary: '開始新增 iSCSI 資料儲存作為 VMware Cloud Foundation (VCF) �
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["三"]link:vmw-vcf-mgmt-supplemental-iscsi-network.html["設定網路"]
 [role="quick-margin-para"]
-在 ESXi 主機上設定 iSCSI 網路。
+在 vSphere 主機上設定 iSCSI 連網。
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png["四"]link:vmw-vcf-mgmt-supplemental-iscsi-storage.html["配置儲存"]
 [role="quick-margin-para"]
 部署並使用ONTAP工具配置儲存。
+
+
+
+[[reference-video]]
+== 參考影片：
+
+.iSCSI 多路徑與 AFF 和 ASA r2
+video::62c2a66c-1a07-4284-bc7b-b4ac00e9aeea[panopto]

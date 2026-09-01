@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols-storage.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
-summary: 在 VI 工作負載域中配置 NFS vVols儲存。ONTAP tools for VMware vSphere後，您將使用 vSphere 用戶端介面新增儲存系統、建立儲存功能設定檔以及設定vVols資料儲存區。 
+summary: 在工作負載域中設定 NFS vVols 儲存設備。部署 ONTAP tools for VMware vSphere 後，您將使用 vSphere 用戶端介面新增儲存系統、建立儲存設備功能設定檔並資源配置 vVols 資料儲存區。 
 ---
-= 使用ONTAP工具在 VCF VI 工作負載域中配置 NFS vVols存儲
+= 使用 ONTAP tools 在 VCF 工作負載網域中設定 NFS vVols 儲存設備
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,14 +14,14 @@ summary: 在 VI 工作負載域中配置 NFS vVols儲存。ONTAP tools for VMwar
 
 
 [role="lead"]
-在 VI 工作負載域中配置 NFS vVols儲存。ONTAP tools for VMware vSphere後，您將使用 vSphere 用戶端介面新增儲存系統、建立儲存功能設定檔以及設定vVols資料儲存區。
+在工作負載域中設定 NFS vVols 儲存設備。部署 ONTAP tools for VMware vSphere 後，您將使用 vSphere 用戶端介面新增儲存系統、建立儲存設備功能設定檔並資源配置 vVols 資料儲存區。
 
 
 
 [[step-1-deploy-ontap-tools-for-vmware-vsphere]]
 == 步驟 1：ONTAP tools for VMware vSphere
 
-對於 VI 工作負載域， ONTAP工具安裝到 VCF 管理集群，但向與 VI 工作負載域關聯的 vCenter 註冊。
+對於工作負載網域，ONTAP tools 安裝在 VCF 管理叢集中，但已註冊到與工作負載網域關聯的 vCenter。
 
 ONTAP tools for VMware vSphere作為 VM 設備部署，並提供用於管理ONTAP儲存的整合 vCenter UI。
 

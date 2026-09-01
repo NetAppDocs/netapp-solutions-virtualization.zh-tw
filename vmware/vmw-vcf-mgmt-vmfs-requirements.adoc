@@ -1,0 +1,54 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-mgmt-vmfs-requirements.html 
+keywords: netapp, vmware, cloud, foundation, vcf, asa, aff, all-flash, fc, array, ontap tools, otv, sddc, sddc manager, ontap tools, ontap tools 10 
+summary: 審查將 vSphere 叢集與 NetApp ONTAP VMFS 資料儲存區融合至 VMware Cloud Foundation 管理網域的需求。 
+---
+= 將 vCenter 伺服器執行個體融合至具有 VMFS 資料儲存區的 VCF 管理網域的部署需求
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+審查將 vSphere 叢集與 NetApp ONTAP VMFS 資料儲存區融合至 VMware Cloud Foundation 管理網域的需求。
+
+
+
+[[infrastructure-requirements]]
+== 基礎設施需求
+
+確保以下組件和配置已到位。
+
+* NetApp ASA R2/ASA/AFF 儲存系統，其儲存虛擬機器 （SVM） 已設定為允許 FC/iSCSI 流量。
+* 為承載 FC/iSCSI 流量而建立的邏輯介面 （LIF），並與 SVM 相關聯。
+* 對於 FC 和 NVMe/FC，在架構交換器上設定 FC 分區。
+* 對於 iSCSI 和 NVMe/TCP，在 vSphere 主機上設定 vmkernel 連接埠群組以承載相應的流量。
+* 受支援的 vSphere 叢集，包含 4 台 vSphere 主機，以及一台與叢集共置的 vCenter 應用裝置。
+* 在為此目的建立的 VLAN 或網路段上為 vMotion 配置的分散式連接埠群組。
+* 已下載 VCF Installer 工具，VCF 融合式需要此工具。如需其他詳細資訊，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment.html["VCF 部署、融合式與升級"]。
+* 滿足ONTAP工具的先決條件。
++
+有關ONTAP工具前提條件的完整信息，請參閱 https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html#system-requirements["適用於ONTAP tools for VMware vSphere的先決條件"]。
+
++
+ONTAP tools for VMware vSphere可以安裝在 HA 或非 HA 設定中。
+
+
+
+
+
+[[additional-resources]]
+== 其他資源
+
+* 有關支援儲存設備和其他將 vSphere 融合至 VCF 的相關注意事項，請參閱 https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/converging-your-existing-vsphere-infrastructure-to-a-vcf-or-vvf-platform-/supported-and-not-supported-configurations.html["趨向 VCF 的支援和不支援組態"]。
+* 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]。
+* 有關設定 VCF 的資訊，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware Cloud Foundation 9.1 文件"]。
+
+
+
+
+[[whats-next]]
+== 下一步是什麼？
+
+在您審查部署要求之後，link:vmw-vcf-mgmt-vmfs-deploy.html["部署 ONTAP tools 並資源配置 VMFS 資料存放區"]。

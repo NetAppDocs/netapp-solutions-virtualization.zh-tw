@@ -14,19 +14,19 @@ summary: 使用ONTAP部署、整合或升級 VMware Cloud Foundation 9 環境。
 
 
 [role="lead"]
-使用ONTAP部署、整合或升級 VMware Cloud Foundation 9 環境。了解如何設定新的 VCF 9.0 環境、融合現有的 vCenter 實例和ONTAP資料儲存以及升級早期的 VCF 部署。
+使用 ONTAP 部署、整合或匯入、升級 VMware Cloud Foundation 9 環境。了解如何設定新的 VCF 9.1 環境、將現有 vCenter 執行個體整合為管理網域或將現有 vCenter 執行個體匯入為工作負載網域，以及升級舊版 VCF 部署。
+
+如需更多詳細資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/overview-of-deploy--converge--and-upgrade.html["Broadcom 連結，適用於 VCF 9.1 部署路徑"]。
 
 
 
 [[deploy-a-new-vcf-9-instance]]
 == 部署新的 VCF 9 實例
 
-使用此工作流程部署乾淨的 VMware Cloud Foundation (VCF) 9.0 環境。部署後，您可以遷移工作負載或開始配置應用程式並提供基礎架構服務。
-
-有關詳細步驟，請參閱link:https://techdocs.broadcom.com/content/dam/broadcom/techdocs/us/en/assets/vmware-cis/vcf/vcf-9.0-vcf-deploy-journey.pdf["建置之旅 – 安裝新的 VMware Cloud Foundation 部署"]。
+使用此工作流程部署一個全新的 VMware Cloud Foundation (VCF) 9.1 環境。部署完成後，您可以移轉工作負載或開始佈建應用程式並提供基礎架構服務。
 
 .步驟
-. 關注link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment/deploying-a-new-vmware-cloud-foundation-or-vmware-vsphere-foundation-private-cloud-/preparing-your-environment.html["Broadcom VCF 9部署步驟"]。
+. 按照link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/deploying-a-new-vmware-cloud-foundation-or-vmware-vsphere-foundation-private-cloud-/preparing-your-environment.html["Broadcom VCF 9部署步驟"]。
 . 在部署準備步驟中，完成主要儲存選項的任務。
 
 
@@ -51,7 +51,7 @@ NOTE: 使用 SVM 邏輯介面 (LIF) 的 WWPN，而不是實體適配器 WWPN。
 . 確保link:https://docs.netapp.com/us-en/ontap/task_nas_enable_linux_nfs.html["SVM 已啟用 NFS"]和link:https://docs.netapp.com/us-en/ontap/nfs-admin/enable-disable-vmware-vstorage-over-nfs-task.html["已啟用 vStorage over NFS"]。
 . 建立一個磁碟區並使用允許 ESXi 主機的策略將其匯出。
 . 根據需要調整權限。
-. 部署ONTAP NFS VAAI VIB 並將其包含在 vLCM 映像中。例如： `esxcli software vib install -d /NetAppNasPlugin2.0.1.zip` 。  （從NetApp支援網站下載 ZIP。）
+. 部署 ONTAP NFS VAAI VIB 並使用此伺服器作為叢集映像。例如： `esxcli software vib install -d /NetAppNasPlugin2.0.1.zip`。（從 NetApp 支援網站下載 ZIP 檔案。）
 . 在建立 VMkernel 介面的主機上掛載 NFS 磁碟區。例如： `esxcli storage nfs add -c 4 -H 192.168.122.210 -s /use1_m01_nfs01 -v use1-m01-cl01-nfs01` 。
 +
 
@@ -61,7 +61,7 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 
 --
 ====
-. 在「部署 VCF 艦隊」階段的「驗證部署摘要並審查後續步驟」結束時，完成以下內容：
+. 成功部署 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/deploying-a-new-vmware-cloud-foundation-or-vmware-vsphere-foundation-private-cloud-/deploy-a-new-vcf-fleet-or-a-new-vcf-instance.html["VCF Fleet"] 階段後，請完成下列步驟：
 +
 .. 部署ONTAP工具
 +
@@ -91,13 +91,13 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 
 .. 使用NetApp Backup and Recovery
 +
-*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/prev-vmware-protect-overview.html["保護VM工作負載"]。
+*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/br-use-vmware-protect-overview.html["保護VM工作負載"]。
 *** link:https://docs.netapp.com/us-en/data-services-backup-recovery/br-use-kubernetes-protect-overview.html["保護VKS工作負載"]。
 
 
 
 
-. 在 VCF 實例中將 vCenter 作為工作負載域匯入後，請完成下列操作：
+. 在 VCF 執行個體中完成 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/building-your-private-cloud-infrastructure/working-with-workload-domains/import-an-existing-vcenter-to-create-a-workload-domain.html["將 vCenter 匯入為工作負載網域"] 後，請完成下列步驟：
 +
 .. 註冊ONTAP工具
 +
@@ -116,7 +116,7 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 
 .. 使用NetApp Backup and Recovery
 +
-*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/prev-vmware-protect-overview.html["保護VM工作負載"]。
+*** link:https://docs.netapp.com/us-en/data-services-backup-recovery/br-use-vmware-protect-overview.html["保護VM工作負載"]。
 *** link:https://docs.netapp.com/us-en/data-services-backup-recovery/br-use-kubernetes-protect-overview.html["保護VKS工作負載"]。
 
 
@@ -140,7 +140,7 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 
 
 .步驟
-. 回顧link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment/converging-your-existing-vsphere-infrastructure-to-a-vcf-or-vvf-platform-/supported-scenarios-to-converge-to-vcf.html["支援融合到 VCF 的場景"]。
+. 請檢閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/converging-your-existing-vsphere-infrastructure-to-a-vcf-or-vvf-platform-/supported-scenarios-to-converge-to-vcf.html["支援融合到 VCF 的場景"]。
 . 將 vCenter 實例與ONTAP配置的資料儲存融合作為主要儲存。
 . 使用以下方法驗證支援的版本link:https://imt.netapp.com/imt/#welcome["互通性矩陣"]。
 . 升級link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["ONTAP工具"]如果需要的話。
@@ -152,14 +152,14 @@ NOTE: 這 `nConnect`會話計數是按主機計算的。部署後根據需要更
 [[upgrade-an-existing-vcf-environment-to-vcf-9]]
 == 將現有 VCF 環境升級到 VCF 9
 
-使用標準升級流程將早期的 VCF 部署升級到版本 9.0。結果是運行 9.0 版本的 VCF 環境，具有升級的管理和工作負載域。
+使用標準升級程序將舊版 VCF 部署升級至 9.1 版。升級後，VCF 環境將執行 9.1 版，並已升級管理網域與工作負載網域。
 
 .先決條件
 * 備份管理域和工作負載域。
-* 驗證ONTAP工具和SnapCenter插件與 VCF 9.0 的兼容性。關注link:https://imt.netapp.com/imt/#welcome["互通性矩陣"]到link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["升級ONTAP工具"]和link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_upgrade.html["適用於 VMware vSphere 的SnapCenter插件"]支持 VCF 9。
+* 驗證 ONTAP tools 和 SnapCenter Plug-in 與 VCF 9.1 的相容性。請依照 link:https://imt.netapp.com/imt/#welcome["互通性矩陣"] 以了解 link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["升級ONTAP工具"] 和 link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_upgrade.html["適用於 VMware vSphere 的SnapCenter插件"]，這些均支援 VCF 9.1。
 
 
 .步驟
-. 升級VCF管理域。看link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/deployment/upgrading-cloud-foundation.html["升級VCF管理域至VCF 9"]以取得說明。
-. 升級任何 VCF 5.x 工作負載域。看link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-0/lifecycle-management/lifecycle-management-of-vcf-core-components/upgrade-workload-domains-to-vcf-5-2.html["將 VCF 5.x 工作負載域升級到 VCF 9"]以取得說明。
+. 升級 VCF 管理網域。請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/deployment/upgrading-cloud-foundation.html["將 VCF 管理網域升級至 VCF 9.1"] 以取得相關說明。
+. 升級所有 VCF 5.x 工作負載域。請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/lifecycle-management/upgrade-workload-domains-to-vcf-5-2.html["將 VCF 5.x 工作負載域升級至 VCF 9.1"] 以取得相關說明。
 

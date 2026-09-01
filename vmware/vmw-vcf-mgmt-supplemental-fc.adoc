@@ -47,11 +47,18 @@ ONTAP tools for VMware vSphere部署為小型單節點，具有核心服務以�
 
 
 
+[[reference-video]]
+== 參考影片
+
+.含 FC 的補充資料存放區
+video::96311abf-aa45-4ce9-984b-b4b001005bab[panopto,width=360]
+
+
 [[additional-information]]
 == 附加資訊
 
 * 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]。
-* 有關配置 VCF 的信息，請參閱link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-5-2-and-earlier/5-2.html["VMware Cloud Foundation 文檔"]。
+* 有關設定 VCF 的資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1.html["VMware Cloud Foundation 文檔"]。
 * 有關在ONTAP儲存系統上配置光纖通道的信息，請參閱ONTAP 9 文檔 https://docs.netapp.com/us-en/ontap/san-management/index.html["SAN儲存管理"]。
 * 有關將 VMFS 與ONTAP儲存系統結合使用的更多信息，請參閱link:vmw-vmfs-deploy.html["VMFS 部署指南"]。
 * 有關此解決方案的視訊演示，請參閱link:../videos/vmware-videos.html#vmware-datastore-provisioning-with-ontap["VMware 資料儲存區配置"]。

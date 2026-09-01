@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nfs-vvols-network.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc 
-summary: 在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS 網路以實現與ONTAP儲存系統的連線。您將建立具有 VLAN 分離的分散式連接埠群組，配置上行鏈路組合以實現冗餘，並在每個 ESXi 主機上設定 VMkernel 適配器以建立專用的 NFS 路徑來實現故障轉移功能。 
+summary: 在 VMware Cloud Foundation 工作負載網域中的 vSphere 主機上設定 NFS 連網，以啟用與 ONTAP 儲存系統的連線。您將建立具有 VLAN 隔離的分散式連接埠群組、設定上行鏈路組合以實現備援，並在每台 vSphere 主機上設定 VMkernel 介面卡，以建立專用的 NFS 路徑來實現容錯移轉功能。 
 ---
-= 在 VCF VI 工作負載域中的 ESXi 主機上設定 NFS 網路
+= 在 VCF 工作負載網域中的 vSphere 主機上設定 NFS 連網
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,9 +14,9 @@ summary: 在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS �
 
 
 [role="lead"]
-在 VMware Cloud Foundation 管理域中的 ESXi 主機上設定 NFS 網路以實現與ONTAP儲存系統的連線。您將建立具有 VLAN 分離的分散式連接埠群組，配置上行鏈路組合以實現冗餘，並在每個 ESXi 主機上設定 VMkernel 適配器以建立專用的 NFS 路徑來實現故障轉移功能。
+在 VMware Cloud Foundation 工作負載網域中的 vSphere 主機上設定 NFS 連網，以啟用與 ONTAP 儲存系統的連線。您將建立具有 VLAN 隔離的分散式連接埠群組、設定上行鏈路組合以實現備援，並在每台 vSphere 主機上設定 VMkernel 介面卡，以建立專用的 NFS 路徑來實現容錯移轉功能。
 
-使用 vSphere 用戶端在 VI 工作負載域叢集上執行下列步驟。在這種情況下，使用 vCenter Single Sign-On，因此 vSphere 用戶端在管理和工作負載域中是通用的。
+使用 vSphere 用戶端在工作負載網域叢集上執行下列步驟。在本例中，由於使用了 vCenter Single Sign-On，因此管理網域和工作負載網域都共用同一個 vSphere 用戶端。
 
 
 
@@ -60,18 +60,18 @@ image:vmware-vcf-aff-037.png["DPG－編輯設置"]
 image:vmware-vcf-aff-038.png["DPG-- 團隊上行鏈路"]
 
 ====
-. 對叢集中的每個 ESXi 主機重複此程序。
+. 對叢集中的每個 vSphere 主機重複此程序。
 
 
 
 
-[[step-2-create-a-vmkernel-adapter-on-each-esxi-host]]
-== 步驟 2：在每個 ESXi 主機上建立 VMkernel 適配器
+[[step-2-create-a-vmkernel-adapter-on-each-vsphere-host]]
+== 步驟 2：在每台 vSphere 主機上建立 VMkernel 介面卡
 
-在工作負載域中的每個 ESXi 主機上建立一個 VMkernel 適配器。
+在工作負載域中的每台 vSphere 主機上建立 VMkernel 介面卡。
 
 .步驟
-. 從 vSphere 用戶端導覽至工作負載域清單中的其中一個 ESXi 主機。從*配置*標籤中選擇*VMkernel 適配器*，然後按一下*新增網路...*開始。
+. 從 vSphere 用戶端導覽至工作負載網域清單中的其中一個 vSphere 主機。從 *Configure* 索引標籤選取 *VMkernel adapters*，然後按一下 *Add Networking……* 開始。
 +
 .顯示範例
 [%collapsible]
@@ -119,4 +119,4 @@ image:vmware-vcf-aff-041.png["檢查 VMkernel 選擇"]
 [[whats-next]]
 == 下一步是什麼？
 
-在工作負載域中的所有 ESXi 主機上設定 NFS 網路後，link:vmw-vcf-viwld-supp-nfs-vvols-storage.html["為 NFS vVols配置存儲"] 。
+在工作負載網域中的所有 vSphere 主機上設定 NFS 連網後，link:vmw-vcf-viwld-supp-nfs-vvols-storage.html["為 NFS vVols配置存儲"]。

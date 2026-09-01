@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmw-vcf-viwld-supp-nvme-svm-lifs.html 
 keywords: netapp, vmware, cloud, foundation, vcf, aff, all-flash, nfs, vvol, vvols, array, ontap tools, otv, sddc, iscsi 
-summary: '建立具有多個邏輯介面 (LIF) 的儲存虛擬機器 (SVM)，為 VMware Cloud Foundation 管理域提供 iSCSI 連線。您將使用 NVMe 協定支援配置 SVM，並在不同的乙太網路上設定多個 LIF，以啟用多路徑和故障轉移，從而實現最佳效能和可用性。' 
+summary: 建立具有多個邏輯介面 （LIF） 的儲存虛擬機器 （SVM），為 VMware Cloud Foundation 工作負載網域提供 NVMe/TCP 連線。您需要設定 SVM 以支援 NVMe 傳輸協定，並在分隔的乙太網路上設定多個 LIF，以實現多重路徑和故障移轉，從而達到最佳效能和可用度。 
 ---
-= 在 VCF VI 工作負載域中為 NVMe/TCP vVols資料儲存建立 SVM 和 LIF 以及 NVMe 命名空間
+= 在 VMware Cloud Foundation 工作負載網域中為 NVMe/TCP 資料儲存區建立 SVM 和 LIF 以及 NVMe 命名空間
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -64,10 +64,10 @@ image:vmware-vcf-asa-004.png["啟用 SVM 帳戶並完成"]
 
 NVMe 命名空間類似 iSCSi 或 FC 的 LUN。您必須先建立 NVMe 命名空間，然後才能從 vSphere Client 部署 VMFS 資料儲存區。
 
-若要建立 NVMe 命名空間，請從叢集中的每個 ESXi 主機取得 NVMe 限定名稱 (NQN)。  ONTAP使用 NQN 為命名空間提供存取控制。
+若要建立 NVMe 命名空間，請從叢集中的每台 vSphere 主機取得 NVMe 限定名稱 （NQN）。ONTAP 使用 NQN 為命名空間提供存取控制。
 
 .步驟
-. 開啟與叢集中的 ESXi 主機的 SSH 會話以取得其 NQN。從 CLI 使用以下命令：
+. 透過 SSH 與叢集中的 vSphere 主機建立工作階段，以取得其 NQN。使用以下 CLI 命令：
 +
 [source, cli]
 ----
@@ -81,7 +81,7 @@ esxcli nvme info get
 ----
 Host NQN: nqn.2014-08.com.netapp.sddc:nvme:vcf-wkld-esx01
 ----
-. 記錄叢集中每個 ESXi 主機的 NQN。
+. 記錄叢集中每個 vSphere 主機的 NQN。
 . 從ONTAP系統管理員中，導覽至左側選單中的 *NVMe 命名空間*，然後按一下 *+ 新增* 開始。
 +
 .顯示範例
@@ -91,7 +91,7 @@ image:vmware-vcf-asa-093.png["按一下「+新增」以建立 NVMe 命名空間"
 
 ====
 . 在「新增 NVMe 命名空間」頁面上，填寫名稱前綴、要建立的命名空間數量、命名空間的大小以及將存取命名空間的主機作業系統。
-. 在 *Host NQN* 部分中，建立一個以逗號分隔的列表，其中包含先前從將存取命名空間的 ESXi 主機收集的 NQN。
+. 在 *主機 NQN* 部分，建立一個以逗號分隔的列表，列出先前從將要存取命名空間的 vSphere 主機收集的 NQN。
 . 按一下「更多選項」以配置其他項目，例如快照保護策略。
 . 最後，按一下「儲存」以建立 NVMe 命名空間。
 +
@@ -108,4 +108,4 @@ image:vmware-vcf-asa-093.png["按一下「+新增」以建立 NVMe 命名空間"
 [[whats-next]]
 == 下一步是什麼？
 
-建立 SVM 和 LIF 後，link:vmw-vcf-viwld-supp-nvme-network.html["為 NVMe/TCP (NVMe/TCP) vVols配置網絡"] 。
+建立 SVM 和 LIF 之後， link:vmw-vcf-viwld-supp-nvme-network.html["設定 NVMe/TCP 連網（NVMe/TCP）"]。

@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vcf-91-whatsnew.html 
+keywords: netapp, vmware, cloud, foundation, vcf, flexpod 
+summary: VCF 9.1 新增了新功能與增強功能。 
+---
+= VMware Cloud Foundation 9.1 的新增功能
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+VCF 9.1 引進了多項新功能和增強功能，可提升私有雲環境的整體功能和效能。了解最新更新以及 NetApp 產品如何持續創造價值。
+
+以下是 VCF 9.1 的一些主要新功能和增強功能：
+
+* vSphere 叢集的零接觸資源配置 (ZTP)，可自動化部署和設定 vSphere 叢集。
++
+** 如果您打算將 VAAI 與 ONTAP NFS 資料儲存搭配使用，請務必將 NFS VAAI 外掛程式新增至映像。 https://mysupport.netapp.com/site/products/all/details/nfsplugin-vmware-vaai/about-tab["NFS VAAI 插件"]可從 NetApp 支援網站下載並新增至用於 vSphere 叢集部署的映像。
+
+
+* UNMAP 支援 NFS 4.1 資料存放區，進而提升儲存效率和空間回收。
+* 支援透過 RDMA 傳輸 NVMe，以提高儲存效能並降低延遲。
++
+** 用於封包分析和疑難排解 RoCEv2 連線的工具（pktcap-uw、rdmaperf-uw、rdmaperf）現已可搭配 Hypervisor 使用。
+
+
+* 使用 Internet 儲存名稱服務 (iSNS) 協定自動探索、設定和管理 iSCSI 連線。如需更多資訊，請查看 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/9-1/vsphere-storage/configuring-iscsi-and-iser-adapters-and-storage-with-esxi/using-isns-with-esx.html["將 iSNS 與 ESXi 搭配使用"]。
+* 記憶體分層支援包括對所有虛擬機器類型的支援及簡化部署。
+* 擴充了客體作業系統的支援，包括 Ubuntu 26.04 LTS、Debian 13 和 SUSE Linux Enterprise Server 16。
+* vSphere 主機 Web 用戶端已更新，提供與 vCenter Server Web 用戶端類似的體驗，並與先前版本完全功能對等。
+* VMware Kubernetes Service （VKS） 中用於快速資源配置 Container 儲存設備 Volume 的 First Class Disks （FCD） Linked Clones。
+* 分散式傳輸閘道支援使用虛擬網路應用裝置 (VNA) 的 VKS Supervisor 和 VCF Automation。VNA 也提供第 4 層負載平衡器支援。
+* VPC Transit Gateway、Traceflow 和即時流量分析現已可透過 vSphere 用戶端取得。
+* VPC 子網路的 VLAN 擴充功能可將來自分散式 vswitch 連接埠群組的工作負載導入 VPC 子網路。
+* 能夠定義 Transit Gateway 和 VPC 的網路範圍，使其僅限於特定叢集，或使其跨越連網域的所有 vCenter 執行個體。
+* 提高了大量移轉的 vMotion 速度。
+* VPC 連線原則，可提升 VPC 之間網路流量的安全性和控制。
+* VKS 多介面連網支援隔離的管理和工作負載流量。
+* 包含移轉工具，用於從 vCloud Director 到 VCF Automation 的就地移轉。
+
+
+有關這些功能和增強功能的更多詳細資訊，請參閱 link:https://techdocs.broadcom.com/us/en/vmware-cis/vcf/vcf-9-0-and-later/9-1/release-notes/vmware-cloud-foundation-9-1-0-0-release-notes/what-s-new.html["Broadcom 技術文件：VCF 9.1 新增功能"]。
+
+除非另有說明，本文件的大部分內容仍適用於 VCF 9.1。在生產環境中使用前，請務必查看 https://imt.netapp.com/matrix/#search["互通性矩陣工具"]並 https://www.vmware.com/resources/compatibility/search.php?deviceCategory=san["VMware 相容性指南"]了解特定版本的詳細資訊。
