@@ -174,9 +174,9 @@ NOTE: 有關存儲配置和Trident使用最佳實踐的更多詳細信息，請�
 [[openshift-virtualization-tuning-scaling-guide]]
 == OpenShift 虛擬化 - 調整與擴充指南
 
-Red Hat 已記錄在案link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/scalability_and_performance/recommended-performance-and-scalability-practices-2["OpenShift 叢集擴充建議與限制"]。
+Red Hat 已記錄在案link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/scalability_and_performance/recommended-performance-and-scalability-practices["OpenShift 叢集擴充建議與限制"]。
 
-此外，他們還記錄了 link:https://access.redhat.com/articles/6994974["OpenShift 虛擬化調整指南"] 和 link:https://access.redhat.com/articles/6571671["OpenShift Virtualization 4.x 支援的限制"]。
+此外，他們還記錄了 link:https://access.redhat.com/articles/6994974["OpenShift 虛擬化調整指南"] 和 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.13/html/virtualization/virt-supported-limits["OpenShift Virtualization 4.x 支援的限制"]。
 
 
 NOTE: 需要有效的 Red Hat 訂閱才能存取上述內容。

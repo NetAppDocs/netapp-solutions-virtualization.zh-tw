@@ -37,6 +37,8 @@ summary: 將現有 vSphere 叢集（包含支援的 NetApp ONTAP VMFS 資料存�
 [[reference-video]]
 == 參考影片：
 
+.採用 FC 的主資料存放區
+video::9c51101c-292b-41ef-8dd5-b4cf0131dd62[panopto,width=360]
 .iSCSI 多路徑與 AFF 和 ASA r2
 video::62c2a66c-1a07-4284-bc7b-b4ac00e9aeea[panopto,width=360]
 .含 NVMe/TCP 的補充資料存放區

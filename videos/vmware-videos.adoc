@@ -90,6 +90,8 @@ video::255640f5-4dff-438c-8d50-b01200f017d1[panopto,width=360]
 [[vmware-cloud-foundation-with-netapp-ontap]]
 == 採用NetApp ONTAP 的VMware Cloud Foundation
 
+.在 FC 上使用 VMFS 部署 VCF
+video::9c51101c-292b-41ef-8dd5-b4cf0131dd62[panopto,width=360]
 .NFS 資料存儲作為 VCF 工作負載域的主要存儲
 video::9b66ac8d-d2b1-4ac4-a33c-b16900f67df6[panopto]
 .iSCSI 資料儲存作為 VCF 管理域的補充存儲

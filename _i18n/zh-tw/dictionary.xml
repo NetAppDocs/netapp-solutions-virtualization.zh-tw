@@ -2914,7 +2914,6 @@
   <block id="092bf78f9c97ba171b8232ddff585392" category="section-title">附加資訊</block>
   <block id="825bcb57c4a920b6ec1b4c96c593210a" category="paragraph">要了解有關此解決方案中提出的技術的更多信息，請參閱以下附加資訊。</block>
   <block id="c566b67acddd823601fe79f9cbf31db9" category="inline-link">NetAppData Infrastructure Insights文檔</block>
-  <block id="cd05e79905f9f7de7a13066ca0953f4f" category="list-text"><block ref="cd05e79905f9f7de7a13066ca0953f4f" category="inline-link-rx"></block></block>
   <block id="cb59b87e00d11222bfd9159d0d23836f" category="section-title">入門</block>
   <block id="436e68f1ecbb1aad162f323520820215" category="list-text">使用 DNS 名稱時應該進行 DNS 解析。否則，請使用 vCenter 的 IP 位址。</block>
   <block id="182e56e650699ca4b371ce3f1d77f3a0" category="list-text">確保環境具有支援的 vCenter Server 和 ESXi 伺服器版本。</block>
@@ -4773,7 +4772,6 @@
   <block id="1a718e68b847d8b2043c7f76af9a4858" category="cell"><block ref="34ab3c79d36e5a654b9402fe2fcf7f3b" category="inline-link-rx"></block></block>
   <block id="391de35bbb4cf1a51813527b129bb11e" category="cell"><block ref="e3a74d6b6b54621583ac737da6124d3a" category="inline-link-rx"></block></block>
   <block id="47c5c0877638b8f808901039637b1474" category="cell"><block ref="8ef8fc61fd753b52cc179e3463e5820b" category="inline-link-rx"></block></block>
-  <block id="b8145535eda5b8ac300fd64bfa74cc26" category="cell"><block ref="64c621ea990d75acd1bb8fba7b272f2c" category="inline-link-rx"></block></block>
   <block id="315a0755b344c41b2a45eb62f3868930" category="cell"><block ref="c0dded1a1fb8dd474b19235d36c5c4c7" category="inline-link-rx"></block></block>
   <block id="15c077c967c5957622bfd9c744f7015f" category="doc">了解NetApp對 VMware vSphere 8 的支持</block>
   <block id="cadc15be508d2904dd26fdd4f4303243" category="paragraph">NetApp和 VMware 的合作夥伴關係是唯一一個透過單一儲存系統解決 VMware 定義的所有關鍵用例的合作夥伴關係。</block>
@@ -8929,8 +8927,6 @@
   <block id="cff9b0e8b1c1c7426b72f45e3a9ac644" category="sidebar">來源集群設定</block>
   <block id="824c1665365457f3bde955b98c2b7f55" category="sidebar">目標叢集設定</block>
   <block id="2aeae710edc424cc326d6cb63b550031" category="sidebar">Red Hat OpenShift Virtualization 使用 Data Infrastructure Insights 監控 VM</block>
-  <block id="2c596413f7f9ee1efaa7fc41145df5c9" category="paragraph">Red Hat 已記錄在案<block ref="e72861cc2ffb2a6f6b2f87c56b1d8448" category="inline-link-macro-rx"></block>。</block>
-  <block id="7868d2e71c1c27e2a8485d667b537155" category="paragraph">此外，他們還記錄了 <block ref="1bdd2b72ac809b354864a3247a207d41" category="inline-link-macro-rx"></block> 和 <block ref="e8677739388ad10428adf0f294cbf3a4" category="inline-link-macro-rx"></block>。</block>
   <block id="91d4980348340733f698961b8bd2b5a1" category="list-text"><block ref="91d4980348340733f698961b8bd2b5a1" category="inline-link-macro-rx"></block></block>
   <block id="ce13298964940b432f5dc3759956e597" category="list-text">按照 Red Hat 提供的 <block ref="3532d0b80dc5cd43a24a54e35bbc755c" category="inline-link-macro-rx"></block> 部署到您選擇的環境。</block>
   <block id="27d15430e2f80a592305cc8f4b2594dd" category="summary">使用 NetApp Console 備份與恢復服務備份與恢復 OpenShift Virtualization 虛擬機器</block>
@@ -9653,4 +9649,10 @@
   <block id="2eb0e03e77cc8eca36d62bc47ae9fe27" category="sidebar">使用 MetroCluster 設定工作負載域</block>
   <block id="dff7877eaefeaf43d1486416898a3b01" category="sidebar">使用 SnapMirror Active Sync （SAN 和 NAS）設定管理網域</block>
   <block id="b1821483a2acb5e3685fa2dc5780aec8" category="sidebar">使用 SnapMirror Active Sync（SAN 和 NAS）設定工作負載網域</block>
+  <block id="f97a05b6d3b0e518f5dc930494fed433" category="paragraph">Red Hat 已記錄在案<block ref="e643f3ad7f751c329c7c2de066096c05" category="inline-link-macro-rx"></block>。</block>
+  <block id="030872cb79765f6a3b8523b90733f271" category="paragraph">此外，他們還記錄了 <block ref="1bdd2b72ac809b354864a3247a207d41" category="inline-link-macro-rx"></block> 和 <block ref="a841c31a520ed2f6dce57ebfd0326a44" category="inline-link-macro-rx"></block>。</block>
+  <block id="fc0aa59ca4ba1a47e72a0390cfbb1a6f" category="video-title">在 FC 上使用 VMFS 部署 VCF</block>
+  <block id="32cd4e96e16ea22218701d95fbb8641b" category="list-text"><block ref="32cd4e96e16ea22218701d95fbb8641b" category="inline-link-rx"></block></block>
+  <block id="4ac9ef937d6829e78f453d8c03de16a1" category="list-text">在叢集中的其中一台 vSphere 主機上建立 VMFS 資料存放區（含 FC LUN）。</block>
+  <block id="1cda12e319bfea043837b8254a9a7c84" category="video-title">採用 FC 的主資料存放區</block>
 </blocks>

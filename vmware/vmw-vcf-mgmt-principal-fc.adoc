@@ -41,6 +41,7 @@ NOTE: 此解決方案適用於支援FC儲存的ONTAP平台，包括NetApp ASA、
 * NetApp儲存系統配置了儲存虛擬機器 (SVM) 以允許 FC 流量。
 * 已在 FC 結構上建立用於承載 FC 流量並與 SVM 關聯的邏輯介面 (LIF)。
 * 分區已配置為在 FC 交換器上使用單一啟動器-目標分區，用於主機 HBA 和儲存目標。
+* 在叢集中的其中一台 vSphere 主機上建立 VMFS 資料存放區（含 FC LUN）。
 
 
 有關配置ONTAP儲存系統的信息，請參閱link:https://docs.netapp.com/us-en/ontap["ONTAP 9 文件"]中心。
@@ -70,6 +71,13 @@ VCF 安裝程式工具支援管理網域的 VMFS on FC、NFS v3 和 vSAN 資料�
 
 從整體來看，為管理網域新增額外叢集的步驟如下：* 確保主機已完成部署，且網路池已在 vCenter 中設定。* 在 ONTAP 儲存系統上配置 LUN，並呈現給額外叢集中的主機。* 在 vCenter 上的管理網域中建立新的 SDDC 叢集，並依照精靈將額外叢集新增至管理網域。
 
+
+
+[[reference-video]]
+== 參考影片
+
+.採用 FC 的主資料存放區
+video::9c51101c-292b-41ef-8dd5-b4cf0131dd62[panopto,width=360]
 
 
 [[additional-information]]

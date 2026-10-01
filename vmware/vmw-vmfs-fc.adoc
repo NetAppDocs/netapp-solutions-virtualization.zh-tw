@@ -102,3 +102,5 @@ summary: 本頁面提供在 VMware vSphere 環境中部署NetApp ONTAP儲存 FC 
 
 .含 FC 的補充資料存放區
 video::96311abf-aa45-4ce9-984b-b4b001005bab[panopto,width=360]
+.採用 FC 的主資料存放區
+video::9c51101c-292b-41ef-8dd5-b4cf0131dd62[panopto,width=360]
