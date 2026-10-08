@@ -1,0 +1,48 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vvol-nfs-migration-options.html 
+keywords: netapp, vmware, nfs, migration, vvol, vvols, vmotion, storage vmotion, powercli 
+summary: 了解在採用 ONTAP 的 VMware 環境中，將虛擬機器從 vVols 資料存放區移轉至 NFS 資料存放區的選項，包括儲存設備 vMotion、冷移轉和指令碼移轉。 
+---
+= 從 vVols 資料存放區移轉至 NFS 資料存放區的選項
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解在採用 ONTAP 的 VMware 環境中，將虛擬機器從 vVols 資料儲存區移轉至 NFS 資料儲存區的選項，包括 Storage vMotion、冷移轉和指令碼移轉，以盡量減少停機並保持作業運作。
+
+在採用 ONTAP 的 VMware 環境中，從 vVols 資料存放區移轉至 NFS 資料存放區時，請考慮下列選項：
+
+* *儲存設備 vMotion*：在虛擬機器運作期間，將虛擬機器檔案從 vVols 資料儲存移轉至 NFS 資料儲存。執行虛擬機器的 ESXi 主機必須能夠存取這兩個資料儲存。
+* *vMotion 與儲存設備 vMotion*：當來源和目的地主機不共享儲存設備時，在單一操作中同時變更運算資源和資料儲存。
+* *冷移轉*：關閉 VM 電源，然後使用 vSphere 用戶端中的 *移轉* 選項將其移至 NFS 資料存放區。此方法簡單，但需要停機。
+* *備份與恢復*：使用支援將虛擬機器還原至不同資料存放區的備份應用程式。當來源與目標資料存放區無法從相同主機存取時，此方法非常有用。
+* *腳本化移轉*：使用 PowerCLI 或其他自動化工具進行大量移轉。
+
+
+在開始移轉之前，請確保 NFS 資料儲存的規模適當、設定正確且經過測試，並備份關鍵資料。
+
+如需逐步指引，包含 PowerCLI 範例，請參閱 link:migrate-vms-to-ontap-datastore.html["將虛擬機器從 VMware vSphere 遷移到ONTAP資料存儲"]。
+
+
+
+[[why-use-storage-vmotion-for-migration]]
+== 為何使用儲存設備 vMotion 進行移轉
+
+儲存 vMotion 是將虛擬機器從 vVols 資料存放區移轉至 NFS 資料存放區的建議方法，因為它能移動虛擬機器檔案而無須停機。
+
+這種方法可將對工作負載的干擾降至最低，並讓管理員在應用程式保持可用的情況下移動虛擬機器。儲存設備 vMotion 會保留虛擬機器的組態和中繼資料，而且您可以在移轉期間保留或變更虛擬磁碟格式。
+
+
+
+[[concurrency-limits]]
+== 並行限制
+
+vCenter 限制並行移轉的數量。預設情況下，一部主機最多可執行兩個並行儲存設備 vMotion 作業，一個資料存放區最多可參與八個。額外的作業會排入佇列，直到資源可用為止。
+
+根據這些限制規劃移轉批次，並在移轉過程中監控主機、網路和儲存使用率。有關目前的限制，請參閱 link:https://configmax.broadcom.com["VMware 組態最大值"^]。

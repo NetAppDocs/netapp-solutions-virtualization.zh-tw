@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vvol-nfs-migration-integ-tools.html 
+keywords: netapp, vmware, nfs, ontap, tools, integration, vaai, snapcenter, sra, disaster recovery 
+summary: 了解用於管理與保護 VMware 環境中 NFS 資料儲存區的 ONTAP 整合工具，包括 ONTAP tools for VMware vSphere、NFS VAAI 外掛，以及 SnapCenter Plug-in for VMware vSphere。 
+---
+= 適用於 VMware 環境中 NFS 資料儲存的 ONTAP 整合工具
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解用於管理、監控與保護 VMware 環境中 NFS 資料儲存區的 ONTAP 整合工具，包括 ONTAP tools for VMware vSphere、NFS VAAI 外掛，以及 SnapCenter Plug-in for VMware vSphere。
+
+NetApp 提供以下工具來管理和保護 VMware 環境中的 NFS 資料儲存：
+
+* *link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["ONTAP tools for VMware vSphere"^]*：將 ONTAP 管理整合至 vSphere 用戶端，以進行資源配置、監控與管理 NFS 資料存放區，並套用建議的 ESXi 主機設定。
+* *link:https://docs.netapp.com/us-en/nfs-plugin-vmware-vaai/index.html["適用於 VMware VAAI 的NetApp NFS 插件"^]*：將複製等儲存設備作業卸載至 ONTAP，以提升效能並減輕 ESXi 主機的負載。
+* *link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/protect/enable-storage-replication-adapter.html["儲存複寫介面卡 (SRA)"^]*：與 VMware Live Site Recovery（先前稱為 VMware Site Recovery Manager）整合，透過使用 ONTAP SnapMirror 複寫來協調災難恢復。
+* *link:vmw-dr-gs.html["NetApp Disaster Recovery"]*：從 NetApp Console 協調 NFS 資料儲存區上虛擬機器的災難恢復。
+* *link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/index.html["SnapCenter Plug-in for VMware vSphere"^]*：為 NFS 資料儲存區上的虛擬機器提供損毀狀況一致與虛擬機器一致的備份與恢復。
+* *link:https://docs.netapp.com/us-en/data-infrastructure-insights/index.html["NetAppData Infrastructure Insights"^]*：提供對 ONTAP 儲存設備和 VMware 基礎架構的效能和健全狀況的可見度。
+
+
+這些工具精簡了操作，提高了效能，並為 VMware 環境中的 NFS 資料儲存提供了資料保護。

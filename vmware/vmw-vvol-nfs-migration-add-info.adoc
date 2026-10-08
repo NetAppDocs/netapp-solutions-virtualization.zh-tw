@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vvol-nfs-migration-add-info.html 
+keywords: netapp, vmware, vvol, vvols, ONTAP tools, nfs, flexgroup, resources 
+summary: 尋找其他資源，以取得在 VMware vSphere 環境中使用 ONTAP 將 vVols 資料存放區移轉至 NFS 資料存放區的詳細資訊。 
+---
+= 從 vVols 移轉至 NFS 資料儲存區的其他資源
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+尋找其他資源，以取得在 VMware vSphere 環境中使用 ONTAP 將 vVols 資料存放區移轉至 NFS 資料存放區的詳細資訊。
+
+
+
+[[netapp-documentation]]
+== NetApp文檔
+
+* link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-overview.html["VMware vSphere 與 ONTAP 最佳實務指南"^]
+* link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-datastores-nfs.html["NFS 資料存放區"^]
+* link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vvols-overview.html["vVols 搭配 ONTAP"^]
+* link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-settings.html["推薦的 ESXi 主機和其他ONTAP設置"^]
+* link:vmw-nfs-otv10.html["使用適用ONTAP tools for VMware vSphere為 vSphere 8 設定 NFS 資料儲存區"]
+* link:vmw-vsphere8-nfs-nconnect.html["在 NFS v3 資料儲存上使用 nConnect 來提高資料儲存效能"]
+* link:migrate-vms-to-ontap-datastore.html["將虛擬機器從 VMware vSphere 遷移到ONTAP資料存儲"]
+* link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["ONTAP tools for VMware vSphere文檔"^]
+* link:https://docs.netapp.com/us-en/nfs-plugin-vmware-vaai/index.html["NetApp 適用於 VMware VAAI 的 NFS 外掛文件"^]
+* link:https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/index.html["SnapCenter Plug-in for VMware vSphere文檔"^]
+* link:https://docs.netapp.com/us-en/ontap/flexgroup/index.html["ONTAP FlexGroup Volume 文件"^]
+* link:https://docs.netapp.com/us-en/ontap/nfs-admin/index.html["ONTAP NFS 說明文件"^]
+
+
+
+
+[[vmware-documentation]]
+== VMware 文件
+
+* link:https://knowledge.broadcom.com/external/article?articleId=401070["在 VCF 9.0 和 VVF 9.0 中棄用 VMware vSphere Virtual Volumes（vVols）"^]
+* link:https://knowledge.broadcom.com/external/article/313464/support-for-nconnect-feature-added-in-es.html["NFS 用戶端中的 nConnect 功能支援 - ESXi"^]
+* link:https://configmax.broadcom.com["VMware 組態最大值"^]
+

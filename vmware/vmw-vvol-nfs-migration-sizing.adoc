@@ -1,0 +1,39 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vvol-nfs-migration-sizing.html 
+keywords: netapp, vmware, nfs, ontap, sizing, capacity, planning, datastore, performance 
+summary: 了解搭配 ONTAP 的 VMware vSphere 環境中 NFS 資料儲存區的規模準則，包括容量規劃、資料儲存區規模、VM 密度與效能。 
+---
+= 採用 ONTAP 的 VMware vSphere 環境中 NFS 資料儲存區的規模指南
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解搭配 ONTAP 的 VMware vSphere 環境中 NFS 資料儲存區的規模指南，包括容量規劃、資料儲存區規模、VM 密度與效能，以便在您從 vVols 移轉 VM 之前，目標 NFS 資料儲存區已準備就緒。
+
+在為使用 ONTAP 的 VMware vSphere 環境規劃 NFS 資料存放區規模時，請考慮下列準則：
+
+* *容量規劃*：根據虛擬機器數量、虛擬機器磁碟大小、成長率和 Snapshot 快照技術保留，估算所需的總儲存設備。包含虛擬機器交換檔案和記錄的例行成本。以 vVols 資料儲存目前佔用的容量作為起點。
+* *資料儲存大小*：根據平台的 ONTAP Volume 限制，調整每個資料儲存的大小。FlexGroup Volume 的擴充範圍可以超過單一 FlexVol Volume 的限制。如需平台限制，請參閱 link:https://hwu.netapp.com["NetApp Hardware Universe"^]。
+* *VM 密度*：根據工作負載效能要求、備份與還原精細度及操作偏好，規劃每個資料存放區的 VM 數量。FlexGroup Volume 可在單一資料存放區中託管數千個 VM。
+* *效能*：考慮 IOPS、處理量和延遲要求。使用多個 ONTAP LIF，並將 Volume 分佈在節點與彙總中以分散負載。
+* *Snapshot 保留*：為 ONTAP Snapshot 快照技術分配足夠的空間，以滿足您的備份與還原保留要求。
+* *資源隨需配置*：啟用資源隨需配置以優化空間使用率，並監控使用情況以避免過度使用。
+* *成長與擴充*：設計資料存放區時應考量未來的成長。您無需停機即可擴充 FlexVol 與 FlexGroup Volume。
+* *備份與災難恢復*：考量備份副本與複寫的空間。
+
+
+
+
+[[additional-information]]
+== 附加資訊
+
+* link:https://configmax.broadcom.com["VMware 組態最大值"^]
+* link:https://hwu.netapp.com["NetApp Hardware Universe"^]
+* link:https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-datastores-nfs.html["VMware vSphere 與 ONTAP 最佳實務指南中的 NFS 資料存放區"^]
+

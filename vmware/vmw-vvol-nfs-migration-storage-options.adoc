@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmw-vvol-nfs-migration-storage-options.html 
+keywords: netapp, vmware, nfs, ontap, flexvol, flexgroup, storage, options, scalability 
+summary: 了解 VMware 環境中 NFS 資料儲存的 ONTAP 儲存設備選項，並比較 FlexVol 與 FlexGroup Volume，以選擇最適合您工作負載的選項。 
+---
+= 採用 ONTAP 的 VMware vSphere 環境中 NFS 資料存放區的儲存選項
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解適用於 VMware 環境中 NFS 資料儲存的 ONTAP 儲存設備選項。比較 FlexVol 和 FlexGroup Volume，選擇最適合您工作負載需求與規模的解決方案。
+
+在 VMware 環境中為 NFS 資料存放區選擇 FlexVol 與 FlexGroup Volume 時，請考慮下列事項：
+
+image:vmw-vvol-nfs-migration-005.png["FlexVol 和 FlexGroup 比較"]
+
+.FlexVol®
+FlexVol Volume 適用於需要可預測效能與精細管理的中小型環境。
+
+它們支援 Snapshot 快照技術複本、複製與複寫。當您需要隔離工作負載或對個別資料存放區套用特定原則時，FlexVol Volume 是理想的選擇。
+
+.FlexGroup
+FlexGroup Volume 專為大型部署而設計，提供龐大的擴充性（高達 20 PB 和 4000 億個檔案）和並行性。
+
+它們會自動將資料分佈到多個組成 Volume 中，為擁有數千台虛擬機器的環境提供高效能和簡化的管理。當您需要為眾多虛擬機器提供單一、易擴充的資料存放區時，請使用 FlexGroup Volume。
+
+.建議
+* *使用 FlexVol Volume* 來處理較小、隔離的工作負載，或在需要精細控制時使用。
+* 針對需要簡化管理和擴充性的大型高效能環境，*請使用 FlexGroup Volume*。
+
+
+
+
+[[additional-information]]
+== 附加資訊
+
+* link:https://docs.netapp.com/us-en/ontap/flexgroup/index.html["FlexGroup Volume 文件"^]
+* link:https://docs.netapp.com/us-en/ontap/flexgroup/supported-unsupported-config-concept.html["FlexGroup卷支援和不支援的配置"^]
+* link:https://docs.netapp.com/us-en/ontap/volumes/index.html["邏輯儲存管理文件"^]
+

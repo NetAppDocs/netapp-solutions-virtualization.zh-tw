@@ -149,6 +149,22 @@ entries:
       url: "/vmware/vmw-vcf-vmsc-viwld-smas.html"
   - title: 從 vSphere 遷移虛擬機
     url: "/vmware/migrate-vms-to-ontap-datastore.html"
+  - title: 將虛擬機器從 vVols 移轉至 NFS
+    entries:
+    - title: 了解如何從 vVols 移轉至 NFS
+      url: "/vmware/vmw-vvol-nfs-migration.html"
+    - title: 部署最佳實務
+      url: "/vmware/vmw-vvol-nfs-migration-best-practices.html"
+    - title: 儲存選項
+      url: "/vmware/vmw-vvol-nfs-migration-storage-options.html"
+    - title: 規模指南
+      url: "/vmware/vmw-vvol-nfs-migration-sizing.html"
+    - title: ONTAP 整合工具
+      url: "/vmware/vmw-vvol-nfs-migration-integ-tools.html"
+    - title: 移轉選項
+      url: "/vmware/vmw-vvol-nfs-migration-options.html"
+    - title: 其他資源
+      url: "/vmware/vmw-vvol-nfs-migration-add-info.html"
   - title: 保護並恢復資料以抵禦勒索軟體
     url: "/vmware/vmw-nfs-arp.html"
   - title: 使用 DII 監控本地存儲

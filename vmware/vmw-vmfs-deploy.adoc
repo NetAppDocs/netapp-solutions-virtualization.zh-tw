@@ -160,7 +160,7 @@ image:vmfs-deploy-015.png["此圖顯示輸入/輸出對話框或表示書面內�
 
 
 
-請參閱這些連結以了解 vVol、FC、NVMe/TCP 資料儲存配置。
+若要資源配置 vVols 資料存放區，或使用 FC 或 NVMe/TCP 的 VMFS 資料存放區，請參閱 link:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["在 ONTAP 工具中建立資料存放區"^]。該頁面也列出 NVMe/TCP 所需的 ESXi 主機組態。
 
 
 
