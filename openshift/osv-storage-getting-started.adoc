@@ -60,24 +60,13 @@ Trident Protect 是 Trident 的進階功能，可為容器化環境提供增強�
 
 
 
-[[netapp-ontap-hardware-models-and-protocols-supported]]
-== NetApp ONTAP 硬體型號與支援的通訊協定
+[[trident-support-for-orchestrators-and-storage-backends]]
+== Trident 對編排器和儲存設備後端的支援
 
-NetApp ONTAP 軟體可在多種硬體型號上運行，每種型號都旨在滿足不同的效能和容量需求。Trident 擴展了其強大的功能，以支援各種 NetApp ONTAP 系統，包括全快閃 FAS （AFF）、全 SAN 陣列 （ASA） 和 ASA R2 系統。這種支援確保企業能夠在容器化環境中充分發揮其高效能儲存解決方案的潛力。
+如需支援的 Kubernetes 發行版與儲存設備後端，請參閱link:https://docs.netapp.com/us-en/trident/trident-get-started/requirements.html["Trident 需求"]。
 
-**全快閃 FAS （AFF）系統** AFF 系統具有卓越的效能和低延遲，使其成為高需求應用程式的理想選擇。
 
-**All SAN Array (ASA) 系統** ASA 系統專為專用 SAN 環境而設計，提供強大的效能和可靠性。
-
-**ASA R2 Systems** ASA R2 系統為 SAN 環境提供增強的功能和效能。
-
-**AFX** NetApp AFX 是一種專為企業級 AI 工作負載而設計的解耦式全快閃儲存架構。它提供高效能 NAS，支援運算能力和容量的獨立擴充。NetApp AFX 儲存系統與其他基於 ONTAP 的系統（ASA、AFF 和 FAS）的差異在於其儲存層的實作方式。AFX 使用分散式檔案系統，從而實現高效能和可擴充性，而其他基於 ONTAP 的系統則採用傳統的儲存架構。
-
-. AFF 支援的協定：NFS、CIFS/SMB、iSCSI、FC、NVMe/TCP
-. ASA 支援的協定：iSCSI、FC、NVMe/TCP
-. ASA R2 支援的協定：iSCSI、FC、NVMe/TCP
-. AFX 支援的協定：從 Trident 25.10 開始，僅支援 NFS 協定；不支援 SMB 協定。
-
+NOTE: Trident 也支援 NetApp link:https://docs.netapp.com/us-en/ontap-afx/get-started/ontap-afx-storage.html#typical-application-workloads["AFX"]。有關 AFX 支援要求，請參閱 link:https://docs.netapp.com/us-en/trident/trident-use/ontap-nas-prep.html["ONTAP NAS 準備文件"]。
 
 
 
@@ -88,8 +77,8 @@ Trident 包含以下 CSI 驅動程式，每個驅動程式都能夠在後端儲�
 
 
 
-[[for-nas-protocols-on-supported-hardware-models]]
-=== 適用於支援硬體型號上的 NAS 通訊協定
+[[for-nas-protocols]]
+=== 對於 NAS 協定
 
 . ontap-nas：一個 PVC 映射到一個 PV，該 PV 是一個專用的 flexvolume
 . ontap-nas-economy：每個配置的 PV 都是一個 qtree，每個 FlexVolume 可配置的 qtree 數量（預設值為 200，可配置範圍為 50 到 300）。一個 PVC 映射到一個 PV，該 PV 是共享 flexvolume 上的一個 qtree。
@@ -103,8 +92,8 @@ NOTE: 您可以將所有虛擬機器的磁碟作為 qtree 放置在單一磁碟�
 
 
 
-[[for-san-protocols-on-supported-hardware-models]]
-=== 對於受支援硬體型號上的 SAN 通訊協定
+[[for-san-protocols]]
+=== 對於 SAN 協定
 
 . ontap-san：一個 PVC 映射到一個 PV，該 PV 是專用 FlexVol 上的一個 LUN。
 . ontap-san-economy：一個 PVC 映射到一個 PV，PV 是共享 FlexVolume 上的一個 LUN。共享 FlexVolume 中可以有多個 LUN。（預設值為 100，每個 FlexVolume 磁碟區可配置為 50 到 200 個 LUN/PV）

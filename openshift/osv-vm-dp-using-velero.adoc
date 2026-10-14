@@ -21,7 +21,7 @@ summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化
 [[steps-to-create-a-backup-of-a-vm]]
 == 建立虛擬機器備份的步驟
 
-若要建立整個 VM（VM 元資料和 VM 磁碟）的隨選備份，請按一下「備份」標籤。這將建立一個備份自訂資源 (CR)。提供了一個範例 yaml 來建立備份 CR。使用此 yaml，將備份指定命名空間中的 VM 及其磁碟。可以設定其他參數，如下所示link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/backing_up_and_restoring/oadp-creating-backup-cr.html["文件"]。
+若要建立整個 VM（VM 中繼資料和 VM 磁碟）的隨選備份，請按一下 **Backup** 索引標籤。這會建立備份自訂資源（CR）。提供了一個範例 yaml 來建立備份 CR。使用此 yaml，將會備份指定命名空間中的 VM 及其磁碟。其他資訊可在 link:https://docs.openshift.com/en/documentation/openshift_container_platform/4.14/html/backup_and_restore/backup-restore-overview#application-backup-restore-operations-overview["OpenShift 容器平台文件"] 中找到。
 
 CSI 將建立支援磁碟的持久性磁碟區的快照。建立虛擬機器的備份及其磁碟的快照，並將其儲存在 yaml 中指定的備份位置。備份將按照 ttl 的規定在系統中保留 30 天。
 

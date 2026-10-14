@@ -140,7 +140,7 @@ image:rh-os-n-use-case-ocpv-tp-dp-007.png["已建立 vm、pod 和 pvc"]
 .創建應用程式
 [%collapsible]
 ====
-**為虛擬機器建立一個 Trident 保護應用程式**
+**為虛擬機器建立 Trident Protect 應用程式**
 
 在範例中，demo 命名空間有一個 VM，並且在建立應用程式時包含了該命名空間的所有資源。
 

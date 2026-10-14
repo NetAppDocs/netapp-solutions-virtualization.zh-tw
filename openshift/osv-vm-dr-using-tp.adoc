@@ -38,7 +38,7 @@ image:redhat-openshift-ocpv-tp-003.png["安裝在 source-ns 命名空間中的 O
 
 本節介紹如何使用 ONTAP S3 物件儲存在 Trident Protect 中設定 AppVault 物件。
 
-使用 oc 命令和下面顯示的 yaml 檔案為 ONTAP s3 建立密鑰和 AppVault 自訂資源。確保在 trident protect 命名空間中建立它們。
+使用 oc 命令和下面顯示的 yaml 檔案，為 ONTAP s3 建立金鑰和 AppVault 自訂資源。確保在 trident-protect 命名空間中建立它們。
 
 [source, cli]
 ----
