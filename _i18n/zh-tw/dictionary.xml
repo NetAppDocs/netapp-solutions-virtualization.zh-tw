@@ -6798,9 +6798,7 @@
   <block id="e64d3e5c79e6674080802b27f21a9fc4" category="list-text"><block ref="e64d3e5c79e6674080802b27f21a9fc4" category="inline-link-macro-rx"></block></block>
   <block id="85f5858cd9a1fa8d7d5f546a8a12b489" category="paragraph">有關配置數組的詳細步驟，請參閱 <block ref="cda967d5dbafb03ba39e303667f2f1c2" category="inline-link-macro-rx"></block> 和 <block ref="227981b99c3933beea85434bdd33c2bd" category="inline-link-macro-rx"></block></block>
   <block id="bbf7a9763c8116fd17ae9786a7504aea" category="list-text">NetApp Console和Data Infrastructure Insights整合。</block>
-  <block id="51cd5879ce0a19dd7464db1782205096" category="summary">使用 Shift Toolkit 和 Migration Toolkit for virtualization 將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift Virtualization。</block>
   <block id="111a2605974d9776ae209866d95f92f1" category="doc">使用 Shift 工具包和虛擬化遷移工具包將虛擬機器從 VMware ESXi 遷移到 Red Hat OpenShift 虛擬化</block>
-  <block id="92ed7cd7e1d94197d6c5c6cb76f5bd37" category="paragraph">本節介紹虛擬化遷移工具包 (MTV) 和NetApp Shift 工具包如何為 Red Hat OpenShift Virtualization 帶來無縫遷移體驗，並提供有關使用虛擬化遷移工具包和 Shift 工具包的轉換功能過渡到 OpenShift Virtualization 的分步指南。</block>
   <block id="4ee3b5d40b4b5ea1ea6abbf248ab4700" category="list-text">OpenShift 叢集可透過網路存取</block>
   <block id="c08399e4ce862b999260b8032ee13f72" category="list-text">NetApp Trident操作員</block>
   <block id="00d5fe821f19533e88ebcbe1ef9121a5" category="list-text">MTV 2.9.4 或更高版本（包含轉換模式）</block>
@@ -6809,12 +6807,9 @@
   <block id="5be8426da76cced0a47158ad47750def" category="list-text">權限最低的帳戶。請參閱本節<block ref="c926533bfc6d97c26e033293cec05b98" category="inline-link-macro-rx"></block></block>
   <block id="290ab574b340fbe7c1c7b7c89a003fef" category="list-text">每個虛擬機器的作業系統都經過認證，並作為轉換所需的客戶作業系統提供支援。</block>
   <block id="9fcda93f457ee4efde123f8b81663bce" category="list-text">遷移之前或遷移期間，不得更改 IP 位址、VLAN 和其他網路配置設定。在遷移過程中，虛擬機器的 MAC 位址將會保留。</block>
-  <block id="409116cb62df6ecb2004715240d3147a" category="section-title">步驟 1：使用虛擬化遷移工具包建立遷移計劃</block>
   <block id="6e9910b1ca90b862667de7817be15cc1" category="inline-link-macro">Web 控制台</block>
   <block id="4e36c3b3ad435683e9f029ac71865abc" category="inline-link-macro">命令列</block>
-  <block id="d688b4ec9c9b009c06aa0f287f8fbe39" category="list-text">為了充分利用虛擬機器 (VM) 的快速轉換優勢，第一步是使用 MTV 為虛擬機器建立遷移計劃。<block ref="70c62987d0b9335730ffdb7ddd9e1317" category="inline-link-macro-rx"></block>或者<block ref="3337becbde3813deecced40a779b0887" category="inline-link-macro-rx"></block>。</block>
   <block id="a3e188416b8a703de12305625c5da1a7" category="admonition">應事先制定計劃，以確保 MTV 配置保留 IP 設定。</block>
-  <block id="8c4271e6faf2cea4cfc8e5b7108d8ee9" category="list-title">程式</block>
   <block id="74e54e76819331b9fc34d6bd9837600e" category="list-text">登入MTV網路控制台。</block>
   <block id="53bd053a8d6b054fc7ecb5374ba494e2" category="list-text">新增來源提供者和目標提供者</block>
   <block id="57e3cd17c30a36fce8a69a072d44ec27" category="list-text">在目標命名空間中建立遷移計劃</block>
@@ -6837,9 +6832,7 @@
   <block id="03219f2365bb167fe7acc92f243e7871" category="list-text">審核並最終定稿</block>
   <block id="98c7c5f2fd8ddce1779f9ed643c1761a" category="list-text">仔細檢查所有設置，然後按一下「完成」以建立遷移計劃。</block>
   <block id="084bc38feb66f33362bca3b9141a9b6f" category="image-alt">審核和創建</block>
-  <block id="bbadb4f2b718afab2d41bc0e71139cea" category="list-text">建立遷移計劃後，複製遷移計劃的名稱，然後前往 Shift 工具包 UI。</block>
   <block id="973a76527c9dc52fa471cf2f6f87e470" category="inline-link-macro">建立網站</block>
-  <block id="09657c90a5a5fed6a3ef58b0118383f3" category="list-text">新增來源虛擬機器管理程式和目標虛擬機器管理程式。點擊此連結<block ref="6dc5de2ed7fd5090638f8a04725f7665" category="inline-link-macro-rx"></block></block>
   <block id="a11a34a1a2f11fd6afa6d5e8d061927c" category="admonition">Shift Toolkit 中配置的端點必須與透過 MTV 控制台新增端點時所使用的格式相符。例如，如果來源端點或目標端點是使用 FQDN 新增的，則在 Shift Toolkit 中也應使用相同的 FQDN。</block>
   <block id="88d5f218c07e3dcc1200eb039539e934" category="image-alt">輪班工具包網站顯示</block>
   <block id="9cebc7a4e984aed09b0e55eb42739edb" category="list-text">導航至“藍圖”並建立新藍圖。</block>
@@ -6852,7 +6845,6 @@
   <block id="13c29b26fb4e3313453403a8b47c6d24" category="list-text">選擇PVC進口選項。預設為克隆並導入磁碟區。</block>
   <block id="5fafc78bbd344640d10aa3386b1d4ccf" category="admonition">磁碟區也可以直接匯入，無需建立克隆。</block>
   <block id="4667dbd6fafc21b84cbaa1826d7c923a" category="image-alt">VM 詳細資訊</block>
-  <block id="0505d284d5f77b26f9c2e901ac70c820" category="list-text">完成後，建立藍圖。</block>
   <block id="28de6972b99da54bfaafb58aae46bb41" category="list-text">點選藍圖中的「遷移」按鈕即可觸發遷移。</block>
   <block id="701e7b661e949d354a8b9cf334102bf2" category="admonition">在觸發遷移之前，應先關閉虛擬機器電源。MTV 將根據虛擬機器目標電源狀態屬性啟動虛擬機器。</block>
   <block id="71dc0880d10a073a87b57eb781852dcb" category="image-alt">觸發遷移</block>
@@ -6870,8 +6862,6 @@
   <block id="b6fe8a689b9cf15f4bdca2cf095c4c9e" category="image-alt">遷移後的 Windows VM</block>
   <block id="94d5abe2db4aa3d6add9fc8023c683c5" category="image-alt">遷移後的 Linux 虛擬機</block>
   <block id="f23e54af32c8f401757078bc6c8394e3" category="admonition">這表明 Shift 工具包和 MTV 可以以閃電般的速度簡化遷移過程。在這個例子中，遷移了 2 台虛擬機，總共 12TB 的空間。整個過程大約耗時8-10分鐘。</block>
-  <block id="115dd50a29d31d14f98082b0c11ce8a3" category="paragraph-title">幕後發生了什麼事：</block>
-  <block id="9d58c8f5f6248972cf82f0097d8795fe" category="paragraph">以下各節描述了 Shift Toolkit API 和 MTV 觸發的步驟，用於轉換 VMDK 檔案並在 OpenShift 平台上建立虛擬機器。無論透過 Shift Toolkit 使用者介面啟動，或是透過 Shift Toolkit 腳本區塊中提供的腳本啟動，此工作流程都保持一致。</block>
   <block id="5db5a1f0b6ce401b5f5a2fe9416b6e33" category="paragraph-title">轉換 VMDK</block>
   <block id="c013f50e770213a410d5f6cda254bd49" category="paragraph">Shift 工具包將自動尋找與每個虛擬機器關聯的 VMDK，包括主啟動磁碟。</block>
   <block id="1897d431751b904960143382b1fac632" category="paragraph-title">批次匯入和遷移計劃配置</block>
@@ -6883,16 +6873,13 @@
   <block id="cb8e1e5c861527e4e6a4de37c73d7bbc" category="list-text">vmdk 磁碟路徑</block>
   <block id="f081b318b7992066d3b226d49f1442a6" category="paragraph">此外，disk.img 檔案的權限也已更新。權限是透過動態部署的 POD 進行修改的，該 POD 用於掛載導入的 PVC 並按如下方式設定權限：</block>
   <block id="0333eac5b2e405300234fd80009bffaa" category="list-text">"owner": { "id": 107 },"group": { "id": 107 },"mode": "0655"</block>
-  <block id="31aac2174d785a4c2950b69ddbafaed0" category="paragraph">重要提示：</block>
   <block id="87e62689cf8d67ce066fde85596046d8" category="list-text">堆高機檢查PVC中的vmID和vmUUID。</block>
   <block id="7e3bfce76524328f20f7a069ca46f8bd" category="list-text">Forklift 使用 forklift.konveyor.io/disk-source 的磁碟名稱（VMDK 路徑）。</block>
   <block id="e312a3da41b2a6b5ef9bcf89370f2406" category="list-text">導入的 PVC 數量必須與來源 VM 關聯的磁碟數量相符。例如，如果一個虛擬機器有三個 VMDK，但導入了四個 ID 匹配的 PVC，則 MTV 不會將遷移計劃狀態更新為「準備開始」。</block>
-  <block id="1dd4d2d0d89438fe47738904c32eb130" category="paragraph">這些步驟完成後，Shift Toolkit 會修補遷移計畫 YAML，以便 MTV 能夠理解應該直接使用 PVC，繞過資料填充程式 pod 進程（這通常很耗時）。修改後的 YAML 檔案包含：</block>
   <block id="c890a1cad0b84a5de7465f3d9b7b9e36" category="list-text">目標命名空間：預設</block>
   <block id="e11e8548d30616ebe3fa63de585ef747" category="list-text">類型：轉換</block>
   <block id="33c53d4cce79c533f2668e1e5a90ff34" category="list-text">貯存： {}</block>
   <block id="dc086a6cd4bacd67009bdd981e39ddbc" category="paragraph-title">啟動遷移過程</block>
-  <block id="6f67c2b6ae09035a640f9251cf9ba8b2" category="paragraph">配置完成後，呼叫 MTV 開始遷移。UI 會將遷移類型顯示為“冷遷移”，但根據 YAML 轉換規範，MTV 會根據關聯的 vmID 和 vmUUID 驗證每個 PVC，並相應地映射它們，然後初始化遷移。顯示範例</block>
   <block id="38f72a347e78e7ca31e2b366b9cefccc" category="image-alt">MTV 控制台完成時間</block>
   <block id="27b433c028b1e00a68be41ccd19544a3" category="admonition">虛擬機器是在「預設」虛擬機器專案下創建的，但可以在 MTV 遷移計劃 YAML 中進行修改。</block>
   <block id="f41366f23fa781b002429962790550a6" category="paragraph">Shift Toolkit 透過簡化流程、最大限度地減少停機時間以及消除對 ESXi 主機存取或基於 VDDK 的方法的需求，加速了遷移。</block>
@@ -9882,4 +9869,20 @@
   <block id="6e2a3b1094b66d679a2f74a8a08c9246" category="section-title">對於 NAS 協定</block>
   <block id="5090601a75323a1861526e5add664b7b" category="section-title">對於 SAN 協定</block>
   <block id="744a96e9ce909d310b032af09b7da629" category="paragraph">**為虛擬機器建立 Trident Protect 應用程式**</block>
+  <block id="085ab91861e475d9e3e50501b0929c95" category="paragraph">為了加快移轉後的 PVC 分割作業，請將來源 NFS 資料存放區保持在 5 TB 或以下。雖然可以使用較大的磁碟區，但在為 VM 移轉建立 200–300 個複本時，較小的磁碟區是更快速完成分割的理想選擇。</block>
+  <block id="2014d8bad25851c143223dea9b91b6b3" category="summary">使用 Migration Toolkit for Virtualization （MTV） 搭配 NetApp Shift 工具套件，將 VM 從 VMware ESXi 移轉至 Red Hat OpenShift Virtualization。此程序包括在 MTV 中建立移轉計畫，以及使用 Shift 工具套件轉換 VM 磁碟，讓 VM 能快速移至 OpenShift Virtualization。</block>
+  <block id="da8b7db47ac0e97698c3cb02730ade0a" category="section-title">步驟 1：建立移轉計畫</block>
+  <block id="1d4d9dc066d1fd014eb68598936db9fd" category="paragraph">為了運用虛擬機器的閃電般快速轉換，第一步是使用 MTV，透過 <block ref="70c62987d0b9335730ffdb7ddd9e1317" category="inline-link-macro-rx"></block> 或 <block ref="3337becbde3813deecced40a779b0887" category="inline-link-macro-rx"></block> 為虛擬機器建立移轉計畫。</block>
+  <block id="4d444f06ad3c08a2f7dc3c0cfe60907f" category="section-title">步驟 2：在 Shift 工具套件中建立藍圖</block>
+  <block id="e3dbab37b88c56eb648687249b96f92b" category="paragraph">在 MTV 中建立移轉計劃後，新增來源和目的地站點，並在 Shift 工具套件 UI 中根據該計劃建立藍圖。</block>
+  <block id="ca831ef4c7b31a9d7609e301ef99fd91" category="list-text">複製移轉計劃的名稱，然後前往 Shift 工具套件 UI。</block>
+  <block id="4dc21b9744cdd8aca0b574855d9848e7" category="list-text">新增來源和目的地虛擬機器管理程式。請點擊此連結 <block ref="6dc5de2ed7fd5090638f8a04725f7665" category="inline-link-macro-rx"></block>。</block>
+  <block id="2c69816126df936233c2f0ebb52dd5e2" category="list-text">檢閱藍圖設定，然後選取 **建立藍圖** 來儲存。</block>
+  <block id="bcdcf19256c58e85f8f38d49a918c003" category="section-title">步驟 3：執行移轉</block>
+  <block id="c4cbabb2b0168d5ac9978c7b865310e8" category="paragraph">建立藍圖後，從 Shift 工具套件觸發移轉並進行監控，直到 MTV 報告計畫完成。</block>
+  <block id="8cb4dbf08eebd4aee7d4d917f1e6e23d" category="section-title">幕後發生的事</block>
+  <block id="ce5585ad6c13f742c5754fc84640274a" category="paragraph">以下各節說明由 Shift 工具套件 API 和 MTV 所觸發的步驟，以轉換 VMDK 檔案並在 OpenShift 平台上建立虛擬機器。無論是透過 Shift 工具套件 UI 啟動，還是使用 Shift 工具套件 Script Blocks 中提供的指令碼，此工作流程均保持一致。</block>
+  <block id="7dcca1322bff7fc795a0f558658f3ba4" category="list-title">重要注意事項</block>
+  <block id="ae490aa3c145227d57aa6ad8214f727f" category="paragraph">完成這些步驟後，Shift 工具套件會修改移轉計畫 YAML，以便 MTV 了解應直接使用 PVC，進而繞過資料填充 pod 程序（這通常相當耗時）。修改後的 YAML 包含：</block>
+  <block id="a043ab0dad12b229a0a7942ab60824a2" category="paragraph">組態完成後，會呼叫 MTV 以開始移轉。使用者介面會將移轉類型顯示為 Cold，但根據 YAML 轉換規格，MTV 會針對相關聯的 vmID 和 vmUUID 驗證每個 PVC，並進行相應的對應，然後初始化移轉。.顯示範例</block>
 </blocks>
