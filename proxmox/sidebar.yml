@@ -40,5 +40,14 @@ entries:
     url: "/proxmox/proxmox-pbs-requirements.html"
   - title: 使用 Proxmox Backup Server 設定資料保護
     url: "/proxmox/proxmox-wkld-dp-pbs.html"
-- title: 設定並使用 Storage Manager for Proxmox
-  url: "/proxmox/proxmox-smp.html"
+  - title: 設定並使用 Storage Manager for Proxmox
+    url: "/proxmox/proxmox-smp.html"
+- title: Proxmox VE 工作負載的業務連續性
+  pdf-filename: Proxmox VE 工作負載的業務連續性
+  entries:
+  - title: 解決方案架構
+    url: "/proxmox/proxmox-business-continuity.html"
+  - title: 配置 NAS 儲存設備
+    url: "/proxmox/proxmox-active-sync-nas-config.html"
+  - title: 設定並使用 Storage Manager for Proxmox
+    url: "/proxmox/proxmox-smp.html"

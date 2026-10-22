@@ -15,6 +15,25 @@ summary: NetApp虛擬化解決方案附件的最新變更日誌。
 
 
 
+[[14-october-2026]]
+== 2026 年 10 月 14 日
+
+* 為 Proxmox VE 新增了搭配 ONTAP SnapMirror 作用中同步的業務連續性解決方案。
++
+** link:proxmox/proxmox-business-continuity.html["了解 Proxmox VE 搭配 SnapMirror 作用中同步的業務連續性"]
++
+了解 Proxmox VE stretch 叢集如何透過適用於 NAS 的 SnapMirror 作用中同步，在儲存設備或站台故障的情況下保持虛擬機器運作，並實現零 RPO。內容包括 corosync 和 QDevice 的設計注意事項、 ONTAP Mediator 和 ONTAP Cloud Mediator 選項、用於第 3 階層網路且具備 BGP 的 VIP LIF，以及與 MetroCluster 的比較。
+
+** link:proxmox/proxmox-active-sync-nas-config.html["設定 Proxmox VE 業務連續性與 NAS 儲存設備"]
++
+設定中介器，保護 NFS SVM，使用 QDevice 建置延伸叢集，資源配置 NFS 共享儲存設備，並使用 Storage Manager for Proxmox 設定 HA 和 VM 備份。
+
+
+
+
+
+
+
 [[21-august-2026]]
 == 2026年8月21日
 

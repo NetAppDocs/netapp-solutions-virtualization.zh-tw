@@ -1,0 +1,468 @@
+---
+sidebar: sidebar 
+permalink: proxmox/proxmox-active-sync-nas-config.html 
+keywords: proxmox ve, snapmirror active sync, configure, stretch cluster, qdevice, nfs shared storage, vip lif, bgp, ontap mediator, ontap cloud mediator, netapp console 
+summary: 設定 NAS 的 SnapMirror 作用中同步、具備 BGP 的選用 VIP LIF，以及具備 QDevice 的 Proxmox VE 延伸叢集，以保護虛擬機器免受站台故障影響。 
+---
+= 設定 Proxmox VE 業務連續性與 NAS 儲存設備
+:hardbreaks:
+:allow-uri-read: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+透過將適用於 NAS 的 ONTAP SnapMirror 作用中同步與 Proxmox VE 延伸叢集結合，保護 Proxmox 虛擬環境（VE）虛擬機器免受站台故障影響。您在 NetApp Console 中設定中介器（ONTAP Mediator 或 ONTAP Cloud Mediator），保護 NFS 儲存設備虛擬機器（SVM），選擇性地使用虛擬 IP（VIP）LIF 和邊界閘道協定（BGP）使其 NFS 位址在路由網路中具備可攜性，使用 QDevice 建立延伸叢集，然後使用 Storage Manager for Proxmox 資源配置共享儲存設備，並設定高可用度（HA）與虛擬機器備份。結果是零資料遺失，並在倖存站台自動恢復虛擬機器。
+
+.關於此工作流程
+開始之前，請審查 link:proxmox-business-continuity.html["解決方案架構、故障行為與 corosync 設計考量"]。將尖括號中的值（例如  `<primary_svm>`）替換為您環境中的值。
+
+.開始之前
+* 兩個 AFF A 系列或 C 系列雙節點叢集必須執行 ONTAP 9.19.1 或更新版本，一個位於站台 A，一個位於站台 B。
+* SnapMirror 和 SnapMirror 同步授權（包含在 ONTAP One 中）必須安裝在兩個叢集上。
+* 叢集必須在預設 IPspace 中進行對等連接，叢集間往返時間（RTT）小於 10 毫秒。
+* 您必須選擇一個調解器選項。如需比較，請參閱 link:proxmox-business-continuity.html#mediator-options["中介選項"]。
++
+** 對於 ONTAP Mediator，必須在站台 C 或另一個第三故障網域安裝 Linux 主機，且該主機必須可從兩個叢集的叢集和節點管理 LIF 存取。
+** 對於 ONTAP Cloud Mediator ，兩個叢集都必須直接或透過 Proxy 對 NetApp Console 進行傳出 HTTPS 存取，且 ping 延遲低於 200 毫秒。您還需要 NetApp Console 組織和建立服務帳戶的權限。
+
+
+* 站台 A 的 SVM 必須為 Proxmox VE 節點提供 NFS 服務。此 SVM 只能包含 NAS 的 FlexVol Volume，不能包含 LUN，且其匯出原則必須允許所有 Proxmox VE 節點。
+* 必須安裝偶數個 Proxmox VE 9.0 或更新版本的節點，在站台 A 和站台 B 之間平均分割，且所有節點之間的 corosync 延遲低於 5 毫秒。
+* 站台 C 或其他第三個位置的 Linux 主機必須可供 corosync QDevice 守護程式使用，並且必須能夠從所有 Proxmox VE 節點透過 TCP 連接埠 5403 存取。無論使用哪種中介器選項，都需要此主機。
+* NFS VLAN 必須在站台 A 和站台 B 之間延伸。對於路由的階層 3 網路，每個站台都必須提供支援 BGP 的路由器，而且您必須向 NetApp 確認，NAS 的 SnapMirror 作用中同步是否支援具備 BGP 的 VIP LIF。
+* 您的 ONTAP 和 Proxmox VE 版本必須一起列在 link:https://mysupport.netapp.com/matrix/["NetApp 互作業性矩陣工具（IMT）"^] 中。
+* 若要資源配置共享儲存設備和備份虛擬機，必須安裝適用於 Proxmox 的 Storage Manager，並使其能夠透過網路存取 Proxmox VE 節點和兩個 ONTAP 叢集。
+
+
+
+
+[[step-1-configure-the-mediator]]
+== 步驟 1：設定中介器
+
+在初始化 SnapMirror 作用中同步關係之前，請將中介器新增至叢集對等關係。ONTAP 需要中介器來執行計畫性與自動容錯移轉。您可以從任一叢集新增中介器，ONTAP 會自動將其新增至另一個叢集。請使用一種中介器選項，不要同時使用兩者。
+
+請選擇以下選項之一。
+
+[role="tabbed-block"]
+====
+.ONTAP Mediator
+--
+如果您在站台 C 的 Linux 主機上安裝中介器，請使用此選項。有關安裝，請參閱 link:https://docs.netapp.com/us-en/ontap/mediator/index.html["安裝或升級 ONTAP Mediator"^]。
+
+.步驟
+. 在任一叢集上，新增中介器：
++
+[source, cli]
+----
+snapmirror mediator add -peer-cluster <peer_cluster> -type on-prem -mediator-address <mediator_ip> -username <mediator_user>
+----
++
+出現提示時，請輸入 Mediator 密碼。
+
+. 確認調解方已連線且法定人數狀態為 `true`：
++
+[source, cli]
+----
+snapmirror mediator show
+----
+
+
+--
+.ONTAP Cloud Mediator
+--
+使用此選項將中介器以服務形式託管在 NetApp Console 中，這樣您就不需要在第三個站台使用中介器主機。
+
+.開始之前
+* 兩個站台的防火牆必須允許來自兩個叢集的 HTTPS 流量存取 NetApp Console API 端點。如需目前的端點主機名稱，請參閱 link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/cloud-mediator-requirements-concept.html["準備設定 ONTAP Cloud 中介器"^]。
+* 如果叢集使用 Proxy 伺服器，請準備 Proxy 的 IP 位址、連接埠和認證。每個叢集應使用不同的 Proxy 伺服器。Proxy 的根目錄 CA 憑證必須安裝在 ONTAP 中。
+* ONTAP 包含常用的根目錄 CA 憑證，因此通常無需安裝 NetApp Console 憑證。若要檢查，請執行 `security certificate show -common-name Sectigo*|USERTrust*|AAA*`。
+
+
+.步驟
+. 在 NetApp Console 中，複製您的組織 ID。
+. 在 NetApp Console 中，建立成員服務帳戶：
++
+.. 將組織設定為您使用 ONTAP Cloud Mediator 的組織。
+.. 將類別設定為 *應用程式*。
+.. 將角色設定為 *ONTAP Mediator Setup Role*。
+.. 建立帳戶時，請儲存用戶端 ID 和用戶端金鑰。
+
+
+. 在任一叢集上，新增中介器：
++
+[source, cli]
+----
+snapmirror mediator add -peer-cluster <peer_cluster> -type cloud -org-id <console_org_id> -service-account-client-id <client_id> -use-http-proxy-local <true|false> -use-http-proxy-remote <true|false>
+----
++
+出現提示時，請輸入用戶端金鑰。
+
++
+您也可以使用 System Manager。選擇 *保護* > *概覽* > *中介器* > *新增*，選擇 *雲端* 作為中介器類型，然後輸入組織 ID、用戶端 ID 和用戶端機密。
+
+. 驗證中介器類型為 `cloud`、連線狀態為 `connected`，以及仲裁狀態為 `true`：
++
+[source, cli]
+----
+snapmirror mediator show
+----
+
+
+--
+====
+
+
+[[step-2-protect-the-nfs-svm-with-snapmirror-active-sync]]
+== 步驟 2：使用 SnapMirror 作用中同步保護 NFS SVM
+
+在站台 B 叢集上建立休眠的目的地 SVM，並將站台 A 的 SVM 複寫到該 SVM。ONTAP 同步複寫資料，並複寫 SVM 組態，包括 NFS LIF 位址和匯出原則。您也可以在 System Manager 中完成此步驟，方法是為 SVM 選擇 *保護*，並選擇 `AutomatedFailOver`原則。
+
+.步驟
+. 在站台 B 叢集上，建立目的地 SVM：
++
+[source, cli]
+----
+vserver create -vserver <secondary_svm> -sub-type dp-destination
+----
+. 在站台 B 叢集上，與主 SVM 建立 SVM 對等關係：
++
+[source, cli]
+----
+vserver peer create -vserver <secondary_svm> -peer-vserver <primary_svm> -peer-cluster <site_a_cluster> -applications snapmirror
+----
+. 在站台 A 叢集上，接受 SVM 對等請求：
++
+[source, cli]
+----
+vserver peer accept -vserver <primary_svm> -peer-vserver <secondary_svm>
+----
+. 在站台 B 叢集上，建立 SnapMirror 作用中同步關係：
++
+[source, cli]
+----
+snapmirror create -source-path <primary_svm>: -destination-path <secondary_svm>: -policy AutomatedFailOver
+----
+. 初始化關係：
++
+[source, cli]
+----
+snapmirror initialize -destination-path <secondary_svm>:
+----
+. 驗證關係是否同步：
++
+[source, cli]
+----
+snapmirror show -destination-path <secondary_svm>:
+----
++
+ `Mirror State` 是 `Snapmirrored`，而 `Relationship Status` 是 `InSync`。
+
+. 視需要，排除不需要保護的 Volume，例如暫存或測試 Volume：
++
+[source, cli]
+----
+volume modify -vserver <primary_svm> -volume <volume_name> -smas-protection unprotected
+----
+
+
+
+
+[[step-3-configure-a-vip-lif-with-bgp-for-layer-3-networks]]
+== 步驟 3：為第 3 階層網路設定具備 BGP 的 VIP LIF
+
+
+CAUTION: 截至發行時，NetApp 尚未將搭配 BGP 的 VIP LIF 記錄為 NAS 的 SnapMirror active sync 合格組態。在完成此步驟之前，請向 NetApp 確認目前的支援情況。否則，請在站台之間延伸 NFS VLAN 並跳過此步驟。
+
+如果 NFS VLAN 跨越站台 A 和站台 B，則跳過此步驟。如果站台之間透過路由網路連接，請在兩個叢集的每個節點上建立 BGP LIF，然後將 NFS 位址代管在主 SVM 的 VIP LIF 上。VIP 位址不得屬於 Proxmox VE 節點的子網路。
+
+.開始之前
+* 每個路由器都必須設定為接受來自其站台 BGP LIF 的 BGP 工作階段，接受 /32 主機路由，並且不向 ONTAP 發送路由更新。
+* 每個 ONTAP 節點和每個路由器都必須具有唯一的私人 ASN，每個 BGP LIF 和路由器對必須具有 /31 子網路。
+
+
+.步驟
+. 在每個叢集上，切換至進階權限層級：
++
+[source, cli]
+----
+set -privilege advanced
+----
+. 在兩個叢集的每個節點上，建立一個 BGP 組態，該節點具有唯一的 ONTAP ASN，保持時間為 3 秒，並將節點管理 IP 位址作為路由器 ID：
++
+[source, cli]
+----
+network bgp config create -node <node_name> -asn <node_asn> -holdtime 3 -routerid <node_mgmt_ip>
+----
+. （可選）在兩個叢集的每個節點上，在連接到路由器的兩個連接埠上分別建立一個 VLAN 連接埠：
++
+[source, cli]
+----
+network port vlan create -node <node_name> -vlan-name <port_name>-<vlan_id>
+----
++
+您也可以使用實體連接埠、介面群組或介面群組上的 VLAN 作為 BGP LIF 歸屬連接埠。這些連接埠必須屬於 IPspace 中的廣播網域。
+
+. 在兩個叢集的每個節點上，在系統 SVM 中建立兩個 BGP LIF，每個連接埠一個，並配置指向該連接埠路由器的 /31 子網路：
++
+[source, cli]
+----
+network interface create -vserver <system_svm> -lif <bgp_lif_name> -service-policy default-route-announce -home-node <node_name> -home-port <vlan_or_port> -address <bgp_lif_ip> -netmask-length 31
+----
++
+對於預設 IPspace， `<system_svm>` 是叢集名稱。對於自訂 IPspace，它是 IPspace 名稱。您需要為每個節點建立一次 BGP LIF，它們為該 IPspace 中所有資料 SVM 的 VIP LIF 提供服務。
+
+. 對於每個 BGP LIF，與其路由器建立一個 BGP 對等群組，並從該路由器學習預設路由：
++
+[source, cli]
+----
+network bgp peer-group create -peer-group <peer_group_name> -ipspace <ipspace> -bgp-lif <bgp_lif_name> -peer-address <router_ip> -peer-asn <router_asn> -use-peer-as-next-hop true
+----
+. 確認每個對等組都已啟動：
++
+[source, cli]
+----
+network bgp peer-group show -ipspace <ipspace>
+----
+. 在每個叢集上啟用多重路徑路由：
++
+[source, cli]
+----
+network options multipath-routing modify -is-enabled true
+----
+. 在站台 A 叢集上，在主 SVM 中建立 NFS VIP LIF：
++
+[source, cli]
+----
+network interface create -vserver <primary_svm> -lif <vip_lif_name> -role data -data-protocol nfs -home-node <node_name> -address <vip_address> -is-vip true -failover-policy broadcast-domain-wide
+----
+. 在站台 A 叢集上，驗證每個節點上主要 SVM 的 BGP 狀態是否為 `up`：
++
+[source, cli]
+----
+network bgp vserver-status show
+----
+. 在兩台路由器上，驗證是否從叢集 A 學習到 VIP 位址的 /32 路由。
+
+
+
+
+[[step-4-create-the-proxmox-ve-stretch-cluster-with-a-qdevice]]
+== 步驟 4：使用 QDevice 建立 Proxmox VE Stretch 叢集
+
+從站台 A 的節點建立叢集，使站台 A 的節點獲得最小的節點 ID，並在站台 C 新增一個 QDevice。當站台間連結發生故障時，QDevice 會將投票權賦予站台 A，這與 ONTAP 保持作用中的 SVM 相符。
+
+.步驟
+. 在第一個站台 A 節點上，建立在分隔網路上具有兩個 corosync 連結的叢集：
++
+[source, cli]
+----
+pvecm create <cluster_name> --link0 <node_link0_ip> --link1 <node_link1_ip>
+----
+. 在每個剩餘的站台 A 節點上，然後在每個站台 B 節點上，參加叢集：
++
+[source, cli]
+----
+pvecm add <first_node_ip> --link0 <node_link0_ip> --link1 <node_link1_ip>
+----
+. 確認站台 A 的節點具有最低的節點 ID：
++
+[source, cli]
+----
+pvecm nodes
+----
+. 在站台 C 或其他第三個位置的 QDevice 主機上，安裝 QDevice 常駐程式：
++
+[source, cli]
+----
+apt install corosync-qnetd
+----
+. 在每個 Proxmox VE 節點上安裝 QDevice 用戶端：
++
+[source, cli]
+----
+apt install corosync-qdevice
+----
+. 在一個 Proxmox VE 節點上，將 QDevice 新增到叢集：
++
+[source, cli]
+----
+pvecm qdevice setup <qdevice_ip>
+----
+. 使用 QDevice 投票驗證叢集是否達到法定人數：
++
+[source, cli]
+----
+pvecm status
+----
++
+對於四節點叢集， `Expected votes` 是  `5`， `Quorum` 是  `3`，並且  `Flags` 包括  `Quorate Qdevice`。
+
+
+
+
+
+[[step-5-provision-protected-nfs-shared-storage]]
+== 步驟 5：資源配置受保護的 NFS 共享儲存設備
+
+在主要 SVM 中資源配置 NFS 儲存設備，並使用兩個 SVM 共享的 NFS LIF 或 VIP 位址，將其裝載到兩個站台的所有 Proxmox VE 節點上。Storage Manager for Proxmox（SMP）可在一個工作流程中建立 ONTAP Volume、匯出原則和 Proxmox VE 儲存設備定義。如果您不使用 SMP，請在 ONTAP 中建立 Volume，然後使用 Proxmox VE CLI 將其新增為 NFS 儲存設備。
+
+請選擇以下方法之一來資源配置儲存設備。
+
+[role="tabbed-block"]
+====
+.Proxmox 儲存設備管理器
+--
+使用 SMP 資源配置儲存設備。必須安裝 SMP，並將 Proxmox VE 叢集和兩個 ONTAP 叢集新增為計畫。如需詳細資訊，請參閱 link:proxmox-smp.html["設定並使用 Storage Manager for Proxmox"]。
+
+. 在 SMP 中，選擇 *資源配置* > *新增 Volume*，然後選擇 *NFS*。
+. 在 *ONTAP 詳細資料* 中，選擇主要 SVM，輸入 Volume 名稱和大小，然後選擇 NFS LIF 或 VIP LIF 作為偏好的 LIF。
+. 選擇允許兩個站台上的 Proxmox VE 節點的匯出原則，或建立一個。
+. 在 *Proxmox 詳細資料* 中，選擇叢集和兩個站台上的所有節點，選擇 NFS v3 或 NFS v4.1，然後選擇內容類型。
+. 確保選取 *裝載資料儲存*，然後選取 *資源配置*。
+. 在站台 A 叢集上，驗證 Volume 是否包含在 SnapMirror 作用中同步保護中：
++
+[source, cli]
+----
+volume show -vserver <primary_svm> -volume <volume_name> -fields smas-protection
+----
+
+
+--
+.CLI
+--
+使用 Proxmox VE CLI 將主 SVM 中已存在的 Volume 新增為 NFS 儲存設備。
+
+. 在一個 Proxmox VE 節點上，新增 NFS 儲存設備：
++
+[source, cli]
+----
+pvesm add nfs <storage_id> --server <nfs_lif_or_vip_address> --export <export_path> --content images,rootdir --options vers=<nfs_version>,nconnect=4
+----
++
+將 `3`或 `4.1`用於 `<nfs_version>`。請勿新增 `soft`裝載選項。
+
+. 確認每個節點上的儲存設備都處於作用中：
++
+[source, cli]
+----
+pvesm status --storage <storage_id>
+----
+
+
+--
+====
+
+
+[[set-the-nfs-mount-options]]
+=== 設定 NFS 裝載選項
+
+使用 nConnect 開啟多個 TCP 連線至 NFS LIF 或 VIP 位址，以獲得更好的效能與容錯能力。如果受保護的 SVM 具有多個資料 LIF，且用戶端在兩個站台均可存取，則您可以改用 NFSv4.1 工作階段中繼。請使用 nConnect 或工作階段中繼，請勿同時使用兩者。如需詳細資訊，請參閱 link:proxmox-ontap-nfs.html["為 Proxmox VE 配置 NFS 存儲"]。
+
+.步驟
+. 如果您使用 SMP 或不使用 nConnect 來資源配置儲存設備，請在一個 Proxmox VE 節點上設定裝載選項：
++
+[source, cli]
+----
+pvesm set <storage_id> --options vers=<nfs_version>,nconnect=4
+----
++
+若要改用工作階段中繼，請設定：
+
++
+[source, cli]
+----
+pvesm set <storage_id> --options vers=4.1,trunkdiscovery,max_connect=16
+----
++
+Proxmox VE 會在下次裝載儲存設備時套用新的裝載選項。在將虛擬機器從該節點移轉出去後，請在維護所需時間期間重新裝載每個節點上的儲存設備。
+
+. 驗證  `/etc/pve/storage.cfg` 中的選項。
+. 在每個 Proxmox VE 節點上，驗證是否有連至 NFS 伺服器位址的多個連線：
++
+[source, cli]
+----
+ss -an | grep :2049
+----
+
+
+
+
+[[step-6-configure-ha-and-vm-backups]]
+== 步驟 6：設定 HA 和 VM 備份
+
+將虛擬機器新增至高可用度（HA），並設定偏好站台 A（主 SVM 提供資料服務的所在位置）的節點親和性規則。然後，使用 SMP 備份原則保護虛擬機器免受邏輯故障（例如意外刪除或勒索軟體）的影響。SnapMirror 作用中同步會同步複寫這些故障，因此不會取代時間點備份。
+
+.步驟
+. 將每個受保護的虛擬機器新增至 HA：
++
+[source, cli]
+----
+ha-manager add vm:<vm_id> --state started
+----
+. 建立節點親和性規則，優先使用站台 A 的節點，並允許容錯移轉到站台 B 的節點：
++
+[source, cli]
+----
+ha-manager rules add node-affinity <rule_name> --resources vm:<vm_id>,vm:<vm_id> --nodes "<site_a_node1>:2,<site_a_node2>:2,<site_b_node1>:1,<site_b_node2>:1"
+----
+. （可選）增加每個客體作業系統中的磁碟逾時，使其長於預期的儲存設備容錯移轉時間。
+. 在 SMP 中，選擇 *保護* > *備份* > *資源群組*，並為每個租戶或應用程式的虛擬機器或儲存設備建立資源群組。
+. 選取 *保護* > *備份* > *原則* > *新增*，並為資源群組建立具有備份頻率與保留的原則。
++
+在執行 QEMU 客體代理程式的虛擬機器的 *進階選項* 中選擇 *虛擬機器一致性*。
+
+. 執行隨選備份，然後從中還原測試 VM 以驗證原則。
+
+
+
+
+[[step-7-test-planned-failover]]
+== 步驟 7：測試計畫性容錯移轉
+
+在將生產虛擬機器部署到共享儲存設備之前，請先驗證設計。計畫性容錯移轉會將作用中 SVM 移至站台 B 且不會發生資料遺失，因此您可以在維護所需時間內進行測試，並在之後容錯回復。
+
+.步驟
+. 將測試虛擬機器即時遷移到站台 B 節點。
+. 在容錯移轉之前，防止 HA 將 VM 移回站台 A 節點：
++
+[source, cli]
+----
+ha-manager set vm:<vm_id> --failback 0
+----
+. 在站台 B 叢集上，啟動計畫性容錯移轉：
++
+[source, cli]
+----
+snapmirror failover start -destination-path <secondary_svm>:
+----
+. 監控容錯移轉直到完成：
++
+[source, cli]
+----
+snapmirror failover show
+----
+. 確認虛擬機器 I/O 持續運行，並且所有 Proxmox VE 節點上的儲存設備保持作用中。
+. 如果使用 VIP LIF，請驗證兩個路由器是否都能從叢集 B 學習到 /32 路由。
+. 在 SMP 中，執行 ONTAP 計畫的探索，然後執行隨選備份，以驗證 SMP 是否能保護站台 B 的 SVM 中的虛擬機器。
+. 測試完成後，容錯回復到站台 A，然後針對測試虛擬機器將 `failback`設回 `1`。
+
+
+.結果
+當作用中 SVM 在站台之間移動時，Proxmox VE VM 會繼續在同一個 NFS 共享儲存設備上運作，且叢集會從計畫外的站台故障中自動恢復。
+
+
+
+[[related-information]]
+== 相關資訊
+
+* link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/protect-nas-task.html["使用適用於 NAS 的 ONTAP SnapMirror 主動同步進行保護"^]
+* link:https://docs.netapp.com/us-en/ontap/networking/configure_virtual_ip_vip_lifs.html["設定 ONTAP VIP LIF"^]
+* link:https://docs.netapp.com/us-en/ontap/mediator/index.html["準備安裝 ONTAP Mediator"^]
+* link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/cloud-mediator-requirements-concept.html["準備設定 ONTAP Cloud 中介器"^]
+* link:https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/cloud-mediator-config-task.html["設定 ONTAP Cloud 中介器以進行 SnapMirror 作用中同步"^]
+* link:https://docs.netapp.com/us-en/ontap-cli/snapmirror-mediator-add.html["snapmirror mediator add"^]
+* link:proxmox-ontap-nfs.html["為 Proxmox VE 配置 NFS 存儲"]
+* link:https://pve.proxmox.com/pve-docs/chapter-pvecm.html#_corosync_external_vote_support["Proxmox VE corosync 外部投票支援"^]
+

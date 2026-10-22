@@ -28,6 +28,14 @@ indexpage:
       url: proxmox-wkld-dp-pbs.html
     - title: 設定並使用 Storage Manager for Proxmox
       url: proxmox-smp.html
+  - title: Proxmox VE 工作負載的業務連續性
+    links:
+    - title: 解決方案架構
+      url: proxmox-business-continuity.html
+    - title: 配置 NAS 儲存設備
+      url: proxmox-active-sync-nas-config.html
+    - title: 設定並使用 Storage Manager for Proxmox
+      url: proxmox-smp.html
   - title: 其他資源
     links:
     - title: NetApp儲存與 NVMe-oF 為 Proxmox 虛擬化環境帶來突破性效能

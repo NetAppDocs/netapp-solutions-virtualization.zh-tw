@@ -9885,4 +9885,455 @@
   <block id="7dcca1322bff7fc795a0f558658f3ba4" category="list-title">重要注意事項</block>
   <block id="ae490aa3c145227d57aa6ad8214f727f" category="paragraph">完成這些步驟後，Shift 工具套件會修改移轉計畫 YAML，以便 MTV 了解應直接使用 PVC，進而繞過資料填充 pod 程序（這通常相當耗時）。修改後的 YAML 包含：</block>
   <block id="a043ab0dad12b229a0a7942ab60824a2" category="paragraph">組態完成後，會呼叫 MTV 以開始移轉。使用者介面會將移轉類型顯示為 Cold，但根據 YAML 轉換規格，MTV 會針對相關聯的 vmID 和 vmUUID 驗證每個 PVC，並進行相應的對應，然後初始化移轉。.顯示範例</block>
+  <block id="fd16fae278a95e0a8d6744e38bdfbd4c" category="summary">設定 NAS 的 SnapMirror 作用中同步、具備 BGP 的選用 VIP LIF，以及具備 QDevice 的 Proxmox VE 延伸叢集，以保護虛擬機器免受站台故障影響。</block>
+  <block id="63ce4c5b54f8a57451337cc887c3c9bc" category="doc">設定 Proxmox VE 業務連續性與 NAS 儲存設備</block>
+  <block id="7dbc9aa91072229989c1972cf30fd22c" category="paragraph">透過將適用於 NAS 的 ONTAP SnapMirror 作用中同步與 Proxmox VE 延伸叢集結合，保護 Proxmox 虛擬環境（VE）虛擬機器免受站台故障影響。您在 NetApp Console 中設定中介器（ONTAP Mediator 或 ONTAP Cloud Mediator），保護 NFS 儲存設備虛擬機器（SVM），選擇性地使用虛擬 IP（VIP）LIF 和邊界閘道協定（BGP）使其 NFS 位址在路由網路中具備可攜性，使用 QDevice 建立延伸叢集，然後使用 Storage Manager for Proxmox 資源配置共享儲存設備，並設定高可用度（HA）與虛擬機器備份。結果是零資料遺失，並在倖存站台自動恢復虛擬機器。</block>
+  <block id="a6812db2442ae325a9ccd39373bbd9dd" category="paragraph-title">關於此工作流程</block>
+  <block id="37dc5f00d22bc207b39df99d4100346e" category="inline-link-macro">解決方案架構、故障行為與 corosync 設計考量</block>
+  <block id="b0a4df3033f49d48061c100a3757f40c" category="paragraph">開始之前，請審查 <block ref="f3cd19d9a653080deebf27969c1cd7f7" category="inline-link-macro-rx"></block>。將尖括號中的值（例如 <block ref="a66306c1cae4f6818f1c28a29a5276e8" prefix=" " category="inline-code"></block>）替換為您環境中的值。</block>
+  <block id="f4481ba1f14cc0f028f14d9231f7bf7a" category="list-text">兩個 AFF A 系列或 C 系列雙節點叢集必須執行 ONTAP 9.19.1 或更新版本，一個位於站台 A，一個位於站台 B。</block>
+  <block id="973c1549935209f4c9e87e016fd2948e" category="list-text">SnapMirror 和 SnapMirror 同步授權（包含在 ONTAP One 中）必須安裝在兩個叢集上。</block>
+  <block id="37f0bf5d8fd2a27d442b54149d81c646" category="list-text">叢集必須在預設 IPspace 中進行對等連接，叢集間往返時間（RTT）小於 10 毫秒。</block>
+  <block id="fcfaed2095b189ab3035d0521a73fa96" category="inline-link-macro">中介選項</block>
+  <block id="e17088013772a00f6a6bb9ed7ee70758" category="list-text">您必須選擇一個調解器選項。如需比較，請參閱 <block ref="4df41b2f5f2ee29dc81bbee2330d7aa5" category="inline-link-macro-rx"></block>。</block>
+  <block id="251feb045692fc94d63c0daa0e9b0d69" category="list-text">對於 ONTAP Mediator，必須在站台 C 或另一個第三故障網域安裝 Linux 主機，且該主機必須可從兩個叢集的叢集和節點管理 LIF 存取。</block>
+  <block id="e5f3ed7c294b1bfb1f8012bca5901d25" category="list-text">對於 ONTAP Cloud Mediator ，兩個叢集都必須直接或透過 Proxy 對 NetApp Console 進行傳出 HTTPS 存取，且 ping 延遲低於 200 毫秒。您還需要 NetApp Console 組織和建立服務帳戶的權限。</block>
+  <block id="63a07b09a6f3c29f7be4c8c643bf5192" category="list-text">站台 A 的 SVM 必須為 Proxmox VE 節點提供 NFS 服務。此 SVM 只能包含 NAS 的 FlexVol Volume，不能包含 LUN，且其匯出原則必須允許所有 Proxmox VE 節點。</block>
+  <block id="5facf4c9e560ecc961fc12135e3f74e8" category="list-text">必須安裝偶數個 Proxmox VE 9.0 或更新版本的節點，在站台 A 和站台 B 之間平均分割，且所有節點之間的 corosync 延遲低於 5 毫秒。</block>
+  <block id="083dbbb25660ed1c8269609b50f8bad7" category="list-text">站台 C 或其他第三個位置的 Linux 主機必須可供 corosync QDevice 守護程式使用，並且必須能夠從所有 Proxmox VE 節點透過 TCP 連接埠 5403 存取。無論使用哪種中介器選項，都需要此主機。</block>
+  <block id="835a9e73c228ebc41be80a11b81155d0" category="list-text">NFS VLAN 必須在站台 A 和站台 B 之間延伸。對於路由的階層 3 網路，每個站台都必須提供支援 BGP 的路由器，而且您必須向 NetApp 確認，NAS 的 SnapMirror 作用中同步是否支援具備 BGP 的 VIP LIF。</block>
+  <block id="697ea025ecb303d4f40d1bf3a8b4bde0" category="inline-link-macro">NetApp 互作業性矩陣工具（IMT）</block>
+  <block id="58885c581440f0d1c47e7399c37a4795" category="list-text">您的 ONTAP 和 Proxmox VE 版本必須一起列在 <block ref="18e7fcfe606d6d0912191de7fd9eb56a" category="inline-link-macro-rx"></block> 中。</block>
+  <block id="c24a1dc702be189f3d31392ac5786e0d" category="list-text">若要資源配置共享儲存設備和備份虛擬機，必須安裝適用於 Proxmox 的 Storage Manager，並使其能夠透過網路存取 Proxmox VE 節點和兩個 ONTAP 叢集。</block>
+  <block id="bb9ff762e3e9941da0d6de46d1789ade" category="section-title">步驟 1：設定中介器</block>
+  <block id="2cd977d7d414179f4dc856791a381940" category="paragraph">在初始化 SnapMirror 作用中同步關係之前，請將中介器新增至叢集對等關係。ONTAP 需要中介器來執行計畫性與自動容錯移轉。您可以從任一叢集新增中介器，ONTAP 會自動將其新增至另一個叢集。請使用一種中介器選項，不要同時使用兩者。</block>
+  <block id="477e5bbc0e18c100ae0ba108c5d3ad66" category="paragraph">請選擇以下選項之一。</block>
+  <block id="58dc7db50a2e11a9de9e6cc092c59d4d" category="open-title">ONTAP Mediator</block>
+  <block id="931e10d7f833f6006078c296b8f49e42" category="inline-link-macro">安裝或升級 ONTAP Mediator</block>
+  <block id="d56110e7a061df96e370423df3d43607" category="paragraph">如果您在站台 C 的 Linux 主機上安裝中介器，請使用此選項。有關安裝，請參閱 <block ref="e4fc8483908a1fd217bb07557b043e20" category="inline-link-macro-rx"></block>。</block>
+  <block id="cb21570d48ef9fc55532097c01db4ef9" category="list-text">在任一叢集上，新增中介器：</block>
+  <block id="f1247effc62154cbe52342e0d0b2745f" category="paragraph">出現提示時，請輸入 Mediator 密碼。</block>
+  <block id="e811cc9a5d72db19c7deb1001301d731" category="list-text">確認調解方已連線且法定人數狀態為<block ref="b326b5062b2f0e69046810717534cb09" prefix=" " category="inline-code"></block>：</block>
+  <block id="b3aa67ea8b077eb2b67ff9a0651b5426" category="open-title">ONTAP Cloud Mediator</block>
+  <block id="71dcc13cb446a96f5cd27c5e29eed593" category="paragraph">使用此選項將中介器以服務形式託管在 NetApp Console 中，這樣您就不需要在第三個站台使用中介器主機。</block>
+  <block id="d5927552ed1a071257cf8b34bb74bf6e" category="inline-link-macro">準備設定 ONTAP Cloud 中介器</block>
+  <block id="ccc9b754fe4eba8e6e8083062a8ef6d9" category="list-text">兩個站台的防火牆必須允許來自兩個叢集的 HTTPS 流量存取 NetApp Console API 端點。如需目前的端點主機名稱，請參閱 <block ref="0e0a4da7cfa51cc3f1a68945c1691053" category="inline-link-macro-rx"></block>。</block>
+  <block id="c68bdd9168ea0578c6e315201afff68e" category="list-text">如果叢集使用 Proxy 伺服器，請準備 Proxy 的 IP 位址、連接埠和認證。每個叢集應使用不同的 Proxy 伺服器。Proxy 的根目錄 CA 憑證必須安裝在 ONTAP 中。</block>
+  <block id="ea4e5a868172ba132c91fc4f4d9d76ee" category="list-text">ONTAP 包含常用的根目錄 CA 憑證，因此通常無需安裝 NetApp Console 憑證。若要檢查，請執行<block ref="ade4c8227a23c6fff12b85bfef2124c8" prefix=" " category="inline-code"></block>。</block>
+  <block id="972162773b750f0eb7946db9bf5a2757" category="list-text">在 NetApp Console 中，複製您的組織 ID。</block>
+  <block id="15f26bd3100143af10b4917f2924c5f8" category="list-text">在 NetApp Console 中，建立成員服務帳戶：</block>
+  <block id="a3be6bc08d95cf8f50e3fe50296b97db" category="list-text">將組織設定為您使用 ONTAP Cloud Mediator 的組織。</block>
+  <block id="0966b3865a4dd7f6f8e7d500b73dd5c7" category="list-text">將類別設定為 *應用程式*。</block>
+  <block id="09e8f20ee9504e21057e03a1e888ad5a" category="list-text">將角色設定為 *ONTAP Mediator Setup Role*。</block>
+  <block id="fca72fdd0b99d0610552886afb09b534" category="list-text">建立帳戶時，請儲存用戶端 ID 和用戶端金鑰。</block>
+  <block id="5bee961b9ec71fa3116af85c9b7d03a4" category="paragraph">出現提示時，請輸入用戶端金鑰。</block>
+  <block id="7f842cd1de1faae8725a1676e74daaab" category="paragraph">您也可以使用 System Manager。選擇 *保護* &gt; *概覽* &gt; *中介器* &gt; *新增*，選擇 *雲端* 作為中介器類型，然後輸入組織 ID、用戶端 ID 和用戶端機密。</block>
+  <block id="3c30d611ec12661dd0691f1ca921b10d" category="list-text">驗證中介器類型為<block ref="a1234b3161b4fbfdfb96dd576b65bbea" prefix=" " category="inline-code"></block>、連線狀態為<block ref="06aa6fa8bdc2078e7e1bd903e70c8f6a" prefix=" " category="inline-code"></block>，以及仲裁狀態為<block ref="b326b5062b2f0e69046810717534cb09" prefix=" " category="inline-code"></block>：</block>
+  <block id="9be418c6b6aa0c799167282ab51d13d9" category="section-title">步驟 2：使用 SnapMirror 作用中同步保護 NFS SVM</block>
+  <block id="c570804f036843cc5944cd62a3f47150" category="paragraph">在站台 B 叢集上建立休眠的目的地 SVM，並將站台 A 的 SVM 複寫到該 SVM。ONTAP 同步複寫資料，並複寫 SVM 組態，包括 NFS LIF 位址和匯出原則。您也可以在 System Manager 中完成此步驟，方法是為 SVM 選擇 *保護*，並選擇<block ref="19c36032ee0bf25c85ddc3354b352edb" prefix=" " category="inline-code"></block>原則。</block>
+  <block id="0f54545cb9f7cf314ef9d8e03f67a0be" category="list-text">在站台 B 叢集上，建立目的地 SVM：</block>
+  <block id="cb290351c7ebc85d897fe277c8318b1c" category="list-text">在站台 B 叢集上，與主 SVM 建立 SVM 對等關係：</block>
+  <block id="d7e96a3a17ed0f23605e502f5546bb23" category="list-text">在站台 A 叢集上，接受 SVM 對等請求：</block>
+  <block id="820917abbbbc136983691fb12441da2d" category="list-text">在站台 B 叢集上，建立 SnapMirror 作用中同步關係：</block>
+  <block id="9d5084cb1856b35d456df89e085156a6" category="list-text">初始化關係：</block>
+  <block id="7785c9bfe5e2fab34c3be6bb290ff62f" category="list-text">驗證關係是否同步：</block>
+  <block id="c9b821dbce1ae450792a725c04d84dc1" category="paragraph"><block ref="745bc8ebd877ab173362548d029964e1" prefix=" " category="inline-code"></block> 是<block ref="d34e79870b17da17e894ddc837954dcc" prefix=" " category="inline-code"></block>，而<block ref="8d4394fa557dd60915ffdb1dddc9fa8c" prefix=" " category="inline-code"></block> 是<block ref="c2d2dc98c478a5a1743d85e03534f500" prefix=" " category="inline-code"></block>。</block>
+  <block id="aee895f123dc413520f050412d24108d" category="list-text">視需要，排除不需要保護的 Volume，例如暫存或測試 Volume：</block>
+  <block id="267bf414b12a21e197467bec2f0b75e6" category="section-title">步驟 3：為第 3 階層網路設定具備 BGP 的 VIP LIF</block>
+  <block id="48ea32aca209ff432d3c1fcc15619ba7" category="admonition">截至發行時，NetApp 尚未將搭配 BGP 的 VIP LIF 記錄為 NAS 的 SnapMirror active sync 合格組態。在完成此步驟之前，請向 NetApp 確認目前的支援情況。否則，請在站台之間延伸 NFS VLAN 並跳過此步驟。</block>
+  <block id="df868ca91ae5ccb93b8bc1d0338ecba6" category="paragraph">如果 NFS VLAN 跨越站台 A 和站台 B，則跳過此步驟。如果站台之間透過路由網路連接，請在兩個叢集的每個節點上建立 BGP LIF，然後將 NFS 位址代管在主 SVM 的 VIP LIF 上。VIP 位址不得屬於 Proxmox VE 節點的子網路。</block>
+  <block id="6e4bc21387e0c0b5374850cd7cebb076" category="list-text">每個路由器都必須設定為接受來自其站台 BGP LIF 的 BGP 工作階段，接受 /32 主機路由，並且不向 ONTAP 發送路由更新。</block>
+  <block id="9f490f9c1eef1d8af2c54573afcf35d0" category="list-text">每個 ONTAP 節點和每個路由器都必須具有唯一的私人 ASN，每個 BGP LIF 和路由器對必須具有 /31 子網路。</block>
+  <block id="49dc354a0b0a0273dba39f501283dc5c" category="list-text">在每個叢集上，切換至進階權限層級：</block>
+  <block id="2b638bdb1645201eec371915dfee2284" category="list-text">在兩個叢集的每個節點上，建立一個 BGP 組態，該節點具有唯一的 ONTAP ASN，保持時間為 3 秒，並將節點管理 IP 位址作為路由器 ID：</block>
+  <block id="73984fd72cf3c519c0fe7ae60451efeb" category="list-text">（可選）在兩個叢集的每個節點上，在連接到路由器的兩個連接埠上分別建立一個 VLAN 連接埠：</block>
+  <block id="0b6f1f4f46943cb98adde97d27a93176" category="paragraph">您也可以使用實體連接埠、介面群組或介面群組上的 VLAN 作為 BGP LIF 歸屬連接埠。這些連接埠必須屬於 IPspace 中的廣播網域。</block>
+  <block id="94e391d3097547b02f88f8f4820fbdb2" category="list-text">在兩個叢集的每個節點上，在系統 SVM 中建立兩個 BGP LIF，每個連接埠一個，並配置指向該連接埠路由器的 /31 子網路：</block>
+  <block id="8a9195b4d619f2a8f4dc2c4af2908648" category="paragraph">對於預設 IPspace，<block ref="8f0b734f09abe07669aade0adbc8c5e5" prefix=" " category="inline-code"></block> 是叢集名稱。對於自訂 IPspace，它是 IPspace 名稱。您需要為每個節點建立一次 BGP LIF，它們為該 IPspace 中所有資料 SVM 的 VIP LIF 提供服務。</block>
+  <block id="569744f482a560ed96d689e61a24b4f7" category="list-text">對於每個 BGP LIF，與其路由器建立一個 BGP 對等群組，並從該路由器學習預設路由：</block>
+  <block id="951fc3d575e897666e3492ae7d7b95cf" category="list-text">確認每個對等組都已啟動：</block>
+  <block id="30c93782a4a0a3952fe183d275fee109" category="list-text">在每個叢集上啟用多重路徑路由：</block>
+  <block id="38a383ffc1a954cfc4b2457e60fcf8a2" category="list-text">在站台 A 叢集上，在主 SVM 中建立 NFS VIP LIF：</block>
+  <block id="cbafa8eb786e00ed0c652b0f65cc6d5d" category="list-text">在站台 A 叢集上，驗證每個節點上主要 SVM 的 BGP 狀態是否為<block ref="46c48bec0d282018b9d167eef7711b2c" prefix=" " category="inline-code"></block>：</block>
+  <block id="5e8e203b109a35e8afeb69d490d2a7d6" category="list-text">在兩台路由器上，驗證是否從叢集 A 學習到 VIP 位址的 /32 路由。</block>
+  <block id="4ac08d9583c5e88a3d7a62c30f31fb9d" category="section-title">步驟 4：使用 QDevice 建立 Proxmox VE Stretch 叢集</block>
+  <block id="f6f1f7adf03447b21c5756047becff1f" category="paragraph">從站台 A 的節點建立叢集，使站台 A 的節點獲得最小的節點 ID，並在站台 C 新增一個 QDevice。當站台間連結發生故障時，QDevice 會將投票權賦予站台 A，這與 ONTAP 保持作用中的 SVM 相符。</block>
+  <block id="8467e69fc6c0a87e6e539b2fe9b0bed4" category="list-text">在第一個站台 A 節點上，建立在分隔網路上具有兩個 corosync 連結的叢集：</block>
+  <block id="9cbaf5836a09584b824220607e6511e6" category="list-text">在每個剩餘的站台 A 節點上，然後在每個站台 B 節點上，參加叢集：</block>
+  <block id="b13f121980bbac6c60b74663b92e1ef0" category="list-text">確認站台 A 的節點具有最低的節點 ID：</block>
+  <block id="d526f77a1304eaec6ee8a096e63cf916" category="list-text">在站台 C 或其他第三個位置的 QDevice 主機上，安裝 QDevice 常駐程式：</block>
+  <block id="91b3877406d17039f0458e8aba6457e2" category="list-text">在每個 Proxmox VE 節點上安裝 QDevice 用戶端：</block>
+  <block id="de43aa826cc9ddbb8ce3d6c682a88f8d" category="list-text">在一個 Proxmox VE 節點上，將 QDevice 新增到叢集：</block>
+  <block id="f3bce0150ebf2f6117591782d062436e" category="list-text">使用 QDevice 投票驗證叢集是否達到法定人數：</block>
+  <block id="9a5449e63bc79ed238bda2a70ac18928" category="paragraph">對於四節點叢集，<block ref="28b2da24a4fbd1d41106c287acdd9f3f" prefix=" " category="inline-code"></block> 是 <block ref="e4da3b7fbbce2345d7772b0674a318d5" prefix=" " category="inline-code"></block>，<block ref="29dc0505c3d4b35e6dcf332ddcceeec3" prefix=" " category="inline-code"></block> 是 <block ref="eccbc87e4b5ce2fe28308fd9f2a7baf3" prefix=" " category="inline-code"></block>，並且 <block ref="4ea7801f17a4e5485e8b050c052fb443" prefix=" " category="inline-code"></block> 包括 <block ref="7cd36d43bc9776e9465f5a6060a050d6" prefix=" " category="inline-code"></block>。</block>
+  <block id="d105eb1fde020154ed97c0420dc34469" category="section-title">步驟 5：資源配置受保護的 NFS 共享儲存設備</block>
+  <block id="8d9635ff0cd2f20186f109f24d8e8ef9" category="paragraph">在主要 SVM 中資源配置 NFS 儲存設備，並使用兩個 SVM 共享的 NFS LIF 或 VIP 位址，將其裝載到兩個站台的所有 Proxmox VE 節點上。Storage Manager for Proxmox（SMP）可在一個工作流程中建立 ONTAP Volume、匯出原則和 Proxmox VE 儲存設備定義。如果您不使用 SMP，請在 ONTAP 中建立 Volume，然後使用 Proxmox VE CLI 將其新增為 NFS 儲存設備。</block>
+  <block id="40cba18829cd196de18fb933a5f4591d" category="paragraph">請選擇以下方法之一來資源配置儲存設備。</block>
+  <block id="7e7bde79e152a2ce4e0424ab0d4c090b" category="open-title">Proxmox 儲存設備管理器</block>
+  <block id="f92a242b9766150a19166842d79cb977" category="paragraph">使用 SMP 資源配置儲存設備。必須安裝 SMP，並將 Proxmox VE 叢集和兩個 ONTAP 叢集新增為計畫。如需詳細資訊，請參閱 <block ref="9e4d208eddea6bb1add725ba82eaf542" category="inline-link-macro-rx"></block>。</block>
+  <block id="a97fc6e4f2d5515e2a94cc2dd0d3aa23" category="list-text">在 SMP 中，選擇 *資源配置* &gt; *新增 Volume*，然後選擇 *NFS*。</block>
+  <block id="ce01db25c991553e687b5ef32aa7a3a3" category="list-text">在 *ONTAP 詳細資料* 中，選擇主要 SVM，輸入 Volume 名稱和大小，然後選擇 NFS LIF 或 VIP LIF 作為偏好的 LIF。</block>
+  <block id="04a8d165ec0e19cea48a8a673949e94c" category="list-text">選擇允許兩個站台上的 Proxmox VE 節點的匯出原則，或建立一個。</block>
+  <block id="f5ece3c531209959744fbe48e1432f24" category="list-text">在 *Proxmox 詳細資料* 中，選擇叢集和兩個站台上的所有節點，選擇 NFS v3 或 NFS v4.1，然後選擇內容類型。</block>
+  <block id="3f9293a5cd1b24764c9a1557d14777ac" category="list-text">確保選取 *裝載資料儲存*，然後選取 *資源配置*。</block>
+  <block id="2bf9630a1db4ffe070b70d529e143194" category="list-text">在站台 A 叢集上，驗證 Volume 是否包含在 SnapMirror 作用中同步保護中：</block>
+  <block id="91af5705f16502125e8b2187e64202c0" category="open-title">CLI</block>
+  <block id="b0677c67a463a63efa43c7c2b12073dd" category="paragraph">使用 Proxmox VE CLI 將主 SVM 中已存在的 Volume 新增為 NFS 儲存設備。</block>
+  <block id="16bbe5c282ebc3b5ae7cc8ca0d521d7e" category="list-text">在一個 Proxmox VE 節點上，新增 NFS 儲存設備：</block>
+  <block id="9488920b8ed70dd95a8c95fc1e7ebeda" category="paragraph">將<block ref="eccbc87e4b5ce2fe28308fd9f2a7baf3" prefix=" " category="inline-code"></block>或<block ref="895a074a5b216322121b5f76bc831927" prefix=" " category="inline-code"></block>用於<block ref="d3be3d13d07ba47df013ac64c9304c0b" prefix=" " category="inline-code"></block>。請勿新增<block ref="dc58a7971816b41f3cc2b8c0f5f1bf0c" prefix=" " category="inline-code"></block>裝載選項。</block>
+  <block id="1ad15ec33a2e7277e94146c8c5bf8c0b" category="list-text">確認每個節點上的儲存設備都處於作用中：</block>
+  <block id="77a02ff05550f0c8557e2e48b8cec6b5" category="section-title">設定 NFS 裝載選項</block>
+  <block id="6781b8923ffc2b3484acf80e69d162c6" category="paragraph">使用 nConnect 開啟多個 TCP 連線至 NFS LIF 或 VIP 位址，以獲得更好的效能與容錯能力。如果受保護的 SVM 具有多個資料 LIF，且用戶端在兩個站台均可存取，則您可以改用 NFSv4.1 工作階段中繼。請使用 nConnect 或工作階段中繼，請勿同時使用兩者。如需詳細資訊，請參閱 <block ref="ff7608fcce5dc1b873f9e65c70c5ca53" category="inline-link-macro-rx"></block>。</block>
+  <block id="74dd1ff27b618f117521951ba7928361" category="list-text">如果您使用 SMP 或不使用 nConnect 來資源配置儲存設備，請在一個 Proxmox VE 節點上設定裝載選項：</block>
+  <block id="d78f0e5131b85009061c81f82bc0929b" category="paragraph">若要改用工作階段中繼，請設定：</block>
+  <block id="4e19de804e853e3511b50d138cfef043" category="paragraph">Proxmox VE 會在下次裝載儲存設備時套用新的裝載選項。在將虛擬機器從該節點移轉出去後，請在維護所需時間期間重新裝載每個節點上的儲存設備。</block>
+  <block id="4e33323bed44af4d856ee0bb51b943a1" category="list-text">驗證 <block ref="d8672d9b1e50401ec0c3f68efb6273c0" prefix=" " category="inline-code"></block> 中的選項。</block>
+  <block id="d04431d801e638c95ac1011a03806feb" category="list-text">在每個 Proxmox VE 節點上，驗證是否有連至 NFS 伺服器位址的多個連線：</block>
+  <block id="19153e44c5318a4fa56edd7ce94fd918" category="section-title">步驟 6：設定 HA 和 VM 備份</block>
+  <block id="7fb128aa98a8e8494db6ea3bc77b11b0" category="paragraph">將虛擬機器新增至高可用度（HA），並設定偏好站台 A（主 SVM 提供資料服務的所在位置）的節點親和性規則。然後，使用 SMP 備份原則保護虛擬機器免受邏輯故障（例如意外刪除或勒索軟體）的影響。SnapMirror 作用中同步會同步複寫這些故障，因此不會取代時間點備份。</block>
+  <block id="c372b6054e7942f4d6a520ea92392738" category="list-text">將每個受保護的虛擬機器新增至 HA：</block>
+  <block id="d94115b74abec784cedde501712e87a5" category="list-text">建立節點親和性規則，優先使用站台 A 的節點，並允許容錯移轉到站台 B 的節點：</block>
+  <block id="068264a83def64333abfcc4090262fce" category="list-text">（可選）增加每個客體作業系統中的磁碟逾時，使其長於預期的儲存設備容錯移轉時間。</block>
+  <block id="746db6a98c7a48a0a52bcdab0bf4d094" category="list-text">在 SMP 中，選擇 *保護* &gt; *備份* &gt; *資源群組*，並為每個租戶或應用程式的虛擬機器或儲存設備建立資源群組。</block>
+  <block id="80208c53177d205135ab612400644f6a" category="list-text">選取 *保護* &gt; *備份* &gt; *原則* &gt; *新增*，並為資源群組建立具有備份頻率與保留的原則。</block>
+  <block id="e104ee80b392c781f478c0bfcd222400" category="paragraph">在執行 QEMU 客體代理程式的虛擬機器的 *進階選項* 中選擇 *虛擬機器一致性*。</block>
+  <block id="ce66fe5bb51e7e7c8aede70eb6674d66" category="list-text">執行隨選備份，然後從中還原測試 VM 以驗證原則。</block>
+  <block id="1625994e9f020ffa5bab6219f62f4c8e" category="section-title">步驟 7：測試計畫性容錯移轉</block>
+  <block id="425e9050c3e080494a511f43f8561d2f" category="paragraph">在將生產虛擬機器部署到共享儲存設備之前，請先驗證設計。計畫性容錯移轉會將作用中 SVM 移至站台 B 且不會發生資料遺失，因此您可以在維護所需時間內進行測試，並在之後容錯回復。</block>
+  <block id="e40162d192c0935f481570cb5071f15c" category="list-text">將測試虛擬機器即時遷移到站台 B 節點。</block>
+  <block id="b24fc3235225a7695fe1a19efa2c8305" category="list-text">在容錯移轉之前，防止 HA 將 VM 移回站台 A 節點：</block>
+  <block id="958f966b76516ec9ffcf7133ad7c19a6" category="list-text">在站台 B 叢集上，啟動計畫性容錯移轉：</block>
+  <block id="63f4fa22ec51edfa567bdc77287f7dce" category="list-text">監控容錯移轉直到完成：</block>
+  <block id="638536a08a5bf0c1cd14f13aaeb82299" category="list-text">確認虛擬機器 I/O 持續運行，並且所有 Proxmox VE 節點上的儲存設備保持作用中。</block>
+  <block id="7c550044fc9978a76f8ed798c298377a" category="list-text">如果使用 VIP LIF，請驗證兩個路由器是否都能從叢集 B 學習到 /32 路由。</block>
+  <block id="04d5d94d5d3c2c8c83bdd6d2f6ac1674" category="list-text">在 SMP 中，執行 ONTAP 計畫的探索，然後執行隨選備份，以驗證 SMP 是否能保護站台 B 的 SVM 中的虛擬機器。</block>
+  <block id="ad25bae07fdd7a7b17ccd87d42a2b62f" category="list-text">測試完成後，容錯回復到站台 A，然後針對測試虛擬機器將<block ref="a571d3783c8d552371d5e8b486416b18" prefix=" " category="inline-code"></block>設回<block ref="c4ca4238a0b923820dcc509a6f75849b" prefix=" " category="inline-code"></block>。</block>
+  <block id="c89bf420f4f240d32bd9b06c1c216276" category="paragraph">當作用中 SVM 在站台之間移動時，Proxmox VE VM 會繼續在同一個 NFS 共享儲存設備上運作，且叢集會從計畫外的站台故障中自動恢復。</block>
+  <block id="30f60d67f457bb040dffde52197a54da" category="section-title">相關資訊</block>
+  <block id="d359aad806cfd9033ebf70235d998444" category="inline-link-macro">使用適用於 NAS 的 ONTAP SnapMirror 主動同步進行保護</block>
+  <block id="27345ed9aef76a934829f04ec76bca49" category="list-text"><block ref="27345ed9aef76a934829f04ec76bca49" category="inline-link-macro-rx"></block></block>
+  <block id="78281e4006a17cd1458a5e79d74a7c38" category="inline-link-macro">設定 ONTAP VIP LIF</block>
+  <block id="db3e70007f4cd50c4a559e0acaaf57b5" category="list-text"><block ref="db3e70007f4cd50c4a559e0acaaf57b5" category="inline-link-macro-rx"></block></block>
+  <block id="dfcddace895e6d15eaa29a365e239546" category="inline-link-macro">準備安裝 ONTAP Mediator</block>
+  <block id="936fb2e610c1b745f9dc729608da7055" category="list-text"><block ref="936fb2e610c1b745f9dc729608da7055" category="inline-link-macro-rx"></block></block>
+  <block id="0e0a4da7cfa51cc3f1a68945c1691053" category="list-text"><block ref="0e0a4da7cfa51cc3f1a68945c1691053" category="inline-link-macro-rx"></block></block>
+  <block id="ac03c34e9ffbf9eabc8fb0515ebfc5c0" category="inline-link-macro">設定 ONTAP Cloud 中介器以進行 SnapMirror 作用中同步</block>
+  <block id="3e19c1c86efa58a3fe9ab2efb456f5b6" category="list-text"><block ref="3e19c1c86efa58a3fe9ab2efb456f5b6" category="inline-link-macro-rx"></block></block>
+  <block id="47a733e59a59708c3179837a196fad15" category="inline-link-macro">snapmirror mediator add</block>
+  <block id="f320e7fc12684f536ec4a2c6bd95eed6" category="list-text"><block ref="f320e7fc12684f536ec4a2c6bd95eed6" category="inline-link-macro-rx"></block></block>
+  <block id="ff7608fcce5dc1b873f9e65c70c5ca53" category="list-text"><block ref="ff7608fcce5dc1b873f9e65c70c5ca53" category="inline-link-macro-rx"></block></block>
+  <block id="e5ef451696f2f33e7280f81ba7481db1" category="inline-link-macro">Proxmox VE corosync 外部投票支援</block>
+  <block id="8023e8513d1bb9a323dde7dc0ab7c238" category="list-text"><block ref="8023e8513d1bb9a323dde7dc0ab7c238" category="inline-link-macro-rx"></block></block>
+  <block id="0465e8e5f27412f58a54b8438ff66275" category="summary">透過將 ONTAP SnapMirror 作用中同步與 Proxmox VE 擴展叢集搭配使用，即使發生儲存設備或站台故障，也能讓 Proxmox VE 虛擬機器保持運作，達成零 RPO。</block>
+  <block id="304b15c718011445cfb2aaaca766ff31" category="doc">了解 Proxmox VE 搭配 SnapMirror 作用中同步的業務連續性</block>
+  <block id="57afc99fb5620146d75eb79859171390" category="paragraph">在 Proxmox 虛擬環境（VE）上執行業務關鍵型虛擬機器（VM）的企業，以及在 Proxmox VE 上託管客戶 VM 的服務供應商，都需要這些 VM 在儲存系統或整個資料中心離線時保持運作。ONTAP SnapMirror 作用中同步可同步複寫跨兩個站台的 Proxmox VE 叢集的共享儲存設備，並自動將儲存設備容錯移轉到存活的站台。您可以獲得零恢復點目標（RPO）、無需指令碼或 Runbook 的自動恢復，以及在兩個站台相同的共享儲存設備，因此 Proxmox VE 高可用度（HA）可以在無需任何儲存設備重新組態的情況下重新啟動 VM。對於 NFS 共享儲存設備，此解決方案使用適用於 NAS 的 SnapMirror 作用中同步。</block>
+  <block id="d4612e7dc1347f1ccbfd5e470dda2295" category="section-title">客戶挑戰</block>
+  <block id="99ade05f06761f36e949a7456102a37e" category="paragraph">僅使用原生工具為 Proxmox VE 建立儲存設備和站台彈性是困難的：</block>
+  <block id="0d7dc8b5047966efd878ab53ac757e10" category="list-text">*站台故障後資料遺失。*Proxmox VE 儲存設備複寫和 Proxmox Backup Server 是非同步的。主站台發生故障時，自上次複寫或備份以來所做的變更將會遺失。</block>
+  <block id="6baffc6d8bf916c438d61233168432d9" category="list-text">*手冊、緩慢的恢復。*在次要站台恢復通常意味著提升複本、在不同的位址掛載儲存設備、更新<block ref="d8672d9b1e50401ec0c3f68efb6273c0" prefix=" " category="inline-code"></block>，以及重新啟動 VM。每個手冊步驟都會增加停機與停電期間發生錯誤的風險。</block>
+  <block id="6bc7dd2968cc91d61fc6c37fb72111c6" category="list-text">*與虛擬機器爭奪主機資源的延伸儲存設備。*超融合延伸儲存設備（例如延伸模式下的 Ceph）在 Proxmox VE 節點上執行，並在每個站台保留每個物件的兩個複本。複寫、恢復和重新平衡流量會使用執行虛擬機器的相同節點上的 CPU、記憶體容量和網路資源。</block>
+  <block id="5731c165d98436e1d5e5b0584c6ff419" category="list-text">*兩個必須達成一致的法定人數決定。*任何雙站台設計都需要在第三個故障網域中設立見證，分別用於 Proxmox VE 叢集和儲存設備。如果在站台間連結故障後，叢集和儲存設備選擇了不同的存活站台，虛擬機器將在無法連線至作用中儲存設備的節點上重新啟動。</block>
+  <block id="59679edfbb9a6b0b7d8286c58f476fc4" category="list-text">*必須在兩個站台都能正常運作的儲存設備位址。*儲存設備容錯移轉後，Proxmox VE 節點必須能夠存取相同位址的共享儲存設備。該位址必須在兩個站台都能連線，這通常代表在兩個站台之間延伸的第 2 階層 VLAN。</block>
+  <block id="edc0b3ce065e0185f69b6311ead4bf01" category="section-title">服務供應商面臨的挑戰</block>
+  <block id="fb091770528e13d30c4f1bbdb652ce89" category="paragraph">在 Proxmox VE 上建置雲端服務的服務供應商面臨同樣的挑戰，此外還要遵守租戶服務層級協定（SLA）：</block>
+  <block id="e73fb64166742c0a077d3029e5aa3f6c" category="list-text">*儲存系統是共享的故障點。*Proxmox VE HA 可保護租戶虛擬機器免受主機故障的影響，但無法保護其免受託管其磁碟的儲存系統故障的影響。一次儲存設備停電會影響該系統上的每個租戶。</block>
+  <block id="1f5e6b0f96f8aa853b69f3fa5bd37754" category="list-text">*無法銷售更高的可用度。*如果沒有同步複寫和自動儲存設備容錯移轉，供應商就無法提供具備零資料遺失和更強大正常運作時間承諾的高級可用度分層。</block>
+  <block id="6a5842e4da0acd8859ed889b508b66cf" category="list-text">*恢復期間的租戶隔離。*恢復、維護和災難恢復測試必須只影響相關的租戶，而不能影響整個平台。</block>
+  <block id="220d32b3855dfcbe6715fb3638098c3c" category="section-title">企業挑戰</block>
+  <block id="709c30ac29aece2fdc8993fe0a53f728" category="paragraph">將關鍵業務工作負載從其他虛擬機器管理程式遷移到 Proxmox VE 的企業期望獲得與先前相同的站台彈性，例如資料庫和業務線應用程式零資料遺失，以及無需手冊 runbook 的恢復。僅使用 Proxmox VE 原生工具來滿足該期望需要大量的設計、指令碼編寫和維運工作。</block>
+  <block id="e354cfd256db9822fcf0d3a3bb056e3a" category="paragraph">此解決方案將 Proxmox VE 延伸叢集與兩個站台上 NetApp AFF 系統上的 SnapMirror 主動同步相結合：</block>
+  <block id="b8177678a9e08cbb23df465f792d4511" category="list-text">*零 RPO。*ONTAP 會將每次對共享儲存設備的寫入，從站台 A 的主要叢集同步複寫到站台 B 的次要叢集。</block>
+  <block id="915cc80acc4f61daace60571b57e3f91" category="list-text">*兩個站台使用相同的共享儲存設備。*容錯移轉後，次要叢集向 Proxmox VE 提供相同的儲存設備，因此<block ref="d8672d9b1e50401ec0c3f68efb6273c0" prefix=" " category="inline-code"></block>中的儲存設備定義仍然有效。</block>
+  <block id="0cc563dfab0194a1e3d363d824b0cb0a" category="list-text">*自動容錯移轉。*Mediator 在兩個站台之外作為見證。您可以將 ONTAP Mediator 安裝在第三個站台，或使用 ONTAP Cloud Mediator ，這是一項託管在 NetApp Console 中的服務。當主儲存設備或站台發生故障時， ONTAP 會容錯移轉至站台 B ，無需手冊干預。</block>
+  <block id="637d3854ec0c42496013a97ba63bfa6d" category="list-text">*精細控制。*您可以選擇要保護的工作負載，並且可以單獨容錯移轉工作負載，例如，為了進行站台維護而移動一個租戶或應用程式。</block>
+  <block id="cd3dad3ade4e9ddc8dc8bda0cb565701" category="list-text">*輔助複本的使用。*您可以 Clone 輔助複本以進行開發、測試或災難恢復測試，而不會影響複寫。</block>
+  <block id="9f51764ea31b2950515e96c35d330c5a" category="section-title">解決方案如何應對挑戰</block>
+  <block id="b5f5623b6137a89a1dadf079a5e92266" category="cell">挑戰</block>
+  <block id="a3f1f209df79e4549d8848676cf57430" category="cell">該解決方案如何提供協助</block>
+  <block id="52aa57fd77cfef9ba1e5730b82ada84f" category="cell">您仍需規劃的事項</block>
+  <block id="7e27b1026ccec43861d470d5a10a37dd" category="cell">資料遺失及手冊恢復</block>
+  <block id="3fd7482cf8629586a1ab730c4c63a3a7" category="cell">同步複寫可提供零 RPO。ONTAP 會自動容錯移轉，且次要 SVM 會提供相同的 NFS 位址，因此<block ref="d8672d9b1e50401ec0c3f68efb6273c0" prefix=" " category="inline-code"></block>保持有效。</block>
+  <block id="a2b9992998cdbc26a5e62311cead8dc4" category="cell">Proxmox VE HA 仍然會從故障站台重新啟動虛擬機器。</block>
+  <block id="077195456e54443d3bae570c6a60d1ac" category="cell">主機上的延伸儲存設備</block>
+  <block id="30c9c792cc6138bf559166a979620e9e" category="cell">複寫在 AFF 控制器上執行，而不是在 Proxmox VE 節點上執行，因此主機 CPU、記憶體容量和網路可繼續供虛擬機器使用。ONTAP 在每個站台保留一份複本，且儲存效率適用於這兩份複本。</block>
+  <block id="cb1eec542cf7dfde5630230ad0d5360e" category="cell">與任何同步複寫一樣，此解決方案需要在站台 B 保留完整的第二份複本，並且複寫會為兩個 AFF 叢集都增加負載。請根據複寫工作負載調整兩個叢集的容量。</block>
+  <block id="33b3498802cbc12875f6b4f67ab3f202" category="cell">兩項法定人數決定</block>
+  <block id="5e3bf18413185d4f9d1f06b3e13149e7" category="cell">ONTAP Mediator，或 NetApp Console 中以服務形式提供的 ONTAP Cloud Mediator，是資料路徑之外的輕量級見證。此解決方案顯示如何讓 corosync QDevice 與主叢集遵守，以便兩者選擇同一站台。</block>
+  <block id="5e81b2d585e5bcbee1738bf161caef2d" category="cell">QDevice 仍然需要第三個位置。ONTAP Mediator 也需要它，但 ONTAP Cloud Mediator 則不需要。請參閱 <block ref="8141d3127ab263fd26ce095bac425e68" category="inline-xref-macro-rx"></block>。</block>
+  <block id="e9f627807c303ad870ff4ab22326ab6a" category="cell">兩個站台的儲存設備位址</block>
+  <block id="61e9b2b8ac14976b64f5f8079693fde5" category="cell">輔助 SVM 接管相同的 NFS LIF 位址，因此無需重新掛載或重新配置儲存設備。</block>
+  <block id="fe6f131eca9b8516be3f82f2c9083683" category="cell">NFS 子網路必須在兩個站台均可連線，通常使用延伸的階層 2 VLAN。有關 VIP LIF 的資格判斷狀態，請參閱 <block ref="ccd2f57403ff44112d71ec3392b29f2a" category="inline-xref-macro-rx"></block>。</block>
+  <block id="31d6e2df69d4c5b2f266236227169ed9" category="paragraph">下圖顯示採用 NFS 共享儲存設備的解決方案架構。</block>
+  <block id="b7a913dbc2c6606f366d7c05953680cc" category="inline-image-macro">採用 SnapMirror 作用中同步的 Proxmox VE stretch 叢集架構（用於 NAS）。站台 C 的 ONTAP Mediator 和 NetApp Console 中的 ONTAP Cloud Mediator 顯示為替代的見證選項。這些元件在圖表之後說明。</block>
+  <block id="1355fb7589601bd504154261ba5d6f49" category="paragraph"><block ref="1355fb7589601bd504154261ba5d6f49" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="86177105820475f27beb9a8accf08ab3" category="list-text">站台 A 和站台 B</block>
+  <block id="9dc5b6d252fc028d4d2b27e8b256a75d" category="list-text">每個站台都配備一個 AFF 雙節點叢集和一半的 Proxmox VE 節點。站台 A 的主叢集為所有 Proxmox VE 節點提供共享儲存設備。站台 B 的節點透過站台間網路存取主叢集。使用 NFS 儲存設備時，站台 B 的輔助 SVM 在發生容錯移轉之前保持休眠狀態。</block>
+  <block id="2b7cd6a0278783cfaa972ecd49ba8dad" category="list-text">站台 C</block>
+  <block id="58483f96f551dbd6b9780ff34489d1bb" category="list-text">第三個故障網域託管 corosync QDevice 系統程式 <block ref="4b26b82f61a525b89662d5e10d5cea6e" prefix="(" category="inline-code"></block>），如果您選擇選項 1，則也託管 ONTAP Mediator。QDevice 提供額外的投票權，以便在一個站台故障時，Proxmox VE 叢集仍能保持仲裁。</block>
+  <block id="3c031b939f6ec312ee601d021e7a6644" category="list-text">NetApp Console</block>
+  <block id="7bbb1dec7be75b08d4e2fc4d2b553938" category="list-text">如果選擇選項 2，ONTAP Cloud Mediator 將以服務形式在 NetApp Console 中執行，由 NetApp 託管和管理。兩個 AFF 叢集都透過 HTTPS 連接到它，因此您無需安裝或維護中介器主機。</block>
+  <block id="cf7f72fb2e3e5a9df104130ba81c194e" category="list-text">中介程式</block>
+  <block id="7f6ba6ca0a562cbbd9c257fd48984d9a" category="list-text">ONTAP Mediator 或 ONTAP Cloud Mediator 協助 ONTAP 決定哪個叢集負責資料服務。請僅使用其中一個，不要同時使用兩個。如需比較，請參閱 <block ref="8141d3127ab263fd26ce095bac425e68" category="inline-xref-macro-rx"></block>。</block>
+  <block id="8a011e056cae1898e78c6d59119e67d5" category="list-text">Proxmox VE 延伸叢集</block>
+  <block id="5efbb2766931be0586b727d0d8cc6cb3" category="list-text">所有 Proxmox VE 節點都屬於同一個叢集，並共享相同的儲存設備定義。Proxmox VE HA 會在存活的節點上重新啟動來自故障站台的虛擬機器。Storage Manager for Proxmox（SMP）在叢集上作為 HA 虛擬機器執行，以資源配置共享儲存設備，並備份、還原和 Clone 虛擬機器。</block>
+  <block id="16f8aa0e71d045c5de4bc7d875ae835b" category="paragraph">SnapMirror 作用中同步使用中介伺服器作為被動見證。在網路分割或單一叢集故障期間，ONTAP 會使用中介伺服器來決定由哪個複本繼續提供 I/O 服務。中介伺服器不在資料路徑中，也不會自行啟動容錯移轉。您可以使用下列其中一個選項，但不能同時使用兩者。</block>
+  <block id="1424e9d02955a063766be77a82c6d273" category="cell">考慮</block>
+  <block id="b39593d5340ed09955bf539ed2075fe6" category="cell">選項 1：ONTAP 中介</block>
+  <block id="bd0a1c9ad3dc3c2394446ea5bed1b098" category="cell">選項 2：ONTAP Cloud 中介</block>
+  <block id="9f7d8eb79b8e8e6e8a1d1f94da91cc0b" category="cell">執行位置</block>
+  <block id="c29c10c721f98c1e43f74ab2b8de7f6a" category="cell">在第三個故障域（例如站台 C）中安裝和管理的 Linux 主機，具有獨立的電源和網路基礎架構。</block>
+  <block id="ee356cee134aa5b9ebaac92d95fa10e4" category="cell">NetApp Console 中的雲端服務。NetApp 負責託管與管理，因此您不需要第三個站台的中介主機。</block>
+  <block id="3b2a75ebc087c7f3c4fa9ac0e2a92ebe" category="cell">ONTAP 版本</block>
+  <block id="1eeb6df76cc7c05e31a5c815604589d2" category="cell">ONTAP 9.19.1 或更新版本，用於 NAS 的 SnapMirror 作用中同步。</block>
+  <block id="f629ce1f1ff55e0481a7a3cd12a7f7ca" category="cell">ONTAP Cloud Mediator 從 ONTAP 9.17.1 開始提供。NAS 的 SnapMirror 作用中同步需要 ONTAP 9.19.1 或更新版本。</block>
+  <block id="44ad9619101b8a07619c995d81024ea9" category="cell">叢集連線</block>
+  <block id="76d66d26741e5b9a6cce625a797a5ba8" category="cell">兩個叢集都連接到中介主機。預設服務連接埠為 31784。</block>
+  <block id="5152dda03d4927edffed66712a49e778" category="cell">兩個叢集都直接或透過 HTTP Proxy，透過 HTTPS 傳出連線至 NetApp Console。建議至 NetApp Console 的 ping 延遲低於 200 毫秒。</block>
+  <block id="ad2376beebecdcf7846ba973fa1a005b" category="cell">設定</block>
+  <block id="e2c815f2b1700287d8e39665d926a691" category="cell">在 Linux 主機上安裝該套件，然後使用主機位址和中介使用者將其新增至叢集。</block>
+  <block id="61bede79a3d8c7bcfa4e4a8a2d4cdfa0" category="cell">建立具有 *ONTAP 中介器設定角色* 的 NetApp Console 服務帳戶，然後使用組織 ID、用戶端 ID 和用戶端密碼將中介器新增至叢集。</block>
+  <block id="456d0deba6a86c9585590550c797502d" category="cell">營運</block>
+  <block id="f4012a269cf7038257245556c00ab349" category="cell">您對主機進行修補和升級，並保持其可用狀態。</block>
+  <block id="23b76b5fcf655a6718ccf07a78298d88" category="cell">沒有主機可供修補或升級。您需要依賴兩個站台的網際網路存取以及 NetApp Console 服務的可用度。</block>
+  <block id="254c1de7ba59ed71ef57b65cd9c61cfb" category="cell">最佳匹配</block>
+  <block id="40bcefc872516d92434d7f9e65d44a88" category="cell">具有第三個站台，或不允許儲存設備叢集存取網際網路的環境。</block>
+  <block id="788d9552344477a2b8fcecdb0fefb157" category="cell">沒有第三個站台可供調解器使用，或想要避免營運調解器的環境。</block>
+  <block id="3bc6eb0ba33041d8486a69e0c4f40a74" category="paragraph">選擇時請記住以下幾點：</block>
+  <block id="42338592bc2dd713bcc21b51e6212193" category="list-text">*QDevice 仍然需要第三個位置。*ONTAP Cloud Mediator 移除的是中介主機，而不是 corosync QDevice 主機。QDevice 需要一台所有 Proxmox VE 節點都可以透過 TCP 連接埠 5403 存取的小型 Linux 主機，而且它沒有像 corosync 那樣的低延遲要求。</block>
+  <block id="52ca185119aacdc9e5b1b37402f99238" category="list-text">*兩個叢集都需要存取 NetApp Console。*如果叢集使用 Proxy，請在兩個叢集上安裝 Proxy 的根目錄 CA 憑證。NetApp 建議每個叢集使用不同的 Proxy 伺服器。</block>
+  <block id="3c03a521834c4badcc5e9ddfadc64bc1" category="list-text">*無論選擇哪一種選項，都應規劃相同的故障行為。*當中介器無法使用時，複寫會繼續進行且無資料遺失，但在中介器再次可用之前，無法進行自動和計畫性的容錯移轉。使用 ONTAP Cloud Mediator 時，這包括從叢集到 NetApp Console 的連線遺失。</block>
+  <block id="3baa15882d96a89d709c2f32047dd92d" category="admonition">本節中的中介器選項適用於 SnapMirror 作用中同步。對於 MetroCluster，此解決方案使用 ONTAP 中介器或 MetroCluster Tiebreaker。部署前，請確認您的 ONTAP 版本、中介器選項和 Proxmox VE 版本是否一起列在 <block ref="18e7fcfe606d6d0912191de7fd9eb56a" category="inline-link-macro-rx"></block> 中。</block>
+  <block id="a26fb725134f9b2a4aee8f95dcb8036f" category="section-title">服務提供者的效益</block>
+  <block id="aae85d419a39db8132afa4a735937249" category="list-text">*超越主機 HA 的虛擬機器可用度。*當裝載其磁碟的儲存系統發生故障時，租戶虛擬機器仍可繼續運作。ONTAP 容錯移轉至第二個 AFF 叢集，且虛擬機器無需重新啟動即可在同一個共享儲存設備上恢復 I/O。</block>
+  <block id="3f4c6f9874a14dcf9f2406702043395f" category="list-text">*進階可用度分層。*您可以在同一個叢集中，將零 RPO、具備儲存彈性的 VM 服務作為附加服務，與未受保護儲存設備上的標準分層一起提供。</block>
+  <block id="3a75bd391f55d0e71cf449dab255125f" category="list-text">*按租戶保護與容錯移轉。*透過為每個租戶或服務分層提供分隔的受保護儲存設備，您可以獨立保護、容錯移轉及測試每個租戶的災難恢復，而不會影響其他租戶。</block>
+  <block id="4d62cb39649c84975c4208cc7f071aa2" category="list-text">*更好地利用兩個站台。*您可以將某些工作負載主要放在站台 A，而將其他工作負載主要放在站台 B，這樣兩個資料中心都可以服務作用中的工作負載。</block>
+  <block id="ff7d8e4f70d9b75af4c017be81a10949" category="section-title">企業效益</block>
+  <block id="b642fc4acd1e5b75315b15431f466716" category="list-text">在儲存設備或站台故障期間，*業務關鍵型 VMs 零資料遺失*。</block>
+  <block id="d8bf43b7e1e143eca64d869edc3ecd8a" category="list-text">*自動恢復*，無需腳本、儲存設備重新掛載或變更<block ref="d8672d9b1e50401ec0c3f68efb6273c0" prefix=" " category="inline-code"></block>。</block>
+  <block id="8936cddddf1a11982058a83dcf16880d" category="list-text">*內建於 ONTAP 中*，Proxmox VE 節點上無需額外的軟體階層。</block>
+  <block id="934904c304975b8d86f6cba645ccdcf3" category="list-text">*透過單一介面進行日常操作。*Storage Manager for Proxmox 配置受保護的共享儲存設備，並使用 ONTAP 快照與 FlexClone 技術來備份、還原及複製虛擬機器。</block>
+  <block id="367c70228b4795c1122c34d2a7f48e3f" category="section-title">解決方案如何應對故障</block>
+  <block id="9bc4fdec13f9c21ad361048341413467" category="paragraph">ONTAP 和 Proxmox VE 各自獨立做出法定人數決定。該設計使它們保持一致，以便兩者都選擇同一個存活站台。</block>
+  <block id="a4ecfc70574394990cf17bd83df499f7" category="cell">事件</block>
+  <block id="526b67ff510d74c23735ab537209aa6c" category="cell">ONTAP 行為</block>
+  <block id="743e397e785b17c8938d0ea91a65dbcc" category="cell">Proxmox VE 行為</block>
+  <block id="e31093deb0cdd1195f7a62376cd7e2af" category="cell">站台 A 故障</block>
+  <block id="a879b186a949ac782703734855fc72f9" category="cell">中介器確認故障後，ONTAP 會自動將共享儲存設備容錯移轉至叢集 B。</block>
+  <block id="0082d33ef55682dd758cce03e54f6751" category="cell">站台 B 節點和 QDevice 保持仲裁。HA 隔離站台 A 節點，並在站台 B 節點上重新啟動其虛擬機器。儲存設備容錯移轉後，已在站台 B 上的虛擬機器恢復 I/O。</block>
+  <block id="518bf7054ba291d040ba9f98a5be4b78" category="cell">AFF 叢集 A 發生故障，站台 A 上的 Proxmox VE 節點繼續運作</block>
+  <block id="fb9e35e60209a90ea9505775d529ab9f" category="cell">中介器確認叢集 A 無法連線，ONTAP 會自動將共享儲存設備容錯移轉至叢集 B。</block>
+  <block id="1c57f055fce8cdb746e301d2249a358d" category="cell">無需更改仲裁，也無需重新啟動虛擬機器。儲存設備容錯移轉後，所有節點上的虛擬機器都在同一共享儲存設備上恢復 I/O，而站台 A 的節點透過站台間網路連接到叢集 B。</block>
+  <block id="3e2f4fced56167b0b6dc1c36c44c8bed" category="cell">A 站台的一台 AFF 控制器發生故障</block>
+  <block id="58f5ba76f78bc894c22814967953f1ca" category="cell">合作夥伴控制器在本地 HA 接管中接管。不會發生 SnapMirror 作用中同步容錯移轉。</block>
+  <block id="b816120208777fda84aa0ceafe1e1d0b" category="cell">無影響。虛擬機器在接管期間會短暫暫停 I/O。</block>
+  <block id="a00c59b2da0effbe626f6274da162153" category="cell">站台 B 故障</block>
+  <block id="0af530c4699097654578aab7aa1dac15" category="cell">叢集 A 繼續提供資料。當站台 B 恢復運作時，複寫將恢復。</block>
+  <block id="2eb748be0d03d053aadb7214d722ef69" category="cell">站台 A 的節點和 QDevice 保持仲裁。HA 在站台 A 的節點上重新啟動站台 B 的虛擬機器。</block>
+  <block id="e4e8fcc180914aa7b8f0eaf55b70d621" category="cell">站台間連結故障</block>
+  <block id="f4267e2b1294a9f386b77215dc392f3d" category="cell">叢集 A 繼續提供資料。未發生容錯移轉。</block>
+  <block id="3aee71ef93275916b53dc57bbf7f78f2" category="cell">當決勝斷路器與主要叢集一致時，QDevice 會將其選票投給站台 A 分割區。站台 B 節點失去仲裁並自我隔離，HA 會在站台 A 上重新啟動其虛擬機器。</block>
+  <block id="fb21776ab37c5657116984a8e4cbe8bf" category="cell">站台 C 故障，或叢集失去對 NetApp Console 的存取</block>
+  <block id="f0e0176b8bb0e8cc8480fa6414d3e7bd" category="cell">複寫持續進行且零資料遺失，但在中介器可用之前，無法進行自動和計畫性的容錯移轉。使用 ONTAP Cloud 中介器時，站台 C 故障只會影響 QDevice。</block>
+  <block id="41b63f1dbb2e96d2284abeab8083a9f7" category="cell">叢集透過四個節點的投票維持法定人數。沒有虛擬機器受到影響。</block>
+  <block id="396e4d22d7da9c1c3278cb9ae25d5dc8" category="cell">一個 Proxmox VE 節點發生故障</block>
+  <block id="82df947b24b142257e99101fa1c8e6f9" category="cell">無影響。</block>
+  <block id="d08c92b421acbdae492949287b1524d6" category="cell">HA 會在其他節點上重新啟動該節點的虛擬機，優先選擇同一站台的節點。</block>
+  <block id="3784559d5087e35dc7372b1c51cf920e" category="section-title">儲存系統故障</block>
+  <block id="57e5b6ec8d029bd2e8bd2367e784abf9" category="paragraph">儲存系統故障是僅靠主機層級 HA 無法應對的情況，也是 SnapMirror 作用中同步能為服務提供者帶來最大價值的情況。下圖展示了 AFF 叢集 A 故障後的狀態，此時所有 Proxmox VE 節點仍保持線上，並使用 NFS 共享儲存設備。</block>
+  <block id="398c8b00261d41a1ceb33fb291cf8ebe" category="inline-image-macro">AFF 叢集 A 故障後的狀態。所有 Proxmox VE 節點繼續運行，並存取站台 B 輔助 SVM 上的 NFS 共享儲存設備。圖中編號的項目將在圖後進行說明。</block>
+  <block id="f4d55aae08d028b22d2c41d6cd425a3a" category="paragraph"><block ref="f4d55aae08d028b22d2c41d6cd425a3a" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="2778da1ce7a212d41b7573073b873006" category="list-text">AFF 叢集 A 無法使用。站台 A 上的 Proxmox VE 節點繼續運作，因此叢集不會失去仲裁，HA 也不會隔離任何節點。</block>
+  <block id="9a536feff9eed2b33f0990517b06a5a1" category="list-text">中介軟體（位於站台 C 的 ONTAP Mediator 或 NetApp Console 中的 ONTAP Cloud Mediator）確認叢集 A 無法連線，然後 ONTAP 會啟動叢集 B 上的次要 SVM，其具有相同的 NFS LIF 位址、磁碟區與匯出原則。</block>
+  <block id="c51386bc3bab9dbf3136c9589fcf34d0" category="list-text">所有 Proxmox VE 節點在同一共享儲存設備上恢復 I/O。站台 B 的節點在本地存取叢集 B，站台 A 的節點透過站台間網路存取叢集 B。虛擬機器在容錯移轉期間暫停 I/O，無需重新啟動即可繼續運作。</block>
+  <block id="aff613fcc54ea3bb6ac1edc28c9792a6" category="paragraph">當叢集 A 恢復後，複寫將繼續進行。請規劃在維護所需時間內容錯回復至叢集 A，以便站台 A 的虛擬機器能夠再次存取本機儲存設備。</block>
+  <block id="1163a74136e40a05bc320e61f567a4df" category="section-title">站台故障</block>
+  <block id="cba7f2bb6bb2f762f3977c19374b1117" category="paragraph">在站台故障期間，該站台的儲存系統和 Proxmox VE 節點都會離線。ONTAP 會將共享儲存設備容錯移轉至存活的叢集，而 Proxmox VE HA 會在存活的節點上重新啟動來自故障站台的 VM，如表中所述。</block>
+  <block id="073b4b51966a0796584619ae83b5164f" category="section-title">在 SnapMirror 作用中同步與 MetroCluster 之間進行選擇</block>
+  <block id="4627ae007064323945e37577bcebf5cb" category="paragraph">NetApp MetroCluster 組態也能為 Proxmox VE 延伸叢集交付零 RPO 和自動恢復。這兩種解決方案的差異在於它們所保護的對象：</block>
+  <block id="ccf184cc1fd0cfd9ae0f7bbc40e1ea85" category="list-text">*MetroCluster 保護所有工作負載。*MetroCluster 結合了陣列型叢集與同步複寫。它會將每個鏡射 Aggregate 中的資料、非揮發性記憶體容量（NVRAM）以及每個 SVM 的組態鏡射到合作夥伴站台，因此叢集上的所有共享儲存設備都會受到保護，而無需針對每個工作負載進行設定。</block>
+  <block id="ff6bd550cc0d8bc5c08ca68b8052a071" category="list-text">*SnapMirror 作用中同步保護部分工作負載。*您可以選擇要保護的 SVM 或磁碟區，並且可以獨立對每個項目進行容錯移轉。未受保護的工作負載可以共享相同的叢集。</block>
+  <block id="d8d09f57ea21892bc2fb0b88fc96bfef" category="paragraph">兩種方案都在每個站台保留受保護資料的完整複本，都需要在第三個故障域中設定見證，並且都會增加儲存設備控制器的複寫負載。它們的區別在於保護範圍、容錯移轉精細度和叢集設計。</block>
+  <block id="7c7a4e98feba92cb7326b88bc3c468d8" category="admonition">在部署任一解決方案之前，請確認您的 ONTAP 版本、MetroCluster 或 SnapMirror 作用中同步組態，以及 Proxmox VE 版本是否一起列在 <block ref="18e7fcfe606d6d0912191de7fd9eb56a" category="inline-link-macro-rx"></block> 中。</block>
+  <block id="9e940d99f21bef801d8860e9e74ed0b6" category="section-title">MetroCluster 搭配 Proxmox VE 的架構</block>
+  <block id="36f24dbad8f03000d166a514ae6f0229" category="paragraph">下圖顯示具有四節點 MetroCluster IP 組態和 NFS 共享儲存設備的 Proxmox VE stretch 叢集。</block>
+  <block id="8a730b708a1f8df05b4fbaae3aadc83f" category="inline-image-macro">Proxmox VE 擴展叢集採用四節點 MetroCluster IP 組態。每個 Proxmox VE 節點在各個站台掛載作用中 SVM。每個站台都保存著另一個站台 SVM 的停止鏡射。圖表後方會說明各元件。</block>
+  <block id="bddb06dfae9fa46031a02d49e2a2649f" category="paragraph"><block ref="bddb06dfae9fa46031a02d49e2a2649f" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="4cab58b7ea054e5d4cbd738a72b6591f" category="list-text">MetroCluster IP 叢集</block>
+  <block id="84281162fb70c291a4007e674cf0e2ab" category="list-text">每個站台都有一個具備鏡射 Aggregate 的 HA 配對。MetroCluster IP 後端網路會將資料（SyncMirror）和 NVRAM 同步鏡射到合作夥伴站台。</block>
+  <block id="e0650734b67608098bba60650de0a6eb" category="list-text">兩個站台的 SVM</block>
+  <block id="d72a0eb7acb8352295fb7b8c8ae70ee8" category="list-text">每個站台都可以運行自己的 SVM。對於每個 SVM，MetroCluster 會在合作夥伴站台保留一個帶有 <block ref="3d1449d5b8fa3419b1f3a0a85c27d0aa" prefix=" " category="inline-code"></block> 後綴的已停止鏡射 SVM，並具有相同的組態和 LIF 位址。</block>
+  <block id="407a71398144d83652ee124ed43362e3" category="list-text">來自所有節點的 NFS 存取</block>
+  <block id="3c4e8c0fa92080cc46426f9da757d764" category="list-text">每個 Proxmox VE 節點都會掛載兩個作用中 SVM（SVM A1 和 SVM B1）的共享儲存設備，以便 HA 可以重新啟動任何節點上的任何 VM。站台 B 的節點可透過站台間網路存取 SVM A1，站台 A 的節點可透過站台間網路存取 SVM B1。這與 SnapMirror 主動同步的存取模型相同。</block>
+  <block id="fbada53248cb254417145f50af659157" category="list-text">切換</block>
+  <block id="6c087ce306888383e28c66daa540e1b9" category="list-text">如果站台發生故障，站台 C 的 ONTAP Mediator 或 MetroCluster Tiebreaker 會啟用自動切換。倖存站台上的鏡射 SVM 會啟動，並使用相同的 NFS 位址為所有共享儲存設備提供服務，而 Proxmox VE HA 會從故障站台重新啟動 VM。單一控制器故障會由本機 HA 接管來處理，無需進行切換。修理故障站台後，您需要修復 Aggregate 並切換回來。</block>
+  <block id="4b8a686a18013faf56de2c945c2eb1a0" category="section-title">MetroCluster 如何應對故障</block>
+  <block id="3fb047288b0153353b721422eaa1d162" category="paragraph">下表顯示 MetroCluster IP 組態和 Proxmox VE 延伸叢集如何回應與 <block ref="191187f6482da3b9bea8932c0de09168" category="inline-xref-macro-rx"></block> 中相同的故障。在本例中，SVM A1 在站台 A 處於作用中，SVM B1 在站台 B 處於作用中。</block>
+  <block id="7eba0b588da0b9f77bd2343614afca5d" category="cell">ONTAP 調解器或 MetroCluster 決勝器確認故障，且 ONTAP 切換站台 A。SVM A1-mc 在站台 B 啟動，並使用相同的 NFS LIF 位址。SVM B1 繼續提供資料。</block>
+  <block id="05d50219ab87f95bb3fe925da0be8da9" category="cell">站台 B 節點和 QDevice 保持仲裁。HA 隔離站台 A 節點，並在站台 B 節點上重新啟動其 VM。已在站台 B 節點上執行的 VM 繼續執行，而 SVM A1 上的 VM 在切換後恢復 I/O。</block>
+  <block id="3c61f18b0a5a58ff6e29138a7dab8d79" category="cell">MetroCluster IP 叢集 A 發生故障，站台 A 上的 Proxmox VE 節點繼續運作</block>
+  <block id="8718c564d43148e712ed80e36272db53" category="cell">ONTAP Mediator 或 MetroCluster Tiebreaker 確認叢集 A 無法連線，且 ONTAP 切換站台 A。SVM A1-mc 在站台 B 啟動，並使用相同的 NFS LIF 位址。</block>
+  <block id="d568f2f86d3d6b9f311a24bbaa4fe478" category="cell">無需更改仲裁，也無需重新啟動虛擬機器。切換後，SVM A1 上的虛擬機器恢復 I/O，站台 A 的節點透過站台間網路連線至站台 B。</block>
+  <block id="2311be00a8c85e8dbdf1913fb039e85c" category="cell">A 站台的一個控制器發生故障</block>
+  <block id="ad90f608c9b6c7f0599620f23991fab1" category="cell">A 站台的 HA 合作夥伴在本地 HA 接管中接管。不會發生切換。</block>
+  <block id="461a2c1312d3db8e654970a2579bfed6" category="cell">ONTAP 切換站台 B。SVM B1-mc 在站台 A 啟動，並使用相同的 NFS LIF 位址。SVM A1 繼續提供資料。</block>
+  <block id="8d60a4148e0d24dd9a0ef2be3bcbabc5" category="cell">站台 A 節點和 QDevice 保持仲裁。HA 在站台 A 節點上重新啟動站台 B 的 VM，它們在該處存取站台 A 的 SVM B1。</block>
+  <block id="6a97ca1e3c0d6d920474ea2dd88b3249" category="cell">由於兩個叢集仍在運行，因此不會發生切換。每個站台繼續運行各自的 SVM，與合作夥伴站台的鏡射將暫停，直到連結恢復。</block>
+  <block id="17397f0e2ec3828a72cda07f22a82178" category="cell">當決勝斷路器與站台 A 一致時，QDevice 會將其選票投給站台 A 分割區。站台 B 節點會失去仲裁並自我隔離。HA 會在站台 A 節點上的 SVM A1 上重新啟動虛擬機器。由於站台 A 節點無法連線至 SVM B1，因此 SVM B1 上的虛擬機器必須等到連結恢復後才能重新啟動。</block>
+  <block id="b5a9961eb8eb266967fba9d9953ebdf2" category="cell">站台 C 故障</block>
+  <block id="5c39924e9d126f590c67a59f9e12f60a" category="cell">鏡射會繼續進行，且零資料遺失，但在見證可用之前，無法進行自動切換。您仍然可以手動切換。</block>
+  <block id="b16da8b673f84a385f7d09a8adcc05c4" category="paragraph">站台間連結故障是與單一主要站台設計的主要差異。每當兩個站台都裝載作用中 SVM 時（無論是使用 MetroCluster，還是使用兩個方向相反的 SnapMirror 作用中同步 SVM），corosync 判定斷路器只能偏好一個站台。其作用中 SVM 位於另一個站台的虛擬機器將保持停機狀態，直到連結恢復為止。為了限制影響，請在分隔的實體路徑上使用備援的站台間連結，並將最關鍵的虛擬機器放置在判定斷路器偏好之站台的 SVM 上。</block>
+  <block id="0161e3d40bdbea6ca6998c8c60165b33" category="section-title">功能比較</block>
+  <block id="4767099b22895a8101a1cba45d8cf6e9" category="cell">MetroCluster IP</block>
+  <block id="75b4d944f79b5c2cc1b2b0a41d3bacf4" category="cell">保護範圍</block>
+  <block id="bb71df7edf46d509bef3ee0521989a94" category="cell">選定的 SVM 和磁碟區</block>
+  <block id="f935825377eeaac7035ff903e5fa051c" category="cell">組態中的所有鏡射 Aggregate 和所有 SVM</block>
+  <block id="eff4580bd61d76daf5cc0a8b9fb3d9fd" category="cell">容錯移轉精細度</block>
+  <block id="10155fda9f7ebeed6ba6fee3e2f1f135" category="cell">每個 SVM 獨立</block>
+  <block id="a51ffacf758fd9e99d0f8d18316957e0" category="cell">整個站台，透過切換</block>
+  <block id="a2af6a5076e3807126293f652290afbf" category="cell">未受保護的工作負載</block>
+  <block id="42c2dc6d45049b1230318cf06c011db6" category="cell">在同一叢集中未受保護的 SVM 上執行</block>
+  <block id="312f0e64995f8f7df4241746b8d84d86" category="cell">可以使用未鏡射的 Aggregate，這些 Aggregate 在切換後會離線，直到您將其設為線上</block>
+  <block id="a09c4080507bf2aa1c48bb2dd627b314" category="cell">叢集設計</block>
+  <block id="5e972b8e78daeb25d5423ae2d7c954c2" category="cell">兩個獨立的叢集，透過 IP 網路對等連接</block>
+  <block id="a18d3480352cbf8100e8803792c539a6" category="cell">兩個合作夥伴叢集的一種組態，具有專用的 MetroCluster IP 後端網路</block>
+  <block id="499b2fdc2f413619ae42a2c8f9bb7fee" category="cell">站台 C 的見證</block>
+  <block id="f0b6a0e3407899c93a8a7297d801f958" category="cell">ONTAP Mediator 或 ONTAP Cloud Mediator</block>
+  <block id="2dcd02a25aa4e409b9d98d0579dc3f69" category="cell">ONTAP Mediator 或 MetroCluster Tiebreaker</block>
+  <block id="5b913a20fc5bc814d51d96d03fab450e" category="cell">受保護資料的複本</block>
+  <block id="88b81a656d54c4919930de266558188b" category="cell">每個站台一台</block>
+  <block id="1b50cd8d3ce356f39cc71094d5f933df" category="cell">每個站台一個，位於鏡射的 Aggregate 中</block>
+  <block id="03523fcdc021af0748401e9d716b0615" category="cell">複寫路徑</block>
+  <block id="1ea533128a6ded81593f1ffccc3df614" category="cell">SnapMirror 透過叢集間 LIF 同步</block>
+  <block id="8d055084fafdbcd3e564e049781516b1" category="cell">SyncMirror 以及透過 MetroCluster IP 後端網路進行的 NVRAM 鏡射</block>
+  <block id="313748137ce23660f3a2f8e66c874577" category="cell">兩個站台的 NFS 位址</block>
+  <block id="0d41eb6ed6c1d73e6f8118d0babb068f" category="cell">擴展的第 2 階層 VLAN。搭配 BGP 的 VIP LIF 待定資格判斷</block>
+  <block id="a4f28c1114090c48b450a319384be779" category="cell">擴展的階層 2 VLAN，或搭配 BGP 的 VIP LIF</block>
+  <block id="b8c7f56c2f49819cd3ad673a11a7a2de" category="cell">站台故障後的恢復</block>
+  <block id="a2d4283106ba914c944dbfc9124dc956" category="cell">容錯回復每個 SVM</block>
+  <block id="f99bd3a5af46ffaf00d0e0e1006b637f" category="cell">修復集合體，然後切換回復站台</block>
+  <block id="e2c366c556a275b2f82dd00a452d1354" category="section-title">選擇指南</block>
+  <block id="55f2b90e72333d4c0ca5555c751b01d4" category="list-text">當儲存設備上的所有或幾乎所有工作負載都需要零 RPO 時，請選擇 MetroCluster，例如當企業僅在叢集上執行任務關鍵型 VM，或服務供應商為每個租戶提供相同的可用度分層時。您將獲得一個保護網域，無需進行每個工作負載的組態。</block>
+  <block id="98cf0197abafa59b9ca6a7cae708c01a" category="list-text">當只有一部分工作負載需要零 RPO 時（例如某些租戶的高階分層），或者當您需要一次對一個租戶或應用程式進行容錯移轉或測試災難恢復時，請選擇 SnapMirror 作用中同步。</block>
+  <block id="4c921463fcc8c41af2fe6a7ce977fdf3" category="list-text">SnapMirror 適用於 NAS 的作用中同步不支援於 MetroCluster 組態。請為每對叢集使用一種解決方案。</block>
+  <block id="c69e0d37303ea1e976c623584e1f2682" category="list-text">本解決方案中的 corosync、QDevice 和 HA 指南同樣適用於這兩種情況。使用 MetroCluster 時，遵守將 QDevice 斷路器與在站台間連結故障時仍持續提供資料的站台保持一致，並使用 HA 節點親和性規則將虛擬機器與其作用中 SVM 保持在同一站台。</block>
+  <block id="39d6ebd0d8faac36797452ddc0777d23" category="list-text">MetroCluster IP 也支援搭配 BGP 的 VIP LIF，用於站台之間的第 3 階層網路。</block>
+  <block id="f6c3f959f7b46d554b962e233161969b" category="section-title">Proxmox VE 擴展叢集的 Corosync 注意事項</block>
+  <block id="1fffdc906017237efbb441504332975b" category="paragraph">Proxmox VE 使用 corosync 進行叢集成員管理和仲裁。Corosync 對站台間網路的敏感度高於 SnapMirror 作用中同步，因此請先規劃叢集網路。</block>
+  <block id="9a6a830def0a355e17b140b1caca2f03" category="section-title">延遲和網路設計</block>
+  <block id="d7b9d2d16130c3bede536ce71796cff1" category="list-text">SnapMirror 作用中同步要求叢集間往返時間（RTT）小於 10 毫秒。Proxmox 建議所有節點之間的 corosync 延遲小於 5 毫秒，因此 corosync 要求設定了解決方案的距離限制。</block>
+  <block id="ded8e63c72b4cc5d68600e5a7fc54514" category="list-text">Corosync 需要的是低且一致的延遲，而不是高頻寬。請使用專用網路運行 Corosync，將其與儲存設備和即時移轉流量分隔，以避免儲存設備突發流量導致 Corosync 逾時。</block>
+  <block id="f8f36dd1bccd8310a16f56dbec421083" category="list-text">在站台之間的分隔實體路徑上設定至少兩個 corosync 連結（例如，連結 0 和連結 1）。如果一條路徑發生故障，Corosync 會使用 Kronosnet 自動切換連結。</block>
+  <block id="31f6b03f88cf307ff612e89325af7150" category="section-title">在第三個站台使用 QDevice 進行仲裁</block>
+  <block id="1d58291c5250f7eb01bb6853fc0a0b95" category="paragraph">將 Proxmox VE 節點平均分配到站台 A 和站台 B，並在站台 C 新增 QDevice。有了四個節點和一個 QDevice，叢集就有五票，而法定人數需要三票，因此任何一個站台發生故障都不會失去法定人數。QDevice 透過 TCP 連接埠 5403 連接到叢集，並且沒有 corosync 的低延遲要求，因此它可以與 ONTAP Mediator 共享站台 C。如果您使用 ONTAP Cloud Mediator，則仍需要第三個位置來放置 QDevice，但它可以是未同時託管 Mediator 的小型 Linux 主機。</block>
+  <block id="5d4e57dc148fdfa45df69d21ca674e39" category="section-title">與主叢集的斷路器對齊</block>
+  <block id="b3e55304a08018b6e22999734d906493" category="paragraph">當站台間連結發生故障，但兩個站台仍可連線至站台 C 時，ONTAP 會讓站台 A 的主要叢集繼續提供資料。QDevice 必須將其選票投給同一個站台。預設情況下，QDevice 會選擇包含最低節點 ID 的分割區。</block>
+  <block id="4a4e4bb9668cc2835612eea5272035fc" category="paragraph">*最佳實務：* 在站台 A 的節點上建立 Proxmox VE 叢集，並在參加站台 B 的節點之前，先將站台 A 的其他節點參加叢集，以確保站台 A 擁有最低的節點 ID。如果主儲存設備長時間移轉至站台 B，請將 QDevice<block ref="d422ea54402da152cc51add6bdc43853" prefix=" " category="inline-code"></block> 設定更新為站台 B 的節點 ID。</block>
+  <block id="096767c133b040298c52d5ba44e78cca" category="paragraph">如果 QDevice 改為偏好站台 B，則站台 A 節點將會自我隔離，而 HA 將會在無法存取站台 A 作用中儲存設備的站台 B 節點上重新啟動虛擬機器。</block>
+  <block id="c54d29fcdcc04b88dab094666bdf3a02" category="section-title">HA 行為和虛擬機器放置</block>
+  <block id="d0dc3a67ffd7a411170fc5ca205d0736" category="list-text">Proxmox VE HA 通常會在大約兩分鐘內偵測到故障節點並恢復其虛擬機器，其中包括 60 秒的看門狗隔離逾時。在站台故障期間，SnapMirror 作用中同步容錯移轉和 Proxmox VE HA 恢復並行運作。</block>
+  <block id="18dcedc2affd6709d85998aa116d5ef9" category="list-text">使用具有節點優先權的 HA 節點親和性規則，將虛擬機器放置在與其主儲存設備位於相同站台的節點上，並允許它們容錯移轉到另一個站台。</block>
+  <block id="9308d326d76e0bfecb7c862fcdf01b7b" category="list-text">站台容錯移轉後，請將受影響 VM 的 HA<block ref="a571d3783c8d552371d5e8b486416b18" prefix=" " category="inline-code"></block> 屬性設為<block ref="cfcd208495d565ef66e7dff9f98764da" prefix=" " category="inline-code"></block>，直到您將儲存設備容錯回復為止。否則，HA 會在站台 A 節點恢復後，立即將 VM 移轉回該節點，而作用中儲存設備仍位於站台 B。</block>
+  <block id="051ff290ccdca7012fb794f12f9b0bd7" category="list-text">確保客體作業系統磁碟逾時時間長於預期的容錯移轉時間，以便客體在儲存設備容錯移轉期間不會報告 I/O 錯誤。</block>
+  <block id="cd42b973e1ce697f4d6d007ecd62a297" category="section-title">與 Storage Manager for Proxmox 整合</block>
+  <block id="cc5e70eb78e630c431c1ec15482635c2" category="paragraph">Storage Manager for Proxmox（SMP）為 Proxmox VE 管理員提供單一介面，以資源配置 ONTAP 共享儲存設備，並透過使用 ONTAP 快照與 FlexClone 技術來備份、還原及 Clone 虛擬機器。SMP 透過其 API 連線至 Proxmox VE 叢集與 ONTAP，因此在 Proxmox VE 節點上不需要代理程式。</block>
+  <block id="429d192cf22757b17686f7377bb5d58e" category="paragraph">SMP 和 SnapMirror 作用中同步可防範不同類型的故障。SnapMirror 作用中同步可在儲存設備或站台故障期間保持 VM 運作，但它會同步複寫每次寫入，包括意外刪除、客體更新失敗或被勒索軟體加密的資料。SMP 快照提供時間點複本，以便從這些邏輯故障中恢復。兩者結合使用，可從相同的 ONTAP 儲存設備提供持續可用度和快速的作業恢復。</block>
+  <block id="fca437e3555c66f269fb4967e579b7c0" category="cell">保護階層</block>
+  <block id="5cb6602889212283e8d1310c7a0d537f" category="cell">保護免受</block>
+  <block id="8d904b2374a31b7e4cb1f98a0aa20fbd" category="cell">恢復點</block>
+  <block id="c39d89ad1b38ee59f19539f3e45cec1e" category="cell">管理工具</block>
+  <block id="819f49b5686c89515398c65fe7633a24" category="cell">儲存系統故障和站台故障</block>
+  <block id="a4e761c78f1dbbbc4b77d200a2d15fc3" category="cell">零資料遺失</block>
+  <block id="253b40ae359ba25b56231803430c4873" category="cell">ONTAP</block>
+  <block id="1e19c3e01fcf49cf529ef390265e7352" category="cell">SMP 備份（ONTAP 快照）</block>
+  <block id="8dd371d7b7dbfac0e4043c8fd946b3c5" category="cell">意外刪除、資料毀損、更新失敗和勒索軟體</block>
+  <block id="3333150caf71c893c9f65c240d344943" category="cell">上次排程或隨需備份</block>
+  <block id="edb3c4d18c4d80ab94156b7df8669c17" category="cell">SMP</block>
+  <block id="ca00142b235d517731879efdb5863269" category="cell">SnapMirror 非同步連出或 Proxmox Backup Server</block>
+  <block id="22cc5144d507c0a738d77150b9c6ae70" category="cell">兩個站台遺失以及長期保留</block>
+  <block id="73bf1614832a53f51502d28830f62e81" category="cell">上次複寫或備份</block>
+  <block id="fcac45db1b31ec59e8aa4dd289166e18" category="cell">ONTAP 或 Proxmox Backup Server</block>
+  <block id="be062cdcabbb3055334e8f19b4bdf378" category="section-title">備份與還原</block>
+  <block id="dc6bac73c73356298062a7f88ba5618d" category="paragraph">SMP 隨需或依原則建立儲存設備 Volume 的損毀狀況一致或檔案一致備份（做為 ONTAP 快照），並還原個別 VM、儲存設備或資源群組：</block>
+  <block id="7ee45f2d4198916a27d0d4e47bd67918" category="list-text">使用資源群組和備份原則，將相同的排程與保留套用至租戶或應用程式的虛擬機器。</block>
+  <block id="4dddd43db5c606308dcba76f0480822f" category="list-text">對於執行 QEMU 客體代理程式的虛擬機器，請使用檔案一致的備份，以便在 ONTAP 建立快照之前使客體檔案系統處於靜止狀態。</block>
+  <block id="1643209145cfe310a23496f5240367bd" category="list-text">SMP 管理作用中的儲存設備。在 SnapMirror 作用中同步容錯移轉之後，請在 SMP 中執行探索，以便將儲存設備對應到叢集 B，然後再執行備份或還原作業。</block>
+  <block id="11d4c80ca29dd0d506da4d5bad065210" category="list-text">如需兩個站台之外的第三個複本，或需要更長時間的保留，請從受保護的 Volume 新增 SnapMirror 非同步連出關係，或使用 Proxmox Backup Server。</block>
+  <block id="569aaaf444a43671282f06f050a49c4d" category="list-text">SnapMirror 作用中同步不支援防篡改快照，因此請勿在 SMP 中為受保護的 Volume 啟用快照鎖定。</block>
+  <block id="4b6826f4f20a8e7e7a3b42ccb81d514f" category="section-title">虛擬機器 Clone</block>
+  <block id="4b4201ed8bc72ef2a6c98fbdd52822d8" category="paragraph">SMP 使用 ONTAP FlexClone 技術建立極具空間效率的 VM Clone，用於開發、測試和快速資源配置。在受保護儲存設備中建立的 Clone 會使用兩個站台的複寫頻寬和容量。請將不需要業務連續性的 Clone 和測試儲存設備從 SnapMirror 作用中同步保護中排除。</block>
+  <block id="2114245d5cf8894ed2cb7ad643189f72" category="section-title">SMP 放置</block>
+  <block id="cc2284f3b900ca3c9a70d89e25b3d7ae" category="list-text">將 SMP VM 作為 HA 資源執行於受 SnapMirror 作用中同步保護的共享儲存設備上，以便 SMP 在儲存設備或站台故障後仍然可用。</block>
+  <block id="6683e0d78a0e8098b41d63309d605d3c" category="list-text">在 SMP 中註冊 Proxmox VE 叢集和兩個 ONTAP 叢集，以便 SMP 可以存取任一站台的作用中儲存設備。</block>
+  <block id="d9db5c5916f175a7e5ea6cacfbfbb595" category="section-title">適用於 NAS 的 NFS 共享儲存設備，支援 SnapMirror 作用中同步</block>
+  <block id="0ea49bcef68dc3ac5abdd3c83dd33374" category="inline-link-macro">NAS 組態工作流程</block>
+  <block id="8bc650871d32fa6cfcd8256e2ea134f7" category="paragraph">從 ONTAP 9.19.1 開始，SnapMirror 作用中同步可保護 NAS 工作負載。下列注意事項僅適用於 NFS 共享儲存設備。若要使用 NFS 儲存設備部署解決方案，請遵循 <block ref="828a4b8441b810633f9861a825889f60" category="inline-link-macro-rx"></block>。</block>
+  <block id="f35786696ed931ffbbeda00743aa1087" category="section-title">SVM 層級保護與網路身分</block>
+  <block id="471edb80801a3e97185fe75d1e8ce3ae" category="list-text">NAS 的 SnapMirror 作用中同步可保護整個儲存設備虛擬機器（SVM）。您可以保護 SVM 中的所有 Volume，也可以排除選取的 Volume。僅支援 FlexVol Volume，且 SVM 不能包含 LUN。</block>
+  <block id="27a951e48c9efb6febed179f65dca6aa" category="list-text">次要 SVM 會保持休眠狀態，其 LIF 處於關閉狀態，直到發生容錯移轉為止。ONTAP 會複寫 SVM 組態，包括 LIF IP 位址、匯出原則和 NFS 設定，因此次要 SVM 在容錯移轉後會提供相同的 NFS 端點。</block>
+  <block id="9e8a4f44302c11c52c7c7380f2b9df3a" category="list-text">對於 NFSv3 及更高版本，容錯移轉不會造成中斷。</block>
+  <block id="85d7c859ad7098941571d061357338e2" category="list-text">NAS 的 SnapMirror 作用中同步為作用中/被動，因此站台 B 節點上的虛擬機器會透過站台間網路對主 SVM 進行讀取與寫入。對於兩個站台上的作用中工作負載，請使用兩個複寫方向相反的 SVM，每個站台各一個主 SVM，並讓每個虛擬機器的節點親和性規則遵守其主 SVM 所在的站台。</block>
+  <block id="cf7f2754d280b30ec1d1edb2fe39d091" category="list-text">AFF A 系列和 C 系列雙節點叢集支援 NAS 的 SnapMirror 作用中同步。</block>
+  <block id="27951ac55a2cb257dfc1948339891ef3" category="section-title">NFS 用戶端設定</block>
+  <block id="81b409d9c925f3465ebdcc4e5ec44c34" category="paragraph">NFS 儲存設備請使用 NFSv3 或 NFSv4.1。保持預設的硬裝載行為，不要新增 <block ref="dc58a7971816b41f3cc2b8c0f5f1bf0c" prefix=" " category="inline-code"></block> 裝載選項，以便在容錯移轉期間 NFS I/O 會重試而不是失敗。</block>
+  <block id="c603a3c2ad895621d9d17e6a487ae512" category="paragraph">為了提高效能和容錯能力，請使用多個 TCP 連線連接到儲存設備。請使用 nConnect 或工作階段中繼，不要同時使用兩者：</block>
+  <block id="565808c37d704fe74bb1fbaa2c4394cd" category="list-text">*nConnect。*對單一 NFS LIF 位址開啟多個 TCP 連線，例如<block ref="6ad27604f562c1a2600540bd7f1094d4" prefix=" " category="inline-code"></block>。nConnect 可與 NFSv3 和 NFSv4.1 以及單一 VIP LIF 位址搭配使用，因此是適用於 NAS 的 SnapMirror 主動式同步的建議選項，包括第 3 階層網路。</block>
+  <block id="2042512ad460fc59bd9840e2dbf6204c" category="inline-link-macro">NFS 中繼</block>
+  <block id="51a2ca1029abc1f9bfc0bad136baa9da" category="list-text">*工作階段中繼。*將多個資料 LIF 群組為一個 NFSv4.1 工作階段，例如<block ref="55b8848a94663040bcff169fc53962e4" prefix=" " category="inline-code"></block>。工作階段中繼需要 NFSv4.1 或更新版本。僅當受保護的 SVM 具有多個用戶端可在兩個站台存取的資料 LIF 時才使用，例如在延伸的第 2 層網路中。如需詳細資訊，請參閱 <block ref="4949b14d37bd9107d0909696d8d04282" category="inline-link-macro-rx"></block>。</block>
+  <block id="38f2043bbbde7986b43c0e71c6ff6e35" category="paragraph">有關裝載選項命令和驗證步驟，請參閱<block ref="ff7608fcce5dc1b873f9e65c70c5ca53" category="inline-link-macro-rx"></block>。</block>
+  <block id="5bbdd7fd1e82ddd156cf26ebcf1b37ba" category="section-title">使用 SMP 進行 NFS 儲存資源配置</block>
+  <block id="f30d9226724ab04a28dde56524b593f6" category="paragraph">SMP 會資源配置 ONTAP Volume，建立或選擇匯出原則，並將該 Volume 作為 NFS 共享儲存設備裝載到您選擇的 Proxmox VE 節點上。對於受保護的 SVM 中的儲存設備：</block>
+  <block id="deb5deb7a776fbb16332542b5c3a9595" category="list-text">在主 SVM 中資源配置 Volume，並選擇 NFS LIF 或第 3 階層網路中的 VIP LIF 作為偏好的 LIF。容錯移轉後，次要 SVM 會使用相同的位址，因此儲存設備定義仍然有效。</block>
+  <block id="be21412abb6a9689a94e9a727476650f" category="list-text">在兩個站台的所有 Proxmox VE 節點上裝載儲存設備，以便 HA 可以在任何節點上重新啟動虛擬機器。</block>
+  <block id="ac107a07e03ec30b3a60f46800bf57c8" category="list-text">請確保匯出原則允許兩個站台上的 Proxmox VE 節點。ONTAP 會將匯出原則複寫至次要 SVM。</block>
+  <block id="0c2e69e0c7bbfba5226b5d892c6bf5c4" category="list-text">資源配置完成後，驗證該 Volume 是否包含在 SnapMirror 作用中同步保護中。</block>
+  <block id="3fb50416a6d0ce54144bf9b9232b15e0" category="section-title">具有 VIP LIF 和 BGP 的第 3 階層網路</block>
+  <block id="a73772ff83a942383515066309f738da" category="paragraph">SnapMirror NAS 的作用中同步要求主要和次要 SVM 具有相同的 IP 位址。當 NFS VLAN 跨站台擴展時，LIF IP 位址會隨 SVM 一起移動。當站台透過路由的階層 3 網路連接時，站台 A LIF 的子網路在站台 B 中不存在。</block>
+  <block id="6d315f23909c8daf7f5049b45048a477" category="admonition">在發行之時，NetApp 尚未記錄將搭配 BGP 的 VIP LIF 作為 NAS 的 SnapMirror 作用中同步的合格組態。在規劃第 3 層設計之前，請向 NetApp 確認目前的支援情況。否則，請在站台之間延伸 NFS VLAN。MetroCluster IP 組態支援搭配 BGP 的 VIP LIF。</block>
+  <block id="b56f5228684361ab9f3149522a561c7c" category="paragraph">ONTAP 虛擬 IP（VIP）LIF 解決了這個問題。VIP LIF 不屬於任何子網路。ONTAP 使用邊界閘道協定（BGP）將 VIP 位址作為 /32 主機路由通告給對等路由器，因此該位址可以在站台之間移動而無需擴展 VLAN。</block>
+  <block id="f8d5789f6960a5a50be3c1abbe18176b" category="inline-image-macro">用於 NFS 共享儲存設備、在階層 3 網路中從作用中站台透過 BGP 通告的 VIP LIF。編號的項目將在圖表後方說明。</block>
+  <block id="f820d03ef509641a4e63ddd15db75def" category="paragraph"><block ref="f820d03ef509641a4e63ddd15db75def" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="54c52b4bad30d5f1205915e15968cdf8" category="list-text">兩個站台上的每個節點在系統 SVM 中都有 BGP LIF，這些 LIF 與其站台的路由器建立對等連線。BGP LIF 是節點特定的且不會進行複寫，因此您需要在兩個叢集上設定它們。</block>
+  <block id="8e4f64d19bf08ef1734513634b6c6dee" category="list-text">主 SVM 託管 NFS VIP LIF。叢集 A 通告 /32 主機路由，兩個站台的 Proxmox VE 節點透過路由網路存取儲存設備。</block>
+  <block id="e4b2bd9c59da2b6f140a86fa3e95a3dc" category="list-text">在 SnapMirror 作用中同步容錯移轉之後，VIP LIF 在次要 SVM 上啟動，叢集 B 通告主機路由，路由器在站台 B 上收斂。</block>
+  <block id="52ee21d9094e34510e59eae007375582" category="paragraph">首次在 ONTAP 中規劃 BGP 時，了解每個 LIF 所屬的 SVM 會有所幫助。BGP LIF 屬於 IPspace 的系統 SVM，而非資料 SVM。每個叢集上的一組 BGP LIF 可服務該 IPspace 中每個資料 SVM 的 VIP LIF，因此您不需要為每個租戶建立 BGP LIF。下圖顯示一個叢集上的 LIF 與連接埠配置，其中 BGP LIF 位於 VLAN 連接埠上。</block>
+  <block id="f7082ded5d457e7250cbf01da509f766" category="inline-image-macro">位於 IPspace 系統 SVM 中且以 VLAN 連接埠為主連接埠的 BGP LIF，可為該 IPspace 中所有資料 SVM 的 VIP LIF 提供服務。編號的項目將在圖表之後說明。</block>
+  <block id="5bf44eedd2176b633da23b6f2be2aec6" category="paragraph"><block ref="5bf44eedd2176b633da23b6f2be2aec6" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="fd8051fc39402e606b4a472ffd406c0c" category="list-text">每個節點都有兩個用於 BGP 的連接埠，在本例中為 VLAN 連接埠 <block ref="e3c0e2e7713c1b4eef5f60bb3685d6bc" prefix=" " category="inline-code"></block> 和 <block ref="ce9b8d475671d1a0e75802f168663e29" prefix=" " category="inline-code"></block>。每個連接埠直接連接到不同的路由器。</block>
+  <block id="c409f9fbcdc4365c091b014ebe3d100b" category="list-text">每個節點在系統 SVM 中都有兩個 BGP LIF，分別位於每個連接埠上，使用 /31 子網路並與一部路由器建立 BGP 對等群組。對於預設 IPspace，系統 SVM 即為叢集 SVM。對於自訂 IPspace，它是與 IPspace 同名的 SVM。</block>
+  <block id="215e1612696a26401e5fb6ebc1a0e711" category="list-text">同一 IPspace 中的資料 SVM 代管 VIP LIF，且不需要自己的 BGP LIF。BGP 對等群組會通告 IPspace 中所有 SVM 的 VIP 路由。</block>
+  <block id="baf18ecdec327b66262f20d559b813ed" category="list-text">當您建立第一個 BGP 對等群組時， ONTAP 會在每個節點上建立一個 VIP 連接埠，例如<block ref="3dc5b961f4ca98b2676f527e321840a8" prefix=" " category="inline-code"></block>。VIP LIF 託管在 VIP 連接埠上，並且可透過在 IPspace 中託管 BGP LIF 的節點上的每個連接埠來存取。</block>
+  <block id="a98df894b323e82c4b809ae5dd0cc6e7" category="paragraph">BGP LIF 的主連接埠可以是實體連接埠、VLAN 連接埠、介面群組或介面群組上的 VLAN。介面群組並非必需。NetApp 技術報告 TR-4949 建議每個 IPspace 使用兩個 BGP LIF，分別位於兩個分隔的連接埠上，每個 LIF 直接連接到不同的第一跳路由器。</block>
+  <block id="1184c4177555dbbc2053615ac9e93d43" category="paragraph">請牢記以下準則：</block>
+  <block id="ef0b903e038861e9d2190da4e708a379" category="list-text">BGP LIF 不會容錯移轉。備援機制來自每個節點的兩個 BGP LIF，每個 LIF 分別與不同的路由器建立對等關係。如果某個節點遺失了所有與某個 SVM 相關的 BGP 工作階段，ONTAP 會將該 VIP LIF 移至另一個與該 SVM 具有作用中 BGP 工作階段的節點。</block>
+  <block id="0063bfdc71e1ba94c7a935070b55248d" category="list-text">使用外部 BGP （eBGP），為每個 ONTAP 節點和每個路由器指派唯一的私有自治系統編號 （ASN）。</block>
+  <block id="d84cc606ab808229d1bc9a97e3a4e5e3" category="list-text">每個 BGP LIF 及其路由器使用 /31 子網路（子網路遮罩 255.255.255.254）。將奇數位址指派給 BGP LIF，將偶數位址指派給路由器。</block>
+  <block id="a1dd9e1dc984fc722e987a7f0363d60c" category="list-text">ONTAP 不處理來自路由器的路由。請設定路由器，使其接受來自 ONTAP 的 /32 主機路由，並且不要向叢集發送路由更新。</block>
+  <block id="792deb5dfb95ccb81c2fe9921065b6c7" category="list-text">Proxmox VE 節點不得與 VIP 位址共享子網路。節點與儲存設備之間的路徑上必須有備援的階層 3 路由器，例如支援 VRRP 或 HSRP 的路由器。</block>
+  <block id="ef90771cfcb9d51de8841e2e1d7636b8" category="list-text">設定 BGP 對等群組<block ref="03c106aaf4719af41376007c9ee1482e" prefix=" " category="inline-code"></block>，以便每個叢集都能從其本機路由器學習到預設路由。容錯移轉後，指向站台 A 閘道的路由在站台 B 將失效。</block>
+  <block id="41d4e3001b4c526aa2c567d67144ddfb" category="list-text">啟用多重路徑路由，使出站 VIP 流量使用所有可用的 BGP LIF 連接埠。</block>
+  <block id="9faedc00a2b3d1b09efd43c02609b792" category="list-text">將 BGP 保持時間從預設的 180 秒降低。TR-4949 建議保持時間為 3 秒。路由器僅在保持定時器逾時時才會從故障叢集中撤迴路由，並且在儲存系統故障期間，站台 A 的路由器將保持線上。</block>
+  <block id="6b0096a280c04de21fb5d2ef96df1cb7" category="inline-link-macro">ONTAP SnapMirror 作用中同步架構</block>
+  <block id="2dfb829fe1e40af1cb9ddc839717eb0e" category="list-text"><block ref="2dfb829fe1e40af1cb9ddc839717eb0e" category="inline-link-macro-rx"></block></block>
+  <block id="59cdd5a932a86ccfe106d9d224aa5a2b" category="inline-link-macro">ONTAP SnapMirror 作用中同步的先決條件</block>
+  <block id="a55a3b9f6e5927a79dab8934dd8ffe77" category="list-text"><block ref="a55a3b9f6e5927a79dab8934dd8ffe77" category="inline-link-macro-rx"></block></block>
+  <block id="5af358fa734bf66107b5e0f599f51d45" category="inline-link-macro">ONTAP MetroCluster 對虛擬 IP 和 BGP 的注意事項</block>
+  <block id="a63fcdbaf493520c78859af2ce7f4131" category="list-text"><block ref="a63fcdbaf493520c78859af2ce7f4131" category="inline-link-macro-rx"></block></block>
+  <block id="84f5ebf9b3c2ee531cc7bff9814a5313" category="inline-link-macro">MetroCluster 資料保護和災難恢復</block>
+  <block id="223aed3cad24ee06eb1a1758feeb27c0" category="list-text"><block ref="223aed3cad24ee06eb1a1758feeb27c0" category="inline-link-macro-rx"></block></block>
+  <block id="9e4d208eddea6bb1add725ba82eaf542" category="list-text"><block ref="9e4d208eddea6bb1add725ba82eaf542" category="inline-link-macro-rx"></block></block>
+  <block id="b5035a2b2da0391f4ca096afc9a3207a" category="inline-link-macro">TR-4949：資料中心內搭配 ONTAP 的 BGP/VIP</block>
+  <block id="8aadede52d3b4cac5a9857c363821b2c" category="list-text"><block ref="8aadede52d3b4cac5a9857c363821b2c" category="inline-link-macro-rx"></block></block>
+  <block id="430e0f26153fc08d5064456a63dd7d84" category="inline-link-macro">Proxmox VE 叢集管理程式</block>
+  <block id="d6405e5d5ec6aebf79309244812c9f50" category="list-text"><block ref="d6405e5d5ec6aebf79309244812c9f50" category="inline-link-macro-rx"></block></block>
+  <block id="0e47570de34d34f503e569132e73b40c" category="inline-link-macro">Proxmox VE 高可用度</block>
+  <block id="95ff68ea490d91143431d474341e6917" category="list-text"><block ref="95ff68ea490d91143431d474341e6917" category="inline-link-macro-rx"></block></block>
+  <block id="f535eb1278ad100b4d323539a7942781" category="section-title">2026 年 10 月 14 日</block>
+  <block id="9c6fb696da0cdd15c87ef7016fe4f6ef" category="list-text">為 Proxmox VE 新增了搭配 ONTAP SnapMirror 作用中同步的業務連續性解決方案。</block>
+  <block id="2f8480a0bd37c11da2dff9d9b62c37ea" category="list-text"><block ref="2f8480a0bd37c11da2dff9d9b62c37ea" category="inline-link-macro-rx"></block></block>
+  <block id="b9509c2be2f49b59c9f2d64393ee8d8a" category="paragraph">了解 Proxmox VE stretch 叢集如何透過適用於 NAS 的 SnapMirror 作用中同步，在儲存設備或站台故障的情況下保持虛擬機器運作，並實現零 RPO。內容包括 corosync 和 QDevice 的設計注意事項、 ONTAP Mediator 和 ONTAP Cloud Mediator 選項、用於第 3 階層網路且具備 BGP 的 VIP LIF，以及與 MetroCluster 的比較。</block>
+  <block id="f79744208db864a6c7f8beb3bb598635" category="list-text"><block ref="f79744208db864a6c7f8beb3bb598635" category="inline-link-macro-rx"></block></block>
+  <block id="1bc5e6d2348849b5c1c0bab88934bc0f" category="paragraph">設定中介器，保護 NFS SVM，使用 QDevice 建置延伸叢集，資源配置 NFS 共享儲存設備，並使用 Storage Manager for Proxmox 設定 HA 和 VM 備份。</block>
+  <block id="5177be93f9cdfe3b7df558b63f798e77" category="sidebar">Proxmox VE 工作負載的業務連續性</block>
+  <block id="274fe65c32318cf5c48e4591b8045f37" category="sidebar">配置 NAS 儲存設備</block>
 </blocks>
