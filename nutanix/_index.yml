@@ -1,0 +1,28 @@
+---
+indexpage:
+  title: NetApp Nutanix 虛擬化解決方案
+  summary: NetApp Nutanix 虛擬化解決方案示範如何將 NetApp ONTAP 用作 Nutanix 雲端平台的外部 NFS 儲存設備，以便您可以獨立擴充運算和儲存設備。
+  lead: NetApp Nutanix 虛擬化解決方案示範如何將 NetApp ONTAP 用作 Nutanix 雲端平台的外部 NFS 儲存設備，以便您可以獨立擴充運算和儲存設備。
+  tiles:
+  - title: 開始
+    links:
+    - title: 了解搭配 ONTAP 儲存設備的 Nutanix
+      url: nutanix-overview.html
+    - title: Nutanix 雲端平台文件
+      url: https://portal.nutanix.com/
+  - title: 部署 Nutanix 與 ONTAP
+    links:
+    - title: 準備部署
+      url: nutanix-connectivity.html
+    - title: 部署 Nutanix 運算叢集
+      url: nutanix-deploy-cluster.html
+    - title: 設定 ONTAP Volume 和權限
+      url: nutanix-ontap-storage.html
+    - title: 連接 ONTAP NFS 儲存設備
+      url: nutanix-attach-storage.html
+  - title: 規劃與保護
+    links:
+    - title: 資料保護、災難恢復和限制
+      url: nutanix-data-protection.html
+    - title: 為 Nutanix AHV 移轉調整 ONTAP 儲存設備大小
+      url: nutanix-sizing.html

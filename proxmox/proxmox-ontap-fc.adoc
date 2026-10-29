@@ -57,8 +57,25 @@ cat /sys/class/fc_host/host*/port_name
 +
 image:proxmox-ontap-fc-001.png["FC介面詳情"]
 
-. 建立 igroup 並填入主機 FC 發起程序。
-. 在 SVM 上建立所需大小的 LUN，並將其呈現給上一個步驟所建立的 igroup。確保在ASA系統的「安全性」標籤上啟用反勒索軟體保護，並在AFF/ FAS系統的「磁碟區安全」標籤上啟用反勒索軟體保護。
+. 建立作業系統類型設定為 `linux` 的 igroup，並新增主機 FC 啟動器。
++
+Proxmox VE 是基於 Debian Linux，因此請針對包含 Proxmox VE 主機啟動器的 igroup 使用 `linux` 作業系統類型。在 System Manager 中，選擇 *Linux* 作為主機作業系統。如果您使用 ONTAP CLI，請執行下列命令。
+
++
+[source, cli]
+----
+lun igroup create -vserver <svm_name> -igroup <igroup_name> -protocol fcp -ostype linux -initiator <wwpn_1>,<wwpn_2>
+----
+. 在 SVM 上建立 LUN，將作業系統類型設為 `linux` 並設定所需大小，然後將其呈現給上一個步驟中建立的 igroup。確保 ASA 系統在「安全性」標籤中啟用反勒索軟體保護，AFF/FAS 系統在「Volume 安全性」標籤中啟用反勒索軟體保護。
++
+在 System Manager 中，選擇 *Linux* 作為主機作業系統。如果您使用 ONTAP CLI，請執行下列命令。
+
++
+[source, cli]
+----
+lun create -vserver <svm_name> -path /vol/<volume_name>/<lun_name> -size <size> -ostype linux
+lun mapping create -vserver <svm_name> -path /vol/<volume_name>/<lun_name> -igroup <igroup_name>
+----
 +
 image:proxmox-ontap-fc-002.png["lun詳情"]
 

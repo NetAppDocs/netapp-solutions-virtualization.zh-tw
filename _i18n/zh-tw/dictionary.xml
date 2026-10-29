@@ -7119,7 +7119,6 @@
   <block id="0a6a83d62edac699a685a5110adc5b5a" category="list-text">每個控制器會建立兩個專用於 FC 的 LIF。</block>
   <block id="4a5e89db07ee92045ddc5ac57264b75b" category="inline-image-macro">FC介面詳情</block>
   <block id="9ca441070522dd2f1d54b6ab432b7332" category="paragraph"><block ref="9ca441070522dd2f1d54b6ab432b7332" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="d55490705ccca6cce7810fa807fc74cd" category="list-text">建立 igroup 並填入主機 FC 發起程序。</block>
   <block id="1247a43611c0d600007445125567c7d8" category="list-text">在 SVM 上建立所需大小的 LUN，並將其呈現給上一個步驟所建立的 igroup。確保在ASA系統的「安全性」標籤上啟用反勒索軟體保護，並在AFF/ FAS系統的「磁碟區安全」標籤上啟用反勒索軟體保護。</block>
   <block id="4d96faf61f4af2b33014302c604ee549" category="inline-image-macro">lun詳情</block>
   <block id="c9546f4d399f52fa0fbc3b1d384bbe38" category="paragraph"><block ref="c9546f4d399f52fa0fbc3b1d384bbe38" category="inline-image-macro-rx" type="image"></block></block>
@@ -7146,8 +7145,6 @@
   <block id="2122c33556de1dbae33223ccafc71df3" category="list-text">確保SVM可用且已啟用iSCSI協定。跟隨 <block ref="7c79a8d96ccab5e00ffe5a51372cb5c5" category="inline-link-macro-rx"></block>。</block>
   <block id="48590fe3408a0ed194b7d763a5f58b44" category="list-text">每個控制器會建立兩個專用於 iSCSI 的 LIF。</block>
   <block id="851413bf6fa6ef971ec8791be965f7e9" category="paragraph"><block ref="851413bf6fa6ef971ec8791be965f7e9" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="e2975f34bb0c193ad8c157c8c19f7a1a" category="list-text">建立 igroup 並填入主機 iSCSI 發起程序。</block>
-  <block id="022ff6b8a2a7f0f8a870dcecfe149e64" category="list-text">在 SVM 上建立所需大小的 LUN，並將其呈現給上一個步驟所建立的 igroup。確保在ASA系統的安全性標籤中啟用反勒索軟體保護。對於AFF/ FAS系統，請確保在磁碟區的安全性標籤上啟用反勒索軟體保護。</block>
   <block id="508651d2a8dc6c48c0b3acac0462c605" category="paragraph"><block ref="508651d2a8dc6c48c0b3acac0462c605" category="inline-image-macro-rx" type="image"></block></block>
   <block id="cd76c01fc90f38590f1723a0e3b6c5e3" category="paragraph">完成下列任務，將 iSCSI LUN 設定為 Proxmox VE 中的共用 LVM 儲存。</block>
   <block id="30f170d7ac8b903032f54b8a8a70fb1a" category="list-text">使用管理使用者介面<block ref="386c071bd7898138d6219d21f97e168d" prefix=" " category="inline-code"></block>按一下“資料中心”，選擇“儲存”，按一下“新增”，然後選擇“iSCSI”。</block>
@@ -7199,7 +7196,6 @@
   <block id="d985a6fbcfbe393df03f57368e7f04fd" category="list-text">將收集到的主機 NQN 和 WWPN 資訊提供給儲存管理員，並請求所需大小的 NVMe 命名空間。</block>
   <block id="2ec446f10b7b466ea6a7401bc4407402" category="list-text">確保SVM可用且已啟用NVMe協定。請參閱 <block ref="dff9a6cc2313f520177d7aee32699621" category="inline-link-macro-rx"></block>。</block>
   <block id="c8bbdfd862a2945db0df1f19e39be37f" category="paragraph"><block ref="c8bbdfd862a2945db0df1f19e39be37f" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="3e81c631da00b7287028256b42d7f3c0" category="list-text">建立子系統並指派主機 NQN（如果使用 CLI）。請點擊上方連結查看詳情。</block>
   <block id="b20376398e0425f815da0c982b56b96b" category="list-text">請確保在安全性標籤中啟用反勒索軟體保護。</block>
   <block id="8d9e6709bc2c4a996ae2505a1837dd74" category="inline-image-macro">反勒索軟體狀態</block>
   <block id="7e3d11ff5a9754f504115873fa5b8542" category="paragraph"><block ref="7e3d11ff5a9754f504115873fa5b8542" category="inline-image-macro-rx" type="image"></block></block>
@@ -7947,7 +7943,6 @@
   <block id="1d73fea09ff2c41139aaaf8f795e18f8" category="list-text">等待系統自動安裝必要的元件。</block>
   <block id="ee16a42e32bf023103544c9f7c590ada" category="list-text">安裝完成後，點選 *View* 或開啟網頁瀏覽器至<block ref="17c02bfa253344cd8c235e1435ecfead" prefix=" " category="inline-code"></block>以存取 Storage Manager</block>
   <block id="344f4624c197942068a6539cdc4138e0" category="paragraph">例如：<block ref="abad16881186eb7f5a53f159fcbe4243" prefix=" " category="inline-code"></block></block>
-  <block id="d82fbaed65c0ae471da1583d14a37bca" category="list-text">開啟網頁瀏覽器，輸入以下指令存取 SMP 使用者介面<block ref="05b17a751d9f33ab7e7a878a6ab984a2" prefix=" " category="inline-code"></block></block>
   <block id="6e4d0d0f8b4808f7b2807bccfe8483da" category="example-title">檢視 SMP 登入畫面</block>
   <block id="e85bb40f2eb4ebf12cc2fb9761d2a1cd" category="image-alt">SMP 登入介面</block>
   <block id="870cd4e95860fe235c8a2e3b15aede36" category="example-title">檢視 SMP 主畫面</block>
@@ -10328,7 +10323,6 @@
   <block id="d6405e5d5ec6aebf79309244812c9f50" category="list-text"><block ref="d6405e5d5ec6aebf79309244812c9f50" category="inline-link-macro-rx"></block></block>
   <block id="0e47570de34d34f503e569132e73b40c" category="inline-link-macro">Proxmox VE 高可用度</block>
   <block id="95ff68ea490d91143431d474341e6917" category="list-text"><block ref="95ff68ea490d91143431d474341e6917" category="inline-link-macro-rx"></block></block>
-  <block id="f535eb1278ad100b4d323539a7942781" category="section-title">2026 年 10 月 14 日</block>
   <block id="9c6fb696da0cdd15c87ef7016fe4f6ef" category="list-text">為 Proxmox VE 新增了搭配 ONTAP SnapMirror 作用中同步的業務連續性解決方案。</block>
   <block id="2f8480a0bd37c11da2dff9d9b62c37ea" category="list-text"><block ref="2f8480a0bd37c11da2dff9d9b62c37ea" category="inline-link-macro-rx"></block></block>
   <block id="b9509c2be2f49b59c9f2d64393ee8d8a" category="paragraph">了解 Proxmox VE stretch 叢集如何透過適用於 NAS 的 SnapMirror 作用中同步，在儲存設備或站台故障的情況下保持虛擬機器運作，並實現零 RPO。內容包括 corosync 和 QDevice 的設計注意事項、 ONTAP Mediator 和 ONTAP Cloud Mediator 選項、用於第 3 階層網路且具備 BGP 的 VIP LIF，以及與 MetroCluster 的比較。</block>
@@ -10336,4 +10330,423 @@
   <block id="1bc5e6d2348849b5c1c0bab88934bc0f" category="paragraph">設定中介器，保護 NFS SVM，使用 QDevice 建置延伸叢集，資源配置 NFS 共享儲存設備，並使用 Storage Manager for Proxmox 設定 HA 和 VM 備份。</block>
   <block id="5177be93f9cdfe3b7df558b63f798e77" category="sidebar">Proxmox VE 工作負載的業務連續性</block>
   <block id="274fe65c32318cf5c48e4591b8045f37" category="sidebar">配置 NAS 儲存設備</block>
+  <block id="97838d03852984f65fe015efab3eba80" category="summary">使用 Prism Element 將 ONTAP NFS Volume 作為儲存 Container 附加到 Nutanix 運算叢集。</block>
+  <block id="b18bbcdec49ce25933fc3cb2880e3829" category="doc">將 ONTAP NFS 儲存設備連接到 Nutanix 運算叢集</block>
+  <block id="f84f4d5b1dbe9f990c8c39397fe00692" category="paragraph">在資源配置 ONTAP Volume 並設定連線後，使用 Prism Element 或 Prism Central 將 ONTAP NFS Volume 作為儲存 Container 連接到 Nutanix 運算叢集。</block>
+  <block id="189451dcfbf73c8ca0df125c3630dff2" category="paragraph">請確保滿足以下先決條件：</block>
+  <block id="5b41045240da2c16858a76c3a7315e5b" category="list-text">ONTAP 叢集或 SVM 可從 Nutanix 叢集存取。</block>
+  <block id="0a4a1009a2ed545dfc85afe68492a415" category="list-text">存在有效的 ONTAP 管理 LIF（IP 位址或 FQDN）。</block>
+  <block id="88cde953a67b7d523c1b0de377bef7f5" category="list-text">您擁有相應的 ONTAP 憑證。</block>
+  <block id="bc5c8741c963c580b76d67338533982d" category="list-text">已建立所需的 FlexVol、qtree 或資料夾匯出路徑，並已設定供 NFS 存取。</block>
+  <block id="471fb11d929eabe1846676075057e229" category="list-text">登入 Prism Element Web 控制台。</block>
+  <block id="86248b1d3534066ee794a93966d16996" category="list-text">從主選單中選擇 *儲存設備* ，然後按一下 *+ 連接外部儲存設備* 。</block>
+  <block id="afe2be3f17fda6c50527fa0572b0399b" category="list-text">在 *初始設定* 頁面上，審查可用資訊，然後按一下 *下一步*。</block>
+  <block id="e44a01642383cbf10b2aa6ac3aef254a" category="inline-image-macro">連接外部儲存設備精靈，初始設定頁面</block>
+  <block id="f297526f7767af54bd7d95f6421a2401" category="paragraph"><block ref="f297526f7767af54bd7d95f6421a2401" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="510e0263087017ede813c0551e2ca790" category="list-text">在 *連線詳細資料* 頁面上，選擇 *NetApp ONTAP* 作為外部儲存設備廠商，然後輸入下列值：</block>
+  <block id="c14873ad82550f662ba3fceda63d9bd4" category="list-text">*IP 位址（IPv4）或 FQDN*：輸入 ONTAP 叢集或 SVM 管理 LIF 位址或 FQDN。</block>
+  <block id="02a1c245020cdbc544434cc5ddeb33b5" category="list-text">*使用者名稱*：輸入 ONTAP 服務帳戶使用者名稱。</block>
+  <block id="3a3c7df736092f7633a49a023f4f5bcf" category="list-text">*密碼*：請輸入服務帳戶密碼。</block>
+  <block id="5a378b18f7bf0c4cabc6c655cd2f535e" category="paragraph">按一下 *Next* 。</block>
+  <block id="49686764afebb22740fe334d7c9e7f8c" category="inline-image-macro">連接外部儲存設備精靈，「連線詳細資料」頁面</block>
+  <block id="a399af38aee667575173f393bb545e76" category="paragraph"><block ref="a399af38aee667575173f393bb545e76" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="4861503a3f465d8f3482c0ad29995020" category="list-text">在 *儲存詳細資料* 頁面上，在 *外部儲存名稱* 中為 ONTAP 儲存系統指定一個唯一的名稱，在 *匯出路徑* 中輸入一個或多個儲存設備匯出路徑，然後按一下 *新增*。</block>
+  <block id="44545f1794f7b9315b94b6fed2321e6a" category="admonition">支援的匯出路徑包括 FlexVol 和 qtree 匯出路徑。</block>
+  <block id="2f59836f0225be101147115bd53ab7ce" category="inline-image-macro">連接外部儲存設備精靈，「儲存設備詳細資料」頁面顯示服務 Volume 匯出路徑選擇</block>
+  <block id="96ed365d0bb5a6bb739d07a824a51201" category="paragraph"><block ref="96ed365d0bb5a6bb739d07a824a51201" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="2f80c7c6141a4d837c0d3b3d563d7ec1" category="list-text">按一下 *附加*。</block>
+  <block id="f84591921bdb106114beec35c239c189" category="paragraph">系統將 ONTAP 儲存設備連接到 Nutanix 叢集。您可以在 Prism Element 的 *Tasks* 中監控進度和狀態資訊。</block>
+  <block id="22e4e008a7bf679c77fa0aa44ee55c99" category="inline-image-macro">「連接外部儲存」精靈的「儲存詳細資料」頁面顯示所選的匯出路徑及其容量</block>
+  <block id="f699fb900027f03a5d1c73a1c035147d" category="paragraph"><block ref="f699fb900027f03a5d1c73a1c035147d" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="d500a4dd57bdd348ad2c1ec6c580ec95" category="admonition">此 <block ref="bb0fc0de24da5f7976510a315e4b7120" prefix=" " category="inline-code"></block> 選項用於裝載選項中。</block>
+  <block id="435423e72dc328e48c58b391696afbb2" category="list-text">在組態期間新增的第一個匯出路徑會自動指定為預設儲存 Container，並標記為 *預設 Container*。</block>
+  <block id="c76d86f9397f068b7ff22b6601aef411" category="list-text">NetApp 建議使用多個 FlexVol Volume 作為儲存 Container，以分配虛擬機器工作負載並平衡容量使用率。</block>
+  <block id="407244745d89ec1c62a378bfd9c4982b" category="list-text">使用專用 Volume 進行中繼資料服務（管理）。</block>
+  <block id="3462594e2b91cfdf8704609ba1a33c12" category="list-text">除非匯出路徑已指派給叢集服務（中繼資料）Volume 或預設儲存 Container，否則您可以移除匯出路徑。</block>
+  <block id="143058cca38c3e14765cc87eccaea025" category="list-text">外部儲存設備連接到 Nutanix 運算叢集時無法移除。</block>
+  <block id="45872041b55539e7ecf32f329ffb131f" category="list-text">一個 Nutanix 運算叢集只能連接一個 ONTAP 外部儲存系統。</block>
+  <block id="90d57912caaff09634e842970f84d25f" category="list-text">Nutanix 建議每個節點最多 128 個虛擬機器，最多 32 個節點，以及在 DR 叢集之間最多 4,800 個 AOS 複寫的 vDisks（結合非同步與同步複寫）。</block>
+  <block id="48901db36539e5b09cdc319a4741e291" category="paragraph">掛載儲存設備後，在 Nutanix 雲端基礎架構（NCI）平台上部署 Prism Central，執行叢集管理和組態任務。您也可以透過 Prism Central 掛載 ONTAP 儲存設備。</block>
+  <block id="ef54739cb0e82cf668ee8e9322ded296" category="summary">準備環境並規劃 Nutanix AHV 純運算主機與 ONTAP 儲存設備控制器之間的網路連線。</block>
+  <block id="4281e247679a4e9f91958cb81df204a8" category="doc">準備部署搭配 ONTAP 儲存設備的 Nutanix Cloud Platform</block>
+  <block id="10e42d1cf4c2688d643b5f43089f4441" category="paragraph">審查將 Nutanix AHV 純運算主機連接到 ONTAP 儲存設備的先決條件和建議的網路架構。此設計可讓您獨立於運算擴充儲存容量和效能，因此無需僅為了擴充儲存設備而新增 Nutanix 節點。</block>
+  <block id="7326e2a7ee83bf39ecbd35e3781e34ad" category="paragraph">此設計在 Nutanix AHV 僅運算主機與 ONTAP 儲存設備控制器之間使用專用的儲存網路。儲存設備流量透過專用虛擬交換器（vswitch1）和外部儲存設備 VLAN，與管理和應用程式流量是隔離的。ONTAP 透過專用 SVM 資料 LIF 提供 NFSv3 儲存設備服務，而 SVM 管理 LIF 則與 REST API 搭配使用，以進行儲存設備管理與整合。</block>
+  <block id="1789a22e63c3bbffdd02ec4f18a611a2" category="paragraph">為了提高彈性和效能，Nutanix 純運算主機和 ONTAP 控制器在備援網路路徑上使用 LACP（作用中 / 作用中）。如果 LACP 無法使用，採用 MAC 綁定的作用中 / 作用中可在虛擬交換器階層提供負載平衡。儲存流量應位於專用的非路由 VLAN 上，而管理、即時移轉、災難恢復複寫和應用程式流量則繼續使用標準路由網路。</block>
+  <block id="01156694543097b9445b72943e566e02" category="paragraph">在將 ONTAP 儲存設備與 Nutanix 雲端基礎架構整合之前，請確保滿足以下要求。</block>
+  <block id="73fa4db6c16918b8b1476cd57c4b80a3" category="paragraph">*Nutanix 叢集*</block>
+  <block id="7822a29dbe9ed28f88309d8940333179" category="paragraph">執行 AHV 的 Nutanix 叢集已部署且運作中，並符合下列需求：</block>
+  <block id="c604e5d03e1e7091ec9908672191982f" category="list-text">至少三個節點。</block>
+  <block id="e0c31f92c2d0b1a49d272890219daf6c" category="list-text">運算節點符合 Nutanix 對 CPU、記憶體容量、連網和開機裝置的最低要求。如需詳細資訊，請參閱最低運算要求。</block>
+  <block id="bc85160904d40313adbdc82e4ecfbb50" category="inline-link-macro">運算平台相容性與互通性矩陣</block>
+  <block id="77ce847edcf2be60ba1cf5baff26d6f7" category="list-text">硬體和軟體列於對應的 Nutanix 相容性矩陣。請參閱<block ref="c81ad5cf378d90ab0d03ced0033acda8" category="inline-link-macro-rx"></block>。</block>
+  <block id="6fcb8ee8bc8725e23730e2b0739522c8" category="paragraph">*NetApp ONTAP 儲存設備*</block>
+  <block id="b5952aa77e54231a64191a542bfb2e4b" category="paragraph">NetApp ONTAP 儲存設備已部署並設定，啟用了 NFS 服務，並符合下列需求：</block>
+  <block id="24875b4d112506ce2170563900155c60" category="list-text">支援的 ONTAP 平台：AFF A 系列（All Flash）、AFF C 系列（All Flash）和 FAS（混合快閃）。</block>
+  <block id="7992c41569a6bb74bbc75e7082421468" category="list-text">ONTAP 執行支援的版本：9.15.1P18 或更新版本、9.16.1P16 或更新版本、9.17.1P8 或更新版本、9.18.1P4 或更新版本，或 9.19.1P2 或更新版本。</block>
+  <block id="6cf1fc4be2dae301740b386b7b203db5" category="list-text">ONTAP One 授權。</block>
+  <block id="320210f832a34fe880ba0273c10d4711" category="list-text">ONTAP 儲存設備虛擬機器（SVM）已設定為提供儲存設備給 Nutanix 運算叢集。</block>
+  <block id="013c0e655bb0084fe15ffb125726e8c2" category="list-text">一個或多個 FlexVol Volume 會匯出為 NFS 共享。Nutanix 叢集會裝載 NFS 匯出，並將其作為工作負載的共享儲存設備。</block>
+  <block id="7e2388a20aef8baa12c86febcb6c7f22" category="inline-link-macro">合併實體連接埠以建立 ONTAP 介面群組</block>
+  <block id="c4ef6228655d857d98dd1f12ad5bbad1" category="list-text">NetApp 強烈建議使用介面群組作為 NFS LIF 的主連接埠。如需詳細資訊，請參閱 <block ref="81b7786f6941e04595c4c2ff6b3de461" category="inline-link-macro-rx"></block>。</block>
+  <block id="d0e5aa254f1ccca87a0cd6748a924c03" category="paragraph">*網路*</block>
+  <block id="8a6933d4e0f55d49cafcde07ebe4ce69" category="list-text">專用儲存網路最低支援 10 GbE。建議使用 25 GbE 或更高規格。</block>
+  <block id="9f93d1aea77ba6580146236a9c1a9661" category="list-text">儲存設備流量有獨立的介面。</block>
+  <block id="7ef6c69924549f74224057397cbd4cac" category="list-text">在支援的儲存網路中，巨型訊框（MTU 9000）的設定保持一致。</block>
+  <block id="7d88b061a000ab1d3d13ccc6c8009dee" category="list-text">使用專用的虛擬交換器來處理 ONTAP 儲存設備流量，並設定 MTU 為 9000 位元組（巨型訊框）。</block>
+  <block id="024da6f5a5ca69013333e20d5b21f459" category="list-text">為 ONTAP 私有連網啟用網路分段後，便無法停用。停用網路分段會導致儲存設備私有 IP 無法連線，並可能導致關鍵的叢集服務故障。</block>
+  <block id="82c161268dfe0b9b1287ad4fe5c236b0" category="section-title">網路架構</block>
+  <block id="ce6e593f91bf8a47c5f1e109124ef518" category="paragraph">下圖顯示 Nutanix AHV 節點與 ONTAP 叢集之間的連線。</block>
+  <block id="9fa1fa9c342aa04e2ab4321a098f85ad" category="inline-image-macro">網路圖顯示一個具有 vswitch0 和 vswitch1 的 Nutanix AHV 節點，透過兩個外部交換器連接至 ONTAP 9 叢集</block>
+  <block id="4fa6b398ba2977fdc851dc24f10a7934" category="paragraph"><block ref="4fa6b398ba2977fdc851dc24f10a7934" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="af5ff5784a731bc016ed4b6afa56caf3" category="paragraph">下表描述每個網路元件、其組態及其用途。</block>
+  <block id="2cb05e4bb7830be982f0922fed86b4cd" category="cell">元件</block>
+  <block id="254f642527b45bc260048e30704edb39" category="cell">組態</block>
+  <block id="e244710138950cf403d4fdca0161c94c" category="cell">Nutanix 運算節點</block>
+  <block id="afa568d367d052961a86faf602d6e17f" category="cell">用於管理和使用者虛擬機器網路（路由 VLAN）以及儲存網路（非路由 VLAN）的綁定網路卡。如果無法使用綁定網路卡，請為虛擬交換器使用作用中/作用中上行連結。</block>
+  <block id="a95a090a8f9e328a5d6ce13cb1d137c9" category="cell">提供網路備援，同時隔離管理、虛擬機器和儲存設備流量。</block>
+  <block id="a678ef77de622077207781708e3e99b7" category="cell">ONTAP 儲存設備控制器</block>
+  <block id="b1dd4dd40fe36fdb54995a2da5613b7f" category="cell">SVM 管理 LIF 和 SVM 資料 LIF。盡可能使用介面群組來實現容錯能力和負載平衡。</block>
+  <block id="06f6d3b7ad02108688d9ca2fedc4abf9" category="cell">管理 LIF 用於 ONTAP 管理。資料 LIF 為 Nutanix 叢集提供 NFSv3 儲存設備存取。</block>
+  <block id="c6d30908fc554df682ad6e9382d0eeb7" category="cell">管理和用戶虛擬機器網路（路由 VLAN）</block>
+  <block id="4dd2a26e244f72edcf2576e5d5cd6702" category="cell">Prism 管理、CVM 流量、即時移轉和複寫流量</block>
+  <block id="b1f814e61eab0b9ea2acb2f2d447b717" category="cell">承載叢集管理和虛擬機器流量。</block>
+  <block id="9bf01d663e7a657ce91486d604bb5a3f" category="cell">內部儲存網路（非路由）</block>
+  <block id="25155acb786c092e649b5c745428336e" category="cell">CVM 間通訊、AHV 服務、叢集節點間流量</block>
+  <block id="c0fcc7833ab8cb13aa5722da86b46386" category="cell">用於儲存設備和叢集服務的專用網路。與使用者流量隔離。</block>
+  <block id="3b71fa87aff883a944c83d389531eb3b" category="cell">外部儲存網路（非路由 VLAN）</block>
+  <block id="888f2e6005dbe99e045cac976efc39cf" category="cell">AHV/CVMs 與 ONTAP 之間的 NFSv3 儲存設備流量</block>
+  <block id="1c7429bc15e42100216ac0a060da23dc" category="cell">提供對 ONTAP 儲存設備的低延遲、高效能存取。</block>
+  <block id="923de2f57c729a15244d2d32be13c2f1" category="cell">vswitch0</block>
+  <block id="17ff15338eaa3f0dbdc3a561b4b7c47a" category="cell">Nutanix 管理、應用程式流量、即時移轉和複寫</block>
+  <block id="21f1ded6ee5fe47e5454d461d413df35" category="cell">用於管理和虛擬機器連網的主虛擬交換器。</block>
+  <block id="1fc1c5d87203c86922bf41b7641e6504" category="cell">vswitch1</block>
+  <block id="6124c75321ba55da58785f3a07e604c3" category="cell">專用的 NFSv3 儲存設備流量。至少兩個實體上行連結。建議使用 LACP（作用中/作用中）。MTU 9000。</block>
+  <block id="c8774204e3a861f300153a01cafc50fd" category="cell">專用儲存設備交換器，可為 ONTAP 連線提供最佳效能、彈性和流量隔離。</block>
+  <block id="24d89b66885ddf758c470311b0e238c5" category="section-title">高階部署步驟</block>
+  <block id="f8098539a697e2e23ff2fbbcdc41ba49" category="paragraph">完成以下高階步驟，以準備 ONTAP、設定儲存網路並將 Nutanix 主機連接到 ONTAP 儲存設備。</block>
+  <block id="e22d4898791c63ab332c69b60b6a8774" category="list-text">部署和設定 ONTAP。</block>
+  <block id="718a426d0459c990f966c5aa3b496666" category="inline-link-macro">ONTAP 快速入門</block>
+  <block id="aec4b036c7f7bfbf4f2f37fe95984800" category="list-text">請參閱 <block ref="35a96c1424a5d39370406442822b6766" category="inline-link-macro-rx"></block>。</block>
+  <block id="1adf393ea11e2b1a03a2f42cd137ec43" category="list-text">盡可能建立介面群組。請參閱 <block ref="81b7786f6941e04595c4c2ff6b3de461" category="inline-link-macro-rx"></block>。</block>
+  <block id="2a4d5c63b1e6241d99e4939d1e02d80a" category="inline-link-macro">為 ONTAP 網路建立 SVM</block>
+  <block id="73358681da1cfcb20b958a561c76414c" category="list-text">為 ONTAP 網路建立 SVM。請參閱 <block ref="374c90f8834cdea00a6f60d18a70f604" category="inline-link-macro-rx"></block>。</block>
+  <block id="47514845299a6fb079009508979f3f4e" category="list-text">建立用於管理和 NFS 資料的 ONTAP LIF。請參閱 <block ref="0dd83352fe1a672de604487265159d1a" category="inline-link-macro-rx"></block>。</block>
+  <block id="f162dae9b2713f12b5bb5bfb34ca8116" category="inline-link-macro">使用 ONTAP System Manager 新增 Volume</block>
+  <block id="b08fa99a736cc3dd29dba13fa709ba16" category="inline-link-macro">建立具有指定交會點的 ONTAP NAS Volume</block>
+  <block id="8ba761e58164d425c600e567b51bde45" category="list-text">使用 ONTAP System Manager 新增 Volume。該 Volume 必須使用 UNIX 安全樣式來提供 NFSv3 資料。請參閱 <block ref="adc597f3f81344bb5887abb0794ad73c" category="inline-link-macro-rx"></block> 和 <block ref="6f0dc90b5189dce76a9b1098ae1169a1" category="inline-link-macro-rx"></block>。</block>
+  <block id="af221594fc5a0003396437dfbee347a7" category="inline-link-macro">匯出原則如何控制用戶端對 ONTAP NFS Volume 或 qtree 的存取</block>
+  <block id="de9f3a925790eb0942f4d15299bccd04" category="list-text">設定匯出原則以允許從 Nutanix 僅運算主機存取。請參閱 <block ref="f51fa1661575b66ec4b4f117ced6c1d4" category="inline-link-macro-rx"></block>。</block>
+  <block id="defaba5f9ab73ddeacbf7e18a4d78c1a" category="list-text">設定儲存網路。</block>
+  <block id="8668d8e40858086ff0f44cc7126a8bfb" category="inline-link-macro">建立專用的非路由 VLAN</block>
+  <block id="fc06197a100edcd59314f40c205e647d" category="list-text">為 NFS 儲存設備流量建立一個專用的非路由 VLAN。請參閱 <block ref="e2f3a3d5ff90e9ab56933021d41612b3" category="inline-link-macro-rx"></block>。</block>
+  <block id="c3f8dc8572c7a9ffbb954a9e7d807d94" category="list-text">設定備援交換器基礎架構。</block>
+  <block id="e02dbffb8cc8785729c0a1d016c77018" category="inline-link-macro">變更 ONTAP 廣播網域中連接埠的 MTU 值</block>
+  <block id="e79a9284ad5fda895c42ec492c4a75be" category="list-text">啟用端點對端點巨型訊框（MTU 9000）。如需 ONTAP 的相關資訊，請參閱 <block ref="ba2bec8a8ab65d996ac1477e07eb5431" category="inline-link-macro-rx"></block>。</block>
+  <block id="660715516ea5b15f3e42792213d071e2" category="list-text">配置 Nutanix 主機並將其連接至 ONTAP。</block>
+  <block id="b5668b17431aae66903055ca3154e818" category="list-text">驗證與 ONTAP NFS 資料 LIF 的連線。</block>
+  <block id="704ba3a7d2db8276934ffa82543a1da4" category="list-text">驗證負載平衡和路徑備援。</block>
+  <block id="b8bb6bc05a14dc8a4f4374b2a99819b2" category="list-text">建立一個專用儲存設備虛擬交換器。</block>
+  <block id="cf91b203b11d67e5ebbe25dd364e31e1" category="list-text">在 Nutanix AHV 上建立 vswitch1。</block>
+  <block id="c0472e733dc8e8b474cb2ff6204455ea" category="list-text">至少分配兩個專用的實體網路卡。</block>
+  <block id="b4ec9445752af56a85f4eb292f7b1280" category="list-text">在支援的情況下設定 LACP（作用中/作用中）。</block>
+  <block id="0befe8ce4f5a98b7d04748cf4d9f8283" category="list-text">驗證韌性。</block>
+  <block id="375252d90edc44fe471a486566cd7321" category="list-text">測試儲存設備路徑故障轉移。</block>
+  <block id="097de64531dbbf4fb65ec7cfbbd0617a" category="list-text">確認 AHV 能夠在連結或交換器故障期間自動重新路由儲存設備流量，而不會影響正在運作的虛擬機器。</block>
+  <block id="13ae5f91ef4c9979c9b27b7da80642b9" category="paragraph">此架構為 Nutanix 環境提供高效能、高可用度的儲存網路，同時允許運算和儲存資源獨立擴充。儲存成長可透過 ONTAP 擴充來滿足，無需額外的 Nutanix 純運算節點，從而在維持企業級效能和可用度的同時降低基礎架構成本。</block>
+  <block id="c3d9387404c3997bbb5df9608d738492" category="summary">了解 Nutanix 與 ONTAP 外部儲存設備的資料保護、災難恢復和 VM 移轉是如何運作的，以及哪些功能在正式可用度時不受支援。</block>
+  <block id="b03fd488e5c8eadca4d9e0785a4da008" category="doc">Nutanix 與 ONTAP 的資料保護、災難恢復、移轉和限制</block>
+  <block id="e9fdd4b4a1f19e027482ec6e585a176b" category="paragraph">了解當您使用 ONTAP 作為 Nutanix 運算叢集的外部儲存設備時，資料保護、災難恢復和 VM 移轉是如何運作的，並審查在正式可用度（GA）時不支援的功能。</block>
+  <block id="7e7397a7b79323762c61941fc0e6b5f9" category="section-title">資料保護</block>
+  <block id="794a3d8583847795adb014e40d9dc85a" category="paragraph">Prism 管理的虛擬機器快照使用虛擬機器磁碟的 ONTAP 檔案層級複製，而不是 ONTAP Volume 快照。Prism 管理快照生命週期，而 ONTAP 提供底層檔案複製功能。</block>
+  <block id="8ba45cc8c2b575e2a515b212df141d8e" category="paragraph">檔案複製是作用中檔案系統中的可寫入的複本。它本身無法鎖定以防止刪除，不是 ARP 恢復點，也不會透過 SnapMirror 或 SnapVault 獨立保留或歸檔。每個磁碟都是單獨複製的，因此除非進行協調，否則無法在單一共享的時間點擷取跨磁碟的恢復點。ONTAP Volume 快照原生提供這些保護。需要不可更改、可抵禦勒索軟體攻擊且長期保留的恢復點的客戶應考慮等待 ONTAP 快照整合。</block>
+  <block id="c1e3ee060dc65237e26b41548d38cc13" category="admonition">ONTAP 快照支援的 GA 限制計畫在未來的版本中解決。</block>
+  <block id="71c6167c7d242b9bda11821ec2344b96" category="paragraph">在 GA 版本期間，Nutanix 非同步災難恢復是唯一受支援的複寫方法。ONTAP SnapMirror 無法使用。</block>
+  <block id="3f43898082ec1f513a69a8de6ef6f6b5" category="paragraph">SnapMirror 是站點間複寫 ONTAP 資料的首選方案。它僅複寫變更的區塊，在傳輸過程中和目的地保留重複資料刪除與壓縮的節省效益，並且可以在二線系統上保留多個恢復點。由於複寫在儲存系統上執行，因此主機無需製作資料複本。對於使用 ONTAP 作為外部儲存設備的客戶而言，這意味著 DR 使用與其 ONTAP 環境其餘部分相同的複寫、保留和恢復流程。</block>
+  <block id="ba38eee467f32cfe339059ac2583e961" category="admonition">SnapMirror 整合計畫在未來的版本中推出。想要在 ONTAP 複寫上將 DR 標準化的客戶，應考慮等待 SnapMirror 整合。</block>
+  <block id="40aeb9ec9c66503ac9e2096f9f50be5e" category="section-title">VM 移轉</block>
+  <block id="2b11abb043cf2a6b03b5db45a499fb15" category="paragraph">在此版本中，虛擬機器移轉使用 Nutanix Move。不支援 NetApp Shift 工具套件。Shift 工具套件與 Nutanix Move 的整合計畫在未來的版本中推出。它將使用 ONTAP 複製和配置的區塊對應，以避免完整的資料複本並加快移轉速度。</block>
+  <block id="15954d6859a0fe86dc4697a321cef5d9" category="section-title">正式版不支援的功能</block>
+  <block id="7c8680054f36aa03f6bf693e30d9473d" category="paragraph">針對 NetApp 與 Nutanix 整合，GA 版本不支援下列組態、功能與整合：</block>
+  <block id="a8e21e772918f6400bf2944d13f6cc54" category="list-text">使用多個 NetApp 陣列、每個 Nutanix 叢集多個儲存設備虛擬機器（SVM）或多個邏輯介面（LIF）的組態</block>
+  <block id="a3e0d31abbc94a19371d4564bfc84cf7" category="list-text">ONTAP 快照及其相依功能</block>
+  <block id="b5d574f46373cb46cf89b82338cd5825" category="list-text">適用於 Nutanix Kubernetes Platform （NKP） 的 NetApp Trident</block>
+  <block id="ee1ef6cf0f3971b44eb2abcac958fb8d" category="list-text">FlexGroup Volume</block>
+  <block id="371711dcb125366b5f6e2979db40f239" category="list-text">NetApp Shift 工具套件</block>
+  <block id="6e69b4c6f01283d2e4f5c7224065f7f3" category="summary">使用 Foundation Central 部署 Nutanix 運算叢集，然後將其連接至 NetApp ONTAP 儲存設備。</block>
+  <block id="081f6f8cc82e7b3abe6a7365e7f222f6" category="doc">部署具有 ONTAP 儲存設備的 Nutanix 運算叢集</block>
+  <block id="e46be2a73a958132d2487a2a93ca5d97" category="paragraph">部署使用 NetApp ONTAP 儲存設備的 Nutanix 運算叢集。您下載 AOS 和 AHV 安裝套件，設定 Foundation Central，對運算節點進行 "映像" 和就職，建立叢集，然後將 ONTAP 儲存設備連接至該叢集。</block>
+  <block id="e8f43dcb2f62d20ca72e427a9f7c4f32" category="list-text">*下載 AOS 和 AHV 安裝套件。*</block>
+  <block id="91f41053835d014870e967b522fdfa7e" category="inline-link-macro">下載 AOS 和 AHV 安裝套件</block>
+  <block id="8ffb8af5a4bc29bb7e91a32bcdaa1150" category="paragraph">如需詳細資訊，請參閱 <block ref="38f05d1733d5299b87a4cff0ac94ba83" category="inline-link-macro-rx"></block>。</block>
+  <block id="74cb5ebaf42ce83b4e79d177c7f4f1a6" category="list-text">*設定 Foundation Central。*</block>
+  <block id="516dd068aa72e7731a6ba493ae73d1c2" category="paragraph">Nutanix Foundation Central (FCA) 是建議的部署工具，用於對受支援的 OEM 伺服器製作映像並建立 Nutanix 運算叢集。</block>
+  <block id="a93dba624abd55e9d47b281f4561ed08" category="list-text">下載 Foundation 安裝程式套裝組合並部署 Foundation VM。</block>
+  <block id="6d1f66d126a3b8e7f075cad8521ca49f" category="inline-link-macro">Foundation Central 設定</block>
+  <block id="2d1a4348468004e0100cf18fe8688e08" category="list-text">完成<block ref="f791a23ba9a105ed6ac3a0123bd96460" category="inline-link-macro-rx"></block>。</block>
+  <block id="51234611747f52a35df7a5353ddc8727" category="list-text">根據需要更新管理 IP 位址和網路設定。</block>
+  <block id="d0bce400a8a13ec0e62ee7a7d670380a" category="list-text">使用已設定的 IP 位址存取 Foundation Central web UI。</block>
+  <block id="813481c10c31b37781572d7443dce8ae" category="admonition">如果 Foundation Central 部署失敗，登入 FCA VM，執行<block ref="ca3845fe3b73258677a5defacd1e25aa" prefix=" " category="inline-code"></block>，然後重新執行設定程序。</block>
+  <block id="e6d89822f35fc247c74d5eb5f74869d4" category="inline-link-macro">安裝 Foundation VM</block>
+  <block id="8157109459babe165ed8f861f20e6248" category="paragraph">如需詳細資訊，請參閱 <block ref="15bc47ca8b243dfb544c54d62c121409" category="inline-link-macro-rx"></block>。</block>
+  <block id="d90e0a8c61666878591830dce9cd3707" category="list-text">*上傳 AOS 和 AHV 安裝 "映像"。*</block>
+  <block id="d223eae137a144267396b169e8e69770" category="paragraph">使用 Foundation Central "映像" 管理執行下列操作：</block>
+  <block id="749099afebe0e939c40094c1fa5d99d1" category="list-text">將 AOS 和 AHV "映像" 上傳到 Foundation Central。</block>
+  <block id="da3404b398cdfb65fb220e5362f53bcc" category="list-text">確認 "映像" 可用於部署。</block>
+  <block id="5252d89d1dc2c29e8d6ba1fdb6ccd983" category="list-text">*探索並"映像"運算節點*</block>
+  <block id="45215b033870c582d772fd4ff8c33fd2" category="paragraph">*選項 A：硬體供應商（建議）*</block>
+  <block id="7d92e6a8eacceaf7798bc85191f3de1f" category="inline-link-macro">硬體供應商</block>
+  <block id="250b467585c4c37342b0c2af530e9f7e" category="paragraph">使用 <block ref="35566d01e9acbe2e672b081115ed5fa5" category="inline-link-macro-rx"></block> 來自動化節點 "映像" 與就職。</block>
+  <block id="eae6abd2bfb477415259bfe6fbcf86ab" category="list-text">使用 HPE iLO 或 Dell iDRAC 設定硬體供應商連線。</block>
+  <block id="98c80639e9e0be2987dd3c67cecfb769" category="list-text">自動探索目標伺服器。</block>
+  <block id="2a99aaaabfcfc9b0889267046004d6cd" category="list-text">選擇已上傳的 AOS 和 AHV 映像。</block>
+  <block id="a751acdbbb9a841fba8ed42e797f79cb" category="list-text">直接從 Foundation Central 為節點建立 "映像"。</block>
+  <block id="e88bc585491767891c9d1f5757b72130" category="paragraph">*選項 B：手動映像*</block>
+  <block id="b52996994fab6b48cd81e934dee321e6" category="inline-link-macro">手冊成像</block>
+  <block id="49baba35db7bcd09b14a4ca25125d9b7" category="paragraph">如果硬體供應商探索無法使用，請使用 <block ref="8f5493e7165305573721d2539a580994" category="inline-link-macro-rx"></block>。</block>
+  <block id="dd0679a0ea834bda0a34b306e7a09346" category="paragraph">在開始之前，請確保滿足以下先決條件：</block>
+  <block id="66b62e50b4972a240cbba541d7b7a1b9" category="list-text">已啟用 UEFI 開機模式。</block>
+  <block id="8b4000931dce8be969425ca4ea629531" category="list-text">安全開機已停用。</block>
+  <block id="b0ee2666cf5b9113e191b9c6bda3c001" category="list-text">頻外（OOB）和資料網路可連線。</block>
+  <block id="1b4490cc35dd9fb01927652019a1d041" category="list-text">主機與 Foundation Central 之間沒有時間偏差。</block>
+  <block id="c5b87462ede4de94bca9a532ca933384" category="list-text">每個主機都有一個可用的 AHV IP 位址。</block>
+  <block id="7257449f9518c473a626ee5939a65833" category="admonition">請勿從與預設 VLAN 上的 192.168.5.0/24 位址空間重疊的子網路中指派 IP 位址。</block>
+  <block id="ec7c19653fc4cdaf314f97c8b8bc29a6" category="list-text">建立安全的宣告權杖。</block>
+  <block id="05332e7515b61ca00d1c9c56b65eb1d2" category="list-text">將 AHV 安裝 ISO 掛載到每個運算節點上。</block>
+  <block id="e5ede927d4698de51e7de8d6459969d9" category="list-text">手動開機並安裝 AHV。</block>
+  <block id="232dae110fed03b1c3e37734f201e395" category="list-text">*讓節點就職。*</block>
+  <block id="90e33977af6187e71f8c05eb861c7da9" category="paragraph">就職會將探索到的伺服器向 Foundation Central Appliance 註冊，並為 "映像" 或叢集建立工作流程做好準備。</block>
+  <block id="03c96cad49b7b47ae1994c9e152b2857" category="list-text">選擇已探索的 AHV 主機。</block>
+  <block id="a72fea437a7a18abca4e6a2f54c9fe76" category="list-text">開始就職程序。</block>
+  <block id="fd650d1cbb3cbf981cfc3cbe4f86a5e7" category="list-text">確認所有節點都出現在節點清單中。</block>
+  <block id="ea4ecd2ff157eb206bcc287b669d228f" category="paragraph">就職完成後，主機即可用於建立叢集。</block>
+  <block id="753b99019692770e964d6b456ac85293" category="list-text">*建立 Nutanix 叢集。*</block>
+  <block id="f164a43821225ee54e0394a577c959b6" category="list-text">選擇已就職的節點。</block>
+  <block id="c04c8f4ee057b9770ef3148a2b7f90b9" category="list-text">按一下 *建立叢集*。</block>
+  <block id="e634053c9c886664389e7b9c974ac9b3" category="list-text">請提供叢集組態資訊。</block>
+  <block id="af7181ced3e0f98f6ca635d584b4ff72" category="list-text">出現提示時，輸入控制器虛擬機器（CVM）IP 位址。</block>
+  <block id="6ee0593644601a457512f7c5d05401a5" category="paragraph">叢集建立工作流程執行以下操作：</block>
+  <block id="c81e6147899da85d556722d2835a1aa6" category="list-text">部署 CVM。</block>
+  <block id="8227d90a71c897d611deddae88bced89" category="list-text">安裝 AOS。</block>
+  <block id="8b64eea0142b42f10433982dcc31e645" category="list-text">設定叢集服務。</block>
+  <block id="9f35fbf8e7ac03a5118463910d804eda" category="list-text">執行驗證檢查。</block>
+  <block id="2bdd53f46f82a16ddd7bbada5efcf2a5" category="inline-image-macro">執行 AHV 的新建立 Nutanix 叢集的 Prism Element 首頁</block>
+  <block id="14d508cebd5f4c810792d089f979051e" category="paragraph"><block ref="14d508cebd5f4c810792d089f979051e" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="b2b79048cc2b1171fcc1bf747d6a0f9c" category="admonition">確保節點間沒有時間偏差。時脈同步失敗會導致叢集部署失敗，需要重新啟動程序。</block>
+  <block id="b9e920a3dd1bca0a157befb26f455eaa" category="list-text">*將 ONTAP 儲存設備連接到 Nutanix 運算叢集。*</block>
+  <block id="e20f8d43ee05141d2fe59d709a9b6f28" category="paragraph">Nutanix 叢集運作後，請執行下列操作：</block>
+  <block id="1a879e5b50f2cf6a7f443d9b5e2419c6" category="list-text">驗證所有 AHV 主機與 ONTAP NFS 資料 LIF 之間的連線能力。</block>
+  <block id="fd9cdf1a9f2060636b550962bad5a182" category="list-text">將 ONTAP NFS 匯出新增至 Nutanix 叢集。</block>
+  <block id="8c01ab30bb6dad2915cbbf9f5b1c92d1" category="list-text">掛載匯出的 FlexVol NFS 共用。</block>
+  <block id="3800b4f56e912a5db25d8a12bdcebbb2" category="list-text">驗證讀寫存取。</block>
+  <block id="c0d0093272a683163e9db60b646dc05b" category="list-text">確認資料儲存的可見度和可用度。</block>
+  <block id="0efb367309c5112f30d09fda62dce646" category="paragraph">您可以將已掛載的 NFS 儲存設備用於以下用途：</block>
+  <block id="393b74b0f99482a306c16e4ef2a2b1f7" category="list-text">虛擬機器工作負載</block>
+  <block id="f7c5fe6bd0c6e625cc9c02ea08a554da" category="list-text">"映像"儲存庫</block>
+  <block id="7df96b18c230f90ada0a9e2307226338" category="list-text">範本</block>
+  <block id="98084adef1ea8e4d4e3384364fd3f774" category="list-text">應用程式資料</block>
+  <block id="2a3447e388ce7f3e91b67e86a06a867d" category="paragraph">詳細步驟請參閱<block ref="3bb6ec5a7295347c11887b87947a5268" category="inline-link-macro-rx"></block>。</block>
+  <block id="90beb67bbb40c624d8407576b3477531" category="summary">建立 ONTAP FlexVol Volume，設定匯出原則，並建立具有 Nutanix 所需最低 REST API 權限的 SVM 角色和服務帳戶。</block>
+  <block id="92dc1ba23fc901065953a38964070d3d" category="doc">為 Nutanix 設定 ONTAP Volume、匯出原則和權限</block>
+  <block id="9099a77440d01e0a7f6e50f384cefdda" category="paragraph">建立並設定 ONTAP 儲存設備 Volume，設定匯出原則，並定義 Nutanix 用於管理 ONTAP 儲存設備的 SVM 角色和服務帳戶。完成這些任務後，您可以將 FlexVol 匯出附加至 Nutanix 叢集，作為虛擬機器工作負載的共享儲存設備。</block>
+  <block id="2efebf6a87cfa87a05f1ce717a0eb634" category="paragraph">流程首先建立 ONTAP FlexVol Volume 並設定 NFS 匯出原則。然後，定義所需的 SVM 角色和 REST API 權限，最後將 ONTAP 儲存設備連接到 Nutanix 運算叢集。</block>
+  <block id="d0d11c278677bcc01b4088ad0e01a0e7" category="section-title">建立 ONTAP FlexVol Volume</block>
+  <block id="4c8a286e125109320cc853e190bf9d53" category="paragraph">建立所需的 FlexVol Volume 並套用建議的 ONTAP 設定，以最佳化 Nutanix 工作負載的容量使用率、儲存效率和效能。</block>
+  <block id="de4700c2801a5bbb50de45c5214cad13" category="list-text">使用以下設定建立 FlexVol Volume：</block>
+  <block id="51ac4bf63a0c6a9cefa7ba69b4154ef1" category="cell">設定</block>
+  <block id="947a833a137f4ed3e295eacc535ed8bd" category="cell"><block ref="f1e0735081bab920eff76b08a4600c76" prefix="" category="inline-code"></block></block>
+  <block id="1fac41ed156429eae37ffff4c99fde2c" category="cell"><block ref="99c0f62171e34b4ab6a79265f038e3af" prefix="" category="inline-code"></block></block>
+  <block id="7c68df7d17c446f99304ee1dc1498bfc" category="cell">自動調整</block>
+  <block id="521c36a31c2762741cf0f8890cbe05e3" category="cell">開啟</block>
+  <block id="a85c04491cb5bbcb534dc50b65b97530" category="cell">自動刪除</block>
+  <block id="bce6cdbbccc632d1644ba652aca25a21" category="cell"><block ref="210ab9e731c9c36c2c38db15c28a8d1c" prefix="" category="inline-code"></block> /<block ref="1c05b3b1dbdf1a366261edd571c87d43" prefix=" " category="inline-code"></block></block>
+  <block id="43c4c1dbc452be91829f25ee32c2a956" category="cell">Volume 分層原則</block>
+  <block id="6d576caa9862f6db0177dfaff7abb095" category="cell">僅 Snapshot 快照技術</block>
+  <block id="1a0347c29b1489fa0ab3d94768b3af37" category="cell"><block ref="902c737cbaa1a86889c41fec210c805f" prefix="" category="inline-code"></block></block>
+  <block id="f4c25546f220bb5d07f94244c9303967" category="cell">自動擴充</block>
+  <block id="4c0abf2d4c54820b8d33061abaf30759" category="cell">Snapshot 原則</block>
+  <block id="94196aaec5ec0e56c6e4674450447eed" category="list-text">配置多個 FlexVol Volume 並將它們新增為儲存 Container。</block>
+  <block id="07dc5d493e4013e826e06d84243bb40f" category="list-text">建立至少 4 到 8 個 NFSv3 Volume 來存放虛擬機器資料。</block>
+  <block id="473d44bff7d5ab7df1ab806a9eea848f" category="list-text">為 Nutanix 服務或中繼資料 Volume 使用專用 Volume。雖然服務資料可以共享資料 Volume，但建議使用專用 Volume。</block>
+  <block id="f76a1b79446e5fcd4830de7205aee57f" category="list-text">預設使用 FlexVol 匯出路徑。如果使用 qtree，請在附加儲存 Container 時指定 qtree 匯出路徑。</block>
+  <block id="8e4b6807031f0687bd243567c5d31889" category="list-text">將 Volume 均勻分佈在 ONTAP 節點上，以交替節點的方式放置 Volume，以平衡整個叢集的工作負載配置與資源使用率。</block>
+  <block id="54278706e756fc32632e725ac74a7c70" category="section-title">計算服務 Volume 大小</block>
+  <block id="5589ee999b11a39899b74f5ac5667a15" category="paragraph">在計算中繼資料（服務）Volume 的大小時，每個叢集節點至少需要分配 1 TiB 的空間（N × 1 TiB）。例如，一個 8 節點叢集至少需要 8 TiB 的可用容量。</block>
+  <block id="277cfb06b78e92e9906356782ebd14ff" category="list-text">為 Nutanix 中繼資料建立單一資源隨需配置的 FlexVol Volume。</block>
+  <block id="e55622ea68ec3d556626db91c3060190" category="list-text">如果未為服務 Volume 指定專用匯出路徑，則系統會自動使用為叢集服務（中繼資料）Volume 設定的第一個匯出路徑，並將 *Cluster Services* 標籤套用至該路徑。</block>
+  <block id="25da714eff5c8cf0f1a3bef6c2f571d5" category="list-text">部署後請勿重新命名選定的 FlexVol Volume 或其關聯的匯出路徑。重新命名可能會毀損虛擬機器 I/O 操作並影響工作負載的存取能力。</block>
+  <block id="5fab8f40aaa759f06d0e9d5803d0e482" category="list-text">用於服務 Volume 的 FlexVol Volume 可以使用資源隨需配置來進行設定。</block>
+  <block id="03976948c8dc5b708cb61b3194d1bc3a" category="section-title">計算資料 Volume 大小</block>
+  <block id="796e261753c1de28205557620ce4d45a" category="paragraph">資料 Volume 規模調整與資料存放區規模調整類似。根據預期的虛擬機器數量、容量需求和預期成長，來調整儲存 Container Volume 的規模。規劃足夠的可用空間，以容納 VM 資源配置、快照和營運例行成本，同時將工作負載分配到多個 Volume 上，以支援擴充性和均衡的資源使用率。</block>
+  <block id="dad2940097284c3b6c8345e293e3cd9e" category="section-title">設定 ONTAP 匯出原則</block>
+  <block id="c8d281ad787a7e5e23b6f6d76afe4ff7" category="paragraph">設定匯出原則，以便只有 Nutanix CVM 可以存取 NFS Volume。</block>
+  <block id="d54c86c42bb034e2e134a338152314a7" category="paragraph">*資料 Volume*</block>
+  <block id="ebea75065fb15c7ecfb9b539a76cfd17" category="list-text">建立 Volume 層級的匯出原則，以允許 CVM IP 位址或子網路範圍。</block>
+  <block id="a21de5807356512316ffa48519a7c389" category="list-text">設定以下規則：</block>
+  <block id="4881ae5df68a63d3acf226a4e0e70f74" category="list-text">唯讀規則<block ref="248ae85cd46aa9db2669ecfda6d5ac2e" prefix="(" category="inline-code"></block>）：<block ref="36bcbb801f5052739af8220c6ea51434" prefix=" " category="inline-code"></block></block>
+  <block id="31db56e3c017f815d12ff1e548f89b27" category="list-text">讀寫規則<block ref="daf1ece2b63bdb7d527a5f823f4d0b95" prefix="(" category="inline-code"></block>）：<block ref="36bcbb801f5052739af8220c6ea51434" prefix=" " category="inline-code"></block></block>
+  <block id="3b5d875ed67cb591c4ef2944857a2d0b" category="list-text">超級使用者：<block ref="36bcbb801f5052739af8220c6ea51434" prefix=" " category="inline-code"></block></block>
+  <block id="d1354ba4b2c70e084937c1e77f0d539d" category="list-text">如果使用 qtree，則為每個 qtree 建立一個具有相同權限的專用匯出原則規則。</block>
+  <block id="234d205c259293c4fcd5e3d1e2b2314e" category="paragraph">*服務或中繼資料 Volume*</block>
+  <block id="410e7876391fd067eff94f7355fe5897" category="list-text">所有 ONTAP NFS 匯出都應僅允許從 Nutanix CVM IP 位址或指定的 CVM 子網路存取。</block>
+  <block id="3fa12f12811769d06524abe06744d029" category="list-text">使用 Prism API 或<block ref="8b8f20398735e0a28ae5337a71b4a5db" prefix=" " category="inline-code"></block> 尋找 CVM 主機 IP 位址清單，以更新匯出原則。</block>
+  <block id="77bf0de81d3ac434fb134d139a3442bb" category="section-title">設定 ONTAP 角色和權限</block>
+  <block id="00988a3c5aaaed41af79d9dccdbe0bb4" category="paragraph">為了將 ONTAP 儲存設備連接到 Nutanix 運算叢集，Nutanix 使用 ONTAP REST API 進行控制平面操作（虛擬機器配置、複製、快照和儲存管理），並使用 NFSv3 作為資料路徑。</block>
+  <block id="9f8215fbf22053a6bb75c835b970359d" category="paragraph">建立一個權限最低的 ONTAP 角色，這樣您就不需要使用該 ONTAP<block ref="21232f297a57a5a743894a0e4a801fc3" prefix=" " category="inline-code"></block> 角色在 Nutanix 純運算叢集中執行操作。這些最低權限角色是 ONTAP 儲存設備端 SVM 層級所必需的。</block>
+  <block id="1957b4b90acaa152602ef9151ed827aa" category="list-text">使用 ONTAP NFS 的預設組態設定。</block>
+  <block id="bd06250641d7104cbc560dd3ccce5c8a" category="list-text">您也可以使用 <block ref="6173aa5206484b5224450952747c7148" prefix=" " category="inline-code"></block> 角色。</block>
+  <block id="b472efad4175e5d5e228f0a56a05b56c" category="section-title">最低 REST API 權限</block>
+  <block id="ad90ef5522a8663d2649151ac94be293" category="paragraph">建立自訂 ONTAP SVM 角色，並賦予其所需的最低 REST API 權限，以啟用 Nutanix 儲存設備探索、配置、複製和管理操作。</block>
+  <block id="e5d70720d20baa60b840d30a0254f374" category="cell">REST API 端點</block>
+  <block id="bf733d8a933c1601697f364223fc7ecb" category="cell">存取</block>
+  <block id="363e2cd7817f719f33d63e2e00a604ae" category="cell"><block ref="d48b8c7902dee00442e14d9b1af3af1b" prefix="" category="inline-code"></block></block>
+  <block id="358388857b3167886e81189ce45f87ef" category="cell">唯讀</block>
+  <block id="803fe6a23d72ffde4f8e3f75af659308" category="cell">叢集驗證和版本驗證</block>
+  <block id="bff176118c8043e6d5e6e206169ef3ca" category="cell"><block ref="afc03d1a82dbecc47aa9f8732c12aace" prefix="" category="inline-code"></block></block>
+  <block id="1de81d00e47b4dfc05b7940048245adf" category="cell">監控非同步儲存設備操作</block>
+  <block id="ded94fd2265eeb1163edbc94cc4a04ae" category="cell"><block ref="a00c50b90749f90a36742b8673eb5362" prefix="" category="inline-code"></block></block>
+  <block id="135a0938ca14153c3b5cffe6a3d4a752" category="cell">探索 ONTAP 資料 LIF</block>
+  <block id="5171b2271c084b4f83bf2064c3fbc9b4" category="cell"><block ref="91443afe19221b584756b058dec25daa" prefix="" category="inline-code"></block></block>
+  <block id="3cdb55110e0f03268456c135dbdeddd0" category="cell">讀取/建立</block>
+  <block id="a3763b6dbd67c7098e9cacdd4e16ab32" category="cell">虛擬機器複製、Snapshot 快照技術和備份作業</block>
+  <block id="05e30638fc4699fd0f5f46965a7de061" category="cell"><block ref="e4bda0100c995f1a022b02958516473a" prefix="" category="inline-code"></block></block>
+  <block id="904f1356ff49d5d1f567dacaacb6272f" category="cell">Volume 探索與管理</block>
+  <block id="e034c69dc6c44535ed8fcb28eebc885d" category="cell"><block ref="b411b876fbf8eae92bfaa2e8d8d43f52" prefix="" category="inline-code"></block></block>
+  <block id="22bb71f5bb6dc726ce615387711955e1" category="cell">完全存取</block>
+  <block id="8e3e6473250f1c3294023340b704b116" category="cell">建立、修改、讀取和刪除 Nutanix 管理的檔案</block>
+  <block id="66f611f92066b778a2ee33d7d561c388" category="section-title">設定服務帳戶</block>
+  <block id="9cee9e02c6cee3e221c414e166cc2a1d" category="paragraph">您可以使用 ONTAP System Manager 或 ONTAP CLI 建立角色和使用者。</block>
+  <block id="26ed02718973e705cd69ee6e109400e0" category="open-title">System Manager</block>
+  <block id="f606c49f26cc72eebe93a8d7e95cd942" category="list-text">在 SVM 層級建立自訂角色。</block>
+  <block id="33db147c2d843800fccf91edb584070c" category="list-text">選擇 *儲存設備 &gt; Storage VM &gt; _指定的 SVM_ &gt; 設定 &gt; 使用者與角色*。</block>
+  <block id="398ebb1248b54866ba874a05f89db335" category="list-text">選擇 *使用者和角色* 旁的箭頭圖示（→）。</block>
+  <block id="a1270bcef444ae8f7e1978d17176ecba" category="list-text">在 *角色* 下，選取 *+新增*。</block>
+  <block id="0607c670bf97cc18aea662bb4a8b1897" category="list-text">定義角色規則，然後點選 *Save* 。</block>
+  <block id="7574cd284f601a710ac10503b0f739bd" category="inline-image-macro">ONTAP System Manager 角色屬性頁面列出 Nutanix 角色的 REST API 路徑和存取層級</block>
+  <block id="dbcd9b01fa038f8f3c830f760a04bf98" category="paragraph"><block ref="dbcd9b01fa038f8f3c830f760a04bf98" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="8407e74fd32f9869d1dc5e18cdf5fe42" category="list-text">將角色對應到 Nutanix 管理員使用者。</block>
+  <block id="5e2565ad35410ae55f3c3837d1b9e9aa" category="list-text">在 *使用者和角色* 頁面上，於 *使用者* 下，選取 *+新增*。</block>
+  <block id="e8e5bd346e1cab4305ccd3272259cca8" category="list-text">選取所需的使用者名稱，然後從 *角色* 下拉式選單中選取您在上一個步驟中建立的角色。</block>
+  <block id="3f8f532f90cddcf60cef75113d4629c5" category="list-text">對於使用者登入方式，請選擇 *HTTP*。</block>
+  <block id="4cc186df234138a57b2e8c5d8e5f7f8d" category="list-text">按一下 *Save* 。</block>
+  <block id="8295254f89bc1b74a1cae258f93f3745" category="inline-image-macro">ONTAP System Manager 使用者和角色頁面顯示對應至自訂角色的 Nutanix 使用者</block>
+  <block id="94b8a0621e36f76c499ad1a9f9fc878b" category="paragraph"><block ref="94b8a0621e36f76c499ad1a9f9fc878b" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="404b6767f45d89523e5530444aac4093" category="inline-image-macro">ONTAP System Manager 使用者和角色頁面顯示 SVM 的使用者和角色存取層級</block>
+  <block id="c3088bca5482ea2ea1594bd04273ae87" category="paragraph"><block ref="c3088bca5482ea2ea1594bd04273ae87" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="ad3da557e531e495867ad0fb3ada97cc" category="list-text">執行下列命令來建立角色。將 <block ref="f9aa6283cec0ad9cc7e4b9173215222e" prefix=" " category="inline-code"></block> 與 <block ref="46e6e6ce85951e4a4fb07f51c242d712" prefix=" " category="inline-code"></block> 取代為您的 SVM 與角色名稱。</block>
+  <block id="5225604484856c358c25a1531e2d0984" category="list-text">建立使用者並將其對應至角色。</block>
+  <block id="bedfb2f5b6fb33f637bfadf7329016e2" category="admonition">將 ONTAP 陣列新增至 Nutanix 叢集時，需要 ONTAP 服務帳戶的使用者名稱和密碼。在 Prism Element 或 Prism Central 中設定 ONTAP 儲存設備 SVM 時，請使用此使用者。</block>
+  <block id="9f0056d1b1d00e12bacf13d8da8397df" category="summary">了解 NetApp ONTAP 儲存設備如何與 Nutanix Cloud Platform 整合，以提供外部 NFS 儲存設備並獨立擴充運算和儲存設備。</block>
+  <block id="5c2c25319ea82fd6076426390a9f0b07" category="doc">了解搭配 NetApp ONTAP 儲存設備的 Nutanix 雲端平台</block>
+  <block id="a5f4222f42fab14e6e59c309eb489f9c" category="paragraph">Nutanix 雲端平台與 NetApp ONTAP 儲存設備提供了解耦架構，讓您能獨立於 Nutanix 運算來擴充儲存容量和效能。了解架構、支援的組態，以及部署前需要注意的要求。</block>
+  <block id="40082e4dcbc30d3e394d4fc22e349315" category="paragraph">ONTAP 為託管 Nutanix 虛擬機器工作負載提供易擴充的且具有恢復能力的儲存平台，使組織能夠簡化儲存管理，同時優化容量使用率、效能和資料保護。</block>
+  <block id="df49e73834f4040e3051807231098cc1" category="paragraph">透過將 Nutanix 運算與 ONTAP 儲存設備結合，客戶可以運用企業級儲存設備服務、靈活的資料管理員和無縫擴充性，同時保持一致的營運模式。該解決方案採用熟悉的儲存設備概念，例如儲存設備虛擬機器（SVM）、FlexVol Volume、匯出原則和 NFS 資料存放區，讓管理員能夠使用既有的 ONTAP 工具和程序來部署和管理儲存設備。這種整合使 Nutanix AHV Hypervisor 能夠從 ONTAP 成熟的資料服務中獲得優點，同時為虛擬化環境提供靈活且高效的基礎架構。</block>
+  <block id="2bcf66072fda23991ffc00bd9893a437" category="paragraph">了解組織為何正在評估 Nutanix 雲端平台，它可能帶來的運算和儲存設備擴充挑戰，以及 NetApp ONTAP 外部儲存設備如何應對這項挑戰。</block>
+  <block id="d953649cb8ecaf5fa66eca0db2578f9c" category="section-title">為什麼組織正在重新評估虛擬化</block>
+  <block id="5d2ac342894d4196b1975fd5b28e5bee" category="paragraph">Broadcom 收購 VMware 後，虛擬化格局發生了顯著變化，促使許多組織重新評估其長期基礎架構和雲端策略。隨著企業推動現代化計畫，他們正在評估能夠交付營運一致性、擴充性和經濟效率，同時將對現有工作負載的毀損降至最低的平台。無論是出於授權變更、成本最佳化目標、資料中心轉型計畫，還是對更高混合雲靈活度的需求，組織都在日益尋求能夠簡化移轉並為其虛擬化環境提供永續發展路徑的解決方案。</block>
+  <block id="c9a17b790d8bdd8d039c3b068fdfb903" category="section-title">Nutanix Cloud Platform</block>
+  <block id="69215416761133d5c3e9008a4bb8a313" category="paragraph">Nutanix Cloud Platform （NCP） 提供一致的混合多雲營運模式，使組織能夠在內部部署環境和公有雲上執行應用程式和資料，同時維持共通的管理、營運和治理。透過運用 Nutanix 軟體定義架構，客戶可以無縫地跨環境擴展工作負載，簡化基礎架構管理，並降低營運複雜度。</block>
+  <block id="e650846facac8d1bfb846dd4d3b7ae54" category="section-title">運算和儲存設備擴充挑戰</block>
+  <block id="cd7ce001bad50e4d3d873f06c73b8899" category="paragraph">虛擬化環境中常見的挑戰是平衡運算和儲存設備需求。傳統架構通常要求組織擴充運算資源，只為了獲得額外儲存容量，導致基礎架構成本增加。儲存密集型工作負載通常需要額外的容量和效能，而不是額外的 CPU 和記憶體容量資源。</block>
+  <block id="ee8daea185cccadd816ee76c012f3ae7" category="section-title">ONTAP 如何應對挑戰</block>
+  <block id="682ab0967db2ebed923769bdb0c7b785" category="paragraph">這就是將 NetApp ONTAP 儲存設備與 Nutanix Cloud Platform 整合能帶來顯著價值的地方。ONTAP 提供企業級儲存功能，包括高效能、效率、資料保護、安全性和擴充性，同時允許儲存容量和效能獨立於 Nutanix 運算基礎架構進行擴充。</block>
+  <block id="707f55faf7b5f019c2bd9320391866ae" category="section-title">範例場景</block>
+  <block id="8943eba6fc27313dd81624add75a051a" category="paragraph">考慮以下情境：客戶需要相當於八個節點的基礎架構資源，以滿足應用程式的運算需求（vCPU 和記憶體容量）。然而，由於快速的資料增長和儲存密集型應用程式，該組織需要的儲存容量傳統上會需要部署額外的節點。這會增加整體擁有成本（TCO），因為客戶必須購買額外的運算資源，僅為了滿足儲存設備需求。透過將 ONTAP 整合到 Nutanix 環境中，組織可以提供真正解耦的架構，該架構可以獨立擴充儲存設備，在無需不必要的運算擴充的情況下，提供所需的容量和儲存效能。</block>
+  <block id="68403bad1101fc14b65e50cc7012c97f" category="section-title">支援的工作負載與使用案例</block>
+  <block id="07fa509afe07bd1a5edece90b1dee857" category="paragraph">這項功能對廣泛的企業應用程式部署極具價值，包括業務關鍵資料庫、ERP 平台、Microsoft 應用程式、虛擬桌面基礎架構（VDI）、分析工作負載、AI/ML 環境、檔案服務以及現代容器化應用程式。它還支援關鍵的基礎架構計畫，例如工作負載移轉、災難恢復、開發和測試環境、資料保護以及網路彈性。透過實現運算和儲存資源的獨立擴充，企業可以最佳化基礎架構投資，在運算叢集之間共享高密度儲存設備的通用資源池，同時滿足傳統應用程式和現代應用程式對效能、可用度和容量的需求。</block>
+  <block id="d729a5ecf18f1f7b7636dae38975ade5" category="section-title">此解決方案涵蓋的內容</block>
+  <block id="da168d451b029c221cbf8cea4acbbe19" category="paragraph">本解決方案說明了對 ONTAP 儲存設備進行資源配置，並將其與 Nutanix Cloud Platform 整合所需的步驟，從而能夠將採用 NFS 的儲存設備用於虛擬化工作負載，同時最佳化成本、擴充性與效能。</block>
+  <block id="40af7bf55634bf778fc4f933d2d0e4a2" category="section-title">高階架構</block>
+  <block id="d650960ceaea0568ada5e54f138be398" category="paragraph">在此架構中，Nutanix 運算叢集提供運算階層，使用 AHV 管理程式在 Nutanix 叢集上執行虛擬機器，而 ONTAP 提供外部共享儲存設備階層。虛擬機器磁碟和資料儲存在 NetApp NFSv3 資料存放區上，由 Nutanix 主機直接掛載。</block>
+  <block id="246e5f67d71ceeffa74ae0dc846704de" category="paragraph">Nutanix 使用 NFSv3 作為虛擬機器 I/O 的高效能資料路徑，而 ONTAP REST API 則用於儲存資源配置、管理和自動化。ONTAP 提供企業級資料服務，包括快照、複製、複寫、儲存效率和不中斷營運，且這些服務獨立於 Nutanix 運算基礎架構。</block>
+  <block id="f6d74ae4e6a1c2c4baa8e371693e9bce" category="inline-image-macro">Nutanix 運算叢集的架構圖，其中三個 AHV 節點透過 NFSv3 和 ONTAP REST API 連接至 NetApp ONTAP 9 叢集</block>
+  <block id="e7d7bec2b9ae170ed6bc0577c80008ed" category="paragraph"><block ref="e7d7bec2b9ae170ed6bc0577c80008ed" category="inline-image-macro-rx" type="image"></block></block>
+  <block id="2659da98abc9c08dfbe43a358abef75e" category="paragraph">這種解耦式架構使客戶能夠獨立擴充運算和儲存設備，最佳化儲存使用率，並運用 ONTAP 獲證實的彈性和資料保護功能。此解決方案支援 NetApp AFF 和 FAS 平台，為虛擬化工作負載、私有雲部署和業務關鍵型應用程式提供靈活的基礎。</block>
+  <block id="6f35fd4aea7586e8cfe094d27efac631" category="paragraph">在搭配 Nutanix 運算叢集部署 ONTAP 儲存設備之前，請檢閱下列要求。</block>
+  <block id="d5a4f2a696644d590f1a1b1b914639e7" category="list-text">至少需要一個三節點運算叢集。</block>
+  <block id="d7fa6a28e8e7d5e89c8b22431b6e72cb" category="list-text">在 ONTAP 中，儲存虛擬機器（SVM）為運算叢集提供儲存設備。</block>
+  <block id="875b12ce36ccc374fc64cf1a8e4b2258" category="list-text">每個 FlexVol Volume 都匯出為 NFSv3 共享或匯出。</block>
+  <block id="f9316a1a896b138a097aa54b68678814" category="section-title">組態限制與注意事項</block>
+  <block id="677ebf7e0b1a7095fbbae3370f1b4a54" category="paragraph">在規劃 Nutanix 和 ONTAP 組態時，請記住以下限制和設計注意事項。</block>
+  <block id="56b1b31f7f7230af5a0d60d2bdaadffa" category="list-text">ONTAP 外部儲存設備無法連接到新建或現有的 Nutanix HCI 叢集。Nutanix 運算叢集可以部署在 HCI 或外部儲存設備組態中，但運算叢集不能同時使用這兩種組態。在現有 HCI 部署中新增外部儲存設備需要完全重新部署節點。</block>
+  <block id="c2b0259f0d8d0300ba1762704dc58772" category="list-text">單一 ONTAP 叢集中只有一個 ONTAP SVM 可以加入 Nutanix 僅運算叢集。</block>
+  <block id="770b5eba62a050593381c034a6b03696" category="list-text">連接儲存 Container 時，每個 SVM 只能使用一個 LIF。</block>
+  <block id="04e146fb9f1da75030e5a4dca14107db" category="list-text">不支援以 ONTAP SnapMirror 為基礎的災難恢復與以 FlexVol 為基礎的快照恢復。</block>
+  <block id="7d20e9fe22670559c1517d1492e04559" category="list-text">單一 ONTAP 叢集可供多個 Nutanix 運算叢集使用，主旨為儲存容量、效能和設計要求。</block>
+  <block id="03af4ddab612673e89672664295ec4e4" category="summary">當您將 VMware 工作負載移轉至搭配 ONTAP 外部儲存設備的 Nutanix AHV 時，請獨立調整 Nutanix AHV 運算與 NetApp ONTAP 儲存設備的規模。</block>
+  <block id="052f58ceb417844c33f5d11e8557c0c5" category="doc">為 Nutanix AHV 移轉調整 ONTAP 儲存設備大小</block>
+  <block id="e23cbfa1197def6682c09a40c494bf2a" category="paragraph">將 VMware 工作負載移轉到配備 NetApp ONTAP 外部儲存設備的 Nutanix AHV 時，請分別規劃運算與儲存設備的規模。Nutanix 運算規模決定了所需的 AHV 節點數量和組態，包括每個節點上控制器虛擬機器（CVM）使用的資源。ONTAP 規模則著重於儲存容量、效能和可用度。</block>
+  <block id="a4ed853a445efea972a59a797722022f" category="section-title">了解 VMware 工作負載要求</block>
+  <block id="ab15b0e572e9628e796c823d17c8d5fc" category="paragraph">從 VMware vCenter 收集 30 至 90 天的虛擬機器層級效能資料，包括：</block>
+  <block id="2d5b1b35a87e9c35f1b7284220b90df0" category="list-text">*運算*：vCPU、CPU 使用率、記憶體容量分配和峰值記憶體容量需求。</block>
+  <block id="319f8caa1f829d70f76e85bf7f1ba8c2" category="list-text">*儲存容量*：已配置和已使用的磁碟空間。</block>
+  <block id="4bc8ffebb70b5accd41f5376175bd9b3" category="list-text">*儲存效能*：讀寫 IOPS、讀寫處理量、平均 I/O 大小與延遲。</block>
+  <block id="f020a90bc688b239107c00ebc3d9d98e" category="list-text">*工作負載模式*：尖峰時段、並行工作負載與讀寫經銷。</block>
+  <block id="b87542b96de79721593dad3534f16124" category="paragraph">針對正在調整規模的工作負載，使用測量到的平均 I/O 大小。對於每個 Nutanix 工作負載，不應假定使用單一區塊大小，例如 8 KiB 或 16 KiB。</block>
+  <block id="9986ccc2895f854058d07e70e2a8ebc2" category="section-title">調整 Nutanix 運算規模</block>
+  <block id="04d8e526599db7192973b90ad308606e" category="inline-link-macro">AHV 節點要求</block>
+  <block id="72fe440d655f1cbeec9ab2d4de51b42e" category="paragraph">根據彙總的虛擬機器 CPU 和記憶體容量需求計算 <block ref="6be2c60eab6837fcca1ca701295f027b" category="inline-link-macro-rx"></block>。包含每個節點上為 CVM 預留的 CPU 和記憶體容量，以及 CPU 過度使用、高可用度要求和預期成長。套用 Nutanix 建議的 CVM 資源預留，以便在每個節點的可用容量中將其列入考量。</block>
+  <block id="b681acc252ff9785de9b861a36df55fa" category="paragraph">分別計算 CPU 和記憶體容量節點的要求。較大的估算值決定了叢集的初始要求。根據 Nutanix 規模指南和高可用性（HA）要求驗證最終組態。</block>
+  <block id="5b4ae3c76d892cbba6bb9456cfb48998" category="section-title">估算 ONTAP 儲存效能規模</block>
+  <block id="a40b230a89089e457be7e98cf27d3965" category="paragraph">請依照下列步驟確定工作負載的 IOPS、處理量、延遲和控制器需求。</block>
+  <block id="b5e8687d1cdf2b1a8cbdc424b949addb" category="list-text">*計算彙總工作負載的 IOPS。*</block>
+  <block id="1ad5fa09ba377526c355359775236672" category="inline-link-macro">NetApp 虛擬機器資料收集器（VMDC）</block>
+  <block id="d2ed1183704b41e9abe9e35346f65b41" category="paragraph">在共同的時間間隔內彙總跨虛擬機器的讀取和寫入 IOPS，以識別實際的並行峰值。使用觀察到的彙總需求，而不是假設每個虛擬機器同時達到各自的峰值。使用 <block ref="bd1ff698c2b3acd5af03831af6080933" category="inline-link-macro-rx"></block>、Live Optics 或任何監控工具來收集虛擬機器磁碟層級的統計資料。</block>
+  <block id="427b078709720263148d9e3f2f82a0d9" category="paragraph">範例工作負載概況：</block>
+  <block id="0164aecbc37fdddffa1d43d785464803" category="list-text">虛擬機器數：500</block>
+  <block id="e33d0efaf7cc674bd7ff8cb42a34a680" category="list-text">每台虛擬機器的平均 IOPS：100</block>
+  <block id="b9de93a41f4138051496e4eab73c0901" category="list-text">彙總平均 IOPS：50,000</block>
+  <block id="c0aca45f9acea2e1b64f87f9a8bd8e13" category="list-text">觀測到的峰值 IOPS：100,000</block>
+  <block id="a63abc889edbfe2457d558bbd7c00071" category="list-text">讀寫比率：70% / 30%</block>
+  <block id="0235bd18b20d4a554fc902cef51b5156" category="list-text">平均 I/O 大小：根據工作負載資料測量</block>
+  <block id="b25c27a7b92ba7886a69e10cb120b327" category="list-text">*計算處理量。*</block>
+  <block id="9d47a616f69267dd69859c33521b4d54" category="paragraph">若可用，請使用測得的讀寫處理量。否則，請使用測得的 I/O 大小進行估算：</block>
+  <block id="aac6a8d1d05a04f46ec918f94e398b64" category="paragraph"><block ref="1385b8ce4e62d638c3de7901573ced45" prefix="" category="inline-code"></block></block>
+  <block id="e45dc9fc154d4bdc4465d10fcc597465" category="paragraph">如果讀取和寫入的 I/O 大小不同，則分別計算讀取和寫入處理量。</block>
+  <block id="bbfc7833a2822beac14bfecce1720bcf" category="list-text">*設定延遲要求。*</block>
+  <block id="f2af8c63b550cbdd0461885f75cdaadf" category="paragraph">目標值應基於 VMware 歷史效能和應用程式要求。例如，通用虛擬機器的目標值可能為 5 毫秒或更低，對效能要求較高的應用程式的目標值可能為 2 毫秒或更低，而某些關鍵資料庫的目標值可能低於毫秒。這些是服務目標，並非 ONTAP 效能保證水準。最終要求應體現應用程式等級協定（SLA）。</block>
+  <block id="c18a914b885b59e79080dc62eaecbc39" category="list-text">*套用工作負載成長。*</block>
+  <block id="d22b909af4ceeeeacf75b1be19301ba9" category="paragraph">納入預期成長，並評估效能變異性、背景作業和快照活動。例如，在 100,000 IOPS 基準上成長 30%，預計要求為 130,000 IOPS。</block>
+  <block id="37090d3bd9be28c9fdf7bc6addbec7ef" category="list-text">*選擇 ONTAP 控制器。*</block>
+  <block id="6118eedbbc6c3d493adf517737935b24" category="paragraph">根據目標延遲下所需的讀寫 IOPS、處理量和網路頻寬、I/O 特性、儲存效率、背景處理、容錯移轉效能以及預期成長，來選擇 AFF 平台。使用 NetApp 支援的規模工具和平台效能資料來驗證組態。單靠 IOPS 不足以決定控制器的選擇。</block>
+  <block id="19d59fdcdab2dde245822074dacd5ccf" category="section-title">規劃 ONTAP 容量規模</block>
+  <block id="e0dcdc1198ffc83720f92c5b393cb1ab" category="paragraph">根據已使用的 VMware 磁碟空間、預期成長、快照保留和預期儲存效率來估算容量。可以使用 2:1 的儲存效率比率作為規劃假設，但實際結果會因工作負載和組態而異。應根據預期的保留和工作負載變化率來計算快照和保護容量，而不是隨意設定一個容差值。</block>
+  <block id="1f2a25309f8d01c25be5427a20ddb550" category="paragraph">容量計算範例：</block>
+  <block id="28e7dc62b3f108e6be27c0a7eca6f12d" category="list-text">500 台虛擬機器 × 100 GiB 消耗：48.8 TiB 邏輯</block>
+  <block id="84ff9ad92ab9c664544ebf3e0ad0dd2d" category="list-text">工作負載成長 30% 後：63.5 TiB 邏輯空間</block>
+  <block id="6b0a140c838e6ddbc93849fb002746ba" category="list-text">2:1 效率下的預計實體資料：31.7 TiB</block>
+  <block id="c6ebad3a7cd50e43e83ac9e1e9d2433f" category="list-text">預估 80% 使用率下的已安裝可用容量：39.7 TiB</block>
+  <block id="9ba70168cbcc565c313056a5d538aa4f" category="paragraph">80% 的使用率數字保留了容量。這不是額外的 20% 營運例行成本。請與 NetApp 解決方案架構師或指定的 NetApp 合作夥伴驗證資料縮減假設、可用容量和平台例行成本。他們可以使用 NetApp Fusion 評估 ONTAP 系統的規模，並確認容量、效能和可用度要求。</block>
+  <block id="007822c806ef210b6ab100489751a268" category="list-text">建立作業系統類型設定為<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block> 的 igroup，並新增主機 FC 啟動器。</block>
+  <block id="fba3cc09cd2befce8e9285817c7abedd" category="paragraph">Proxmox VE 是基於 Debian Linux，因此請針對包含 Proxmox VE 主機啟動器的 igroup 使用<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block> 作業系統類型。在 System Manager 中，選擇 *Linux* 作為主機作業系統。如果您使用 ONTAP CLI，請執行下列命令。</block>
+  <block id="7d0c33b86e92ab690d078b8f4cea50b6" category="list-text">在 SVM 上建立 LUN，將作業系統類型設為<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block> 並設定所需大小，然後將其呈現給上一個步驟中建立的 igroup。確保 ASA 系統在「安全性」標籤中啟用反勒索軟體保護，AFF/FAS 系統在「Volume 安全性」標籤中啟用反勒索軟體保護。</block>
+  <block id="a0c2ec2c88ecabc268aec734b715f2f5" category="paragraph">在 System Manager 中，選擇 *Linux* 作為主機作業系統。如果您使用 ONTAP CLI，請執行下列命令。</block>
+  <block id="12a5429d722c54fc2b990b7192efca4d" category="list-text">建立作業系統類型設定為<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block> 的 igroup，並新增主機 iSCSI 啟動器。</block>
+  <block id="d33f5fae66035c7894e165cda83dfd11" category="list-text">在 SVM 上建立 LUN，將作業系統類型設為<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block> 及所需的大小，並將其呈現給上一個步驟中建立的 igroup。請確保 ASA 系統的安全性標籤中已啟用反勒索軟體保護。對於 AFF/FAS 系統，請確保 Volume 的安全性標籤中已啟用反勒索軟體保護。</block>
+  <block id="f01e62d2af03bb4b22697c48f88ca7b2" category="list-text">建立 NVMe 命名空間，並將作業系統類型設定為<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block>。</block>
+  <block id="a19b827bc9a177885b04bbad3fead60c" category="paragraph">Proxmox VE 是以 Debian Linux 為基礎，因此針對 Proxmox VE 主機存取的命名空間，請使用<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block> 作業系統類型。在 System Manager 中，選擇 *Linux* 作為主機作業系統。如果您使用 ONTAP CLI，請指定<block ref="a79a9777f91ffbc41a1711a0b48d4103" prefix=" " category="inline-code"></block>。</block>
+  <block id="3275470801f2bf5dfb90922b4cfeb2dd" category="list-text">建立子系統，並將主機作業系統類型設定為<block ref="e206a54e97690cce50cc872dd70ee896" prefix=" " category="inline-code"></block>，指派主機 NQN，並將命名空間對應到子系統。</block>
+  <block id="2efafcba0dc3ad95e2a3861e0d6d12ee" category="paragraph">當您建立命名空間並選擇 *Linux* 作為主機作業系統時，System Manager 會建立子系統。如果您使用 ONTAP CLI，請執行下列命令。</block>
+  <block id="382d8a7d3f9dbae2cd54fe68f087b9e9" category="list-text">開啟網頁瀏覽器，輸入以下指令存取 SMP 使用者介面<block ref="f7b77b1b2665fa138c722f56e2afbf0a" prefix=" " category="inline-code"></block></block>
+  <block id="bfbae08b49c5869f29c7ef356cf541ba" category="list-text">使用預設使用者名稱<block ref="21232f297a57a5a743894a0e4a801fc3" prefix=" " category="inline-code"></block>和密碼<block ref="21232f297a57a5a743894a0e4a801fc3" prefix=" " category="inline-code"></block>登入 SMP。</block>
+  <block id="214aa82b7e803741efa1b837ff7c9f6f" category="paragraph">出現提示時，請變更預設密碼。使用 Shift 工具套件安裝 SMP 時，也適用相同的預設憑證。</block>
+  <block id="c1d5eadc03b8ae8e90a09d7216f26935" category="section-title">2026 年 10 月 22 日</block>
+  <block id="585eb0ed546547b6782499bbe77004af" category="list-text">為與 Proxmox VE 搭配使用的 NVMe 命名空間、NVMe 子系統、LUN 和 igroup 新增了建議的 ONTAP OS 類型。</block>
+  <block id="c66ca2a188d7348d29ef387e66ba317d" category="list-text"><block ref="2e94ca9f81de016c02e76e148fee1eaf" category="inline-link-macro-rx"></block> == 2026 年 10 月 14 日</block>
+  <block id="9c23910fefbeeda3ddd579351b6ec0de" category="sidebar">NetApp Nutanix 虛擬化解決方案示範如何將 NetApp ONTAP 用作 Nutanix 雲端平台的外部 NFS 儲存設備，以便您可以獨立擴充運算和儲存設備。</block>
+  <block id="d729979f2a5ebe49b7739031bd07bb1b" category="sidebar">NetApp Nutanix 虛擬化解決方案</block>
+  <block id="97a1afd73c2cd01eeba4f33af7085273" category="sidebar">了解搭配 ONTAP 儲存設備的 Nutanix</block>
+  <block id="8ff6db39887e6f377cd6bccb51423334" category="sidebar">Nutanix 雲端平台文件</block>
+  <block id="3792027e94ae6c9190db74074a73a179" category="sidebar">部署 Nutanix 與 ONTAP</block>
+  <block id="54b6e2a7fb724421b4465be2511dc7df" category="sidebar">部署 Nutanix 運算叢集</block>
+  <block id="ce23a175ba3308c055cffed5849cb891" category="sidebar">設定 ONTAP Volume 和權限</block>
+  <block id="864a1c8353d9cb6107d0654bb70de59a" category="sidebar">連接 ONTAP NFS 儲存設備</block>
+  <block id="9c5ffdefc6ca815ae609bdfec9a4622c" category="sidebar">規劃與保護</block>
+  <block id="4454b239e8242fc257f918e7fbad8787" category="sidebar">資料保護、災難恢復和限制</block>
+  <block id="098f5a33637670276d04c3dca13babd0" category="sidebar">Nutanix 虛擬化</block>
+  <block id="ee6ba74d15434fa7f9488015f9c2ade7" category="sidebar">關於搭配 ONTAP 儲存設備的 Nutanix</block>
+  <block id="b6bc930a5d1ecffce002445909a91249" category="sidebar">部署搭配 ONTAP 儲存設備的 Nutanix</block>
+  <block id="f35ae7427609e0b7edeeb614e901b52b" category="sidebar">使用 NetApp ONTAP 部署 Nutanix 雲端平台</block>
+  <block id="655f594403daccdc2c80061d472731bc" category="sidebar">資料保護、災難恢復和限制</block>
+  <block id="0c5410939f2fbf4c292853697d3cbb3c" category="sidebar">Nutanix 與 ONTAP 的資料保護、災難恢復與限制</block>
+  <block id="b148bfd5e1eea585283ef9778eaf950d" category="sidebar">為 AHV 移轉調整 ONTAP 儲存設備大小</block>
 </blocks>

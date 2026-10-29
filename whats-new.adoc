@@ -15,8 +15,13 @@ summary: NetApp虛擬化解決方案附件的最新變更日誌。
 
 
 
-[[14-october-2026]]
-== 2026 年 10 月 14 日
+[[22-october-2026]]
+== 2026 年 10 月 22 日
+
+* 為與 Proxmox VE 搭配使用的 NVMe 命名空間、NVMe 子系統、LUN 和 igroup 新增了建議的 ONTAP OS 類型。
++
+** link:proxmox/proxmox-ontap.html["為 Proxmox 虛擬環境配置ONTAP存儲"] == 2026 年 10 月 14 日
+
 
 * 為 Proxmox VE 新增了搭配 ONTAP SnapMirror 作用中同步的業務連續性解決方案。
 +

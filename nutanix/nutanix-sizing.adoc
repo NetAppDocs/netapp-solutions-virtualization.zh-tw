@@ -1,0 +1,105 @@
+---
+sidebar: sidebar 
+permalink: nutanix/nutanix-sizing.html 
+keywords: nutanix, ahv, ontap, sizing, migration, vmware, iops, capacity, vmdc 
+summary: 當您將 VMware 工作負載移轉至搭配 ONTAP 外部儲存設備的 Nutanix AHV 時，請獨立調整 Nutanix AHV 運算與 NetApp ONTAP 儲存設備的規模。 
+---
+= 為 Nutanix AHV 移轉調整 ONTAP 儲存設備大小
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+將 VMware 工作負載移轉到配備 NetApp ONTAP 外部儲存設備的 Nutanix AHV 時，請分別規劃運算與儲存設備的規模。Nutanix 運算規模決定了所需的 AHV 節點數量和組態，包括每個節點上控制器虛擬機器（CVM）使用的資源。ONTAP 規模則著重於儲存容量、效能和可用度。
+
+
+
+[[discover-vmware-workload-requirements]]
+== 了解 VMware 工作負載要求
+
+從 VMware vCenter 收集 30 至 90 天的虛擬機器層級效能資料，包括：
+
+* *運算*：vCPU、CPU 使用率、記憶體容量分配和峰值記憶體容量需求。
+* *儲存容量*：已配置和已使用的磁碟空間。
+* *儲存效能*：讀寫 IOPS、讀寫處理量、平均 I/O 大小與延遲。
+* *工作負載模式*：尖峰時段、並行工作負載與讀寫經銷。
+
+
+針對正在調整規模的工作負載，使用測量到的平均 I/O 大小。對於每個 Nutanix 工作負載，不應假定使用單一區塊大小，例如 8 KiB 或 16 KiB。
+
+
+
+[[size-nutanix-compute]]
+== 調整 Nutanix 運算規模
+
+根據彙總的虛擬機器 CPU 和記憶體容量需求計算 link:https://sizer.nutanix.com/["AHV 節點要求"^]。包含每個節點上為 CVM 預留的 CPU 和記憶體容量，以及 CPU 過度使用、高可用度要求和預期成長。套用 Nutanix 建議的 CVM 資源預留，以便在每個節點的可用容量中將其列入考量。
+
+分別計算 CPU 和記憶體容量節點的要求。較大的估算值決定了叢集的初始要求。根據 Nutanix 規模指南和高可用性（HA）要求驗證最終組態。
+
+
+
+[[size-ontap-storage-performance]]
+== 估算 ONTAP 儲存效能規模
+
+請依照下列步驟確定工作負載的 IOPS、處理量、延遲和控制器需求。
+
+. *計算彙總工作負載的 IOPS。*
++
+在共同的時間間隔內彙總跨虛擬機器的讀取和寫入 IOPS，以識別實際的並行峰值。使用觀察到的彙總需求，而不是假設每個虛擬機器同時達到各自的峰值。使用 link:https://docs.netapp.com/us-en/netapp-solutions-virtualization/vmware/vmw-getting-started-vmdc.html["NetApp 虛擬機器資料收集器（VMDC）"^]、Live Optics 或任何監控工具來收集虛擬機器磁碟層級的統計資料。
+
++
+範例工作負載概況：
+
++
+** 虛擬機器數：500
+** 每台虛擬機器的平均 IOPS：100
+** 彙總平均 IOPS：50,000
+** 觀測到的峰值 IOPS：100,000
+** 讀寫比率：70% / 30%
+** 平均 I/O 大小：根據工作負載資料測量
+
+
+. *計算處理量。*
++
+若可用，請使用測得的讀寫處理量。否則，請使用測得的 I/O 大小進行估算：
+
++
+`Throughput = IOPS × Average I/O Size`
+
++
+如果讀取和寫入的 I/O 大小不同，則分別計算讀取和寫入處理量。
+
+. *設定延遲要求。*
++
+目標值應基於 VMware 歷史效能和應用程式要求。例如，通用虛擬機器的目標值可能為 5 毫秒或更低，對效能要求較高的應用程式的目標值可能為 2 毫秒或更低，而某些關鍵資料庫的目標值可能低於毫秒。這些是服務目標，並非 ONTAP 效能保證水準。最終要求應體現應用程式等級協定（SLA）。
+
+. *套用工作負載成長。*
++
+納入預期成長，並評估效能變異性、背景作業和快照活動。例如，在 100,000 IOPS 基準上成長 30%，預計要求為 130,000 IOPS。
+
+. *選擇 ONTAP 控制器。*
++
+根據目標延遲下所需的讀寫 IOPS、處理量和網路頻寬、I/O 特性、儲存效率、背景處理、容錯移轉效能以及預期成長，來選擇 AFF 平台。使用 NetApp 支援的規模工具和平台效能資料來驗證組態。單靠 IOPS 不足以決定控制器的選擇。
+
+
+
+
+
+[[size-ontap-capacity]]
+== 規劃 ONTAP 容量規模
+
+根據已使用的 VMware 磁碟空間、預期成長、快照保留和預期儲存效率來估算容量。可以使用 2:1 的儲存效率比率作為規劃假設，但實際結果會因工作負載和組態而異。應根據預期的保留和工作負載變化率來計算快照和保護容量，而不是隨意設定一個容差值。
+
+容量計算範例：
+
+* 500 台虛擬機器 × 100 GiB 消耗：48.8 TiB 邏輯
+* 工作負載成長 30% 後：63.5 TiB 邏輯空間
+* 2:1 效率下的預計實體資料：31.7 TiB
+* 預估 80% 使用率下的已安裝可用容量：39.7 TiB
+
+
+80% 的使用率數字保留了容量。這不是額外的 20% 營運例行成本。請與 NetApp 解決方案架構師或指定的 NetApp 合作夥伴驗證資料縮減假設、可用容量和平台例行成本。他們可以使用 NetApp Fusion 評估 ONTAP 系統的規模，並確認容量、效能和可用度要求。

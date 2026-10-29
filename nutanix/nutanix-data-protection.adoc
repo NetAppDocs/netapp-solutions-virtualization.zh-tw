@@ -1,0 +1,66 @@
+---
+sidebar: sidebar 
+permalink: nutanix/nutanix-data-protection.html 
+keywords: nutanix, ontap, data protection, disaster recovery, snapshot, snapmirror, migration, nutanix move, limitations, ga 
+summary: 了解 Nutanix 與 ONTAP 外部儲存設備的資料保護、災難恢復和 VM 移轉是如何運作的，以及哪些功能在正式可用度時不受支援。 
+---
+= Nutanix 與 ONTAP 的資料保護、災難恢復、移轉和限制
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+了解當您使用 ONTAP 作為 Nutanix 運算叢集的外部儲存設備時，資料保護、災難恢復和 VM 移轉是如何運作的，並審查在正式可用度（GA）時不支援的功能。
+
+
+
+[[data-protection]]
+== 資料保護
+
+Prism 管理的虛擬機器快照使用虛擬機器磁碟的 ONTAP 檔案層級複製，而不是 ONTAP Volume 快照。Prism 管理快照生命週期，而 ONTAP 提供底層檔案複製功能。
+
+檔案複製是作用中檔案系統中的可寫入的複本。它本身無法鎖定以防止刪除，不是 ARP 恢復點，也不會透過 SnapMirror 或 SnapVault 獨立保留或歸檔。每個磁碟都是單獨複製的，因此除非進行協調，否則無法在單一共享的時間點擷取跨磁碟的恢復點。ONTAP Volume 快照原生提供這些保護。需要不可更改、可抵禦勒索軟體攻擊且長期保留的恢復點的客戶應考慮等待 ONTAP 快照整合。
+
+
+NOTE: ONTAP 快照支援的 GA 限制計畫在未來的版本中解決。
+
+
+
+[[disaster-recovery]]
+== 災難復原
+
+在 GA 版本期間，Nutanix 非同步災難恢復是唯一受支援的複寫方法。ONTAP SnapMirror 無法使用。
+
+SnapMirror 是站點間複寫 ONTAP 資料的首選方案。它僅複寫變更的區塊，在傳輸過程中和目的地保留重複資料刪除與壓縮的節省效益，並且可以在二線系統上保留多個恢復點。由於複寫在儲存系統上執行，因此主機無需製作資料複本。對於使用 ONTAP 作為外部儲存設備的客戶而言，這意味著 DR 使用與其 ONTAP 環境其餘部分相同的複寫、保留和恢復流程。
+
+
+NOTE: SnapMirror 整合計畫在未來的版本中推出。想要在 ONTAP 複寫上將 DR 標準化的客戶，應考慮等待 SnapMirror 整合。
+
+
+
+[[vm-migrations]]
+== VM 移轉
+
+在此版本中，虛擬機器移轉使用 Nutanix Move。不支援 NetApp Shift 工具套件。Shift 工具套件與 Nutanix Move 的整合計畫在未來的版本中推出。它將使用 ONTAP 複製和配置的區塊對應，以避免完整的資料複本並加快移轉速度。
+
+
+
+[[features-not-supported-at-ga]]
+== 正式版不支援的功能
+
+針對 NetApp 與 Nutanix 整合，GA 版本不支援下列組態、功能與整合：
+
+* 使用多個 NetApp 陣列、每個 Nutanix 叢集多個儲存設備虛擬機器（SVM）或多個邏輯介面（LIF）的組態
+* NetApp MetroCluster
+* ONTAP 快照及其相依功能
+* SnapMirror主動同步
+* ONTAP Select
+* 適用於 Nutanix Kubernetes Platform （NKP） 的 NetApp Trident
+* NFSv4.1
+* FlexGroup Volume
+* NetApp Shift 工具套件
+

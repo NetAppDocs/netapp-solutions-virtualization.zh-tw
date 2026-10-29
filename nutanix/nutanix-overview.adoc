@@ -1,0 +1,116 @@
+---
+sidebar: sidebar 
+permalink: nutanix/nutanix-overview.html 
+keywords: nutanix, ahv, ontap, nfs, netapp, virtualization, overview, architecture, disaggregated 
+summary: 了解 NetApp ONTAP 儲存設備如何與 Nutanix Cloud Platform 整合，以提供外部 NFS 儲存設備並獨立擴充運算和儲存設備。 
+---
+= 了解搭配 NetApp ONTAP 儲存設備的 Nutanix 雲端平台
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Nutanix 雲端平台與 NetApp ONTAP 儲存設備提供了解耦架構，讓您能獨立於 Nutanix 運算來擴充儲存容量和效能。了解架構、支援的組態，以及部署前需要注意的要求。
+
+ONTAP 為託管 Nutanix 虛擬機器工作負載提供易擴充的且具有恢復能力的儲存平台，使組織能夠簡化儲存管理，同時優化容量使用率、效能和資料保護。
+
+透過將 Nutanix 運算與 ONTAP 儲存設備結合，客戶可以運用企業級儲存設備服務、靈活的資料管理員和無縫擴充性，同時保持一致的營運模式。該解決方案採用熟悉的儲存設備概念，例如儲存設備虛擬機器（SVM）、FlexVol Volume、匯出原則和 NFS 資料存放區，讓管理員能夠使用既有的 ONTAP 工具和程序來部署和管理儲存設備。這種整合使 Nutanix AHV Hypervisor 能夠從 ONTAP 成熟的資料服務中獲得優點，同時為虛擬化環境提供靈活且高效的基礎架構。
+
+
+
+[[introduction]]
+== 介紹
+
+了解組織為何正在評估 Nutanix 雲端平台，它可能帶來的運算和儲存設備擴充挑戰，以及 NetApp ONTAP 外部儲存設備如何應對這項挑戰。
+
+
+
+[[why-organizations-are-reassessing-virtualization]]
+=== 為什麼組織正在重新評估虛擬化
+
+Broadcom 收購 VMware 後，虛擬化格局發生了顯著變化，促使許多組織重新評估其長期基礎架構和雲端策略。隨著企業推動現代化計畫，他們正在評估能夠交付營運一致性、擴充性和經濟效率，同時將對現有工作負載的毀損降至最低的平台。無論是出於授權變更、成本最佳化目標、資料中心轉型計畫，還是對更高混合雲靈活度的需求，組織都在日益尋求能夠簡化移轉並為其虛擬化環境提供永續發展路徑的解決方案。
+
+
+
+[[nutanix-cloud-platform]]
+=== Nutanix Cloud Platform
+
+Nutanix Cloud Platform （NCP） 提供一致的混合多雲營運模式，使組織能夠在內部部署環境和公有雲上執行應用程式和資料，同時維持共通的管理、營運和治理。透過運用 Nutanix 軟體定義架構，客戶可以無縫地跨環境擴展工作負載，簡化基礎架構管理，並降低營運複雜度。
+
+
+
+[[the-compute-and-storage-scaling-challenge]]
+=== 運算和儲存設備擴充挑戰
+
+虛擬化環境中常見的挑戰是平衡運算和儲存設備需求。傳統架構通常要求組織擴充運算資源，只為了獲得額外儲存容量，導致基礎架構成本增加。儲存密集型工作負載通常需要額外的容量和效能，而不是額外的 CPU 和記憶體容量資源。
+
+
+
+[[how-ontap-addresses-the-challenge]]
+=== ONTAP 如何應對挑戰
+
+這就是將 NetApp ONTAP 儲存設備與 Nutanix Cloud Platform 整合能帶來顯著價值的地方。ONTAP 提供企業級儲存功能，包括高效能、效率、資料保護、安全性和擴充性，同時允許儲存容量和效能獨立於 Nutanix 運算基礎架構進行擴充。
+
+
+
+[[example-scenario]]
+=== 範例場景
+
+考慮以下情境：客戶需要相當於八個節點的基礎架構資源，以滿足應用程式的運算需求（vCPU 和記憶體容量）。然而，由於快速的資料增長和儲存密集型應用程式，該組織需要的儲存容量傳統上會需要部署額外的節點。這會增加整體擁有成本（TCO），因為客戶必須購買額外的運算資源，僅為了滿足儲存設備需求。透過將 ONTAP 整合到 Nutanix 環境中，組織可以提供真正解耦的架構，該架構可以獨立擴充儲存設備，在無需不必要的運算擴充的情況下，提供所需的容量和儲存效能。
+
+
+
+[[supported-workloads-and-use-cases]]
+=== 支援的工作負載與使用案例
+
+這項功能對廣泛的企業應用程式部署極具價值，包括業務關鍵資料庫、ERP 平台、Microsoft 應用程式、虛擬桌面基礎架構（VDI）、分析工作負載、AI/ML 環境、檔案服務以及現代容器化應用程式。它還支援關鍵的基礎架構計畫，例如工作負載移轉、災難恢復、開發和測試環境、資料保護以及網路彈性。透過實現運算和儲存資源的獨立擴充，企業可以最佳化基礎架構投資，在運算叢集之間共享高密度儲存設備的通用資源池，同時滿足傳統應用程式和現代應用程式對效能、可用度和容量的需求。
+
+
+
+[[what-this-solution-covers]]
+=== 此解決方案涵蓋的內容
+
+本解決方案說明了對 ONTAP 儲存設備進行資源配置，並將其與 Nutanix Cloud Platform 整合所需的步驟，從而能夠將採用 NFS 的儲存設備用於虛擬化工作負載，同時最佳化成本、擴充性與效能。
+
+
+
+[[high-level-architecture]]
+== 高階架構
+
+在此架構中，Nutanix 運算叢集提供運算階層，使用 AHV 管理程式在 Nutanix 叢集上執行虛擬機器，而 ONTAP 提供外部共享儲存設備階層。虛擬機器磁碟和資料儲存在 NetApp NFSv3 資料存放區上，由 Nutanix 主機直接掛載。
+
+Nutanix 使用 NFSv3 作為虛擬機器 I/O 的高效能資料路徑，而 ONTAP REST API 則用於儲存資源配置、管理和自動化。ONTAP 提供企業級資料服務，包括快照、複製、複寫、儲存效率和不中斷營運，且這些服務獨立於 Nutanix 運算基礎架構。
+
+image:nutanix-overview-001.png["Nutanix 運算叢集的架構圖，其中三個 AHV 節點透過 NFSv3 和 ONTAP REST API 連接至 NetApp ONTAP 9 叢集"]
+
+這種解耦式架構使客戶能夠獨立擴充運算和儲存設備，最佳化儲存使用率，並運用 ONTAP 獲證實的彈性和資料保護功能。此解決方案支援 NetApp AFF 和 FAS 平台，為虛擬化工作負載、私有雲部署和業務關鍵型應用程式提供靈活的基礎。
+
+
+
+[[requirements]]
+== 需求
+
+在搭配 Nutanix 運算叢集部署 ONTAP 儲存設備之前，請檢閱下列要求。
+
+* 至少需要一個三節點運算叢集。
+* 在 ONTAP 中，儲存虛擬機器（SVM）為運算叢集提供儲存設備。
+* 每個 FlexVol Volume 都匯出為 NFSv3 共享或匯出。
+
+
+
+
+[[configuration-limitations-and-considerations]]
+== 組態限制與注意事項
+
+在規劃 Nutanix 和 ONTAP 組態時，請記住以下限制和設計注意事項。
+
+* ONTAP 外部儲存設備無法連接到新建或現有的 Nutanix HCI 叢集。Nutanix 運算叢集可以部署在 HCI 或外部儲存設備組態中，但運算叢集不能同時使用這兩種組態。在現有 HCI 部署中新增外部儲存設備需要完全重新部署節點。
+* 單一 ONTAP 叢集中只有一個 ONTAP SVM 可以加入 Nutanix 僅運算叢集。
+* 連接儲存 Container 時，每個 SVM 只能使用一個 LIF。
+* 不支援以 ONTAP SnapMirror 為基礎的災難恢復與以 FlexVol 為基礎的快照恢復。
+* 單一 ONTAP 叢集可供多個 Nutanix 運算叢集使用，主旨為儲存容量、效能和設計要求。
+

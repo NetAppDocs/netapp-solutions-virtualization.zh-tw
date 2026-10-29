@@ -152,7 +152,7 @@ image::proxmox-smp-image2.png[SMP 安裝精靈]
 
 
 
-. 開啟網頁瀏覽器，輸入以下指令存取 SMP 使用者介面 `http://<IP address specified during installation>:4001`
+. 開啟網頁瀏覽器，輸入以下指令存取 SMP 使用者介面 `https://<IP address specified during installation>:4001`
 +
 .檢視 SMP 登入畫面
 [%collapsible]
@@ -160,6 +160,10 @@ image::proxmox-smp-image2.png[SMP 安裝精靈]
 image::proxmox-smp-image4.png[SMP 登入介面]
 
 ====
+. 使用預設使用者名稱 `admin`和密碼 `admin`登入 SMP。
++
+出現提示時，請變更預設密碼。使用 Shift 工具套件安裝 SMP 時，也適用相同的預設憑證。
+
 +
 .檢視 SMP 主畫面
 [%collapsible]

@@ -1,0 +1,24 @@
+---
+section: nutanix
+title: Nutanix 虛擬化
+url: "/nutanix/index.html"
+entries:
+- title: 關於搭配 ONTAP 儲存設備的 Nutanix
+  url: "/nutanix/nutanix-overview.html"
+- title: 部署搭配 ONTAP 儲存設備的 Nutanix
+  pdf-filename: 使用 NetApp ONTAP 部署 Nutanix 雲端平台
+  entries:
+  - title: 準備部署
+    url: "/nutanix/nutanix-connectivity.html"
+  - title: 部署 Nutanix 運算叢集
+    url: "/nutanix/nutanix-deploy-cluster.html"
+  - title: 設定 ONTAP Volume 和權限
+    url: "/nutanix/nutanix-ontap-storage.html"
+- title: 連接 ONTAP NFS 儲存設備
+  url: "/nutanix/nutanix-attach-storage.html"
+- title: 資料保護、災難恢復和限制
+  pdf-filename: Nutanix 與 ONTAP 的資料保護、災難恢復與限制
+  url: "/nutanix/nutanix-data-protection.html"
+- title: 為 AHV 移轉調整 ONTAP 儲存設備大小
+  pdf-filename: 為 Nutanix AHV 移轉調整 ONTAP 儲存設備大小
+  url: "/nutanix/nutanix-sizing.html"

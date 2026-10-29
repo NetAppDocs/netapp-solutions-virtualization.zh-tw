@@ -1,0 +1,81 @@
+---
+sidebar: sidebar 
+permalink: nutanix/nutanix-attach-storage.html 
+keywords: nutanix, prism element, prism central, external storage, ontap, nfs, storage container, attach 
+summary: 使用 Prism Element 將 ONTAP NFS Volume 作為儲存 Container 附加到 Nutanix 運算叢集。 
+---
+= 將 ONTAP NFS 儲存設備連接到 Nutanix 運算叢集
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+在資源配置 ONTAP Volume 並設定連線後，使用 Prism Element 或 Prism Central 將 ONTAP NFS Volume 作為儲存 Container 連接到 Nutanix 運算叢集。
+
+.開始之前
+請確保滿足以下先決條件：
+
+* ONTAP 叢集或 SVM 可從 Nutanix 叢集存取。
+* 存在有效的 ONTAP 管理 LIF（IP 位址或 FQDN）。
+* 您擁有相應的 ONTAP 憑證。
+* 已建立所需的 FlexVol、qtree 或資料夾匯出路徑，並已設定供 NFS 存取。
+
+
+.步驟
+. 登入 Prism Element Web 控制台。
+. 從主選單中選擇 *儲存設備* ，然後按一下 *+ 連接外部儲存設備* 。
+. 在 *初始設定* 頁面上，審查可用資訊，然後按一下 *下一步*。
++
+image:nutanix-attach-001.png["連接外部儲存設備精靈，初始設定頁面"]
+
+. 在 *連線詳細資料* 頁面上，選擇 *NetApp ONTAP* 作為外部儲存設備廠商，然後輸入下列值：
++
+** *IP 位址（IPv4）或 FQDN*：輸入 ONTAP 叢集或 SVM 管理 LIF 位址或 FQDN。
+** *使用者名稱*：輸入 ONTAP 服務帳戶使用者名稱。
+** *密碼*：請輸入服務帳戶密碼。
++
+按一下 *Next* 。
+
++
+image:nutanix-attach-002.png["連接外部儲存設備精靈，「連線詳細資料」頁面"]
+
+
+
+. 在 *儲存詳細資料* 頁面上，在 *外部儲存名稱* 中為 ONTAP 儲存系統指定一個唯一的名稱，在 *匯出路徑* 中輸入一個或多個儲存設備匯出路徑，然後按一下 *新增*。
++
+
+NOTE: 支援的匯出路徑包括 FlexVol 和 qtree 匯出路徑。
+
++
+image:nutanix-attach-003.png["連接外部儲存設備精靈，「儲存設備詳細資料」頁面顯示服務 Volume 匯出路徑選擇"]
+
+. 按一下 *附加*。
++
+系統將 ONTAP 儲存設備連接到 Nutanix 叢集。您可以在 Prism Element 的 *Tasks* 中監控進度和狀態資訊。
+
++
+image:nutanix-attach-004.png["「連接外部儲存」精靈的「儲存詳細資料」頁面顯示所選的匯出路徑及其容量"]
+
++
+
+NOTE: 此  `nconnect` 選項用於裝載選項中。
+
+
+
+[NOTE]
+====
+* 在組態期間新增的第一個匯出路徑會自動指定為預設儲存 Container，並標記為 *預設 Container*。
+* NetApp 建議使用多個 FlexVol Volume 作為儲存 Container，以分配虛擬機器工作負載並平衡容量使用率。
+* 使用專用 Volume 進行中繼資料服務（管理）。
+* 除非匯出路徑已指派給叢集服務（中繼資料）Volume 或預設儲存 Container，否則您可以移除匯出路徑。
+* 外部儲存設備連接到 Nutanix 運算叢集時無法移除。
+* 一個 Nutanix 運算叢集只能連接一個 ONTAP 外部儲存系統。
+* Nutanix 建議每個節點最多 128 個虛擬機器，最多 32 個節點，以及在 DR 叢集之間最多 4,800 個 AOS 複寫的 vDisks（結合非同步與同步複寫）。
+
+
+====
+掛載儲存設備後，在 Nutanix 雲端基礎架構（NCI）平台上部署 Prism Central，執行叢集管理和組態任務。您也可以透過 Prism Central 掛載 ONTAP 儲存設備。

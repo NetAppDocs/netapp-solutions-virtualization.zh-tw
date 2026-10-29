@@ -22,6 +22,7 @@ sidebar:
   - section: virtualization
   - section: vmware
   - section: hyperv
+  - section: nutanix
   - section: osv
   - section: proxmox
   - section: kvm

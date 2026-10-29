@@ -1,0 +1,155 @@
+---
+sidebar: sidebar 
+permalink: nutanix/nutanix-deploy-cluster.html 
+keywords: nutanix, ahv, aos, foundation central, cluster, deploy, ontap, netapp 
+summary: 使用 Foundation Central 部署 Nutanix 運算叢集，然後將其連接至 NetApp ONTAP 儲存設備。 
+---
+= 部署具有 ONTAP 儲存設備的 Nutanix 運算叢集
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+部署使用 NetApp ONTAP 儲存設備的 Nutanix 運算叢集。您下載 AOS 和 AHV 安裝套件，設定 Foundation Central，對運算節點進行 "映像" 和就職，建立叢集，然後將 ONTAP 儲存設備連接至該叢集。
+
+.步驟
+. *下載 AOS 和 AHV 安裝套件。*
++
+如需詳細資訊，請參閱 link:https://portal.nutanix.com/page/documents/details?targetId=AHV-Admin-Guide-v11_2:ahv-ahv-installer-download-t.html["下載 AOS 和 AHV 安裝套件"^]。
+
+. *設定 Foundation Central。*
++
+Nutanix Foundation Central (FCA) 是建議的部署工具，用於對受支援的 OEM 伺服器製作映像並建立 Nutanix 運算叢集。
+
++
+.. 下載 Foundation 安裝程式套裝組合並部署 Foundation VM。
+.. 完成link:https://portal.nutanix.com/page/documents/details?targetId=Foundation-Central-Appliance-v1_11:v1-setup-fca-t.html["Foundation Central 設定"^]。
+.. 根據需要更新管理 IP 位址和網路設定。
+.. 使用已設定的 IP 位址存取 Foundation Central web UI。
++
+
+NOTE: 如果 Foundation Central 部署失敗，登入 FCA VM，執行 `k3d cluster delete fccluster`，然後重新執行設定程序。
+
++
+如需詳細資訊，請參閱 link:https://portal.nutanix.com/page/documents/details?targetId=Field-Installation-Guide:fie-foundation-vm-install-on-workstation-t.html["安裝 Foundation VM"^]。
+
+
+
+. *上傳 AOS 和 AHV 安裝 "映像"。*
++
+使用 Foundation Central "映像" 管理執行下列操作：
+
++
+.. 將 AOS 和 AHV "映像" 上傳到 Foundation Central。
+.. 確認 "映像" 可用於部署。
+
+
+. *探索並"映像"運算節點*
++
+請選擇以下選項之一。
+
++
+*選項 A：硬體供應商（建議）*
+
++
+使用 link:https://portal.nutanix.com/page/documents/details?targetId=Foundation-Central-Appliance-v2_3_0_1:v2-bare-metal-install-workflow-c.html["硬體供應商"^] 來自動化節點 "映像" 與就職。
+
++
+.. 使用 HPE iLO 或 Dell iDRAC 設定硬體供應商連線。
+.. 自動探索目標伺服器。
+.. 選擇已上傳的 AOS 和 AHV 映像。
+.. 直接從 Foundation Central 為節點建立 "映像"。
++
+*選項 B：手動映像*
+
++
+如果硬體供應商探索無法使用，請使用 link:https://portal.nutanix.com/page/documents/details?targetId=Foundation-Central-Appliance-v2_3_0_1:v2-manual-workflow-c.html["手冊成像"^]。
+
++
+在開始之前，請確保滿足以下先決條件：
+
++
+*** 已啟用 UEFI 開機模式。
+*** 安全開機已停用。
+*** 頻外（OOB）和資料網路可連線。
+*** 主機與 Foundation Central 之間沒有時間偏差。
+*** 每個主機都有一個可用的 AHV IP 位址。
++
+
+NOTE: 請勿從與預設 VLAN 上的 192.168.5.0/24 位址空間重疊的子網路中指派 IP 位址。
+
+
+
+.. 建立安全的宣告權杖。
+.. 將 AHV 安裝 ISO 掛載到每個運算節點上。
+.. 手動開機並安裝 AHV。
+
+
+. *讓節點就職。*
++
+就職會將探索到的伺服器向 Foundation Central Appliance 註冊，並為 "映像" 或叢集建立工作流程做好準備。
+
++
+.. 選擇已探索的 AHV 主機。
+.. 開始就職程序。
+.. 確認所有節點都出現在節點清單中。
++
+就職完成後，主機即可用於建立叢集。
+
+
+
+. *建立 Nutanix 叢集。*
++
+.. 選擇已就職的節點。
+.. 按一下 *建立叢集*。
+.. 請提供叢集組態資訊。
+.. 出現提示時，輸入控制器虛擬機器（CVM）IP 位址。
++
+叢集建立工作流程執行以下操作：
+
++
+*** 部署 CVM。
+*** 安裝 AOS。
+*** 設定叢集服務。
+*** 執行驗證檢查。
++
+image:nutanix-deploy-001.png["執行 AHV 的新建立 Nutanix 叢集的 Prism Element 首頁"]
+
++
+
+NOTE: 確保節點間沒有時間偏差。時脈同步失敗會導致叢集部署失敗，需要重新啟動程序。
+
+
+
+
+
+. *將 ONTAP 儲存設備連接到 Nutanix 運算叢集。*
++
+Nutanix 叢集運作後，請執行下列操作：
+
++
+.. 驗證所有 AHV 主機與 ONTAP NFS 資料 LIF 之間的連線能力。
+.. 將 ONTAP NFS 匯出新增至 Nutanix 叢集。
+.. 掛載匯出的 FlexVol NFS 共用。
+.. 驗證讀寫存取。
+.. 確認資料儲存的可見度和可用度。
++
+您可以將已掛載的 NFS 儲存設備用於以下用途：
+
++
+*** 虛擬機器工作負載
+*** "映像"儲存庫
+*** 範本
+*** 應用程式資料
++
+詳細步驟請參閱link:nutanix-attach-storage.html["將 ONTAP NFS 儲存設備連接到 Nutanix 運算叢集"]。
+
+
+
+
+
+

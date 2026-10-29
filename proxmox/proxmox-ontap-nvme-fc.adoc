@@ -44,7 +44,15 @@ nvme show-hostnqn
 如果您是ONTAP新手，請使用系統管理員以獲得更好的體驗。
 
 . 確保SVM可用且已啟用NVMe協定。請參閱 link:https://docs.netapp.com/us-en/ontap/san-admin/create-nvme-namespace-subsystem-task.html["ONTAP 9 上的 NVMe 任務文檔"]。
-. 建立 NVMe 命名空間。
+. 建立 NVMe 命名空間，並將作業系統類型設定為 `linux`。
++
+Proxmox VE 是以 Debian Linux 為基礎，因此針對 Proxmox VE 主機存取的命名空間，請使用 `linux` 作業系統類型。在 System Manager 中，選擇 *Linux* 作為主機作業系統。如果您使用 ONTAP CLI，請指定 `-ostype linux`。
+
++
+[source, cli]
+----
+vserver nvme namespace create -vserver <svm_name> -path /vol/<volume_name>/<namespace_name> -size <size> -ostype linux
+----
 +
 .顯示範例
 [%collapsible]
@@ -52,7 +60,17 @@ nvme show-hostnqn
 image:proxmox-ontap-nvme-fc-001.png["nvme 命名空間創建"]
 
 ====
-. 建立子系統並指派主機 NQN（如果使用 CLI）。請點擊上方連結查看詳情。
+. 建立子系統，並將主機作業系統類型設定為 `linux`，指派主機 NQN，並將命名空間對應到子系統。
++
+當您建立命名空間並選擇 *Linux* 作為主機作業系統時，System Manager 會建立子系統。如果您使用 ONTAP CLI，請執行下列命令。
+
++
+[source, cli]
+----
+vserver nvme subsystem create -vserver <svm_name> -subsystem <subsystem_name> -ostype linux
+vserver nvme subsystem host add -vserver <svm_name> -subsystem <subsystem_name> -host-nqn <host_nqn>
+vserver nvme subsystem map add -vserver <svm_name> -subsystem <subsystem_name> -path /vol/<volume_name>/<namespace_name>
+----
 . 請確保在安全性標籤中啟用反勒索軟體保護。
 +
 .顯示範例
