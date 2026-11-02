@@ -30,7 +30,7 @@ summary: ROSA 上的 Red Hat OpenShift 虛擬化
 * link:https://console.redhat.com/openshift/downloads["ROSA CLI"]
 * link:https://console.redhat.com/openshift/downloads["OpenShift 命令列介面"]（oc）
 * link:https://docs.aws.amazon.com/eks/latest/userguide/helm.html["Helm 3 文檔"]
-* link:https://docs.openshift.com/rosa/rosa_hcp/rosa-hcp-sts-creating-a-cluster-quickly.html["HCP ROSA 集群"]（至少有 3 個裸機工作節點）
+* link:https://docs.redhat.com/en/documentation/red_hat_openshift_service_on_aws_classic_architecture/4["HCP ROSA 集群"]（至少包含 3 個裸機工作節點）
 * link:https://console.redhat.com/openshift/overview["造訪 Red Hat OpenShift Web 控制台"]
 * Trident 25.02 或更高版本 有關上述Trident先決條件，請參閱link:osv-trident-install.html["Trident安裝部分"]了解詳情。
 * link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.17/html/virtualization/installing#virt-aws-bm_preparing-cluster-for-virt["在 ROSA 叢集上安裝 OpenShift 虛擬化"]

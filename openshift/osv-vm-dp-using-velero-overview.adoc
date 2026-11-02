@@ -18,7 +18,7 @@ summary: Red Hat OpenShift 虛擬化資料保護與NetApp ONTAP
 
 OpenShift 虛擬化環境中的虛擬機器是在 OpenShift 容器平台的工作節點中執行的容器化應用程式。保護虛擬機器元資料以及虛擬機器的持久性磁碟非常重要，以便在它們遺失或損壞時可以還原它們。
 
-OpenShift 虛擬化虛擬機器的持久性磁碟可以透過使用整合到 OpenShift 叢集的ONTAP儲存進行支援link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"]。在本節中我們使用link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/installing/installing-oadp-ocs.html["OpenShift 資料保護 API (OADP)"]執行虛擬機器（包括其資料卷）的備份
+OpenShift 虛擬化 VM 的持續性磁碟可由使用 link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"] 整合至 OpenShift 叢集的 ONTAP 儲存設備提供支援。在本節中，我們使用 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.14/html/backup_and_restore/oadp-application-backup-and-restore#installing-oadp["OpenShift 資料保護 API (OADP)"] 來執行 VM 及其資料磁碟區的備份至
 
 * ONTAP物件存儲
 * 儲存網格
@@ -46,4 +46,4 @@ OADP 1.3 可從 OpenShift 叢集 4.12 及更高版本的操作員中心取得。
 * ONTAP 9.12
 
 
-link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"] link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/installing/installing-oadp-ocs.html["OpenShift 資料保護 API (OADP)"] link:https://velero.io/["維萊羅"]
+link:https://docs.netapp.com/us-en/trident/["Trident犯罪現場調查"] link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.14/html/backup_and_restore/oadp-application-backup-and-restore#installing-oadp["OpenShift 資料保護 API (OADP)"] link:https://velero.io/["維萊羅"]

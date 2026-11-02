@@ -26,7 +26,7 @@ summary: 搭載NetApp ONTAP 的Red Hat OpenShift 虛擬化
 .還原到同一命名空間
 [%collapsible%open]
 ====
-要從我們剛剛建立的備份中恢復，我們需要建立一個恢復自訂資源 (CR)。我們需要為其提供一個名稱，提供我們想要從中還原的備份的名稱，並將 restorePVs 設為 true。可以設定其他參數，如下所示link:https://docs.openshift.com/container-platform/4.14/backup_and_restore/application_backup_and_restore/backing_up_and_restoring/restoring-applications.html["文件"]。點選建立按鈕。
+若要從我們剛剛建立的備份還原，我們需要建立一個還原自訂資源（CR）。我們需要為其命名，提供要從中還原的備份名稱，並將 restorePVs 設為 true。其他參數可以如 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.14/html/backup_and_restore/oadp-application-backup-and-restore#oadp-backing-up["文件"] 所示進行設定。按一下「建立」按鈕。
 
 image:redhat-openshift-oadp-restore-001.png["建立恢復 CR"]
 

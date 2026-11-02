@@ -49,7 +49,7 @@ NOTE: 點擊「快速建立 VirtualMachine」將使用預設 StorageClass 建立
 若要在選擇作業系統範本後自訂虛擬機器創建，請按一下「自訂虛擬機器」而不是「快速建立」。
 
 . 如果選擇的作業系統已經配置了啟動來源，可以點選*自訂虛擬機器參數*。
-. 如果所選作業系統沒有配置啟動來源，則必須配置它。您可以查看link:https://docs.openshift.com/container-platform/4.14/virt/virtual_machines/creating_vms_custom/virt-creating-vms-from-custom-images-overview.html["文件"]。
+. 如果所選作業系統未設定開機來源，則必須設定。有關程序的詳細資訊，請參見 link:https://docs.redhat.com/en/documentation/openshift_container_platform/4.14/html/virtualization/virtual-machines#virt-creating-vms-from-custom-images-overview["文件"]。
 . 配置啟動磁碟後，可以點選*自訂虛擬機器參數*。
 . 您可以從此頁面上的選項卡自訂虛擬機器。例如，按一下「*磁碟*」選項卡，然後按一下「*新增磁碟*」為虛擬機器新增另一個磁碟。
 . 按一下「建立虛擬機器」以建立虛擬機器；這會在背景啟動對應的 pod。
