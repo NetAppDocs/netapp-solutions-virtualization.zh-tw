@@ -15,6 +15,18 @@ summary: NetApp虛擬化解決方案附件的最新變更日誌。
 
 
 
+[[5-november-2026]]
+== 2026年11月5日
+
+* 新增了關於讓 Proxmox VE NFS 儲存設備的 NFS v4.2 稀疏檔案操作保持停用的指引。
++
+** link:proxmox/proxmox-ontap-nfs.html["為 Proxmox VE 配置 NFS 存儲"]
+
+
+
+
+
+
 [[22-october-2026]]
 == 2026 年 10 月 22 日
 

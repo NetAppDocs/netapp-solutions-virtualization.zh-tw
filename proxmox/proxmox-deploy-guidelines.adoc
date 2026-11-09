@@ -44,6 +44,7 @@ Proxmox 虛擬環境 (VE) 與NetApp ONTAP儲存集成，為虛擬機器和容器
 * 使用FlexGroup磁碟區來滿足大容量需求，以充分發揮ONTAP可擴充性的潛力。
 * 在地理分佈的環境中，使用FlexCache將映像和範本分發到更靠近 Proxmox VE 節點的位置，以加快部署並實現集中管理。
 * 將FlexGroup與 NFS 結合使用時，請結合使用 nConnect 或會話中繼以及 pNFS 來最佳化效能和可用性。
+* 在為 Proxmox VE 提供 NFS 儲存設備的 SVM 上，請保持停用 NFS v4.2 稀疏檔案操作 (`-v4.2-sparsefile-ops`）。ONTAP 僅支援對整個檔案執行 DEALLOCATE 操作，部分檔案釋放要求可能會導致客體虛擬機器中出現 I/O 錯誤和資料毀損。如需詳細資訊，請參閱 link:proxmox-ontap-nfs.html["為 Proxmox VE 配置 NFS 存儲"]。
 * 對於區塊協議，確保進行適當的分區和 LUN 掩碼，以限制只有授權的 Proxmox VE 節點才能存取。
 * 分配足夠的儲存容量以滿足虛擬機器成長和資料需求。
 * 實施儲存分層以優化效能和成本效益。
