@@ -29,7 +29,6 @@
   <block id="407f1754d47b022d224184ba78043466" category="section-title">虛擬機器遷移場景</block>
   <block id="60a392608625b9eda74d86f2c986cbae" category="paragraph">vMotion 通常用於遷移虛擬機，而不管其電源狀態如何。以下是針對特定場景的額外注意事項和遷移程序。</block>
   <block id="60a503f29372372274084ecd49ed17d1" category="inline-link">vSphere vMotion 的虛擬機器條件與限制</block>
-  <block id="87f3600ce33f342b10587ce8ad49104e" category="admonition">理解<block ref="5cb6239c39b36fbae133a5f1d170baf7" category="inline-link-rx"></block>在繼續任何 VM 遷移選項之前。</block>
   <block id="b54d9fc1cdef0a24fc13ccfcc05a04ca" category="example-title">從特定 vSphere 資料儲存遷移虛擬機</block>
   <block id="1209c19104cf806da2509fa4183cf968" category="paragraph">請依照下列步驟使用 UI 將虛擬機器遷移到新的資料儲存。</block>
   <block id="9f54af6392a5e7279ec1b02fb2298987" category="list-text">使用 vSphere Web Client，從儲存清單中選擇資料存儲，然後按一下「虛擬機器」標籤。</block>
@@ -54,7 +53,6 @@
   <block id="6f33028fff02cecb516f5e2a865e550c" category="paragraph"><block ref="6f33028fff02cecb516f5e2a865e550c" category="inline-image-macro-rx" type="image"></block></block>
   <block id="abd56d7535056b175963af8675f32417" category="admonition">當資料儲存群集與全自動儲存 DRS（動態資源調度）一起使用並且兩個（來源和目標）資料儲存屬於同一類型（VMFS/NFS/vVol）時，請將兩個資料儲存保留在同一個儲存群集中，並透過在來源上啟用維護模式從來源資料儲存遷移虛擬機器。體驗將類似於計算主機的維護處理方式。</block>
   <block id="c1bd08cef6ea55ad141205bb4652da6f" category="inline-link">CPU 相容性和 vSphere Enhanced vMotion 相容性</block>
-  <block id="2426039635007bcc9f03cf496e7f8b51" category="admonition">參考<block ref="50cb0fd3f064393324f1b30977bea82e" category="inline-link-rx"></block>當來源主機和目標主機屬於不同的 CPU 系列或型號。</block>
   <block id="a33e2de71bc4a1dd5ee6184e1a98ebb6" category="list-text">選擇更改運算資源和儲存的選項，按一下“下一步”</block>
   <block id="a5bd22742fd4e0f4ecb0c61b99a2c288" category="inline-image-macro">更改計算和存儲</block>
   <block id="8934933b0b44bf59ffee8a8ec7ac7bd9" category="paragraph"><block ref="8934933b0b44bf59ffee8a8ec7ac7bd9" category="inline-image-macro-rx" type="image"></block></block>
@@ -70,7 +68,6 @@
   <block id="d278eda991982af0390dcc63b50d6cec" category="paragraph"><block ref="d278eda991982af0390dcc63b50d6cec" category="inline-image-macro-rx" type="image"></block></block>
   <block id="e4991f515597208b8d5688673bd1ac21" category="paragraph">請依照下列步驟將虛擬機器遷移到相同 vSphere Client UI 上列出的新 vCenter 伺服器。</block>
   <block id="668251322616477782480694c04ab4eb" category="inline-link">有關 vCenter 伺服器實例之間 vMotion 要求的 vSphere 文檔</block>
-  <block id="76bd3dafe5e70b877f4c74cd6b789fad" category="admonition">對於來源和目標 vCenter 版本等其他要求，請查看<block ref="15531949925a9ab13d501d9e355f8fd2" category="inline-link-rx"></block></block>
   <block id="8ec58dea3da0b291945f34e7c8168d60" category="list-text">在目標 vCenter 伺服器中選擇目標叢集。</block>
   <block id="905bc5c946741b9eafdefa1971a6baa7" category="list-text">檢查遷移選項並點擊“完成”。</block>
   <block id="29666ff4ecae595758733eced0aa5ad9" category="example-title">在不同 SSO 網域中的 vCenter 伺服器之間遷移虛擬機</block>
@@ -84,7 +81,6 @@
   <block id="9a14e6dcef5d5c8983b859a7a239c6c1" category="inline-image-macro">跨 vCenter Server 匯出</block>
   <block id="b5c5c158df4cdda390bf5324a7918730" category="paragraph"><block ref="b5c5c158df4cdda390bf5324a7918730" category="inline-image-macro-rx" type="image"></block></block>
   <block id="6367b892ffc53d7adaa5a0c9e9b0a02b" category="inline-link">使用進階跨 vCenter vMotion 匯入或複製虛擬機</block>
-  <block id="81f30df27aa74b1696d9a3b1ddeb4fe8" category="admonition">也可以從目標 vCenter 伺服器匯入 VM。對於該過程，請檢查<block ref="ae4f23729d2e7fd78e04fa4fd2bce779" category="inline-link-rx"></block></block>
   <block id="34f454ce9807d9bed3fecbe0313c4375" category="list-text">提供 vCenter 憑證詳細資訊並按一下登入。</block>
   <block id="dcf2f84dc2ed5c13d78c9e07b650b7f3" category="inline-image-macro">vCenter 憑證</block>
   <block id="b7069528969b1d96d2400f9c6946cd1a" category="paragraph"><block ref="b7069528969b1d96d2400f9c6946cd1a" category="inline-image-macro-rx" type="image"></block></block>
@@ -166,16 +162,13 @@
   <block id="8d529016191c5d8888d2b3cee0d947cc" category="list-text">根據ONTAP資料儲存庫的配置位置，從上方選擇 VM 遷移選項。</block>
   <block id="82154dec8199b96d4b6fc6e680b3987f" category="example-title">從 vSphere 的先前版本遷移到最新版本。</block>
   <block id="5109f11ddb7fa395a2b9702dd7da5188" category="list-text">如果無法進行就地升級，可以啟動新環境並使用上述遷移選項。</block>
-  <block id="d5587d106e98a47bcb64cd09ef215f28" category="admonition">在跨 vCenter 移轉選項中，如果來源上沒有匯出選項，則從目標匯入。對於該過程，請檢查<block ref="4bd34efc494b7c0c048a599de5fb1d0e" category="inline-link-macro-rx"></block></block>
   <block id="fcfd0c15962db1f564732b4025884f01" category="example-title">遷移到 VCF 工作負載域。</block>
   <block id="67885add60f172422ab38b3902e15ebe" category="list-text">將虛擬機器從每個 vSphere 叢集遷移到目標工作負載域。</block>
   <block id="ed0e87b54c5aad3a24966d14ebf411a5" category="inline-link">配置 Edge 虛擬機器以進行橋接</block>
   <block id="b50537e52be225bdbe992eca087c73cf" category="admonition">為了允許與來源 vCenter 上其他叢集上的現有虛擬機器進行網路通信，可以透過將來源 vCenter vSphere 主機新增至傳輸區域來擴展 NSX 段，或使用邊緣上的 L2 橋接來允許 VLAN 中的 L2 通訊。檢查 NSX 文檔<block ref="479fb9d0c2493899b72e326d5f4144d6" category="inline-link-rx"></block></block>
   <block id="89d5e6802ef5a3ae4296f49d4d6bc447" category="section-title">其他資源</block>
   <block id="bc9119ed58244e2689047c3cedd83108" category="inline-link">vSphere 虛擬機器遷移</block>
-  <block id="49f68dbfd307bea6e62464f61c8139bf" category="list-text"><block ref="49f68dbfd307bea6e62464f61c8139bf" category="inline-link-rx"></block></block>
   <block id="53882348759a32fd2ff144a62e67f923" category="inline-link">使用 vSphere vMotion 遷移虛擬機</block>
-  <block id="32d6fa2d7a53e6d8e6a138f47e512f15" category="list-text"><block ref="32d6fa2d7a53e6d8e6a138f47e512f15" category="inline-link-rx"></block></block>
   <block id="3a231af9bfa3b8f20d401bc62fdd9c21" category="inline-link">NSX Federation 中的 Tier-0 閘道配置</block>
   <block id="bb395a25245d60b22e4ee35bb3720619" category="list-text"><block ref="bb395a25245d60b22e4ee35bb3720619" category="inline-link-rx"></block></block>
   <block id="4c7b9062bf6dec81cf8f1f612748c4ea" category="inline-link">HCX 4.8 使用者指南</block>
@@ -9061,7 +9054,6 @@
   <block id="bf3f0b2ca058bcdbf31e79b8d8fe0c84" category="paragraph">切換階段完成後，DataVolume 狀態變成成功，PVC 即會繫結。</block>
   <block id="d59dcd95172517ecdb4895532a71f370" category="paragraph">移轉計畫繼續完成 ImageConversion 階段，最終完成 VirtualMachineCreation 階段。虛擬機器在 OpenShift 虛擬化環境中進入執行中狀態。</block>
   <block id="735c16b2a9c39cd92d183ec84328eda5" category="sidebar">使用 NetApp Console 進行備份和還原</block>
-  <block id="9e7b8966b92f2729b2874cc084bff343" category="admonition">某些使用外部管理工具（例如 VCF Automation、vSphere Supervisor 或其他 Kubernetes 版本）部署的虛擬機器通常依賴虛擬機器儲存設備原則。如果在相同虛擬機器儲存設備原則下的不同資料儲存之間移轉，對應用程式的影響應該較小。請與應用程式擁有者確認，以便將這些虛擬機器正確移轉到新的資料儲存。vSphere 8 引入了<block ref="4138091703f18ed0bf54f6615bff3dc7" category="inline-link-rx"></block>以準備應用程式進行 vMotion。</block>
   <block id="30e78b58f384fe575ee25be94d65aad4" category="video-title">含 NVMe/FC 的補充資料存放區</block>
   <block id="ec551004b042ec5b7897b563e4ecdd09" category="video-title">含 FC 的補充資料存放區</block>
   <block id="30c635f4eaf98ab2f250ab2b8875fb34" category="video-title">使用 ONTAP tools 為 VCF 建置具有 SnapMirror 主動同步 iSCSI 的延伸叢集</block>
@@ -10757,4 +10749,12 @@
   <block id="c48b251f1a0e09db59e345d9c01e941c" category="section-title">2026年11月5日</block>
   <block id="94940fc5e3ed7709a1802b0f6c8c0da3" category="list-text">新增了關於讓 Proxmox VE NFS 儲存設備的 NFS v4.2 稀疏檔案操作保持停用的指引。</block>
   <block id="92a08e70da607bac4fc002495ff52b6b" category="list-text"><block ref="92a08e70da607bac4fc002495ff52b6b" category="inline-link-macro-rx"></block></block>
+  <block id="0880d7d7e8a9f9f117378333baf1744c" category="admonition">某些使用外部管理工具（例如 VCF Automation、vSphere Supervisor 或其他 Kubernetes 版本）部署的虛擬機器通常依賴虛擬機器儲存設備原則。如果在相同虛擬機器儲存設備原則下的不同資料儲存之間移轉，對應用程式的影響應該較小。請與應用程式擁有者確認，以便將這些虛擬機器正確移轉到新的資料儲存。vSphere 8 引入了<block ref="8d4be88356ddd5437433cb20b3032bba" category="inline-link-rx"></block>以準備應用程式進行 vMotion。</block>
+  <block id="0911a2ec135cb755bbc6e76a42a4e900" category="admonition">在繼續進行任何 VM 移轉選項之前，請先了解<block ref="8d653b0042694a03b6e6e500ccc4b091" category="inline-link-rx"></block>。</block>
+  <block id="2663cc8682585aac97b0eb40812cdc58" category="admonition">當來源和目標主機屬於不同的 CPU 系列或型號時，請參考<block ref="f1148a707d78805a2b200287a6d70377" category="inline-link-rx"></block>。</block>
+  <block id="d2068895e2cdfa74faf5f610cd35f08f" category="admonition">如需來源與目標 vCenter 版本等其他需求，請查看<block ref="aaa2836d8eacdf37af3c5b55a09f191f" category="inline-link-rx"></block></block>
+  <block id="e9654b9ca9eb14de9bcff07ab11d788d" category="admonition">虛擬機器也可以從目標 vCenter 伺服器匯入。有關該程序，請查看<block ref="c5f2565c7bfd3d2181c0cb0b402b72dd" category="inline-link-rx"></block></block>
+  <block id="312289e2486572e4b856f4a585abff49" category="admonition">在跨 vCenter 移轉選項中，如果來源無法使用匯出選項，請從目標匯入。如需該程序，請查看 <block ref="e57ae436e3e09bf8897078cbdb056dec" category="inline-link-macro-rx"></block></block>
+  <block id="2bafda705f6b7c42a6e67d826d6e08f8" category="list-text"><block ref="2bafda705f6b7c42a6e67d826d6e08f8" category="inline-link-rx"></block></block>
+  <block id="05f8528d1c6c0ee3bbe70ec7fefe2fae" category="list-text"><block ref="05f8528d1c6c0ee3bbe70ec7fefe2fae" category="inline-link-rx"></block></block>
 </blocks>

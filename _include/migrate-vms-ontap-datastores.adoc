@@ -13,7 +13,7 @@ Broadcom 的 VMware vSphere 支援用於託管虛擬機器的 VMFS、NFS 和 vVo
 客戶可以使用ONTAP Tools vCenter 插件或其 API 輕鬆配置資料存儲，並且即使在開啟電源時也可以將虛擬機器遷移到ONTAP資料儲存。
 
 
-NOTE: 某些使用外部管理工具（例如 VCF Automation、vSphere Supervisor 或其他 Kubernetes 版本）部署的虛擬機器通常依賴虛擬機器儲存設備原則。如果在相同虛擬機器儲存設備原則下的不同資料儲存之間移轉，對應用程式的影響應該較小。請與應用程式擁有者確認，以便將這些虛擬機器正確移轉到新的資料儲存。vSphere 8 引入了 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management/migrating-virtual-machines-host-management/migration-with-vmotion-host-management/virtual-machine-conditions-and-limitation-for-vmotion-host-management/how-to-prepare-an-application-for-vsphere-vmotion-host-management.html["針對延遲敏感型應用程式的 vSphere vMotion 通知"]以準備應用程式進行 vMotion。
+NOTE: 某些使用外部管理工具（例如 VCF Automation、vSphere Supervisor 或其他 Kubernetes 版本）部署的虛擬機器通常依賴虛擬機器儲存設備原則。如果在相同虛擬機器儲存設備原則下的不同資料儲存之間移轉，對應用程式的影響應該較小。請與應用程式擁有者確認，以便將這些虛擬機器正確移轉到新的資料儲存。vSphere 8 引入了 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management/migrating-virtual-machines/migration-with-vmotion/virtual-machine-conditions-and-limitation-for-vmotion/how-to-prepare-an-application-for-vsphere-vmotion.html["針對延遲敏感型應用程式的 vSphere vMotion 通知"]以準備應用程式進行 vMotion。
 
 
 
@@ -45,7 +45,7 @@ TIP: 確保 vMotion 和 Provisioning VMkernel 介面所使用的連接埠群組�
 vMotion 通常用於遷移虛擬機，而不管其電源狀態如何。以下是針對特定場景的額外注意事項和遷移程序。
 
 
-NOTE: 理解 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management/migration-with-vmotion-host-management/virtual-machine-conditions-and-limitation-for-vmotion-host-management.html["vSphere vMotion 的虛擬機器條件與限制"]在繼續任何 VM 遷移選項之前。
+NOTE: 在繼續進行任何 VM 移轉選項之前，請先了解 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines/migration-with-vmotion/virtual-machine-conditions-and-limitation-for-vmotion.html["vSphere vMotion 的虛擬機器條件與限制"]。
 
 .從特定 vSphere 資料儲存遷移虛擬機
 [%collapsible%open]
@@ -160,7 +160,7 @@ TIP: 當資料儲存群集與全自動儲存 DRS（動態資源調度）一起�
 [%collapsible%open]
 ====
 
-NOTE: 參考 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management/cpu-compatibility-and-evc-host-management.html["CPU 相容性和 vSphere Enhanced vMotion 相容性"]當來源主機和目標主機屬於不同的 CPU 系列或型號。
+NOTE: 當來源和目標主機屬於不同的 CPU 系列或型號時，請參考 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines/cpu-compatibility-and-evc.html["CPU 相容性和 vSphere Enhanced vMotion 相容性"]。
 
 請依照下列步驟使用 UI 將虛擬機器遷移到新的資料儲存。
 
@@ -233,7 +233,7 @@ $vm, $vmdisk | Get-SPBMEntityConfiguration
 請依照下列步驟將虛擬機器遷移到相同 vSphere Client UI 上列出的新 vCenter 伺服器。
 
 
-NOTE: 對於來源和目標 vCenter 版本等其他要求，請查看 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management/vmotion-across-vcenter-server-systems-host-management/requirements-for-migration-across-vcenter-servers-host-management.html["有關 vCenter 伺服器實例之間 vMotion 要求的 vSphere 文檔"]
+NOTE: 如需來源與目標 vCenter 版本等其他需求，請查看 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines/vmotion-across-vcenter-server-systems/requirements-for-migration-across-vcenter-servers.html["有關 vCenter 伺服器實例之間 vMotion 要求的 vSphere 文檔"]
 
 . 使用 vSphere Web Client，從主機和叢集清單中選擇叢集，然後按一下「虛擬機器」標籤。
 +
@@ -320,7 +320,7 @@ image:migrate-vms-to-ontap-011.png["跨 vCenter Server 匯出"]
 
 +
 
-TIP: 也可以從目標 vCenter 伺服器匯入 VM。對於該過程，請檢查 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management/vmotion-across-vcenter-server-systems-host-management/migrate-a-virtual-machine-from-an-external-vcenter-server-instance-host-management.html["使用進階跨 vCenter vMotion 匯入或複製虛擬機"]
+TIP: 虛擬機器也可以從目標 vCenter 伺服器匯入。有關該程序，請查看 https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines/vmotion-across-vcenter-server-systems/migrate-a-virtual-machine-from-an-external-vcenter-server-instance.html["使用進階跨 vCenter vMotion 匯入或複製虛擬機"]
 
 . 提供 vCenter 憑證詳細資訊並按一下登入。
 +
@@ -513,7 +513,7 @@ NOTE: 有關內容庫中虛擬機模板的更多詳細信息，請查看 https:/
 * 如果無法進行就地升級，可以啟動新環境並使用上述遷移選項。
 +
 
-TIP: 在跨 vCenter 移轉選項中，如果來源上沒有匯出選項，則從目標匯入。對於該過程，請檢查link:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management/vmotion-across-vcenter-server-systems-host-management/migrate-a-virtual-machine-from-an-external-vcenter-server-instance-host-management.html["使用進階跨 vCenter vMotion 匯入或複製虛擬機"]
+TIP: 在跨 vCenter 移轉選項中，如果來源無法使用匯出選項，請從目標匯入。如需該程序，請查看 link:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines/vmotion-across-vcenter-server-systems/migrate-a-virtual-machine-from-an-external-vcenter-server-instance.html["使用進階跨 vCenter vMotion 匯入或複製虛擬機"]
 
 
 
@@ -534,8 +534,8 @@ NOTE: 為了允許與來源 vCenter 上其他叢集上的現有虛擬機器進�
 [[additional-resources]]
 == 其他資源
 
-* https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management.html["vSphere 虛擬機器遷移"]
-* https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines-host-management/migration-with-vmotion-host-management.html["使用 vSphere vMotion 遷移虛擬機"]
+* https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines.html["vSphere 虛擬機器遷移"]
+* https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vcenter-and-host-management-8-0/migrating-virtual-machines/migration-with-vmotion.html["使用 vSphere vMotion 遷移虛擬機"]
 * https://techdocs.broadcom.com/us/en/vmware-cis/nsx/vmware-nsx/4-2/administration-guide/managing-nsx-t-in-multiple-locations/nsx-t-federation/networking-topologies-in-nsx-federation/tier-0-in-federation.html["NSX Federation 中的 Tier-0 閘道配置"]
 * https://techdocs.broadcom.com/us/en/vmware-cis/hcx/vmware-hcx/4-11/vmware-hcx-user-guide-4-11.html["HCX 4.8 使用者指南"]
 * https://techdocs.broadcom.com/us/en/vmware-cis/live-recovery.html["VMware Live Recovery 文檔"]
