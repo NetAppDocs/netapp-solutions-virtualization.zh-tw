@@ -102,7 +102,7 @@ NOTE: 確保啟動 PostgreSQL 伺服器並啟用開機啟動服務。
 [[install-mtv]]
 === 安裝 MTV
 
-現在您可以安裝 Migration Toolkit for Virtualization （MTV）。請參閱提供的說明 link:https://access.redhat.com/documentation/en-us/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/installing-the-operator["這裡"] 以取得安裝協助。
+現在您可以安裝 Migration Toolkit for Virtualization （MTV）。請參閱提供的說明 link:https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vms-web-console#mtv-ui_mtv["這裡"] 以取得安裝協助。
 
 虛擬化移轉工具套件 (MTV) 使用者介面已整合到 OpenShift Web 控制台中。您可以參考 link:https://access.redhat.com/documentation/en-us/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vms-web-console#mtv-ui_mtv["這裡"] 開始使用使用者介面執行各種任務。
 
@@ -127,7 +127,7 @@ image:rh-os-n-use-case-vm-migration-source-provider.png["此圖顯示輸入/輸�
 
 NOTE: 虛擬化遷移工具包 (MTV) 使用 VMware 虛擬磁碟開發工具包 (VDDK) SDK 來加速從 VMware vSphere 傳輸虛擬磁碟。因此，儘管是可選的，但強烈建議創建 VDDK 影像。若要使用此功能，您需要下載 VMware 虛擬磁碟開發工具包 (VDDK)，建立 VDDK 映像，然後將 VDDK 映像推送到您的映像登錄。
 
-請按照提供的說明進行操作link:https://access.redhat.com/documentation/en-us/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/prerequisites#creating-vddk-image_mtv["這裡"]建立 VDDK 映像並將其推送到可從 OpenShift 叢集存取的登錄。
+按照提供的說明link:https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/prerequisites#creating-vddk-image_mtv["這裡"]建立 VDDK 映像，並將其推送到 OpenShift 叢集可存取的登錄庫中。
 
 
 
@@ -139,7 +139,7 @@ NOTE: 虛擬化遷移工具包 (MTV) 使用 VMware 虛擬磁碟開發工具包 (
 
 ==== 制定移轉計劃
 
-請按照提供的說明進行操作link:https://access.redhat.com/documentation/en-us/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vms-web-console#creating-migration-plan_mtv["這裡"]建立遷移計劃。
+請按照提供的說明link:https://docs.redhat.com/en/documentation/migration_toolkit_for_virtualization/2.5/html/installing_and_using_the_migration_toolkit_for_virtualization/migrating-vms-web-console#creating-migration-plan_mtv["這裡"]建立移轉計劃
 
 創建計劃時，如果尚未創建，則需要創建以下內容：
 

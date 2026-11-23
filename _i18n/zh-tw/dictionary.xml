@@ -2308,8 +2308,6 @@
   <block id="959b7c4b71886115429518587644aebe" category="paragraph">來源提供者建立範例：</block>
   <block id="70e5b89fc1b2f47a0bd5055703229114" category="paragraph"><block ref="70e5b89fc1b2f47a0bd5055703229114" category="inline-image-macro-rx" type="image"></block></block>
   <block id="431899a140e7168ac10851938d985f34" category="admonition">虛擬化遷移工具包 (MTV) 使用 VMware 虛擬磁碟開發工具包 (VDDK) SDK 來加速從 VMware vSphere 傳輸虛擬磁碟。因此，儘管是可選的，但強烈建議創建 VDDK 影像。若要使用此功能，您需要下載 VMware 虛擬磁碟開發工具包 (VDDK)，建立 VDDK 映像，然後將 VDDK 映像推送到您的映像登錄。</block>
-  <block id="4a6d1c59688d4bfd35bf9273bf11f8ea" category="paragraph">請按照提供的說明進行操作<block ref="102736775f16e15f2f98ffe552b0757e" category="inline-link-macro-rx"></block>建立 VDDK 映像並將其推送到可從 OpenShift 叢集存取的登錄。</block>
-  <block id="3008c031ed8e56d6902d0efc66eaa035" category="paragraph">請按照提供的說明進行操作<block ref="39595bf3d6cb45be93d62f6764c92ee0" category="inline-link-macro-rx"></block>建立遷移計劃。</block>
   <block id="5254832d8ded5bf2d2f6fe4975628d7b" category="paragraph">創建計劃時，如果尚未創建，則需要創建以下內容：</block>
   <block id="cfd81ec3034efddb911513d79b28d9db" category="list-text">將來源網路對應到目標網路的網路映射。</block>
   <block id="7d42c5ccd50e37e78e13b9f02e3f2672" category="paragraph"><block ref="7d42c5ccd50e37e78e13b9f02e3f2672" category="inline-image-macro-rx" type="image"></block></block>
@@ -9031,7 +9029,6 @@
   <block id="4439eaee8e63d255712c7fa9383e8c53" category="admonition">確保啟動 PostgreSQL 伺服器並啟用開機啟動服務。</block>
   <block id="0c0d27ee593f2a1a8b6a9df8d6283f69" category="section-title">在 OpenShift 叢集上</block>
   <block id="c4a3913e8354ba2c7e7e16520357bb9c" category="list-text"><block ref="c4a3913e8354ba2c7e7e16520357bb9c" category="inline-link-macro-rx"></block></block>
-  <block id="7b72d6c4f1cc78426ebd9bf2dab22e65" category="paragraph">現在您可以安裝 Migration Toolkit for Virtualization （MTV）。請參閱提供的說明 <block ref="78541cf70d4432a26af2ad2bc2f1599e" category="inline-link-macro-rx"></block> 以取得安裝協助。</block>
   <block id="d46d9c721fc7784b48ab686418a683c3" category="paragraph">虛擬化移轉工具套件 (MTV) 使用者介面已整合到 OpenShift Web 控制台中。您可以參考 <block ref="0501eeadc64b28b9be041bb74afe3ad8" category="inline-link-macro-rx"></block> 開始使用使用者介面執行各種任務。</block>
   <block id="9513e2829b7844fda30bf786e4defd11" category="section-title">建立來源供應商</block>
   <block id="dd60212b1324509a50e7c15f2e1efeec" category="paragraph">若要將 RHEL 虛擬機器從 VMware 移轉到 OpenShift 虛擬化環境，您需要先建立 VMware 的來源供應商。請參閱<block ref="5a232a9d86f11be106236c73b37bba4f" category="inline-link-macro-rx"></block>以取得建立來源供應商的說明。</block>
@@ -10757,4 +10754,7 @@
   <block id="312289e2486572e4b856f4a585abff49" category="admonition">在跨 vCenter 移轉選項中，如果來源無法使用匯出選項，請從目標匯入。如需該程序，請查看 <block ref="e57ae436e3e09bf8897078cbdb056dec" category="inline-link-macro-rx"></block></block>
   <block id="2bafda705f6b7c42a6e67d826d6e08f8" category="list-text"><block ref="2bafda705f6b7c42a6e67d826d6e08f8" category="inline-link-rx"></block></block>
   <block id="05f8528d1c6c0ee3bbe70ec7fefe2fae" category="list-text"><block ref="05f8528d1c6c0ee3bbe70ec7fefe2fae" category="inline-link-rx"></block></block>
+  <block id="8630286f7f0c6df3110c469fde71488d" category="paragraph">現在您可以安裝 Migration Toolkit for Virtualization （MTV）。請參閱提供的說明 <block ref="684d83d1bf0551153556a173bf68c205" category="inline-link-macro-rx"></block> 以取得安裝協助。</block>
+  <block id="ea84cd4ed6281427dce77380eef8157b" category="paragraph">按照提供的說明<block ref="387e79dd099ff24c4be03cc7219dd965" category="inline-link-macro-rx"></block>建立 VDDK 映像，並將其推送到 OpenShift 叢集可存取的登錄庫中。</block>
+  <block id="5cd4458941cea4ae1dfb6f56491febbb" category="paragraph">請按照提供的說明<block ref="8e9c654427e4288e55170a72ccab8593" category="inline-link-macro-rx"></block>建立移轉計劃</block>
 </blocks>
